@@ -1,0 +1,16 @@
+name: registration
+channels:
+  - defaults
+dependencies:
+  - pip=20.3.3=py38haa95532_0
+  - python=3.8.5=h5fd99cc_1
+  - pip:
+    - git+https://www.github.com/vispy/vispy.git@7f3f6f60c8462bb8a3a8fa03344a2e6990b86eb2
+    - tifffile>=2020.12
+    - xmltodict>=0.12
+    - numpy>=1.19
+    - bg_atlasapi>=1.0
+    - PySide2>=5.15
+    - PyOpenGL>=3.1
+    - PyOpenGL-accelerate>=3.1
+prefix: D:\miniconda\envs\registration
