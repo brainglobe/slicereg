@@ -27,4 +27,7 @@ The repositories work as a backend-only.   This is the "Gateways" (i.e. Reposito
 Each repo can store its data in whatever format it wants internally but must give domain objects (found in `domain` directory) 
 back to the use cases.  This is great for performance/space optimization and supporting straightforward reimplementation of data handling.
 
+ ### Guidelines
  
+   - Repos currently are in a priviliged position to access the domain entities.  As such, they should call any of their methods or access their calculated properties, just contructing them and accessing their attributes.
+  

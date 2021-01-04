@@ -25,6 +25,6 @@ class LoadSectionUseCase(BaseUseCase):
         atlas = self.atlas_repo.get_current_atlas()
         self.presenter.show_section(
             image=section.channels[0],
-            transform=section.model_matrix,
-            ref_image=atlas.slice(width=section.width_um, transform=section.model_matrix)
+            transform=section.affine_transform,
+            ref_image=atlas.slice(width=section.width_um, transform=section.affine_transform)
         )

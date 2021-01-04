@@ -3,8 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Tuple
 
-from numpy.core._multiarray_umath import ndarray
-from vispy.util.transforms import translate, scale, rotate
+from numpy import ndarray
+
+from src.domain.utils import affine_transform, shift_plane
 
 
 @dataclass(frozen=True)
@@ -16,16 +17,11 @@ class Section:
     rotation_deg: Tuple[float, float, float] = (0., 0., 0.)
 
     @property
-    def model_matrix(self) -> ndarray:
+    def affine_transform(self) -> ndarray:
+        x, y, z = self.position_um
         cx, cy = self.image_center
         rx, ry, rz = self.rotation_deg
-        return \
-            translate((-cx, -cy, 0)) @ \
-            scale((self.pixel_res_um,) * 3) @ \
-            rotate(rx, (1, 0, 0)) @ \
-            rotate(ry, (0, 1, 0)) @ \
-            rotate(rz, (0, 0, 1)) @ \
-            translate(self.position_um)
+        return shift_plane(x=-cx, y=-cy) @ affine_transform(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz, s=self.pixel_res_um)
 
     @property
     def image_center(self) -> Tuple[float, float]:

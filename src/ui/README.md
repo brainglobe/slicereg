@@ -26,3 +26,13 @@ This is done to make the classes simpler, keep the command code dependent on the
 ![Presenter/Controller Diagram](https://miro.medium.com/max/283/1*zlbE57Ff2bXadvynsFmt_g.png)
  
 To learn more, this blog article is a good first look: https://medium.com/@nishancw/clean-architecture-net-core-part-1-introduction-e70e1c49ef6
+
+### Guidelines
+
+  - No importing from the domain or repository modules; if new commands are needed, new use cases should be added first.
+  - The UI should not have access to any Domain objects; this is to increase flexibility to the domain, increase testability, and to reduce the number of processing- and persistence-related bugs
+  
+### Future development
+
+  - This section will undergo the most change, as it's quite complex and will grow the most in early stages of the project.
+  - As manual testing gets slower, a different design for this module will be selected to make automated testing easier. 
