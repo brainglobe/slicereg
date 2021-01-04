@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 from PySide2.QtWidgets import QWidget
 
-from src.use_cases.provider import UseCaseProvider
+from src.ui.provider import UseCaseProvider
 
 
 class BaseVispyView(ABC):
