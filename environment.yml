@@ -1,4 +1,4 @@
-name: registration
+name: slicereg
 channels:
   - defaults
 dependencies:
@@ -13,4 +13,3 @@ dependencies:
     - PySide2>=5.15
     - PyOpenGL>=3.1
     - PyOpenGL-accelerate>=3.1
-prefix: D:\miniconda\envs\registration
