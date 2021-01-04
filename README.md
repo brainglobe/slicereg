@@ -7,37 +7,39 @@ A 2D-3D histological brain slice registration application for mouse brains.
 
 ## Development and Testing
 
-### Setting up the Project
+### Downloading the source code
 
-Get the source code onto your computer using git:
+Get a copy of the project onto your computer using git:
 
 ```
 git clone https://github.com/brainglobe/slicereg
-```
-
-Use conda to create a virtual environment with all the necessary dependencies for running the application:
-
-```
 cd slicereg
-conda env create -f environment.yml
-conda activate slicereg 
 ```
 
-Install additional optional dependencies (just for extra things, like getting test data, running tests, creating build artifacts, docs, etc):
+
+### Setting up the Project
+
+
+This project uses [Poetry](https://python-poetry.org/) for installing dependencies; this is to make it easier for getting
+the same versions of python libraries on everyones' computer and help manage virtual environments.  To get it, it can be pip-installed:
 
 ```
-conda activate slicereg
-pip install -f dev_requirements.txt
+pip install poetry
 ``` 
 
+
+To set up a virtual environment and install the dependencies (there are a lot of dependencies, this may take a couple minutes):
+
+```
+poetry install
+```
 
 ### Running the Project
 
 Run the program:
 
 ```
-conda activate slicereg
-python main.py
+poetry run main.py
 ```
 
 ### Downloading Test Data
@@ -46,7 +48,7 @@ Some test data can be made available for project developers.
 After you've been added to the access list, you can download it using DVC:
 
 ```
-dvc pull
+poetry run dvc pull
 ``` 
 
 The first time you do this, there will be an authentication procedure.  
