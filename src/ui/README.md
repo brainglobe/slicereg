@@ -14,7 +14,7 @@ as the project grows and automated testing is added to speed development.See the
 
 The gui works as a backend-only, relying on the use_cases directory to get the data it needs.
 
-This is the "UI" layer of the architecture:
+This is the "Presenters" and "UI" layer of the architecture:
 
 ![Clean Arch Diagram](https://miro.medium.com/max/875/1*EN-joV0Cr_gMn8aX06iHNQ.jpeg)
 
