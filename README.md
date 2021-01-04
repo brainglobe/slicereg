@@ -56,4 +56,7 @@ It will ask you to go to a Google Drive link and log in.
 Once you've logged in, copy-paste the authentication token from the browser into your terminal and press enter.  
 The example data will appear in the project's data directory.
 
- 
+### Documentation
+
+Developer documentation is found in README files in the subdirectories.  
+Open different folders to learn more about what their purpose is.
