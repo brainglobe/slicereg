@@ -1,5 +1,5 @@
 from src.use_cases.provider import UseCaseProvider
-from src.gui_app.window import Window, Presenter
+from src.ui.window import Window, Presenter
 from src.repositiories.atlas import BGAtlasAllenRepo
 from src.repositiories.section import InMemorySectionRepo
 

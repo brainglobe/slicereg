@@ -5,7 +5,7 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
-from src.gui_app.base import BaseVispyView
+from src.ui.base import BaseVispyView
 from src.use_cases.provider import UseCaseProvider
 
 

@@ -6,8 +6,8 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, Q
 from numpy import ndarray
 from vispy.app import Timer
 
-from src.gui_app.slice_view import SliceView
-from src.gui_app.volume_view import VolumeView
+from src.ui.slice_view import SliceView
+from src.ui.volume_view import VolumeView
 from src.use_cases.load_atlas import BaseLoadAtlasPresenter
 from src.use_cases.load_section import BaseLoadSectionPresenter
 from src.use_cases.move_section import BaseMoveSectionPresenter

@@ -9,7 +9,7 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from src.gui_app.base import BaseVispyView
+from src.ui.base import BaseVispyView
 from src.use_cases.provider import UseCaseProvider
 
 
@@ -36,13 +36,12 @@ class VolumeView(BaseVispyView):
         return self._canvas.native
 
     def view_atlas(self, volume: ndarray, transform: ndarray):
-        ...
-        # self._atlas_volume.set_data(volume)
-        # self._atlas_volume.transform = MatrixTransform(transform)
-        # self._atlas_volume.clim = np.min(volume), np.max(volume)
-        # self._viewbox.camera.center = (0, 0, 0)
-        # self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
-        # self._canvas.update()
+        self._atlas_volume.set_data(volume)
+        self._atlas_volume.transform = MatrixTransform(transform)
+        self._atlas_volume.clim = np.min(volume), np.max(volume)
+        self._viewbox.camera.center = (0, 0, 0)
+        self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
+        self._canvas.update()
 
     def view_section(self, image: ndarray, transform: Optional[ndarray]):
         self._section_image.set_data(image)
