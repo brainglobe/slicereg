@@ -39,7 +39,7 @@ poetry install
 Run the program:
 
 ```
-poetry run main.py
+poetry run python main.py
 ```
 
 ### Downloading Test Data
