@@ -6,7 +6,7 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from src.ui.base import BaseVispyView
-from src.ui.provider import UseCaseProvider
+from src.ui.use_cases import UseCaseProvider
 
 
 class SliceView(BaseVispyView):

@@ -11,7 +11,7 @@ from src.ui.volume_view import VolumeView
 from src.use_cases.load_atlas import BaseLoadAtlasPresenter
 from src.use_cases.load_section import BaseLoadSectionPresenter
 from src.use_cases.move_section import BaseMoveSectionPresenter
-from src.ui.provider import UseCaseProvider
+from src.ui.use_cases import UseCaseProvider
 from src.use_cases.select_channel import BaseSelectChannelPresenter
 
 

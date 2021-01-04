@@ -10,7 +10,7 @@ from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
 from src.ui.base import BaseVispyView
-from src.ui.provider import UseCaseProvider
+from src.ui.use_cases import UseCaseProvider
 
 
 class VolumeView(BaseVispyView):
