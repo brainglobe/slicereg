@@ -3,9 +3,9 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.histological_section.base import BaseSectionRepo
-from src.histological_section.io import read_ome_tiff
-from src.reference_atlas.load_atlas import BaseAtlasRepo
+from src.section.base import BaseSectionRepo
+from src.section.io import read_ome_tiff
+from src.atlas.load_atlas import BaseAtlasRepo
 
 
 class BaseLoadSectionPresenter(ABC):

@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
-from src.histological_section.base import BaseSectionRepo
-from src.reference_atlas.load_atlas import LoadAtlasUseCase, BaseLoadAtlasPresenter, BaseAtlasRepo
-from src.histological_section.load_section import LoadSectionUseCase, BaseLoadSectionPresenter
-from src.histological_section.select_channel import SelectChannelUseCase, BaseSelectChannelPresenter
-from src.histological_section.move_section import MoveSectionUseCase, BaseMoveSectionPresenter
+from src.section.base import BaseSectionRepo
+from src.atlas.load_atlas import LoadAtlasUseCase, BaseLoadAtlasPresenter, BaseAtlasRepo
+from src.section.load_section import LoadSectionUseCase, BaseLoadSectionPresenter
+from src.section.select_channel import SelectChannelUseCase, BaseSelectChannelPresenter
+from src.section.move_section import MoveSectionUseCase, BaseMoveSectionPresenter
 
 
 @dataclass

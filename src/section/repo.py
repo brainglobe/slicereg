@@ -1,7 +1,7 @@
 from typing import Optional
 
-from src.histological_section.base import BaseSectionRepo
-from src.histological_section.models import Section
+from src.section.base import BaseSectionRepo
+from src.section.models import Section
 
 
 class InMemorySectionRepo(BaseSectionRepo):

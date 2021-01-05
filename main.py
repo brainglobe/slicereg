@@ -1,7 +1,7 @@
 from src.gui_app.use_cases import UseCaseProvider
 from src.gui_app.window import Window, Presenter
-from src.reference_atlas.repo import BGAtlasAllenRepo
-from src.histological_section.repo import InMemorySectionRepo
+from src.atlas.repo import BGAtlasAllenRepo
+from src.section.repo import InMemorySectionRepo
 
 win = Window(title="Registration App")
 

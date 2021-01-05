@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.reference_atlas.models import Atlas
+from src.atlas.models import Atlas
 
 
 class BaseAtlasRepo(ABC):

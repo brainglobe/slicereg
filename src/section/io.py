@@ -2,7 +2,7 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from src.histological_section.models import Section
+from src.section.models import Section
 
 
 def read_ome_tiff(filename: str) -> Section:

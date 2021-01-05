@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from src.histological_section.models import Section
+from src.section.models import Section
 
 
 class BaseSectionRepo(ABC):

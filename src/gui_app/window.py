@@ -8,11 +8,11 @@ from vispy.app import Timer
 
 from src.gui_app.slice_view import SliceView
 from src.gui_app.volume_view import VolumeView
-from src.reference_atlas.load_atlas import BaseLoadAtlasPresenter
-from src.histological_section.load_section import BaseLoadSectionPresenter
-from src.histological_section.move_section import BaseMoveSectionPresenter
+from src.atlas.load_atlas import BaseLoadAtlasPresenter
+from src.section.load_section import BaseLoadSectionPresenter
+from src.section.move_section import BaseMoveSectionPresenter
 from src.gui_app.use_cases import UseCaseProvider
-from src.histological_section.select_channel import BaseSelectChannelPresenter
+from src.section.select_channel import BaseSelectChannelPresenter
 
 
 def restart_timer(timer: Timer, iterations=1) -> None:

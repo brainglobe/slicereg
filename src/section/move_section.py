@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.histological_section.base import BaseSectionRepo
+from src.section.base import BaseSectionRepo
 
 
 class BaseMoveSectionPresenter(ABC):
