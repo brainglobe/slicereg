@@ -18,6 +18,17 @@ This is the "Presenters" and "UI" layer of the architecture:
 
 ![Clean Arch Diagram](https://miro.medium.com/max/875/1*EN-joV0Cr_gMn8aX06iHNQ.jpeg)
 
+
+#### Use Case Provider 
+
+To make it easier for the UI to access the use cases and instantiated, a Provider manager class is available.  This is 
+essentially the [Facade Pattern](https://refactoring.guru/design-patterns/facade), used to simplify access to the classes:
+
+![Facade Pattern Diagram](https://refactoring.guru/images/patterns/diagrams/facade/example.png) 
+
+This facade is nice for now, but it may change in the future as the Controller and Presenter code becomes more seperate.
+
+#### Controller / Presenter
   
 The Window/View classes send commands to the use case functions (for example, requests for data, or changing a parameter), 
 and the use case functions in turn send the data (if needed) via the Presenter class.  
@@ -29,7 +40,10 @@ To learn more, this blog article is a good first look: https://medium.com/@nisha
 
 ### Guidelines
 
-  - No importing from the domain or repository modules; if new commands are needed, new use cases should be added first.
+  - Only the use_cases should be importing outside the package;
+  - if new data are needed, new use cases should be added first, or existing use case presenters should be modified to supply more data.
+    - Calculations should generally be pushed to the models; however, if the calculation is only related to the visualization and has no meaning outside the display and needs no extra data, then it's perfectly fine to do it in-place.  
+    - In fact, as these display calculations increase, a new ViewModel class will be developed that localizes these calculations and makes them accessible to the Views and unit-testable  
   - The UI should not have access to any Domain objects; this is to increase flexibility to the domain, increase testability, and to reduce the number of processing- and persistence-related bugs
   
 ### Future development

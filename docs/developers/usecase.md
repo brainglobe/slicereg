@@ -16,22 +16,13 @@ libraries; instead, it indirectly uses them via base classes it specifies (and o
 
 #### Architecture
 
-This is the "Entities" part of the architecture, found in the center of the diagram:
+This is the "Use Cases" part of the architecture, found near center donut of the diagram:
 
 ![Clean Arch Diagram](https://miro.medium.com/max/875/1*EN-joV0Cr_gMn8aX06iHNQ.jpeg) 
 
 Doing it this way gives the Use Cases a lot of control over how things are done without needing to manage a lot of computational details. 
 It also makes it easier to add more Use Cases without breaking old ones (a "vertical" architecture).
 
-
-#### Provider 
-
-To make it easier for the UI to access the use cases and instantiated, a Provider manager class is available.  This is 
-essentially the [Facade Pattern](https://refactoring.guru/design-patterns/facade), used to simplify access to the classes:
-
-![Facade Pattern Diagram](https://refactoring.guru/images/patterns/diagrams/facade/example.png) 
-
-This facade is nice for now, but it may change in the future if use cases become more inter-dependent (but hopefully not).
 
 #### Errors
 
