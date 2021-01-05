@@ -27,5 +27,5 @@ class MoveSectionWorkflow:
             return
         new_section = section.translate(dx=x, dy=y, dz=z).rotate(dx=rx, dy=ry, dz=rz)
 
-        self.section_repo.save_section(new_section)
+        self.section_repo.set_section(new_section)
         self.presenter.update_section_transform(transform=new_section.affine_transform)

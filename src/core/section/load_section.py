@@ -20,7 +20,7 @@ class LoadSectionWorkflow:
 
     def __call__(self, filename: str) -> None:
         section = self.serializer.read(filename=filename)
-        self.section_repo.save_section(section=section)
+        self.section_repo.set_section(section=section)
         self.presenter.show_section(
             image=section.channels[0],
             transform=section.affine_transform,

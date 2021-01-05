@@ -22,5 +22,5 @@ class InMemoryRepo(BaseAtlasRepo, BaseSectionRepo):
     def get_section(self) -> Optional[Section]:
         return self._section
 
-    def save_section(self, section: Section) -> None:
+    def set_section(self, section: Section) -> None:
         self._section = section
