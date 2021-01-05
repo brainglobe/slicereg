@@ -6,13 +6,13 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, Q
 from numpy import ndarray
 from vispy.app import Timer
 
-from src.ui.slice_view import SliceView
-from src.ui.volume_view import VolumeView
-from src.use_cases.load_atlas import BaseLoadAtlasPresenter
-from src.use_cases.load_section import BaseLoadSectionPresenter
-from src.use_cases.move_section import BaseMoveSectionPresenter
-from src.ui.use_cases import UseCaseProvider
-from src.use_cases.select_channel import BaseSelectChannelPresenter
+from src.gui_app.slice_view import SliceView
+from src.gui_app.volume_view import VolumeView
+from src.reference_atlas.load_atlas import BaseLoadAtlasPresenter
+from src.histological_section.load_section import BaseLoadSectionPresenter
+from src.histological_section.move_section import BaseMoveSectionPresenter
+from src.gui_app.use_cases import UseCaseProvider
+from src.histological_section.select_channel import BaseSelectChannelPresenter
 
 
 def restart_timer(timer: Timer, iterations=1) -> None:

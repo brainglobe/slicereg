@@ -9,8 +9,8 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from src.ui.base import BaseVispyView
-from src.ui.use_cases import UseCaseProvider
+from src.gui_app.base import BaseVispyView
+from src.gui_app.use_cases import UseCaseProvider
 
 
 class VolumeView(BaseVispyView):

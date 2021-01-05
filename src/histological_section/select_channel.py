@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.use_cases.base import BaseUseCase, BaseSectionRepo
+from src.histological_section.base import BaseSectionRepo
 
 
 class BaseSelectChannelPresenter(ABC):
@@ -16,7 +16,7 @@ class BaseSelectChannelPresenter(ABC):
 
 
 @dataclass(frozen=True)
-class SelectChannelUseCase(BaseUseCase):
+class SelectChannelUseCase:
     section_repo: BaseSectionRepo
     presenter: BaseSelectChannelPresenter
 

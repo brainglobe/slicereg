@@ -5,8 +5,8 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
-from src.ui.base import BaseVispyView
-from src.ui.use_cases import UseCaseProvider
+from src.gui_app.base import BaseVispyView
+from src.gui_app.use_cases import UseCaseProvider
 
 
 class SliceView(BaseVispyView):

@@ -3,7 +3,16 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.use_cases.base import BaseUseCase, BaseAtlasRepo
+from src.reference_atlas.models import Atlas
+
+
+class BaseAtlasRepo(ABC):
+
+    @abstractmethod
+    def get_atlas(self, resolution_um: int) -> Atlas: ...
+
+    @abstractmethod
+    def get_current_atlas(self) -> Atlas: ...
 
 
 class BaseLoadAtlasPresenter(ABC):
@@ -13,7 +22,7 @@ class BaseLoadAtlasPresenter(ABC):
 
 
 @dataclass
-class LoadAtlasUseCase(BaseUseCase):
+class LoadAtlasUseCase:
     atlas_repo: BaseAtlasRepo
     presenter: BaseLoadAtlasPresenter
 

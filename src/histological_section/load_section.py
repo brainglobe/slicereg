@@ -3,8 +3,9 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.repositiories.section import read_ome_tiff
-from src.use_cases.base import BaseUseCase, BaseSectionRepo, BaseAtlasRepo
+from src.histological_section.base import BaseSectionRepo
+from src.histological_section.io import read_ome_tiff
+from src.reference_atlas.load_atlas import BaseAtlasRepo
 
 
 class BaseLoadSectionPresenter(ABC):
@@ -14,7 +15,7 @@ class BaseLoadSectionPresenter(ABC):
 
 
 @dataclass
-class LoadSectionUseCase(BaseUseCase):
+class LoadSectionUseCase:
     section_repo: BaseSectionRepo
     atlas_repo: BaseAtlasRepo
     presenter: BaseLoadSectionPresenter

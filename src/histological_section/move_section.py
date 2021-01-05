@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.use_cases.base import BaseUseCase, BaseSectionRepo
+from src.histological_section.base import BaseSectionRepo
 
 
 class BaseMoveSectionPresenter(ABC):
@@ -16,7 +16,7 @@ class BaseMoveSectionPresenter(ABC):
 
 
 @dataclass
-class MoveSectionUseCase(BaseUseCase):
+class MoveSectionUseCase:
     section_repo: BaseSectionRepo
     presenter: BaseMoveSectionPresenter
 
