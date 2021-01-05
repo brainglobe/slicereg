@@ -4,10 +4,43 @@
 # slicereg
 A 2D-3D histological brain slice registration application for mouse brains.
 
+## Features
 
-## Development and Testing
+At the moment, only some very basic features are implemented:
+  - Displays multi-channel OME-TIFF files onscreen.
+  - Loads 25um and 100um resolution Allen Mouse Reference Atlas into a 3D visualizer
+  - 2D slices can be translated and rotated in 3D space.
 
-### Downloading the source code
+If you'd like to try it out, check the Installation section below.
+
+## Next Steps
+
+Next steps are largely focused around deployment and development; this will ensure the tech stack is valid and make it easier to keep updating the project:
+  - Get builds running for executable files on Windows, Mac, and Linux and confirm they work
+  - Add continuous integration tooling to check builds, run static analysis tools, and test runner.
+  - Auto-deployment and versioning.
+  - Entry points for launching GUI from command line after pip install
+
+Next features are focused on manual registration in the GUI:
+  - manual registration:
+    - Comparison widget between section and reference atlas
+    - Controls for full affine transforms
+  - multi-slice handling:
+    - Load multiple slices at once
+    - Slice selection and multi-slice manipulation interface.
+  - QuPath Visualization
+    - Import QuPath files onto loaded slices for 3D visualization.
+  - More control over visualization
+    - View manipulation tools (channel selector, atlas transparency controls, qupath show/hide, etc)
+    - CLim controls
+   
+
+  
+## Installation
+
+### Using Python
+
+#### Downloading the source code
 
 Get a copy of the project onto your computer using git:
 
@@ -17,7 +50,7 @@ cd slicereg
 ```
 
 
-### Setting up the Project
+#### Setting up the Project
 
 
 This project uses [Poetry](https://python-poetry.org/) for installing dependencies; this is to make it easier for getting
@@ -34,7 +67,7 @@ To set up a virtual environment and install the dependencies (there are a lot of
 poetry install
 ```
 
-### Running the Project
+#### Running the Project
 
 Run the program:
 
@@ -42,7 +75,7 @@ Run the program:
 poetry run python main.py
 ```
 
-### Downloading Test Data
+#### Downloading Test Data
 
 Some test data can be made available for project developers.  
 After you've been added to the access list, you can download it using DVC:
@@ -56,7 +89,9 @@ It will ask you to go to a Google Drive link and log in.
 Once you've logged in, copy-paste the authentication token from the browser into your terminal and press enter.  
 The example data will appear in the project's data directory.
 
-### Documentation
+#### Documentation
 
 Developer documentation is found in README files in the subdirectories.  
 Open different folders to learn more about what their purpose is.
+
+
