@@ -10,16 +10,14 @@ from src.core.section.models import Section
 class InMemoryRepo(BaseAtlasRepo, BaseSectionRepo):
 
     def __init__(self):
-        self._current_atlas: Optional[Atlas] = None
+        self._atlas: Optional[Atlas] = None
         self._section: Optional[Section] = None
 
-    def get_atlas(self, resolution_um: int) -> Atlas:
-        if self._current_atlas is None or self._current_atlas.resolution_um != resolution_um:
-            self._current_atlas = BGAtlasSerializer().read(resolution_um=resolution_um)
-        return self._current_atlas
+    def get_atlas(self) -> Optional[Atlas]:
+        return self._atlas
 
-    def get_current_atlas(self) -> Atlas:
-        return self._current_atlas
+    def set_atlas(self, atlas: Atlas) -> None:
+        self._atlas = atlas
 
     def get_section(self) -> Optional[Section]:
         return self._section

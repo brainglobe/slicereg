@@ -23,7 +23,7 @@ class SliceAtlasWorkflow:
     def __call__(self):
         section = RegisteredSection(
             section=self.section_repo.get_section(),
-            atlas=self.atlas_repo.get_current_atlas()
+            atlas=self.atlas_repo.get_atlas()
         )
         ref_image = section.slice_atlas()
         self.presenter.show_ref_image(ref_image=ref_image)
