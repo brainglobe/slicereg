@@ -1,7 +1,7 @@
 from typing import Optional
 
-from src.section.base import BaseSectionRepo
-from src.section.models import Section
+from src.core.section.base import BaseSectionRepo
+from src.core.section.models import Section
 
 
 class InMemorySectionRepo(BaseSectionRepo):

@@ -3,9 +3,8 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.section.base import BaseSectionRepo
-from src.section.io import read_ome_tiff
-from src.atlas.load_atlas import BaseAtlasRepo
+from src.core.section.base import BaseSectionRepo, BaseSectionSerializer
+from src.core.atlas.load_atlas import BaseAtlasRepo
 
 
 class BaseLoadSectionPresenter(ABC):
@@ -15,13 +14,14 @@ class BaseLoadSectionPresenter(ABC):
 
 
 @dataclass
-class LoadSectionUseCase:
+class LoadSectionWorkflow:
     section_repo: BaseSectionRepo
     atlas_repo: BaseAtlasRepo
     presenter: BaseLoadSectionPresenter
+    serializer: BaseSectionSerializer
 
     def __call__(self, filename: str) -> None:
-        section = read_ome_tiff(filename=filename)
+        section = self.serializer.read(filename=filename)
         self.section_repo.save_section(section=section)
         atlas = self.atlas_repo.get_current_atlas()
         self.presenter.show_section(

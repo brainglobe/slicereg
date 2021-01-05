@@ -1,14 +1,17 @@
-from src.gui_app.use_cases import UseCaseProvider
-from src.gui_app.window import Window, Presenter
-from src.atlas.repo import BGAtlasAllenRepo
-from src.section.repo import InMemorySectionRepo
+from src.gui.workflows import WorkflowProvider
+from src.gui.window import Window
+from src.gui.presenter import Presenter
+from src.repos.bg_atlas import BGAtlasAllenRepo
+from src.repos.inmemory_section import InMemorySectionRepo
+from src.serializers.ome_tiff import OmeTiffSerializer
 
 win = Window(title="Registration App")
 
 presenter = Presenter(win=win)
-use_cases = UseCaseProvider(
+use_cases = WorkflowProvider(
     section_repo=InMemorySectionRepo(),
     atlas_repo=BGAtlasAllenRepo(),
+    section_serializer=OmeTiffSerializer(),
     load_atlas_presenter=presenter,
     select_channel_presenter=presenter,
     load_section_presenter=presenter,

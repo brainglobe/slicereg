@@ -5,8 +5,8 @@ from typing import Optional
 from bg_atlasapi import BrainGlobeAtlas
 from numpy import ndarray
 
-from src.atlas.models import Atlas
-from src.atlas.load_atlas import BaseAtlasRepo
+from src.core.atlas.models import Atlas
+from src.core.atlas.load_atlas import BaseAtlasRepo
 
 
 class BGAtlasAllenRepo(BaseAtlasRepo):

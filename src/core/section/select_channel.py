@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.section.base import BaseSectionRepo
+from src.core.section.base import BaseSectionRepo
 
 
 class BaseSelectChannelPresenter(ABC):
@@ -16,7 +16,7 @@ class BaseSelectChannelPresenter(ABC):
 
 
 @dataclass(frozen=True)
-class SelectChannelUseCase:
+class SelectChannelWorkflow:
     section_repo: BaseSectionRepo
     presenter: BaseSelectChannelPresenter
 

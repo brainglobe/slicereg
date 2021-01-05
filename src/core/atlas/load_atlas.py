@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.atlas.models import Atlas
+from src.core.atlas.models import Atlas
 
 
 class BaseAtlasRepo(ABC):
@@ -22,7 +22,7 @@ class BaseLoadAtlasPresenter(ABC):
 
 
 @dataclass
-class LoadAtlasUseCase:
+class LoadAtlasWorkflow:
     atlas_repo: BaseAtlasRepo
     presenter: BaseLoadAtlasPresenter
 
