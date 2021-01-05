@@ -16,7 +16,3 @@ class Atlas:
     def model_matrix(self) -> ndarray:
         x, y, z = self.origin
         return scale((self.resolution_um,) * 3) @ translate((-x, -y, -z))
-
-    def slice(self, width: float, transform: ndarray) -> ndarray:
-        warn("Atlas Slicing not correctly implemented, don't rely on this result!")
-        return self.volume[20]

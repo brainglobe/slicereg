@@ -25,7 +25,6 @@ class WorkflowProvider:
     def load_section(self) -> LoadSectionWorkflow:
         return LoadSectionWorkflow(
             section_repo=self.section_repo,
-            atlas_repo=self.atlas_repo,
             serializer=self.section_serializer,
             presenter=self.load_section_presenter
         )

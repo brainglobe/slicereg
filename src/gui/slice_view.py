@@ -52,16 +52,13 @@ class SliceView(BaseVispyView):
     def update_slice_image(self, image: ndarray):
         self._slice.set_data(image)
         self._slice.clim = np.min(image), np.max(image)
+        self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
+        self._viewbox.camera.scale_factor = image.shape[1]
         self._canvas.update()
 
-    def show_new_slice(self, slice: ndarray, ref_slice: ndarray):
-        self._viewbox.camera.center = ref_slice.shape[1] / 2, ref_slice.shape[0] / 2, 0.
-        self._viewbox.camera.scale_factor = ref_slice.shape[1]
-        self._reference_slice.set_data(ref_slice)
-        self._reference_slice.clim = np.min(ref_slice), np.max(ref_slice)
-        self._viewbox.camera.scale_factor = slice.shape[1]
-        self._slice.set_data(slice)
-        self._slice.clim = np.min(slice), np.max(slice)
+    def update_ref_slice_image(self, image: ndarray):
+        self._slice.set_data(image)
+        self._slice.clim = np.min(image), np.max(image)
         self._canvas.update()
 
     def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:

@@ -3,13 +3,15 @@ from typing import Optional
 from numpy.core._multiarray_umath import ndarray
 
 from src.core.atlas.load_atlas import BaseLoadAtlasPresenter
+from src.core.registration.slice_atlas import BaseSliceAtlasPresenter
 from src.core.section.load_section import BaseLoadSectionPresenter
 from src.core.section.move_section import BaseMoveSectionPresenter
 from src.core.section.select_channel import BaseSelectChannelPresenter
 from src.gui.window import Window
 
 
-class Presenter(BaseLoadAtlasPresenter, BaseSelectChannelPresenter, BaseLoadSectionPresenter, BaseMoveSectionPresenter):
+class Presenter(BaseLoadAtlasPresenter, BaseSelectChannelPresenter, BaseLoadSectionPresenter, BaseMoveSectionPresenter,
+                BaseSliceAtlasPresenter):
 
     def __init__(self, win: Window):
         self.win = win
@@ -27,6 +29,9 @@ class Presenter(BaseLoadAtlasPresenter, BaseSelectChannelPresenter, BaseLoadSect
     def update_section_transform(self, transform: ndarray):
         self.win.volume_view.update_transform(transform=transform)
 
-    def show_section(self, image: ndarray, ref_image: ndarray, transform: Optional[ndarray] = None) -> None:
+    def show_section(self, image: ndarray, transform: Optional[ndarray] = None) -> None:
         self.win.volume_view.view_section(image=image, transform=transform)
-        self.win.slice_view.show_new_slice(slice=image, ref_slice=ref_image)
+        self.win.slice_view.update_slice_image(image=image)
+
+    def show_ref_image(self, ref_image: ndarray):
+        self.win.slice_view.update_ref_slice_image(image=ref_image)
