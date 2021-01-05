@@ -19,7 +19,7 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 class Window(QObject):
 
     def __init__(self, title):
-        self.use_cases: Optional[WorkflowProvider] = None
+        self.workflows: Optional[WorkflowProvider] = None
         self._qt_app = QApplication([])
         self.win = QMainWindow()
         self._default_window_title = title
@@ -74,11 +74,11 @@ class Window(QObject):
 
         resolution_label = button.text()
         resolution = int("".join(filter(str.isdigit, resolution_label)))
-        self.use_cases.load_atlas(resolution=resolution)
+        self.workflows.load_atlas(resolution=resolution)
 
     # Command Routing
     def show_load_image_dialog(self):
-        if self.use_cases is None:
+        if self.workflows is None:
             return
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.win,
@@ -88,15 +88,16 @@ class Window(QObject):
         )
         if not filename:
             return
-        self.use_cases.load_section(filename=filename)
+        self.workflows.load_section(filename=filename)
+
 
     # Controller Code
 
     def register_use_cases(self, app: WorkflowProvider):
-        self.use_cases = app
+        self.workflows = app
         self.volume_view.register_use_cases(app=app)
         self.slice_view.register_use_cases(app=app)
-        self.use_cases.load_atlas(resolution=25)
+        self.workflows.load_atlas(resolution=25)
 
     def run(self):
         self._qt_app.exec_()
