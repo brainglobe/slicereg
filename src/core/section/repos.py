@@ -1,13 +1,11 @@
 from typing import Optional
 
-from src.core.atlas.load_atlas import BaseAtlasRepo
 from src.core.atlas.models import Atlas
-from src.serializers.bg_atlas import BGAtlasSerializer
 from src.core.section.base import BaseSectionRepo
 from src.core.section.models import Section
 
 
-class InMemoryRepo(BaseAtlasRepo, BaseSectionRepo):
+class SectionRepo(BaseSectionRepo):
 
     def __init__(self):
         self._atlas: Optional[Atlas] = None
