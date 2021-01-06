@@ -3,7 +3,7 @@ from typing import Optional
 
 from numpy import ndarray
 
-from src.core.atlas.models import Atlas
+from src.core.models.atlas import Atlas
 
 
 class BaseAtlasRepo(ABC):

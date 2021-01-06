@@ -1,7 +1,7 @@
 from typing import Optional
 
 from src.core.atlas.load_atlas import BaseAtlasRepo
-from src.core.atlas.models import Atlas
+from src.core.models.atlas import Atlas
 
 
 class AtlasRepo(BaseAtlasRepo):

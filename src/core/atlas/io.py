@@ -5,7 +5,7 @@ from bg_atlasapi import BrainGlobeAtlas
 from numpy import ndarray
 
 from src.core.atlas.load_atlas import BaseAtlasSerializer
-from src.core.atlas.models import Atlas
+from src.core.models.atlas import Atlas
 
 
 class BGAtlasSerializer(BaseAtlasSerializer):

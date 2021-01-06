@@ -1,6 +1,6 @@
 from typing import Optional
 
-from src.core.atlas.models import Atlas
+from src.core.models.atlas import Atlas
 from src.core.section.base import BaseSectionRepo
 from src.core.section.models import Section
 

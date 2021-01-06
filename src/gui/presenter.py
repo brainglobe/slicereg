@@ -3,15 +3,13 @@ from typing import Optional
 from numpy.core._multiarray_umath import ndarray
 
 from src.core.atlas.load_atlas import BaseLoadAtlasPresenter
-from src.core.registration.slice_atlas import BaseSliceAtlasPresenter
 from src.core.section.load_section import BaseLoadSectionPresenter
 from src.core.section.move_section import BaseMoveSectionPresenter
 from src.core.section.select_channel import BaseSelectChannelPresenter
 from src.gui.window import Window
 
 
-class Presenter(BaseLoadAtlasPresenter, BaseSelectChannelPresenter, BaseLoadSectionPresenter, BaseMoveSectionPresenter,
-                BaseSliceAtlasPresenter):
+class Presenter(BaseLoadAtlasPresenter, BaseSelectChannelPresenter, BaseLoadSectionPresenter, BaseMoveSectionPresenter):
 
     def __init__(self, win: Window):
         self.win = win

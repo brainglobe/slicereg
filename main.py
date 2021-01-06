@@ -2,7 +2,7 @@ from src.core.atlas.repos import AtlasRepo
 from src.gui.presenter import Presenter
 from src.gui.window import Window
 from src.gui.workflows import WorkflowProvider
-from src.core.section.repos import SectionRepo
+from src.core.models.section import SectionRepo
 from src.core.atlas.io import BGAtlasSerializer
 from src.core.section.io import OmeTiffSerializer
 
