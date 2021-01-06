@@ -8,7 +8,7 @@
     - **models.py** : Contains the The main data structures, scientific concepts, and algorithms.  
       - This is the most important file, and reading it should give you a good idea of what the directory does.
     - **xxx_xxx.py** : These are the workflows that the application can perform. 
-      - Each pipeline is self-contained in its own class and has descriptions of what it needs to perform its work.
+      - Each pipeline is self-contained in its own procedure (it returns nothing) and has descriptions of what it needs to perform its work.
       - As a result, other applications will do the actual supplying and constructing of the data it needs. This code is meant to be very abstract and keep to the big-picture view.
     - **base.py**: Contains abstract classes ("base" classes) that other modules in the directory might use.
     
