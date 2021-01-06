@@ -2,14 +2,14 @@ from typing import Optional
 
 from numpy.core._multiarray_umath import ndarray
 
-from src.core.atlas.load_atlas import BaseLoadAtlasPresenter
+from src.core.load_atlas.load_atlas import BasePresenter
 from src.core.section.load_section import BaseLoadSectionPresenter
 from src.core.section.move_section import BaseMoveSectionPresenter
 from src.core.section.select_channel import BaseSelectChannelPresenter
 from src.gui.window import Window
 
 
-class Presenter(BaseLoadAtlasPresenter, BaseSelectChannelPresenter, BaseLoadSectionPresenter, BaseMoveSectionPresenter):
+class Presenter(BasePresenter, BaseSelectChannelPresenter, BaseLoadSectionPresenter, BaseMoveSectionPresenter):
 
     def __init__(self, win: Window):
         self.win = win
