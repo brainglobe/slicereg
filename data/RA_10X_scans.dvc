@@ -1,10 +1,3 @@
-md5: 1e24a3482c81c70475a351dc0b5b5340
-frozen: true
-deps:
-- path: data/kohllab_exampledata/nassar/RA_10X_scans
-  repo:
-    url: ssh://git@github.com/FrancisCrickInstitute/brain_maps
-    rev_lock: b7fac08dce22ac692b5eb24163e49716ea0c9bf7
 outs:
 - md5: 3c97245f032e7896f39f29711df2fa98.dir
   size: 531779404
