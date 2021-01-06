@@ -28,16 +28,10 @@ class BaseLoadAtlasPresenter(ABC):
     def show_atlas(self, volume: ndarray, transform: ndarray): ...
 
 
-@dataclass
-class LoadAtlasWorkflow:
-    repo: BaseAtlasRepo
-    serializer: BaseAtlasSerializer
-    presenter: BaseLoadAtlasPresenter
-
-    def __call__(self, resolution: int) -> None:
-        atlas = self.repo.get_atlas()
+def load_atlas(repo: BaseAtlasRepo, serializer: BaseAtlasSerializer, presenter: BaseLoadAtlasPresenter, resolution: int) -> None:
+        atlas = repo.get_atlas()
         if atlas is None or atlas.resolution_um != resolution:
-            atlas = self.serializer.read(resolution_um=resolution)
-            self.repo.set_atlas(atlas=atlas)
+            atlas = serializer.read(resolution_um=resolution)
+            repo.set_atlas(atlas=atlas)
 
-        self.presenter.show_atlas(volume=atlas.volume, transform=atlas.model_matrix)
+        presenter.show_atlas(volume=atlas.volume, transform=atlas.model_matrix)

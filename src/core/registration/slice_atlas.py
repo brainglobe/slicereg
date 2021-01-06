@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
 from numpy import ndarray
 
@@ -14,16 +13,10 @@ class BaseSliceAtlasPresenter(ABC):
     def show_ref_image(self, ref_image: ndarray): ...
 
 
-@dataclass
-class SliceAtlasWorkflow:
-    section_repo: BaseSectionRepo
-    atlas_repo: BaseAtlasRepo
-    presenter: BaseSliceAtlasPresenter
-
-    def __call__(self):
-        section = RegisteredSection(
-            section=self.section_repo.get_section(),
-            atlas=self.atlas_repo.get_atlas()
-        )
-        ref_image = section.slice_atlas()
-        self.presenter.show_ref_image(ref_image=ref_image)
+def slice_atlas(section_repo: BaseSectionRepo, atlas_repo: BaseAtlasRepo, presenter: BaseSliceAtlasPresenter) -> None:
+    section = RegisteredSection(
+        section=section_repo.get_section(),
+        atlas=atlas_repo.get_atlas()
+    )
+    ref_image = section.slice_atlas()
+    presenter.show_ref_image(ref_image=ref_image)

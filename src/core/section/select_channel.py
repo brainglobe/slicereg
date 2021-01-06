@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
 from numpy import ndarray
 
@@ -15,19 +14,14 @@ class BaseSelectChannelPresenter(ABC):
     def show_error(self, msg: str) -> None: ...
 
 
-@dataclass(frozen=True)
-class SelectChannelWorkflow:
-    section_repo: BaseSectionRepo
-    presenter: BaseSelectChannelPresenter
-
-    def __call__(self, num: int) -> None:
-        section = self.section_repo.get_section()
-        if section is None:
-            self.presenter.show_error(msg="No section loaded yet.")
-            return
-        try:
-            image = section.channels[num - 1]
-        except IndexError:
-            self.presenter.show_error(msg=f"Section doesn't have a Channel {num}.")
-            return
-        self.presenter.update_section_image(image=image)
+def select_channel(section_repo: BaseSectionRepo, presenter: BaseSelectChannelPresenter, num: int) -> None:
+    section = section_repo.get_section()
+    if section is None:
+        presenter.show_error(msg="No section loaded yet.")
+        return
+    try:
+        image = section.channels[num - 1]
+    except IndexError:
+        presenter.show_error(msg=f"Section doesn't have a Channel {num}.")
+        return
+    presenter.update_section_image(image=image)

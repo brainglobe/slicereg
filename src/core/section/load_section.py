@@ -1,5 +1,4 @@
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
 from numpy import ndarray
 
@@ -12,16 +11,10 @@ class BaseLoadSectionPresenter(ABC):
     def show_section(self, image: ndarray, transform: ndarray): ...
 
 
-@dataclass
-class LoadSectionWorkflow:
-    section_repo: BaseSectionRepo
-    presenter: BaseLoadSectionPresenter
-    serializer: BaseSectionSerializer
-
-    def __call__(self, filename: str) -> None:
-        section = self.serializer.read(filename=filename)
-        self.section_repo.set_section(section=section)
-        self.presenter.show_section(
-            image=section.channels[0],
-            transform=section.affine_transform,
-        )
+def load_section(section_repo: BaseSectionRepo, presenter: BaseLoadSectionPresenter, serializer: BaseSectionSerializer, filename: str) -> None:
+    section = serializer.read(filename=filename)
+    section_repo.set_section(section=section)
+    presenter.show_section(
+        image=section.channels[0],
+        transform=section.affine_transform,
+    )

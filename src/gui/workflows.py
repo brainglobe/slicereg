@@ -1,10 +1,10 @@
 from dataclasses import dataclass
 
 from src.core.section.base import BaseSectionRepo, BaseSectionSerializer
-from src.core.atlas.load_atlas import LoadAtlasWorkflow, BaseLoadAtlasPresenter, BaseAtlasRepo, BaseAtlasSerializer
-from src.core.section.load_section import LoadSectionWorkflow, BaseLoadSectionPresenter
-from src.core.section.select_channel import SelectChannelWorkflow, BaseSelectChannelPresenter
-from src.core.section.move_section import MoveSectionWorkflow, BaseMoveSectionPresenter
+from src.core.atlas.load_atlas import load_atlas, BaseLoadAtlasPresenter, BaseAtlasRepo, BaseAtlasSerializer
+from src.core.section.load_section import load_section, BaseLoadSectionPresenter
+from src.core.section.select_channel import select_channel, BaseSelectChannelPresenter
+from src.core.section.move_section import move_section, BaseMoveSectionPresenter
 
 
 @dataclass
@@ -18,26 +18,33 @@ class WorkflowProvider:
     load_section_presenter: BaseLoadSectionPresenter
     move_section_presenter: BaseMoveSectionPresenter
 
-    @property
-    def load_atlas(self) -> LoadAtlasWorkflow:
-        return LoadAtlasWorkflow(
+    def load_atlas(self, resolution: int) -> None:
+        load_atlas(
             repo=self.atlas_repo,
             serializer=self.atlas_serializer,
-            presenter=self.load_atlas_presenter
+            presenter=self.load_atlas_presenter,
+            resolution=resolution
         )
 
-    @property
-    def load_section(self) -> LoadSectionWorkflow:
-        return LoadSectionWorkflow(
+
+    def load_section(self, filename: str) -> None:
+        load_section(
             section_repo=self.section_repo,
             serializer=self.section_serializer,
-            presenter=self.load_section_presenter
+            presenter=self.load_section_presenter,
+            filename=filename
         )
 
-    @property
-    def select_channel(self) -> SelectChannelWorkflow:
-        return SelectChannelWorkflow(section_repo=self.section_repo, presenter=self.select_channel_presenter)
+    def select_channel(self, num: int) -> None:
+        select_channel(
+            section_repo=self.section_repo,
+            presenter=self.select_channel_presenter,
+            num=num
+        )
 
-    @property
-    def move_section(self) -> MoveSectionWorkflow:
-        return MoveSectionWorkflow(section_repo=self.section_repo, presenter=self.move_section_presenter)
+    def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
+        move_section(
+            section_repo=self.section_repo,
+            presenter=self.move_section_presenter,
+            x=x, y=y, z=z, rx=rx, ry=ry, rz=rz,
+        )
