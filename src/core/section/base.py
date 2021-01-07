@@ -11,11 +11,3 @@ class BaseSectionRepo(ABC):
     @abstractmethod
     def set_section(self, section: Section) -> None: ...
 
-
-class BaseSectionSerializer(ABC):
-
-    @abstractmethod
-    def read(self, filename: str, *args, **kwargs) -> Section: ...
-
-    @abstractmethod
-    def write(self, section: Section, *args, **kwargs) -> None: ...

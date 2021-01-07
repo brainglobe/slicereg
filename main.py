@@ -1,16 +1,19 @@
 from src.core.load_atlas.load_atlas import LoadAtlasWorkflow
-from src.core.load_atlas.repos import AtlasRepo
+from src.core.load_atlas.repo import AtlasRepo
+from src.core.load_section.load_section import LoadSectionWorkflow
+from src.core.load_section.repo import SectionRepo
 from src.gui.presenter import Presenter
 from src.gui.window import Window
 from src.gui.workflows import WorkflowProvider
-from src.core.models.section import SectionRepo
 from src.core.load_atlas.io import BGAtlasSerializer
-from src.core.section.io import OmeTiffSerializer
+from src.core.load_section.io import OmeTiffSerializer
 
 win = Window(title="Registration App")
 
 presenter = Presenter(win=win)
-repo = SectionRepo()
+repo = SectionRepo(
+    serializer=OmeTiffSerializer()
+)
 
 use_cases = WorkflowProvider(
     section_repo=repo,
@@ -20,9 +23,11 @@ use_cases = WorkflowProvider(
         ),
         presenter=presenter,
     ),
-    section_serializer=OmeTiffSerializer(),
+    load_section=LoadSectionWorkflow(
+        repo=repo,
+        presenter=presenter,
+    ),
     select_channel_presenter=presenter,
-    load_section_presenter=presenter,
     move_section_presenter=presenter,
 )
 win.register_use_cases(app=use_cases)

@@ -2,8 +2,8 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
+from src.core.load_section.repo import BaseSectionSerializer
 from src.core.section.models import Section
-from src.core.section.base import BaseSectionSerializer
 
 
 class OmeTiffSerializer(BaseSectionSerializer):
@@ -21,6 +21,3 @@ class OmeTiffSerializer(BaseSectionSerializer):
             "Pixels are not square"
 
         return Section(channels=image, pixel_res_um=float(res_x))
-
-    def write(self, section: Section, *args, **kwargs) -> None:
-        raise NotImplementedError("OME Tiff Writing not yet added.")

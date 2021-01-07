@@ -4,7 +4,7 @@ from io import StringIO
 from bg_atlasapi import BrainGlobeAtlas
 from numpy import ndarray
 
-from src.core.load_atlas.repos import BaseAtlasSerializer
+from src.core.load_atlas.repo import BaseAtlasSerializer
 from src.core.models.atlas import Atlas
 
 

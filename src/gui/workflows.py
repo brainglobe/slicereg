@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 
-from src.core.section.base import BaseSectionRepo, BaseSectionSerializer
+from src.core.section.base import BaseSectionRepo
 from src.core.load_atlas.load_atlas import LoadAtlasWorkflow
-from src.core.section.load_section import load_section, BaseLoadSectionPresenter
+from src.core.load_section.load_section import LoadSectionWorkflow
 from src.core.section.select_channel import select_channel, BaseSelectChannelPresenter
 from src.core.section.move_section import move_section, BaseMoveSectionPresenter
 
@@ -11,18 +11,9 @@ from src.core.section.move_section import move_section, BaseMoveSectionPresenter
 class WorkflowProvider:
     section_repo: BaseSectionRepo
     load_atlas: LoadAtlasWorkflow
-    section_serializer: BaseSectionSerializer
+    load_section: LoadSectionWorkflow
     select_channel_presenter: BaseSelectChannelPresenter
-    load_section_presenter: BaseLoadSectionPresenter
     move_section_presenter: BaseMoveSectionPresenter
-
-    def load_section(self, filename: str) -> None:
-        load_section(
-            section_repo=self.section_repo,
-            serializer=self.section_serializer,
-            presenter=self.load_section_presenter,
-            filename=filename
-        )
 
     def select_channel(self, num: int) -> None:
         select_channel(
