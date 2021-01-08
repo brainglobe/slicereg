@@ -2,6 +2,7 @@ from src.core.load_atlas.load_atlas import LoadAtlasWorkflow
 from src.core.load_atlas.repo import AtlasRepo
 from src.core.load_section.load_section import LoadSectionWorkflow
 from src.core.load_section.repo import SectionRepo
+from src.core.select_channel.select_channel import SelectChannelWorkflow
 from src.gui.presenter import Presenter
 from src.gui.window import Window
 from src.gui.workflows import WorkflowProvider
@@ -27,7 +28,10 @@ use_cases = WorkflowProvider(
         repo=repo,
         presenter=presenter,
     ),
-    select_channel_presenter=presenter,
+    select_channel=SelectChannelWorkflow(
+        repo=repo,
+        presenter=presenter,
+    ),
     move_section_presenter=presenter,
 )
 win.register_use_cases(app=use_cases)
