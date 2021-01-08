@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from src.core.load_section.load_section import BaseRepo
-from src.core.models.section import Section
+from src.workflows.load_section.load_section import BaseRepo
+from src.models.section import Section
 
 
 class BaseSectionSerializer(ABC):

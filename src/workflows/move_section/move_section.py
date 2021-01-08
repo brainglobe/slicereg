@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from src.core.models.section import Section
+from src.models.section import Section
 
 
 class BaseRepo(ABC):

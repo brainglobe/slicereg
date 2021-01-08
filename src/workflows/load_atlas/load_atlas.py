@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import Optional
 
 from numpy import ndarray
 
-from src.core.models.atlas import Atlas
+from src.models.atlas import Atlas
 
 
 class BaseRepo(ABC):

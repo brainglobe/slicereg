@@ -5,7 +5,7 @@ from typing import Tuple
 
 from numpy import ndarray
 
-from src.core.models.math import shift_plane, affine_transform
+from src.models.math import shift_plane, affine_transform
 
 
 @dataclass(frozen=True)

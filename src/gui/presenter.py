@@ -2,10 +2,10 @@ from typing import Optional
 
 from numpy.core._multiarray_umath import ndarray
 
-from src.core.load_atlas.load_atlas import BasePresenter as LAPresenter
-from src.core.load_section.load_section import BasePresenter as BLSPresenter
-from src.core.move_section.move_section import BasePresenter as MSPresenter
-from src.core.select_channel.select_channel import BasePresenter as SCPresenter
+from src.workflows.load_atlas.load_atlas import BasePresenter as LAPresenter
+from src.workflows.load_section.load_section import BasePresenter as BLSPresenter
+from src.workflows.move_section.move_section import BasePresenter as MSPresenter
+from src.workflows.select_channel.select_channel import BasePresenter as SCPresenter
 from src.gui.window import Window
 
 

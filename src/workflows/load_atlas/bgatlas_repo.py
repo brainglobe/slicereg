@@ -1,7 +1,7 @@
 from numpy import ndarray
 
-from src.core.load_atlas.load_atlas import BaseRepo
-from src.core.models.atlas import Atlas
+from src.workflows.load_atlas.load_atlas import BaseRepo
+from src.models.atlas import Atlas
 from contextlib import redirect_stdout
 from io import StringIO
 
