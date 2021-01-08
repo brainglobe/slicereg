@@ -4,12 +4,12 @@ from numpy.core._multiarray_umath import ndarray
 
 from src.core.load_atlas.load_atlas import BasePresenter as LAPresenter
 from src.core.load_section.load_section import BasePresenter as BLSPresenter
-from src.core.section.move_section import BaseMoveSectionPresenter
-from src.core.select_channel.select_channel import BasePresenter
+from src.core.move_section.move_section import BasePresenter as MSPresenter
+from src.core.select_channel.select_channel import BasePresenter as SCPresenter
 from src.gui.window import Window
 
 
-class Presenter(LAPresenter, BasePresenter, BLSPresenter, BaseMoveSectionPresenter):
+class Presenter(LAPresenter, SCPresenter, BLSPresenter, MSPresenter):
 
     def __init__(self, win: Window):
         self.win = win
