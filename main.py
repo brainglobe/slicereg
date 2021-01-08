@@ -1,4 +1,4 @@
-from src.gui.presenter import LoadAtlasPresenter, LoadSectionPresenter, SelectChannelPresenter
+from src.gui.presenter import LoadAtlasPresenter, LoadSectionPresenter
 from src.gui.window import Window
 from src.gui.workflows import ViewModel
 from src.repos.bgatlas_repo import BrainglobeAtlasRepo
@@ -25,9 +25,8 @@ use_cases = ViewModel(
         repo=repo,
         presenter=LoadSectionPresenter(win=win),
     ),
-    select_channel=SelectChannelWorkflow(
+    _select_channel=SelectChannelWorkflow(
         repo=repo,
-        presenter=SelectChannelPresenter(win=win),
     ),
     _move_section=MoveSectionWorkflow(
         repo=repo,

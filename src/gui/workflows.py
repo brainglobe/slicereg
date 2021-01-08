@@ -13,7 +13,7 @@ class ViewModel:
     win: Window
     load_atlas: LoadAtlasWorkflow
     load_section: LoadSectionWorkflow
-    select_channel: SelectChannelWorkflow
+    _select_channel: SelectChannelWorkflow
     _move_section: MoveSectionWorkflow
 
     def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
@@ -24,3 +24,12 @@ class ViewModel:
         else:
             msg = result.value
             self.win.show_temp_title(msg)
+
+    def select_channel(self, num: int) -> None:
+        result = self._select_channel(num=num)
+        if result.is_ok():
+            data = result.value
+            self.win.volume_view.update_image(image=data.section_image)
+            self.win.slice_view.update_slice_image(image=data.section_image)
+        else:
+            self.win.show_temp_title(result.value)
