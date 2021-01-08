@@ -1,6 +1,5 @@
-from src.core.load_atlas.io import BGAtlasSerializer
 from src.core.load_atlas.load_atlas import LoadAtlasWorkflow
-from src.core.load_atlas.repo import AtlasRepo
+from src.core.load_atlas.bgatlas_repo import BrainglobeAtlasRepo
 from src.core.load_section.io import OmeTiffSerializer
 from src.core.load_section.load_section import LoadSectionWorkflow
 from src.core.load_section.repo import SectionRepo
@@ -19,9 +18,7 @@ repo = SectionRepo(
 
 use_cases = WorkflowProvider(
     load_atlas=LoadAtlasWorkflow(
-        repo=AtlasRepo(
-            serializer=BGAtlasSerializer()
-        ),
+        repo=BrainglobeAtlasRepo(),
         presenter=presenter,
     ),
     load_section=LoadSectionWorkflow(
