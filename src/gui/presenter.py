@@ -2,11 +2,10 @@ from typing import Optional
 
 from numpy import ndarray
 
-from src.workflows.load_atlas.load_atlas import BasePresenter as LAPresenter
-from src.workflows.load_section.load_section import BasePresenter as BLSPresenter
-from src.workflows.move_section.move_section import BasePresenter as MSPresenter
-from src.workflows.select_channel.select_channel import BasePresenter as SCPresenter
 from src.gui.window import Window
+from src.workflows.load_atlas import BasePresenter as LAPresenter
+from src.workflows.load_section.load_section import BasePresenter as BLSPresenter
+from src.workflows.select_channel import BasePresenter as SCPresenter
 
 
 class LoadAtlasPresenter(LAPresenter):
@@ -39,15 +38,3 @@ class SelectChannelPresenter(SCPresenter):
 
     def __init__(self, win: Window):
         self.win = win
-
-
-class MoveSectionPresenter(MSPresenter):
-
-    def __init__(self, win: Window):
-        self.win = win
-
-    def show_error(self, msg: str) -> None:
-        self.win.show_temp_title(msg)
-
-    def update_section_transform(self, transform: ndarray):
-        self.win.volume_view.update_transform(transform=transform)
