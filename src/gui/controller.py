@@ -1,6 +1,9 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import dataclass
+
+from numpy import ndarray
 
 from src.workflows.load_atlas import LoadAtlasWorkflow
 from src.workflows.load_section.load_section import LoadSectionWorkflow
@@ -8,9 +11,25 @@ from src.workflows.move_section import MoveSectionWorkflow
 from src.workflows.select_channel import SelectChannelWorkflow
 
 
+class BaseView(ABC):
+
+    @abstractmethod
+    def update_transform(self, transform: ndarray) -> None: ...
+
+    @abstractmethod
+    def show_error(self, msg: str) -> None: ...
+
+    @abstractmethod
+    def update_section_image(self, image: ndarray) -> None: ...
+
+    @abstractmethod
+    def show_atlas(self, volume: ndarray, transform: ndarray) -> None: ...
+
+
+
 @dataclass
-class ViewModel:
-    win: Window
+class Controller:
+    view: BaseView
     _load_atlas: LoadAtlasWorkflow
     load_section: LoadSectionWorkflow
     _select_channel: SelectChannelWorkflow
@@ -20,24 +39,23 @@ class ViewModel:
         result = self._move_section(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz)
         if result.is_ok():
             data = result.value
-            self.win.volume_view.update_transform(transform=data.transform)
+            self.view.update_transform(transform=data.transform)
         else:
             msg = result.value
-            self.win.show_temp_title(msg)
+            self.view.show_error(msg)
 
     def select_channel(self, num: int) -> None:
         result = self._select_channel(num=num)
         if result.is_ok():
             data = result.value
-            self.win.volume_view.update_image(image=data.section_image)
-            self.win.slice_view.update_slice_image(image=data.section_image)
+            self.view.update_section_image(image=data.section_image)
         else:
-            self.win.show_temp_title(result.value)
+            self.view.show_error(result.value)
 
     def load_atlas(self, resolution: int) -> None:
         result = self._load_atlas(resolution=resolution)
         if result.is_ok():
             data = result.value
-            self.win.volume_view.view_atlas(volume=data.atlas_volume, transform=data.atlas_transform)
+            self.view.show_atlas(volume=data.atlas_volume, transform=data.atlas_transform)
         else:
-            self.win.show_temp_title(result.value)
+            self.view.show_error(result.value)
