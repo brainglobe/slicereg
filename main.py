@@ -1,4 +1,4 @@
-from src.gui.presenter import LoadAtlasPresenter, LoadSectionPresenter
+from src.gui.presenter import LoadSectionPresenter
 from src.gui.window import Window
 from src.gui.workflows import ViewModel
 from src.repos.bgatlas_repo import BrainglobeAtlasRepo
@@ -17,9 +17,8 @@ repo = SectionRepo(
 
 use_cases = ViewModel(
     win=win,
-    load_atlas=LoadAtlasWorkflow(
+    _load_atlas=LoadAtlasWorkflow(
         repo=BrainglobeAtlasRepo(),
-        presenter=LoadAtlasPresenter(win=win),
     ),
     load_section=LoadSectionWorkflow(
         repo=repo,

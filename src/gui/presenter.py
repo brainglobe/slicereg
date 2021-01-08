@@ -3,17 +3,7 @@ from typing import Optional
 from numpy import ndarray
 
 from src.gui.window import Window
-from src.workflows.load_atlas import BasePresenter as LAPresenter
 from src.workflows.load_section.load_section import BasePresenter as BLSPresenter
-
-
-class LoadAtlasPresenter(LAPresenter):
-
-    def __init__(self, win: Window):
-        self.win = win
-
-    def show_atlas(self, volume: ndarray, transform: ndarray):
-        self.win.volume_view.view_atlas(volume=volume, transform=transform)
 
 
 class LoadSectionPresenter(BLSPresenter):

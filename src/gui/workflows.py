@@ -11,7 +11,7 @@ from src.workflows.select_channel import SelectChannelWorkflow
 @dataclass
 class ViewModel:
     win: Window
-    load_atlas: LoadAtlasWorkflow
+    _load_atlas: LoadAtlasWorkflow
     load_section: LoadSectionWorkflow
     _select_channel: SelectChannelWorkflow
     _move_section: MoveSectionWorkflow
@@ -31,5 +31,13 @@ class ViewModel:
             data = result.value
             self.win.volume_view.update_image(image=data.section_image)
             self.win.slice_view.update_slice_image(image=data.section_image)
+        else:
+            self.win.show_temp_title(result.value)
+
+    def load_atlas(self, resolution: int) -> None:
+        result = self._load_atlas(resolution=resolution)
+        if result.is_ok():
+            data = result.value
+            self.win.volume_view.view_atlas(volume=data.atlas_volume, transform=data.atlas_transform)
         else:
             self.win.show_temp_title(result.value)
