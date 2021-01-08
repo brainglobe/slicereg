@@ -10,7 +10,7 @@ from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
 from src.gui.base import BaseVispyView
-from src.gui.workflows import ViewModel
+from src.gui.viewmodel import ViewModel
 
 
 class VolumeView(BaseVispyView):

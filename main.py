@@ -1,6 +1,6 @@
 from src.gui.presenter import LoadSectionPresenter
 from src.gui.window import Window
-from src.gui.workflows import ViewModel
+from src.gui.viewmodel import ViewModel
 from src.repos.bgatlas_repo import BrainglobeAtlasRepo
 from src.workflows.load_atlas import LoadAtlasWorkflow
 from src.workflows.load_section.io import OmeTiffSerializer

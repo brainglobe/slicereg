@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 from PySide2.QtWidgets import QWidget
 
-from src.gui.workflows import ViewModel
+from src.gui.viewmodel import ViewModel
 
 
 class BaseVispyView(ABC):

@@ -7,7 +7,7 @@ from vispy.app import Timer
 
 from src.gui.slice_view import SliceView
 from src.gui.volume_view import VolumeView
-from src.gui.workflows import ViewModel
+from src.gui.viewmodel import ViewModel
 
 
 def restart_timer(timer: Timer, iterations=1) -> None:
