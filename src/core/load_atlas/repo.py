@@ -12,13 +12,9 @@ class BaseAtlasSerializer(ABC):
 
 
 class AtlasRepo(BaseRepo):
-    _atlas: Optional[Atlas] = None
 
     def __init__(self, serializer: BaseAtlasSerializer):
         self._serializer = serializer
 
     def load_atlas(self, resolution: int) -> Atlas:
         return self._serializer.read(resolution_um=resolution)
-
-    def set_atlas(self, atlas: Atlas) -> None:
-        self._atlas = atlas

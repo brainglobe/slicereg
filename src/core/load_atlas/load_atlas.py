@@ -11,9 +11,6 @@ class BaseRepo(ABC):
     @abstractmethod
     def load_atlas(self, resolution: int) -> Atlas: ...
 
-    @abstractmethod
-    def set_atlas(self, atlas: Atlas) -> None: ...
-
 
 class BasePresenter(ABC):
 
@@ -29,5 +26,4 @@ class LoadAtlasWorkflow:
 
     def __call__(self, resolution: int) -> None:
         atlas = self._repo.load_atlas(resolution=resolution)
-        self._repo.set_atlas(atlas=atlas)
         self._presenter.show_atlas(volume=atlas.volume, transform=atlas.model_matrix)
