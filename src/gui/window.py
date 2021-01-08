@@ -7,7 +7,7 @@ from vispy.app import Timer
 
 from src.gui.slice_view import SliceView
 from src.gui.volume_view import VolumeView
-from src.gui.workflows import WorkflowProvider
+from src.gui.workflows import ViewModel
 
 
 def restart_timer(timer: Timer, iterations=1) -> None:
@@ -19,7 +19,7 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 class Window(QObject):
 
     def __init__(self, title):
-        self.workflows: Optional[WorkflowProvider] = None
+        self.workflows: Optional[ViewModel] = None
         self._qt_app = QApplication([])
         self.win = QMainWindow()
         self._default_window_title = title
@@ -93,7 +93,7 @@ class Window(QObject):
 
     # Controller Code
 
-    def register_use_cases(self, app: WorkflowProvider):
+    def register_use_cases(self, app: ViewModel):
         self.workflows = app
         self.volume_view.register_use_cases(app=app)
         self.slice_view.register_use_cases(app=app)

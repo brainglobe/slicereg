@@ -202,7 +202,7 @@ watch = ["pyinotify"]
 
 [[package]]
 name = "dvc"
-version = "1.11.9"
+version = "1.11.10"
 description = "Git for data scientists - manage your code and data together"
 category = "dev"
 optional = false
@@ -828,6 +828,14 @@ security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
+name = "result"
+version = "0.5.0"
+description = "A rust-like result type for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "rich"
 version = "9.6.1"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
@@ -1101,7 +1109,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8,<3.10"
-content-hash = "e3ff825f49d7220bb2ad8bad36eab66f9277a84dec23303153e9cefbaab956b0"
+content-hash = "7e30c7be12add209831cf7323d3ee0d4c94a770ce1253fbd79a538a3935c3062"
 
 [metadata.files]
 appdirs = [
@@ -1234,8 +1242,8 @@ dulwich = [
     {file = "dulwich-0.20.15.tar.gz", hash = "sha256:fb1773373ec2af896031f8312af6962a1b8b0176a2de3fb3d84a84ec04498888"},
 ]
 dvc = [
-    {file = "dvc-1.11.9-py2.py3-none-any.whl", hash = "sha256:f7cdb4d33bec02a418adc2068107314420fa3e69bae623394dbcd5c163f508c3"},
-    {file = "dvc-1.11.9.tar.gz", hash = "sha256:d5f8c634a333be06d8d4d84a6ed92015c553846c1e36207b3aea235a44fb6dc1"},
+    {file = "dvc-1.11.10-py2.py3-none-any.whl", hash = "sha256:037ffc5c7fa6f8e42f898659e58823645305e8cf3c76b3fca6be3d5819ee058f"},
+    {file = "dvc-1.11.10.tar.gz", hash = "sha256:6b53ebf1bd5619836f131181402bb21f7b44109166e9db8f8d6a0d8c7ce9458d"},
 ]
 flatten-dict = [
     {file = "flatten-dict-0.3.0.tar.gz", hash = "sha256:0ccc43f15c7c84c5ef387ad19254f6769a32d170313a1bcbf4ce582089313d7e"},
@@ -1552,6 +1560,10 @@ pyyaml = [
 requests = [
     {file = "requests-2.25.1-py2.py3-none-any.whl", hash = "sha256:c210084e36a42ae6b9219e00e48287def368a26d03a048ddad7bfee44f75871e"},
     {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
+]
+result = [
+    {file = "result-0.5.0-py3-none-any.whl", hash = "sha256:46f039a2d17e47709c13e29af359c3fa91fd5cacddba2a8109fdcb514e6ff471"},
+    {file = "result-0.5.0.tar.gz", hash = "sha256:f4563ff615b1147822d13eb363fbda202511fcbf281b3cf7acf0723ca7cb612b"},
 ]
 rich = [
     {file = "rich-9.6.1-py3-none-any.whl", hash = "sha256:064814e6cfbc61ff1f82b1e950667c5dc3bf3ec3ed9ca6f62a29007d1bc5ed4c"},

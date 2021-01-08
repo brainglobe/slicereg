@@ -1,3 +1,4 @@
+from src.gui.presenter import LoadAtlasPresenter, LoadSectionPresenter, SelectChannelPresenter, MoveSectionPresenter
 from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow
 from src.workflows.load_atlas.bgatlas_repo import BrainglobeAtlasRepo
 from src.workflows.load_section.io import OmeTiffSerializer
@@ -5,33 +6,31 @@ from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.load_section.repo import SectionRepo
 from src.workflows.move_section.move_section import MoveSectionWorkflow
 from src.workflows.select_channel.select_channel import SelectChannelWorkflow
-from src.gui.presenter import Presenter
 from src.gui.window import Window
-from src.gui.workflows import WorkflowProvider
+from src.gui.workflows import ViewModel
 
 win = Window(title="Registration App")
 
-presenter = Presenter(win=win)
 repo = SectionRepo(
     serializer=OmeTiffSerializer()
 )
 
-use_cases = WorkflowProvider(
+use_cases = ViewModel(
     load_atlas=LoadAtlasWorkflow(
         repo=BrainglobeAtlasRepo(),
-        presenter=presenter,
+        presenter=LoadAtlasPresenter(win=win),
     ),
     load_section=LoadSectionWorkflow(
         repo=repo,
-        presenter=presenter,
+        presenter=LoadSectionPresenter(win=win),
     ),
     select_channel=SelectChannelWorkflow(
         repo=repo,
-        presenter=presenter,
+        presenter=SelectChannelPresenter(win=win),
     ),
     move_section=MoveSectionWorkflow(
         repo=repo,
-        presenter=presenter
+        presenter=MoveSectionPresenter(win=win)
     )
 )
 win.register_use_cases(app=use_cases)

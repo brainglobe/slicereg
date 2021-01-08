@@ -7,7 +7,7 @@ from src.workflows.select_channel.select_channel import SelectChannelWorkflow
 
 
 @dataclass
-class WorkflowProvider:
+class ViewModel:
     load_atlas: LoadAtlasWorkflow
     load_section: LoadSectionWorkflow
     select_channel: SelectChannelWorkflow

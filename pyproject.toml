@@ -15,6 +15,7 @@ PySide2 = "^5.15.2"
 PyOpenGL = "^3.1.5"
 PyOpenGL-accelerate = "^3.1.5"
 vispy = { git = "https://www.github.com/vispy/vispy.git", rev = "7f3f6f6" }
+result = "^0.5.0"
 
 [tool.poetry.dev-dependencies]
 dvc = {extras = ["gdrive"], version = "^1.11.9"}
