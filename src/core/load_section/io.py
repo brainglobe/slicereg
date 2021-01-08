@@ -3,7 +3,7 @@ import xmltodict
 from numpy import uint16
 
 from src.core.load_section.repo import BaseSectionSerializer
-from src.core.section.models import Section
+from src.core.models.section import Section
 
 
 class OmeTiffSerializer(BaseSectionSerializer):

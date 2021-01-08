@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from src.core.models.atlas import Atlas
-from src.core.section.base import BaseSectionRepo
-from src.core.section.models import Section
+from src.core.load_section.load_section import BaseRepo
+from src.core.models.section import Section
 
 
 class BaseSectionSerializer(ABC):
@@ -12,7 +11,7 @@ class BaseSectionSerializer(ABC):
     def read(self, filename: str) -> Section: ...
 
 
-class SectionRepo(BaseSectionRepo):
+class SectionRepo(BaseRepo):
 
     def __init__(self, serializer: BaseSectionSerializer):
         self._serializer = serializer
