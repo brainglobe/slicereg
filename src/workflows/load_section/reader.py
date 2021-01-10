@@ -2,11 +2,11 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from src.workflows.load_section.repo import BaseSectionSerializer
+from src.workflows.load_section.load_section import BaseSectionReader
 from src.models.section import Section
 
 
-class OmeTiffSerializer(BaseSectionSerializer):
+class OmeTiffReader(BaseSectionReader):
 
     def read(self, filename: str) -> Section:
         f = tifffile.TiffFile(filename)

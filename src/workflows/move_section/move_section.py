@@ -6,16 +6,7 @@ from dataclasses import dataclass
 from numpy import ndarray
 from result import Result, Err, Ok
 
-from src.models.section import Section
-
-
-class BaseRepo(ABC):
-
-    @abstractmethod
-    def get_section(self) -> Section: ...
-
-    @abstractmethod
-    def set_section(self, section: Section) -> None: ...
+from src.workflows.shared.section_repo import BaseSectionRepo
 
 
 @dataclass
@@ -25,7 +16,7 @@ class SectionTransformData:
 
 class MoveSectionWorkflow:
 
-    def __init__(self, repo: BaseRepo, presenter: BasePresenter):
+    def __init__(self, repo: BaseSectionRepo, presenter: BasePresenter):
         self._repo = repo
         self._presenter = presenter
 

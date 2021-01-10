@@ -3,10 +3,11 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from numpy.core._multiarray_umath import ndarray
+from numpy import ndarray
 from result import Result, Err, Ok
 
 from src.models.section import Section
+from src.workflows.shared.section_repo import BaseSectionRepo
 
 
 class BaseRepo(ABC):
@@ -22,7 +23,7 @@ class SectionChannelData:
 
 class SelectChannelWorkflow:
 
-    def __init__(self, repo: BaseRepo, presenter: BasePresenter):
+    def __init__(self, repo: BaseSectionRepo, presenter: BasePresenter):
         self._repo = repo
         self._presenter = presenter
 
