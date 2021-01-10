@@ -9,7 +9,7 @@ from src.workflows.load_section.io import OmeTiffSerializer
 from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.load_section.repo import SectionRepo
 from src.workflows.move_section.move_section import MoveSectionWorkflow
-from src.workflows.select_channel import SelectChannelWorkflow
+from src.workflows.select_channel.select_channel import SelectChannelWorkflow
 
 win = Window(title="Registration App")
 
@@ -20,21 +20,31 @@ repo = SectionRepo(
 
 from src.workflows.move_section.presenter import GuiPresenter as MSPresenter
 from src.workflows.move_section.gui_view import GuiView as MSView
+from src.workflows.select_channel.presenter import GuiPresenter as SCPresenter
+from src.workflows.select_channel.gui_view import GuiView as SCView
 
 
 use_cases = Controller(
-    view=win,
     load_section=LoadSectionWorkflow(
         repo=repo,
-        presenter=LoadSectionPresenter(win=win),
+        presenter=LoadSectionPresenter(
+            win=win
+        ),
     ),
-    _select_channel=SelectChannelWorkflow(
+    select_channel=SelectChannelWorkflow(
         repo=repo,
+        presenter=SCPresenter(
+            view=SCView(
+                win=win
+            )
+        )
     ),
     load_atlas=LoadAtlasWorkflow(
         repo=BrainglobeAtlasRepo(),
         presenter=GuiPresenter(
-            view=GuiView(win=win)
+            view=GuiView(
+                win=win
+            )
         )
     ),
     move_section=MoveSectionWorkflow(

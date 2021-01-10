@@ -1,14 +1,12 @@
 from typing import Optional
 
-from PySide2.QtCore import QObject
 from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout
-from numpy import ndarray
 from vispy.app import Timer
 
+from src.gui.controller import Controller
 from src.gui.slice_view import SliceView
 from src.gui.volume_view import VolumeView
-from src.gui.controller import Controller, BaseView
 
 
 def restart_timer(timer: Timer, iterations=1) -> None:
@@ -17,7 +15,7 @@ def restart_timer(timer: Timer, iterations=1) -> None:
     timer.start(iterations=iterations)
 
 
-class Window(BaseView):
+class Window:
 
     def __init__(self, title):
         self.workflows: Optional[Controller] = None
@@ -69,15 +67,8 @@ class Window(BaseView):
         self._show_default_window_title()
         self.win.show()
 
-    def update_section_image(self, image: ndarray) -> None:
-        self.volume_view.update_image(image=image)
-        self.slice_view.update_slice_image(image=image)
-
     def show_error(self, msg: str) -> None:
         self.show_temp_title(msg)
-
-    def update_transform(self, transform: ndarray) -> None:
-        self.volume_view.update_transform(transform=transform)
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
