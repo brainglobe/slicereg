@@ -108,7 +108,7 @@ class Window(BaseView):
         self.workflows = app
         self.volume_view.register_use_cases(app=app)
         self.slice_view.register_use_cases(app=app)
-        self.load_atlas.__call__(resolution=25)
+        self.workflows.load_atlas(resolution=25)
 
     def run(self):
         self._qt_app.exec_()
