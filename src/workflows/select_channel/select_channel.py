@@ -7,7 +7,7 @@ from numpy import ndarray
 from result import Result, Err, Ok
 
 from src.models.section import Section
-from src.workflows.shared.section_repo import BaseSectionRepo
+from src.workflows.shared.repos.base import BaseSectionRepo
 
 
 class BaseRepo(ABC):

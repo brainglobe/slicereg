@@ -13,7 +13,7 @@ from src.workflows.provider import Provider
 from src.workflows.select_channel.gui_view import GuiView as SCView
 from src.workflows.select_channel.presenter import GuiPresenter as SCPresenter
 from src.workflows.select_channel.select_channel import SelectChannelWorkflow
-from src.workflows.shared.section_repo import InMemorySectionRepo
+from src.workflows.shared.repos.section_repo import InMemorySectionRepo
 
 win = Window(title="Registration App")
 

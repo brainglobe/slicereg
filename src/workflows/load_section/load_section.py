@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from numpy import ndarray
 
 from src.models.section import Section
-from src.workflows.shared.section_repo import BaseSectionRepo
+from src.workflows.shared.repos.base import BaseSectionRepo
 
 
 class BasePresenter(ABC):
