@@ -69,9 +69,6 @@ class Window(BaseView):
         self._show_default_window_title()
         self.win.show()
 
-    def show_atlas(self, volume: ndarray, transform: ndarray) -> None:
-        self.volume_view.view_atlas(volume=volume, transform=transform)
-
     def update_section_image(self, image: ndarray) -> None:
         self.volume_view.update_image(image=image)
         self.slice_view.update_slice_image(image=image)
@@ -111,7 +108,7 @@ class Window(BaseView):
         self.workflows = app
         self.volume_view.register_use_cases(app=app)
         self.slice_view.register_use_cases(app=app)
-        self.load_atlas.load_atlas(resolution=25)
+        self.load_atlas.__call__(resolution=25)
 
     def run(self):
         self._qt_app.exec_()

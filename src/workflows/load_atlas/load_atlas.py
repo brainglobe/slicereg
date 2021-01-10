@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Tuple
@@ -6,6 +8,7 @@ from numpy import ndarray
 from result import Result, Ok
 
 from src.models.atlas import Atlas
+
 
 @dataclass
 class AtlasRepoData:
@@ -28,34 +31,19 @@ class AtlasData:
 
 class LoadAtlasWorkflow:
 
-    def __init__(self, repo: BaseRepo):
+    def __init__(self, repo: BaseRepo, presenter: BasePresenter):
         self._repo = repo
+        self._presenter = presenter
 
-    def __call__(self, resolution: int) -> Result[AtlasData, str]:
+    def __call__(self, resolution: int):
         data = self._repo.get_atlas(resolution=resolution)
         atlas = Atlas(volume=data.volume, resolution_um=data.resolution_um, origin=data.origin)
-        return Ok(AtlasData(atlas_volume=atlas.volume, atlas_transform=atlas.model_matrix))
+        response = Ok(AtlasData(atlas_volume=atlas.volume, atlas_transform=atlas.model_matrix))
+        self._presenter.present(response)
 
 
-@dataclass
-class BaseLoadAtlasView(ABC):
-
-    @abstractmethod
-    def show_atlas(self, volume: ndarray, transform: ndarray) -> None: ...
+class BasePresenter(ABC):
 
     @abstractmethod
-    def show_error(self, msg: str) -> None: ...
+    def present(self, data: Result[AtlasData, str]): ...
 
-
-@dataclass
-class LoadAtlasController:
-    view: BaseLoadAtlasView
-    _load_atlas: LoadAtlasWorkflow
-
-    def load_atlas(self, resolution: int) -> None:
-        result = self._load_atlas(resolution=resolution)
-        if result.is_ok():
-            data = result.value
-            self.view.show_atlas(volume=data.atlas_volume, transform=data.atlas_transform)
-        else:
-            self.view.show_error(result.value)
