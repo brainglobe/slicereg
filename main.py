@@ -1,8 +1,8 @@
 from src.gui.presenter import LoadSectionPresenter
 from src.gui.window import Window
 from src.gui.controller import Controller
-from src.repos.bgatlas_repo import BrainglobeAtlasRepo
-from src.workflows.load_atlas import LoadAtlasWorkflow
+from src.workflows.load_atlas.bgatlas_repo import BrainglobeAtlasRepo
+from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow, LoadAtlasController
 from src.workflows.load_section.io import OmeTiffSerializer
 from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.load_section.repo import SectionRepo
@@ -11,15 +11,20 @@ from src.workflows.select_channel import SelectChannelWorkflow
 
 win = Window(title="Registration App")
 
+win.load_atlas = LoadAtlasController(
+    view=win,
+    _load_atlas=LoadAtlasWorkflow(
+        repo=BrainglobeAtlasRepo()
+    )
+)
+
+
 repo = SectionRepo(
     serializer=OmeTiffSerializer()
 )
 
 use_cases = Controller(
     view=win,
-    _load_atlas=LoadAtlasWorkflow(
-        repo=BrainglobeAtlasRepo(),
-    ),
     load_section=LoadSectionWorkflow(
         repo=repo,
         presenter=LoadSectionPresenter(win=win),

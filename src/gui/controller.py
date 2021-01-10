@@ -5,7 +5,6 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.workflows.load_atlas import LoadAtlasWorkflow
 from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.move_section import MoveSectionWorkflow
 from src.workflows.select_channel import SelectChannelWorkflow
@@ -22,15 +21,11 @@ class BaseView(ABC):
     @abstractmethod
     def update_section_image(self, image: ndarray) -> None: ...
 
-    @abstractmethod
-    def show_atlas(self, volume: ndarray, transform: ndarray) -> None: ...
-
 
 
 @dataclass
 class Controller:
     view: BaseView
-    _load_atlas: LoadAtlasWorkflow
     load_section: LoadSectionWorkflow
     _select_channel: SelectChannelWorkflow
     _move_section: MoveSectionWorkflow
@@ -52,10 +47,5 @@ class Controller:
         else:
             self.view.show_error(result.value)
 
-    def load_atlas(self, resolution: int) -> None:
-        result = self._load_atlas(resolution=resolution)
-        if result.is_ok():
-            data = result.value
-            self.view.show_atlas(volume=data.atlas_volume, transform=data.atlas_transform)
-        else:
-            self.view.show_error(result.value)
+
+
