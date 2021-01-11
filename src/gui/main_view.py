@@ -4,7 +4,7 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, Q
     QHBoxLayout
 from vispy.app import Timer
 
-from src.workflows.workflowprovider import WorkflowProvider
+from src.workflows.provider import WorkflowProvider
 from src.gui.slice_view import SliceView
 from src.gui.volume_view import VolumeView
 

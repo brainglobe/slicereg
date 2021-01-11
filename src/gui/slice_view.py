@@ -6,7 +6,7 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from src.gui.base import BaseVispyView
-from src.workflows.workflowprovider import WorkflowProvider
+from src.workflows.provider import WorkflowProvider
 
 
 class SliceView(BaseVispyView):

@@ -5,7 +5,7 @@ from src.workflows.load_section import OmeTiffReader, LoadSectionWorkflow
 from src.workflows.move_section import MoveSectionWorkflow
 from src.workflows.select_channel import SelectChannelWorkflow
 from src.workflows.shared.repos.section_repo import InMemorySectionRepo
-from src.workflows.workflowprovider import WorkflowProvider
+from src.workflows.provider import WorkflowProvider
 
 win = MainView(title="Registration App")
 
