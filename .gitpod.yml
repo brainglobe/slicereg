@@ -1,7 +1,6 @@
 image:
     file: .gitpod.Dockerfile
 tasks:
-  - init: pip install poetry
-    command: poetry install
-  - command: poetry shell
+  - init: poetry install
+    command: poetry shell
 
