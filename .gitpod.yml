@@ -1,6 +1,16 @@
 image:
     file: .gitpod.Dockerfile
+ports:
+  - port: 6080
+    onOpen: open-preview
+  - port: 5900
+    onOpen: ignore
+  - port: 35900
+    onOpen: ignore
 tasks:
   - init: poetry install
     command: poetry shell
+    name: Install dependencies
+  - openMode: split-right
+    command: echo SplitTerminal && clear
 

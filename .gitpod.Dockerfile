@@ -1,7 +1,7 @@
-FROM gitpod/workspace-full
+FROM gitpod/workspace-full-vnc
 
-ENV DISPLAY :99.0
+USER gitpod
 
-RUN sudo apt-get update && sudo apt-get install -y xvfb x11-utils libxkbcommon-x11-0
+RUN sudo apt-get update
 RUN python -m pip install --upgrade
 RUN python -m pip install poetry
