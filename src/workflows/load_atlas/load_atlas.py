@@ -23,12 +23,6 @@ class BaseRepo(ABC):
     def get_atlas(self, resolution: int) -> AtlasRepoData: ...
 
 
-@dataclass
-class AtlasData:
-    atlas_volume: ndarray
-    atlas_transform: ndarray
-
-
 class LoadAtlasWorkflow:
 
     def __init__(self, repo: BaseRepo, presenter: BasePresenter):
@@ -38,12 +32,11 @@ class LoadAtlasWorkflow:
     def __call__(self, resolution: int):
         data = self._repo.get_atlas(resolution=resolution)
         atlas = Atlas(volume=data.volume, resolution_um=data.resolution_um, origin=data.origin)
-        response = Ok(AtlasData(atlas_volume=atlas.volume, atlas_transform=atlas.model_matrix))
-        self._presenter.present(response)
+        self._presenter.show_atlas(volume=atlas.volume, transform=atlas.model_matrix)
 
 
 class BasePresenter(ABC):
 
     @abstractmethod
-    def present(self, data: Result[AtlasData, str]): ...
+    def show_atlas(self, volume: ndarray, transform: ndarray) -> None: ...
 

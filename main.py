@@ -1,6 +1,6 @@
 from src.gui.window import Window
 from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow
-from src.workflows.load_atlas.presenter import GuiPresenter, GuiView
+from src.workflows.load_atlas.presenter import GuiPresenter, GuiPresenter
 from src.workflows.load_atlas.repo import BrainglobeAtlasRepo
 from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.load_section.reader import OmeTiffReader
@@ -35,9 +35,7 @@ use_cases = Provider(
     load_atlas=LoadAtlasWorkflow(
         repo=BrainglobeAtlasRepo(),
         presenter=GuiPresenter(
-            view=GuiView(
-                win=win
-            )
+            win=win
         )
     ),
     move_section=MoveSectionWorkflow(
