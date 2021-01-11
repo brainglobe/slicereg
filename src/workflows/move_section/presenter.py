@@ -3,7 +3,7 @@ from dataclasses import dataclass
 from numpy.core._multiarray_umath import ndarray
 
 from src.gui.window import Window
-from src.workflows.move_section.move_section import BasePresenter
+from src.workflows.move_section.workflow import BasePresenter
 
 
 @dataclass

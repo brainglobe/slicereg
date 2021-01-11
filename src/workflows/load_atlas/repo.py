@@ -4,7 +4,7 @@ from io import StringIO
 from bg_atlasapi import BrainGlobeAtlas
 from numpy import ndarray
 
-from src.workflows.load_atlas.load_atlas import BaseRepo, AtlasRepoData
+from src.workflows.load_atlas.workflow import BaseRepo, AtlasRepoData
 
 
 class BrainglobeAtlasRepo(BaseRepo):

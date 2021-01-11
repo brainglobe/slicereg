@@ -3,7 +3,7 @@ from typing import Optional
 from numpy import ndarray
 
 from src.gui.window import Window
-from src.workflows.load_section.load_section import BasePresenter
+from src.workflows.load_section.workflow import BasePresenter
 
 
 class GuiPresenter(BasePresenter):

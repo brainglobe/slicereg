@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from numpy import ndarray
 
 from src.gui.window import Window
-from src.workflows.load_atlas.load_atlas import BasePresenter
+from src.workflows.load_atlas.workflow import BasePresenter
 
 
 @dataclass

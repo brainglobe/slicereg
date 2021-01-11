@@ -6,7 +6,7 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from src.gui.base import BaseVispyView
-from src.workflows.provider import Provider
+from src.workflows.workflowprovider import WorkflowProvider
 
 
 class SliceView(BaseVispyView):
@@ -38,7 +38,7 @@ class SliceView(BaseVispyView):
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
 
-    def register_use_cases(self, app: Provider):
+    def register_use_cases(self, app: WorkflowProvider):
         self.use_cases = app
 
         self._canvas.events.mouse_press.connect(self._vispy_mouse_event)

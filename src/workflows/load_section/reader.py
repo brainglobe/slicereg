@@ -2,7 +2,7 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from src.workflows.load_section.load_section import BaseSectionReader
+from src.workflows.load_section.workflow import BaseSectionReader
 from src.models.section import Section
 
 

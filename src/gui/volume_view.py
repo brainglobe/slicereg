@@ -10,7 +10,7 @@ from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
 from src.gui.base import BaseVispyView
-from src.workflows.provider import Provider
+from src.workflows.workflowprovider import WorkflowProvider
 
 
 class VolumeView(BaseVispyView):
@@ -61,7 +61,7 @@ class VolumeView(BaseVispyView):
 
     # Controller Code
 
-    def register_use_cases(self, app: Provider):
+    def register_use_cases(self, app: WorkflowProvider):
         self.use_cases = app
 
         def handle_vispy_key_press_events(event: KeyEvent) -> None:

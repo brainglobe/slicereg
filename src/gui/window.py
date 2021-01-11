@@ -4,7 +4,7 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, Q
     QHBoxLayout
 from vispy.app import Timer
 
-from src.workflows.provider import Provider
+from src.workflows.workflowprovider import WorkflowProvider
 from src.gui.slice_view import SliceView
 from src.gui.volume_view import VolumeView
 
@@ -18,7 +18,7 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 class Window:
 
     def __init__(self, title):
-        self.workflows: Optional[Provider] = None
+        self.workflows: Optional[WorkflowProvider] = None
         self._qt_app = QApplication([])
         self.win = QMainWindow()
         self._default_window_title = title
@@ -95,7 +95,7 @@ class Window:
 
     # Controller Code
 
-    def register_use_cases(self, app: Provider):
+    def register_workflows(self, app: WorkflowProvider):
         self.workflows = app
         self.volume_view.register_use_cases(app=app)
         self.slice_view.register_use_cases(app=app)

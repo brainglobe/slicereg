@@ -1,22 +1,20 @@
 from src.gui.window import Window
-from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow
+from src.workflows.load_atlas.workflow import LoadAtlasWorkflow
 from src.workflows.load_atlas.presenter import GuiPresenter
 from src.workflows.load_atlas.repo import BrainglobeAtlasRepo
-from src.workflows.load_section.load_section import LoadSectionWorkflow
+from src.workflows.load_section.workflow import LoadSectionWorkflow
 from src.workflows.load_section.presenter import GuiPresenter as LSPresenter
 from src.workflows.load_section.reader import OmeTiffReader
-from src.workflows.move_section.move_section import MoveSectionWorkflow
+from src.workflows.move_section.workflow import MoveSectionWorkflow
 from src.workflows.move_section.presenter import GuiPresenter as MSPresenter
-from src.workflows.move_section.presenter import GuiPresenter as MSView
-from src.workflows.provider import Provider
-from src.workflows.select_channel.gui_view import GuiView as SCView
-from src.workflows.select_channel.presenter import GuiPresenter as SCPresenter
-from src.workflows.select_channel.select_channel import SelectChannelWorkflow
+from src.workflows.workflowprovider import WorkflowProvider
+from src.workflows.select_channel.workflow import SelectChannelWorkflow
+from src.workflows.select_channel.presenter import GuiView
 from src.workflows.shared.repos.section_repo import InMemorySectionRepo
 
 win = Window(title="Registration App")
 
-use_cases = Provider(
+use_cases = WorkflowProvider(
     load_section=LoadSectionWorkflow(
         repo=InMemorySectionRepo(),
         presenter=LSPresenter(
@@ -26,10 +24,8 @@ use_cases = Provider(
     ),
     select_channel=SelectChannelWorkflow(
         repo=InMemorySectionRepo(),
-        presenter=SCPresenter(
-            view=SCView(
-                win=win
-            )
+        presenter=GuiView(
+            win=win
         )
     ),
     load_atlas=LoadAtlasWorkflow(
@@ -45,5 +41,5 @@ use_cases = Provider(
         )
     )
 )
-win.register_use_cases(app=use_cases)
+win.register_workflows(app=use_cases)
 win.run()
