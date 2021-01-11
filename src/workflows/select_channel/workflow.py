@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from numpy import ndarray
-from result import Result, Err, Ok
 
 from src.models.section import Section
 from src.workflows.shared.repos.base import BaseSectionRepo
@@ -30,12 +29,12 @@ class SelectChannelWorkflow:
     def __call__(self, num: int):
         section = self._repo.get_section()
         if section is None:
-            self._presenter.present(Err("No section loaded yet."))
+            self._presenter.show_error("No section loaded yet.")
         try:
             image = section.channels[num - 1]
-            self._presenter.present(Ok(SectionChannelData(section_image=image)))
+            self._presenter.update_section_image(image=image)
         except IndexError:
-            self._presenter.present(Err(f"Section doesn't have a Channel {num}."))
+            self._presenter.show_error(f"Section doesn't have a Channel {num}.")
 
         
 class BasePresenter(ABC):

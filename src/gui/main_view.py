@@ -15,7 +15,7 @@ def restart_timer(timer: Timer, iterations=1) -> None:
     timer.start(iterations=iterations)
 
 
-class Window:
+class MainView:
 
     def __init__(self, title):
         self.workflows: Optional[WorkflowProvider] = None

@@ -4,13 +4,13 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from src.gui.window import Window
+from src.gui.main_view import MainView
 from src.workflows.load_atlas.workflow import BasePresenter
 
 
 @dataclass
-class GuiPresenter(BasePresenter):
-    win: Window
+class LoadAtlasPresenter(BasePresenter):
+    view: MainView
 
     def show_atlas(self, volume: ndarray, transform: ndarray) -> None:
-        self.win.volume_view.view_atlas(volume=volume, transform=transform)
+        self.view.volume_view.view_atlas(volume=volume, transform=transform)
