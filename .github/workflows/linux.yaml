@@ -15,7 +15,7 @@ jobs:
 
       - name: Install Platform Dependencies
         run: |
-          sudo apt install -y xvfb x11-utils libxkbcommon-x11-0  # https://stackoverflow.com/questions/60692711/cant-create-python-qapplication-in-github-action
+          sudo apt install -y xvfb x11-utils libxkbcommon-x11-0 herbstluftwm # https://stackoverflow.com/questions/60692711/cant-create-python-qapplication-in-github-action
           Xvfb -ac :99 &
           export DISPLAY=:99
       - name: Set up Python
@@ -32,4 +32,4 @@ jobs:
       - name: Run Tests
         env:
           QT_DEBUG_PLUGINS: 1
-        run: poetry run pytest
+        run: herbstluftwm & poetry run pytest
