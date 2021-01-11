@@ -67,6 +67,14 @@ To set up a virtual environment and install the dependencies (there are a lot of
 poetry install
 ```
 
+
+*Note*: This project is python 3.8-only.  If you get an error that says that python 3.8 is not available, then one way you can get it is with conda, if you have it installed already:
+
+```
+conda create -n py38 python=3.8
+conda activate py38
+```
+
 #### Running the Project
 
 Run the program:
@@ -74,6 +82,8 @@ Run the program:
 ```
 poetry run bg-slicereg
 ```
+
+
 
 #### Downloading Test Data
 
