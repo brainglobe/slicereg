@@ -8,11 +8,7 @@ on:
 
 jobs:
   test:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.8]
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
@@ -21,12 +17,11 @@ jobs:
         run: |
           sudo apt install -y xvfb x11-utils libxkbcommon-x11-0  # https://stackoverflow.com/questions/60692711/cant-create-python-qapplication-in-github-action
           Xvfb -ac :99 &
-          export DISPLAY=:99.0
-
+          export DISPLAY=:99
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-            python-version: ${{ matrix.python-version }}
+            python-version: 3.8
 
       - name: Install Python Dependencies
         run: |
@@ -35,4 +30,6 @@ jobs:
           poetry install
 
       - name: Run Tests
-        run: xvfb-run --auto-servernum poetry run pytest
+        env:
+          QT_DEBUG_PLUGINS: 1
+        run: poetry run pytest
