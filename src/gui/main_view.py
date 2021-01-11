@@ -97,8 +97,8 @@ class MainView:
 
     def register_workflows(self, app: WorkflowProvider):
         self.workflows = app
-        self.volume_view.register_use_cases(app=app)
-        self.slice_view.register_use_cases(app=app)
+        self.volume_view.register_workflows(app=app)
+        self.slice_view.register_workflows(app=app)
         self.workflows.load_atlas(resolution=25)
 
     def run(self):

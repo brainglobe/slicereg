@@ -9,7 +9,7 @@ from src.workflows.workflowprovider import WorkflowProvider
 
 win = MainView(title="Registration App")
 
-use_cases = WorkflowProvider(
+workflows = WorkflowProvider(
     load_section=LoadSectionWorkflow(
         repo=InMemorySectionRepo(),
         presenter=LoadSectionPresenter(
@@ -36,5 +36,5 @@ use_cases = WorkflowProvider(
         )
     )
 )
-win.register_workflows(app=use_cases)
+win.register_workflows(app=workflows)
 win.run()

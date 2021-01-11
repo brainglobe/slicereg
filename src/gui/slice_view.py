@@ -38,8 +38,8 @@ class SliceView(BaseVispyView):
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
 
-    def register_use_cases(self, app: WorkflowProvider):
-        self.use_cases = app
+    def register_workflows(self, app: WorkflowProvider):
+        self.workflows = app
 
         self._canvas.events.mouse_press.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_move.connect(self._vispy_mouse_event)
@@ -84,11 +84,11 @@ class SliceView(BaseVispyView):
         scale = 4.
         x_slice_offset = x_amp * x_dir * scale
         y_slice_offset = y_amp * y_dir * scale
-        self.use_cases.move_section(x=x_slice_offset, y=y_slice_offset)
+        self.workflows.move_section(x=x_slice_offset, y=y_slice_offset)
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         x_amp = abs(x2 - x1)
         x_dir = ((x2 > x1) * 2) - 1
         scale = .1
         x_slice_offset = x_amp * x_dir * scale
-        self.use_cases.move_section(ry=x_slice_offset)
+        self.workflows.move_section(ry=x_slice_offset)

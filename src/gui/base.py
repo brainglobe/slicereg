@@ -8,7 +8,7 @@ from src.workflows.workflowprovider import WorkflowProvider
 class BaseVispyView(ABC):
 
     @abstractmethod
-    def register_use_cases(self, app: WorkflowProvider) -> None: ...
+    def register_workflows(self, app: WorkflowProvider) -> None: ...
 
     @property
     @abstractmethod
