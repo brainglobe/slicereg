@@ -3,10 +3,10 @@ from typing import Optional
 from numpy import ndarray
 
 from src.gui.window import Window
-from src.workflows.load_section.load_section import BasePresenter as BLSPresenter
+from src.workflows.load_section.load_section import BasePresenter
 
 
-class LoadSectionPresenter(BLSPresenter):
+class GuiPresenter(BasePresenter):
 
     def __init__(self, win: Window):
         self.win = win

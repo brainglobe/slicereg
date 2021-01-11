@@ -1,4 +1,3 @@
-from src.gui.presenter import LoadSectionPresenter
 from src.gui.window import Window
 from src.workflows.load_atlas.gui_view import GuiView
 from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow
@@ -6,6 +5,7 @@ from src.workflows.load_atlas.presenter import GuiPresenter
 from src.workflows.load_atlas.repo import BrainglobeAtlasRepo
 from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.load_section.reader import OmeTiffReader
+from src.workflows.load_section.presenter import GuiPresenter as LSPresenter
 from src.workflows.move_section.gui_view import GuiView as MSView
 from src.workflows.move_section.move_section import MoveSectionWorkflow
 from src.workflows.move_section.presenter import GuiPresenter as MSPresenter
@@ -20,7 +20,7 @@ win = Window(title="Registration App")
 use_cases = Provider(
     load_section=LoadSectionWorkflow(
         repo=InMemorySectionRepo(),
-        presenter=LoadSectionPresenter(
+        presenter=LSPresenter(
             win=win
         ),
         reader=OmeTiffReader()
