@@ -4,7 +4,6 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 from numpy import ndarray
-from result import Result, Err, Ok
 
 from src.workflows.shared.repos.base import BaseSectionRepo
 

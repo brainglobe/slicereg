@@ -1,14 +1,9 @@
 from src.gui.main_view import MainView
-from src.workflows.load_atlas.presenter import LoadAtlasPresenter
-from src.workflows.load_atlas.repo import BrainglobeAtlasRepo
-from src.workflows.load_atlas.workflow import LoadAtlasWorkflow
-from src.workflows.load_section.presenter import LoadSectionPresenter
-from src.workflows.load_section.reader import OmeTiffReader
-from src.workflows.load_section.workflow import LoadSectionWorkflow
-from src.workflows.move_section.presenter import MoveSectionPresenter
-from src.workflows.move_section.workflow import MoveSectionWorkflow
-from src.workflows.select_channel.presenter import SelectChannelPresenter
-from src.workflows.select_channel.workflow import SelectChannelWorkflow
+from src.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
+from src.workflows.load_atlas import BrainglobeAtlasRepo, LoadAtlasWorkflow
+from src.workflows.load_section import OmeTiffReader, LoadSectionWorkflow
+from src.workflows.move_section import MoveSectionWorkflow
+from src.workflows.select_channel import SelectChannelWorkflow
 from src.workflows.shared.repos.section_repo import InMemorySectionRepo
 from src.workflows.workflowprovider import WorkflowProvider
 
