@@ -7,34 +7,40 @@ from src.workflows.select_channel import SelectChannelWorkflow
 from src.workflows.shared.repos.section_repo import InMemorySectionRepo
 from src.workflows.provider import WorkflowProvider
 
-win = MainView(title="Registration App")
 
-workflows = WorkflowProvider(
-    load_section=LoadSectionWorkflow(
-        repo=InMemorySectionRepo(),
-        presenter=LoadSectionPresenter(
-            view=win
+def launch_gui():
+    win = MainView(title="Registration App")
+
+    workflows = WorkflowProvider(
+        load_section=LoadSectionWorkflow(
+            repo=InMemorySectionRepo(),
+            presenter=LoadSectionPresenter(
+                view=win
+            ),
+            reader=OmeTiffReader()
         ),
-        reader=OmeTiffReader()
-    ),
-    select_channel=SelectChannelWorkflow(
-        repo=InMemorySectionRepo(),
-        presenter=SelectChannelPresenter(
-            view=win
-        )
-    ),
-    load_atlas=LoadAtlasWorkflow(
-        repo=BrainglobeAtlasRepo(),
-        presenter=LoadAtlasPresenter(
-            view=win
-        )
-    ),
-    move_section=MoveSectionWorkflow(
-        repo=InMemorySectionRepo(),
-        presenter=MoveSectionPresenter(
-            view=win
+        select_channel=SelectChannelWorkflow(
+            repo=InMemorySectionRepo(),
+            presenter=SelectChannelPresenter(
+                view=win
+            )
+        ),
+        load_atlas=LoadAtlasWorkflow(
+            repo=BrainglobeAtlasRepo(),
+            presenter=LoadAtlasPresenter(
+                view=win
+            )
+        ),
+        move_section=MoveSectionWorkflow(
+            repo=InMemorySectionRepo(),
+            presenter=MoveSectionPresenter(
+                view=win
+            )
         )
     )
-)
-win.register_workflows(app=workflows)
-win.run()
+    win.register_workflows(app=workflows)
+    win.run()
+
+
+if __name__ == '__main__':
+    launch_gui()
