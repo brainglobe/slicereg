@@ -1,7 +1,6 @@
 from src.gui.window import Window
-from src.workflows.load_atlas.gui_view import GuiView
 from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow
-from src.workflows.load_atlas.presenter import GuiPresenter
+from src.workflows.load_atlas.presenter import GuiPresenter, GuiView
 from src.workflows.load_atlas.repo import BrainglobeAtlasRepo
 from src.workflows.load_section.load_section import LoadSectionWorkflow
 from src.workflows.load_section.reader import OmeTiffReader
