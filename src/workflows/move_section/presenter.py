@@ -1,31 +1,17 @@
-from __future__ import annotations
-
-from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
-from numpy import ndarray
-from result import Result
+from numpy.core._multiarray_umath import ndarray
 
-from src.workflows.move_section.move_section import BasePresenter, SectionTransformData
+from src.gui.window import Window
+from src.workflows.move_section.move_section import BasePresenter
 
 
 @dataclass
 class GuiPresenter(BasePresenter):
-    view: BaseView
+    win: Window
 
-    def present(self, result: Result[SectionTransformData, str]):
-        if result.is_ok():
-            result = result.value
-            self.view.update_transform(transform=result.transform)
-        else:
-            msg = result.value
-            self.view.show_error(msg)
+    def update_transform(self, transform: ndarray):
+        self.win.volume_view.update_transform(transform=transform)
 
-
-class BaseView(ABC):
-
-    @abstractmethod
-    def update_transform(self, transform: ndarray): ...
-
-    @abstractmethod
-    def show_error(self, msg: str): ...
+    def show_error(self, msg: str):
+        self.win.show_temp_title(title=msg)

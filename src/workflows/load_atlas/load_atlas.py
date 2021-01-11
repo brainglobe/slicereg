@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from typing import Tuple
 
 from numpy import ndarray
-from result import Result, Ok
 
 from src.models.atlas import Atlas
 

@@ -1,13 +1,13 @@
 from src.gui.window import Window
 from src.workflows.load_atlas.load_atlas import LoadAtlasWorkflow
-from src.workflows.load_atlas.presenter import GuiPresenter, GuiPresenter
+from src.workflows.load_atlas.presenter import GuiPresenter
 from src.workflows.load_atlas.repo import BrainglobeAtlasRepo
 from src.workflows.load_section.load_section import LoadSectionWorkflow
-from src.workflows.load_section.reader import OmeTiffReader
 from src.workflows.load_section.presenter import GuiPresenter as LSPresenter
-from src.workflows.move_section.gui_view import GuiView as MSView
+from src.workflows.load_section.reader import OmeTiffReader
 from src.workflows.move_section.move_section import MoveSectionWorkflow
 from src.workflows.move_section.presenter import GuiPresenter as MSPresenter
+from src.workflows.move_section.presenter import GuiPresenter as MSView
 from src.workflows.provider import Provider
 from src.workflows.select_channel.gui_view import GuiView as SCView
 from src.workflows.select_channel.presenter import GuiPresenter as SCPresenter
@@ -41,7 +41,7 @@ use_cases = Provider(
     move_section=MoveSectionWorkflow(
         repo=InMemorySectionRepo(),
         presenter=MSPresenter(
-            view=MSView(win=win)
+            win=win
         )
     )
 )
