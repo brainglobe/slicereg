@@ -16,9 +16,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      - name: Install Platform Dependencies
-        run: |
-          sudo apt install -y xvfb x11-utils libxkbcommon-x11-0  # https://stackoverflow.com/questions/60692711/cant-create-python-qapplication-in-github-action
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
@@ -29,4 +26,6 @@ jobs:
           pip install poetry
           poetry install
       - name: Run Tests
-        run: xvfb-run poetry run pytest
+        uses: GabrielBB/xvfb-action@v1
+        with:
+          run: xvfb-run poetry run pytest
