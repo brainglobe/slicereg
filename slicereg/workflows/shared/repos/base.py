@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from src.models.section import Section
+from slicereg.models.section import Section
 
 
 class BaseSectionRepo(ABC):

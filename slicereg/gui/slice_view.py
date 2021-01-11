@@ -5,8 +5,8 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
-from src.gui.base import BaseVispyView
-from src.workflows.provider import WorkflowProvider
+from slicereg.gui.base import BaseVispyView
+from slicereg.workflows.provider import WorkflowProvider
 
 
 class SliceView(BaseVispyView):

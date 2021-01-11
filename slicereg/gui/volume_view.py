@@ -9,8 +9,8 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from src.gui.base import BaseVispyView
-from src.workflows.provider import WorkflowProvider
+from slicereg.gui.base import BaseVispyView
+from slicereg.workflows.provider import WorkflowProvider
 
 
 class VolumeView(BaseVispyView):

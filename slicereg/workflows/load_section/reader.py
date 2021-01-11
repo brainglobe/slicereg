@@ -2,8 +2,8 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from src.workflows.load_section.workflow import BaseSectionReader
-from src.models.section import Section
+from slicereg.workflows.load_section.workflow import BaseSectionReader
+from slicereg.models.section import Section
 
 
 class OmeTiffReader(BaseSectionReader):

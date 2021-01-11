@@ -1,15 +1,18 @@
-from src.gui.main_view import MainView
-from src.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
-from src.workflows.load_atlas import BrainglobeAtlasRepo, LoadAtlasWorkflow
-from src.workflows.load_section import OmeTiffReader, LoadSectionWorkflow
-from src.workflows.move_section import MoveSectionWorkflow
-from src.workflows.select_channel import SelectChannelWorkflow
-from src.workflows.shared.repos.section_repo import InMemorySectionRepo
-from src.workflows.provider import WorkflowProvider
+from PySide2.QtWidgets import QApplication
+
+from slicereg.gui.main_view import MainWindow
+from slicereg.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
+from slicereg.workflows.load_atlas import BrainglobeAtlasRepo, LoadAtlasWorkflow
+from slicereg.workflows.load_section import OmeTiffReader, LoadSectionWorkflow
+from slicereg.workflows.move_section import MoveSectionWorkflow
+from slicereg.workflows.select_channel import SelectChannelWorkflow
+from slicereg.workflows.shared.repos.section_repo import InMemorySectionRepo
+from slicereg.workflows.provider import WorkflowProvider
 
 
 def launch_gui():
-    win = MainView(title="Registration App")
+    app = QApplication([])
+    win = MainWindow()
 
     workflows = WorkflowProvider(
         load_section=LoadSectionWorkflow(
@@ -39,7 +42,7 @@ def launch_gui():
         )
     )
     win.register_workflows(app=workflows)
-    win.run()
+    app.exec_()
 
 
 if __name__ == '__main__':

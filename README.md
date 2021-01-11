@@ -72,7 +72,7 @@ poetry install
 Run the program:
 
 ```
-poetry run python main.py
+poetry run bg-slicereg
 ```
 
 #### Downloading Test Data

@@ -6,7 +6,7 @@ from typing import Tuple
 
 from numpy import ndarray
 
-from src.models.atlas import Atlas
+from slicereg.models.atlas import Atlas
 
 
 @dataclass

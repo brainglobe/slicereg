@@ -2,8 +2,8 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from src.models.section import Section
-from src.workflows.shared.repos.base import BaseSectionRepo
+from slicereg.models.section import Section
+from slicereg.workflows.shared.repos.base import BaseSectionRepo
 
 
 class BasePresenter(ABC):

@@ -4,9 +4,9 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, Q
     QHBoxLayout
 from vispy.app import Timer
 
-from src.workflows.provider import WorkflowProvider
-from src.gui.slice_view import SliceView
-from src.gui.volume_view import VolumeView
+from slicereg.workflows.provider import WorkflowProvider
+from slicereg.gui.slice_view import SliceView
+from slicereg.gui.volume_view import VolumeView
 
 
 def restart_timer(timer: Timer, iterations=1) -> None:
@@ -15,11 +15,10 @@ def restart_timer(timer: Timer, iterations=1) -> None:
     timer.start(iterations=iterations)
 
 
-class MainView:
+class MainWindow:
 
-    def __init__(self, title):
+    def __init__(self, title="Registration App"):
         self.workflows: Optional[WorkflowProvider] = None
-        self._qt_app = QApplication([])
         self.win = QMainWindow()
         self._default_window_title = title
 
@@ -101,11 +100,7 @@ class MainView:
         self.slice_view.register_workflows(app=app)
         self.workflows.load_atlas(resolution=25)
 
-    def run(self):
-        self._qt_app.exec_()
-
     # View Code
-
     def _show_default_window_title(self):
         self.win.setWindowTitle(self._default_window_title)
 
