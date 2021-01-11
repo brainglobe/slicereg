@@ -1,4 +1,4 @@
-FROM gitpod-workspace-full
+FROM gitpod/workspace-full
 
 ENV DISPLAY :99.0
 
