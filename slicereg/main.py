@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QApplication
 
-from slicereg.gui.main_view import MainWindow
+from slicereg.gui.window import MainWindow
 from slicereg.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
 from slicereg.workflows.load_atlas import BrainglobeAtlasRepo, LoadAtlasWorkflow
 from slicereg.workflows.load_section import OmeTiffReader, LoadSectionWorkflow

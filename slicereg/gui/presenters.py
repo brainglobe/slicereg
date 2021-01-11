@@ -5,7 +5,7 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.gui.main_view import MainWindow
+from slicereg.gui.window import MainWindow
 from slicereg.workflows.load_atlas.workflow import BasePresenter as BaseLoadAtlasPresenter
 from slicereg.workflows.load_section.workflow import BasePresenter as BaseLoadSectionPresenter
 from slicereg.workflows.move_section.workflow import BasePresenter as BaseMoveSectionPresenter

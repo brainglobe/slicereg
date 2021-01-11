@@ -1,4 +1,4 @@
-from slicereg.gui.main_view import MainWindow
+from slicereg.gui.window import MainWindow
 
 
 def test_gui_launches_without_errors(qtbot):
