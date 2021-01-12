@@ -15,7 +15,10 @@ jobs:
 
       - name: Install Platform Dependencies
         run: |
-          sudo apt install -y xvfb x11-utils libxkbcommon-x11-0 # https://stackoverflow.com/questions/60692711/cant-create-python-qapplication-in-github-action
+          sudo apt install -y xvfb x11-utils herbstluftwm
+          sudo apt install -y gcc
+          sudo apt install -y libgl1-mesa-glx libqt5x11extras5
+          sudo apt install -y libdbus-1-3 libxkbcommon-x11-0 l
           export DISPLAY=:99.0
       - name: Set up Python
         uses: actions/setup-python@v2
