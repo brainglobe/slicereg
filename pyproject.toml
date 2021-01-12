@@ -21,6 +21,7 @@ dvc = {extras = ["gdrive"], version = "^1.11.9"}
 pytest = "^6.2.1"
 pytest-qt = "^3.3.0"
 hypothesis = "^6.0.0"
+pytest-bdd = "^4.0.2"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
