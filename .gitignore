@@ -1,3 +1,6 @@
 *.svg
 .idea
 build/*
+.pytest_cache
+.hypothesis/
+__pycache__

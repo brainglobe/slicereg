@@ -4,9 +4,8 @@ from dataclasses import dataclass
 from typing import Tuple, NamedTuple, Dict
 
 from numpy import ndarray
-from vispy.util.transforms import translate, scale, rotate
+from vispy.util.transforms import translate, rotate
 
-from slicereg.models.math import affine_transform
 
 class Plane(NamedTuple):
     x: float
@@ -25,19 +24,16 @@ class Plane(NamedTuple):
         rotation = rotate(self.theta, (0, 0, 1), dtype=float)
         return (rotation @ translation).T
 
-class Image(NamedTuple):
+
+class SliceImage(NamedTuple):
     channels: ndarray
     pixel_resolution_um: float
-    x: float
-    y: float
-
-    def transform(self) -> ndarray:
-        s = self.pixel_resolution_um
-        return scale((s, s, s)) @ translate((-self.x, -self.y, 0))
 
 
 @dataclass
 class Section(NamedTuple):
+    image: SliceImage
+    image_plane: Plane
     channels: Dict[int, Image]
     thickness_um: float = 16.
     position_um: Tuple[float, float, float] = (0., 0., 0.)
