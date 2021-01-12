@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Tuple, NamedTuple, Dict
 
 from numpy import ndarray
-from vispy.util.transforms import translate, scale
+from vispy.util.transforms import translate, scale, rotate
 
 from slicereg.models.math import affine_transform
 
@@ -21,7 +21,9 @@ class Plane(NamedTuple):
 
     @property
     def affine_transform(self) -> ndarray:
-        return (translate((self.x, self.y, 0), dtype=float)).T
+        translation = translate((self.x, self.y, 0), dtype=float)
+        rotation = rotate(self.theta, (0, 0, 1), dtype=float)
+        return (rotation @ translation).T
 
 class Image(NamedTuple):
     channels: ndarray
