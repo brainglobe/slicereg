@@ -10,6 +10,3 @@ def affine_transform(x: float, y: float, z: float, rx: float, ry: float, rz: flo
         rotate(rz, (0, 0, 1)) @ \
         translate((x, y, z))
 
-
-def shift_plane(x: float, y: float) -> ndarray:
-    return translate((x, y, 0))

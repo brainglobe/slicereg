@@ -20,6 +20,7 @@ vispy = { git = "https://www.github.com/vispy/vispy.git", rev = "7f3f6f6" }
 dvc = {extras = ["gdrive"], version = "^1.11.9"}
 pytest = "^6.2.1"
 pytest-qt = "^3.3.0"
+hypothesis = "^6.0.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
