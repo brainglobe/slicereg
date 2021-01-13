@@ -28,6 +28,7 @@ class BaseLoadAtlasRepo(ABC):
 class LoadAtlasModel(NamedTuple):
     reference_volume: ndarray
     atlas_transform: ndarray
+    atlas_resolution: int
 
 
 class LoadAtlasWorkflow:
@@ -39,7 +40,11 @@ class LoadAtlasWorkflow:
     def execute(self, resolution: int):
         data = self._repo.get_atlas(resolution=resolution)
         atlas = Atlas(volume=data.volume, resolution_um=data.resolution_um, origin=data.origin)
-        response = LoadAtlasModel(reference_volume=atlas.volume, atlas_transform=atlas.model_matrix)
+        response = LoadAtlasModel(
+            reference_volume=atlas.volume,
+            atlas_transform=atlas.model_matrix,
+            atlas_resolution=int(atlas.resolution_um),
+        )
         self._presenter.show(response)
 
 
