@@ -1,2 +1,2 @@
-from .workflow import LoadSectionWorkflow
+from .workflow import LoadImageWorkflow
 from .reader import OmeTiffReader

@@ -1,13 +1,14 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import Optional, List
 
 from slicereg.models.section import Section
 
 
 class BaseSectionRepo(ABC):
 
+    @property
     @abstractmethod
-    def get_section(self) -> Optional[Section]:  ...
+    def sections(self) -> List[Section]:  ...
 
     @abstractmethod
-    def set_section(self, section: Section) -> None: ...
+    def save_section(self, section: Section) -> None: ...

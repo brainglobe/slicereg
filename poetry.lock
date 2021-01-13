@@ -634,6 +634,14 @@ rsa = ">=3.1.4"
 six = ">=1.6.1"
 
 [[package]]
+name = "ok"
+version = "0.0.0"
+description = "ok"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "packaging"
 version = "20.8"
 description = "Core utilities for Python packages"
@@ -1013,6 +1021,14 @@ security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
+name = "result"
+version = "0.5.0"
+description = "A rust-like result type for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "rich"
 version = "9.8.0"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
@@ -1294,7 +1310,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8,<3.9"
-content-hash = "1a1806a7dd4664d4c85543fca3021baba3261eb1f03adbf765b5d93e566fa979"
+content-hash = "cb2670efc0d5be14bb7310b1e7efa9d45732b31100466a0747e3063d88e9f861"
 
 [metadata.files]
 appdirs = [
@@ -1612,6 +1628,9 @@ oauth2client = [
     {file = "oauth2client-4.1.3-py2.py3-none-any.whl", hash = "sha256:b8a81cc5d60e2d364f0b1b98f958dbd472887acaf1a5b05e21c28c31a2d6d3ac"},
     {file = "oauth2client-4.1.3.tar.gz", hash = "sha256:d486741e451287f69568a4d26d70d9acd73a2bbfa275746c535b4209891cccc6"},
 ]
+ok = [
+    {file = "ok-0.0.0.tar.gz", hash = "sha256:22211653a892916cf139fbbb8fc51fcfb8c93ccecfb3330746de30eccccb6611"},
+]
 packaging = [
     {file = "packaging-20.8-py2.py3-none-any.whl", hash = "sha256:24e0da08660a87484d1602c30bb4902d74816b6985b93de36926f5bc95741858"},
     {file = "packaging-20.8.tar.gz", hash = "sha256:78598185a7008a470d64526a8059de9aaa449238f280fc9eb6b13ba6c4109093"},
@@ -1830,6 +1849,10 @@ pyyaml = [
 requests = [
     {file = "requests-2.25.1-py2.py3-none-any.whl", hash = "sha256:c210084e36a42ae6b9219e00e48287def368a26d03a048ddad7bfee44f75871e"},
     {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
+]
+result = [
+    {file = "result-0.5.0-py3-none-any.whl", hash = "sha256:46f039a2d17e47709c13e29af359c3fa91fd5cacddba2a8109fdcb514e6ff471"},
+    {file = "result-0.5.0.tar.gz", hash = "sha256:f4563ff615b1147822d13eb363fbda202511fcbf281b3cf7acf0723ca7cb612b"},
 ]
 rich = [
     {file = "rich-9.8.0-py3-none-any.whl", hash = "sha256:812a911cd85d32f484325f501fb8f84270b8e0a7af739d4bf1d3df42643e93a6"},

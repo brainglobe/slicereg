@@ -3,7 +3,7 @@ from PySide2.QtWidgets import QApplication
 from slicereg.gui.window import MainWindow
 from slicereg.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
 from slicereg.workflows.load_atlas import BrainglobeAtlasRepo, LoadAtlasWorkflow
-from slicereg.workflows.load_section import OmeTiffReader, LoadSectionWorkflow
+from slicereg.workflows.load_section import OmeTiffReader, LoadImageWorkflow
 from slicereg.workflows.move_section import MoveSectionWorkflow
 from slicereg.workflows.select_channel import SelectChannelWorkflow
 from slicereg.workflows.shared.repos.section_repo import InMemorySectionRepo
@@ -15,7 +15,7 @@ def launch_gui():
     win = MainWindow()
 
     workflows = WorkflowProvider(
-        load_section=LoadSectionWorkflow(
+        load_section=LoadImageWorkflow(
             repo=InMemorySectionRepo(),
             presenter=LoadSectionPresenter(
                 view=win

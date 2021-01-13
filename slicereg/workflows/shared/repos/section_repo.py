@@ -1,16 +1,19 @@
 from __future__ import annotations
 
-from typing import Optional
+from typing import Optional, List, Tuple
 
 from slicereg.models.section import Section
 from slicereg.workflows.shared.repos.base import BaseSectionRepo
 
 
 class InMemorySectionRepo(BaseSectionRepo):
-    __section: Optional[Section] = None
 
-    def get_section(self) -> Optional[Section]:
-        return self.__class__.__section
+    def __init__(self):
+        self.__sections: List[Section] = []
 
-    def set_section(self, section: Section) -> None:
-        self.__class__.__section = section
+    @property
+    def sections(self) -> List[Section]:
+        return self.__sections[:]
+
+    def save_section(self, section: Section) -> None:
+        self.__sections.append(section)

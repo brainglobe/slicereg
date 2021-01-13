@@ -6,6 +6,8 @@ from typing import Tuple, NamedTuple, Dict
 from numpy import ndarray
 from vispy.util.transforms import translate, rotate
 
+from slicereg.models.math import affine_transform
+
 
 class Plane(NamedTuple):
     x: float
@@ -29,12 +31,16 @@ class SliceImage(NamedTuple):
     channels: ndarray
     pixel_resolution_um: float
 
+    @property
+    def center(self) -> Tuple[float, float]:
+        _, x, y = self.channels.shape
+        return x // 2, y // 2
 
-@dataclass
+
+
 class Section(NamedTuple):
     image: SliceImage
-    image_plane: Plane
-    channels: Dict[int, Image]
+    plane: Plane
     thickness_um: float = 16.
     position_um: Tuple[float, float, float] = (0., 0., 0.)
     rotation_deg: Tuple[float, float, float] = (0., 0., 0.)
@@ -42,9 +48,9 @@ class Section(NamedTuple):
     @property
     def affine_transform(self) -> ndarray:
         x, y, z = self.position_um
-        cx, cy = self.image_center
         rx, ry, rz = self.rotation_deg
-        # return shift_plane(x=-cx, y=-cy) @ affine_transform(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz, s=self.pixel_res_um)
+        s = self.image.pixel_resolution_um
+        return self.plane.affine_transform @ affine_transform(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz, s=s)
 
     def translate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Section:
         x, y, z = self.position_um

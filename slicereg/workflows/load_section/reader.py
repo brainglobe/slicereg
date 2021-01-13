@@ -2,13 +2,13 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from slicereg.workflows.load_section.workflow import BaseSectionReader
+from slicereg.workflows.load_section.workflow import BaseSectionReader, SliceImageData
 from slicereg.models.section import Section
 
 
 class OmeTiffReader(BaseSectionReader):
 
-    def read(self, filename: str) -> Section:
+    def read(self, filename: str) -> SliceImageData:
         f = tifffile.TiffFile(filename)
         image = f.asarray()
         assert image.ndim == 3
@@ -20,4 +20,4 @@ class OmeTiffReader(BaseSectionReader):
         assert res_x == res_y, \
             "Pixels are not square"
 
-        return Section(channels=image, pixel_res_um=float(res_x))
+        return SliceImageData(channels=image, pixel_resolution_um=float(res_x))

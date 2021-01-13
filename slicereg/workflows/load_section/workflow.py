@@ -1,34 +1,53 @@
 from abc import ABC, abstractmethod
+from typing import NamedTuple, Optional
 
 from numpy import ndarray
 
-from slicereg.models.section import Section
+from slicereg.models.section import Section, Plane, SliceImage
 from slicereg.workflows.shared.repos.base import BaseSectionRepo
+
+
+class LoadSectionResponse(NamedTuple):
+    model_matrix: ndarray
 
 
 class BasePresenter(ABC):
 
     @abstractmethod
-    def show_section(self, image: ndarray, transform: ndarray): ...
+    def show(self, data: LoadSectionResponse): ...
+
+
+class SliceImageData(NamedTuple):
+    channels: ndarray
+    pixel_resolution_um: float
 
 
 class BaseSectionReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str) -> Section: ...
+    def read(self, filename: str) -> SliceImageData: ...
 
 
-class LoadSectionWorkflow:
+class LoadImageWorkflow:
 
     def __init__(self, repo: BaseSectionRepo, presenter: BasePresenter, reader: BaseSectionReader):
         self._repo = repo
         self._presenter = presenter
         self._reader = reader
 
-    def __call__(self, filename: str) -> None:
-        section = self._reader.read(filename=filename)
-        self._repo.set_section(section=section)
-        self._presenter.show_section(
-            image=section.channels[0],
-            transform=section.affine_transform,
+    def execute(self, filename: str) -> None:
+        slice_data = self._reader.read(filename=filename)
+        section = Section(
+            image=SliceImage(
+                channels=slice_data.channels,
+                pixel_resolution_um=slice_data.pixel_resolution_um
+            ),
+            plane=Plane(x=0, y=0)
         )
+
+        self._repo.save_section(section=section)
+        response = LoadSectionResponse(model_matrix=section.affine_transform)
+        self._presenter.show(response)
+        # image=section.channels[0],
+        # transform=section.affine_transform,
+        # )
