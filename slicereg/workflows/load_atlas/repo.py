@@ -1,13 +1,16 @@
+import re
 from contextlib import redirect_stdout
 from io import StringIO
+from typing import Tuple
 
 from bg_atlasapi import BrainGlobeAtlas
+from bg_atlasapi.list_atlases import get_downloaded_atlases
 from numpy import ndarray
 
-from slicereg.workflows.load_atlas.workflow import BaseRepo, AtlasRepoData
+from slicereg.workflows.load_atlas.workflow import BaseLoadAtlasRepo, AtlasRepoData
 
 
-class BrainglobeAtlasRepo(BaseRepo):
+class BrainglobeAtlasRepo(BaseLoadAtlasRepo):
 
     def get_atlas(self, resolution: int) -> AtlasRepoData:
         if resolution not in [10, 25, 100]:
@@ -29,3 +32,11 @@ class BrainglobeAtlasRepo(BaseRepo):
             resolution_um=bgatlas.resolution[0],
             origin=(w / 2., h / 2., d / 2.)
         )
+
+    @property
+    def get_downloaded_resolutions(self) -> Tuple[int, ...]:
+        pattern = re.compile("allen_mouse_(\d{2,})um")  # look for the name "allen_mouse_XXXum"
+        downloaded = get_downloaded_atlases()
+        maybe_matches = [re.match(pattern, name) for name in downloaded]
+        resolutions = [int(match.group(1)) for match in maybe_matches if match]
+        return tuple(resolutions)

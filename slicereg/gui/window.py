@@ -75,7 +75,7 @@ class MainWindow:
 
         resolution_label = button.text()
         resolution = int("".join(filter(str.isdigit, resolution_label)))
-        self.workflows.load_atlas(resolution=resolution)
+        self.workflows.load_atlas.execute(resolution=resolution)
 
     # Command Routing
     def show_load_image_dialog(self):
@@ -98,7 +98,7 @@ class MainWindow:
         self.workflows = app
         self.volume_view.register_workflows(app=app)
         self.slice_view.register_workflows(app=app)
-        self.workflows.load_atlas(resolution=25)
+        self.workflows.load_atlas.execute(resolution=25)
 
     # View Code
     def _show_default_window_title(self):

@@ -31,7 +31,7 @@ def filename():
 
 
 @given("No sections have been loaded yet")
-def repo(workflow):
+def no_sections_loaded(workflow):
     assert not workflow._repo.sections
 
 

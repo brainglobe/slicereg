@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import Tuple
+from typing import Tuple, NamedTuple
 
 from numpy import ndarray
 
@@ -16,26 +16,34 @@ class AtlasRepoData:
     origin: Tuple[float, float, float]
 
 
-class BaseRepo(ABC):
+class BaseLoadAtlasRepo(ABC):
 
     @abstractmethod
     def get_atlas(self, resolution: int) -> AtlasRepoData: ...
 
+    @abstractmethod
+    def get_downloaded_resolutions(self) -> Tuple[int, ...]: ...
+
+
+class LoadAtlasModel(NamedTuple):
+    reference_volume: ndarray
+    atlas_transform: ndarray
+
 
 class LoadAtlasWorkflow:
 
-    def __init__(self, repo: BaseRepo, presenter: BasePresenter):
+    def __init__(self, repo: BaseLoadAtlasRepo, presenter: BasePresenter):
         self._repo = repo
         self._presenter = presenter
 
-    def __call__(self, resolution: int):
+    def execute(self, resolution: int):
         data = self._repo.get_atlas(resolution=resolution)
         atlas = Atlas(volume=data.volume, resolution_um=data.resolution_um, origin=data.origin)
-        self._presenter.show_atlas(volume=atlas.volume, transform=atlas.model_matrix)
+        response = LoadAtlasModel(reference_volume=atlas.volume, atlas_transform=atlas.model_matrix)
+        self._presenter.show(response)
 
 
 class BasePresenter(ABC):
 
     @abstractmethod
-    def show_atlas(self, volume: ndarray, transform: ndarray) -> None: ...
-
+    def show(self, data: LoadAtlasModel) -> None: ...

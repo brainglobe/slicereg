@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-from typing import Tuple, NamedTuple, Dict
+from typing import Tuple, NamedTuple
 
 from numpy import ndarray
 from vispy.util.transforms import translate, rotate
@@ -35,6 +34,7 @@ class SliceImage(NamedTuple):
     def center(self) -> Tuple[float, float]:
         _, x, y = self.channels.shape
         return x // 2, y // 2
+
 
 
 
