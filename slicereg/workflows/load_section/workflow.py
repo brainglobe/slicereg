@@ -8,6 +8,7 @@ from slicereg.workflows.shared.repos.base import BaseSectionRepo
 
 
 class LoadSectionResponse(NamedTuple):
+    section: ndarray
     model_matrix: ndarray
 
 
@@ -35,7 +36,7 @@ class LoadImageWorkflow:
         self._presenter = presenter
         self._reader = reader
 
-    def execute(self, filename: str) -> None:
+    def execute(self, filename: str, channel: int) -> None:
         slice_data = self._reader.read(filename=filename)
         section = Section(
             image=SliceImage(
@@ -46,7 +47,7 @@ class LoadImageWorkflow:
         )
 
         self._repo.save_section(section=section)
-        response = LoadSectionResponse(model_matrix=section.affine_transform)
+        response = LoadSectionResponse(section=section.image.channels[channel - 1], model_matrix=section.affine_transform)
         self._presenter.show(response)
         # image=section.channels[0],
         # transform=section.affine_transform,

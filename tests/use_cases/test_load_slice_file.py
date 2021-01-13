@@ -1,11 +1,19 @@
 from pathlib import Path
+from unittest.mock import Mock
 
+import pytest
 from numpy import ndarray
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.workflows.load_section import LoadImageWorkflow, OmeTiffReader
-from slicereg.workflows.load_section.view_model import LoadImageViewModel, LoadImagePresenter
+from slicereg.workflows.load_section.view_model import LoadImagePresenter
 from slicereg.workflows.shared.repos.section_repo import InMemorySectionRepo
+
+
+@pytest.fixture
+def workflow():
+    return LoadImageWorkflow(repo=InMemorySectionRepo(), presenter=Mock(LoadImagePresenter),
+                             reader=OmeTiffReader())
 
 
 @scenario("features/load_slice.feature", "Single Slice Import")
@@ -22,32 +30,18 @@ def filename():
     return filename
 
 
-@given("No sections have been loaded yet", target_fixture="repo")
-def repo():
-    repo = InMemorySectionRepo()
-    assert not repo.sections
-    return repo
-
-
-@given("No sections are onscreen", target_fixture="view_model")
-def view_model():
-    model = LoadImageViewModel()
-    assert not model.sections
-    return model
+@given("No sections have been loaded yet")
+def repo(workflow):
+    assert not workflow._repo.sections
 
 
 @when("I load the file")
-def load_file(filename, repo, view_model):
-    workflow = LoadImageWorkflow(repo=repo, presenter=LoadImagePresenter(model=view_model), reader=OmeTiffReader())
-    workflow.execute(filename=filename)
+def load_file(workflow, filename):
+    workflow.execute(filename=filename, channel=1)
 
 
-@then("I should see the file image onscreen")
-def check_for_loaded_section(view_model):
-    assert len(view_model.sections) == 1
-
-
-@then("it should have some default 3D transformation.")
-def check_metadata(view_model):
-    assert isinstance(view_model.sections[0].model_matrix, ndarray)
-    assert view_model.sections[0].model_matrix.shape == (4, 4)
+@then("I should see the file image onscreen in 3D")
+def check_for_loaded_3d_section(workflow):
+    view_model = workflow._presenter.show.call_args[0][0]  # Grab what was passed to Presenter.show()
+    assert isinstance(view_model.section, ndarray)
+    assert view_model.model_matrix.shape == (4, 4)

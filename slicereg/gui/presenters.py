@@ -7,7 +7,7 @@ from numpy import ndarray
 
 from slicereg.gui.window import MainWindow
 from slicereg.workflows.load_atlas.workflow import BasePresenter as BaseLoadAtlasPresenter
-from slicereg.workflows.load_section.workflow import BasePresenter as BaseLoadSectionPresenter
+from slicereg.workflows.load_section.workflow import BasePresenter as BaseLoadSectionPresenter, LoadSectionResponse
 from slicereg.workflows.move_section.workflow import BasePresenter as BaseMoveSectionPresenter
 from slicereg.workflows.select_channel.workflow import BasePresenter as BaseSelectChannelPresenter
 
@@ -25,9 +25,9 @@ class LoadSectionPresenter(BaseLoadSectionPresenter):
     def __init__(self, view: MainWindow):
         self.view = view
 
-    def show_section(self, image: ndarray, transform: Optional[ndarray] = None) -> None:
-        self.view.volume_view.view_section(image=image, transform=transform)
-        self.view.slice_view.update_slice_image(image=image)
+    def show(self, data: LoadSectionResponse):
+        self.view.volume_view.view_section(image=data.section, transform=data.model_matrix)
+        self.view.slice_view.update_slice_image(image=data.section)
 
 
 @dataclass
