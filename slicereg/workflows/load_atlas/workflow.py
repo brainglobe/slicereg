@@ -33,7 +33,7 @@ class LoadAtlasModel(NamedTuple):
 
 class LoadAtlasWorkflow:
 
-    def __init__(self, repo: BaseLoadAtlasRepo, presenter: BasePresenter):
+    def __init__(self, repo: BaseLoadAtlasRepo, presenter: BaseLoadAtlasPresenter):
         self._repo = repo
         self._presenter = presenter
 
@@ -48,7 +48,7 @@ class LoadAtlasWorkflow:
         self._presenter.show(response)
 
 
-class BasePresenter(ABC):
+class BaseLoadAtlasPresenter(ABC):
 
     @abstractmethod
     def show(self, data: LoadAtlasModel) -> None: ...
