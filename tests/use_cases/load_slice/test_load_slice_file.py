@@ -6,17 +6,17 @@ from numpy import ndarray
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.workflows.load_section import LoadImageWorkflow, OmeTiffReader
-from slicereg.workflows.load_section.view_model import LoadImagePresenter
+from slicereg.gui.presenters import LoadSectionPresenter
 from slicereg.workflows.shared.repos.section_repo import InMemorySectionRepo
 
 
 @pytest.fixture
 def workflow():
-    return LoadImageWorkflow(repo=InMemorySectionRepo(), presenter=Mock(LoadImagePresenter),
+    return LoadImageWorkflow(repo=InMemorySectionRepo(), presenter=Mock(LoadSectionPresenter),
                              reader=OmeTiffReader())
 
 
-@scenario("features/load_slice.feature", "Single Slice Import")
+@scenario("load_slice.feature", "Single Slice Import")
 def test_outlined():
     ...
 
