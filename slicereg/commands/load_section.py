@@ -6,16 +6,16 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.models.section import Section, Plane, SliceImage
 
 
-class BaseLoadSectionPresenter(ABC):
-
-    @abstractmethod
-    def show(self, section: ndarray, model_matrix: ndarray): ...
-
-
 class BaseSectionReader(ABC):
 
     @abstractmethod
     def read(self, filename: str) -> SliceImage: ...
+
+
+class BaseLoadSectionPresenter(ABC):
+
+    @abstractmethod
+    def show(self, section: ndarray, model_matrix: ndarray): ...
 
 
 class LoadImageCommand:

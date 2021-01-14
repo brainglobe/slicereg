@@ -7,6 +7,15 @@ from numpy import ndarray
 from slicereg.commands.base import BaseSectionRepo
 
 
+class BaseMoveSectionPresenter(ABC):
+
+    @abstractmethod
+    def show(self, transform: ndarray): ...
+
+    @abstractmethod
+    def show_error(self, msg: str): ...
+
+
 class MoveSectionCommand:
 
     def __init__(self, repo: BaseSectionRepo, presenter: BaseMoveSectionPresenter):
@@ -22,12 +31,3 @@ class MoveSectionCommand:
 
         self._repo.save_section(new_section)
         self._presenter.show(transform=new_section.affine_transform)
-
-
-class BaseMoveSectionPresenter(ABC):
-
-    @abstractmethod
-    def show(self, transform: ndarray): ...
-
-    @abstractmethod
-    def show_error(self, msg: str): ...

@@ -17,6 +17,12 @@ class BaseLoadAtlasRepo(ABC):
     def get_downloaded_resolutions(self) -> Tuple[int, ...]: ...
 
 
+class BaseLoadAtlasPresenter(ABC):
+
+    @abstractmethod
+    def show(self, reference_volume: ndarray, atlas_transform: ndarray, atlas_resolution: int) -> None: ...
+
+
 class LoadAtlasCommand:
 
     def __init__(self, repo: BaseLoadAtlasRepo, presenter: BaseLoadAtlasPresenter):
@@ -27,9 +33,3 @@ class LoadAtlasCommand:
         atlas = self._repo.get_atlas(resolution=resolution)
         self._presenter.show(reference_volume=atlas.volume, atlas_transform=atlas.model_matrix,
                              atlas_resolution=int(atlas.resolution_um))
-
-
-class BaseLoadAtlasPresenter(ABC):
-
-    @abstractmethod
-    def show(self, reference_volume: ndarray, atlas_transform: ndarray, atlas_resolution: int) -> None: ...
