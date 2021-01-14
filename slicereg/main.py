@@ -19,36 +19,36 @@ def launch_gui():
     view_model = ViewModel()
     repo = InMemorySectionRepo()
 
-    commands = CommandProvider(
-        load_section=LoadImageCommand(
-            repo=repo,
-            presenter=LoadSectionPresenter(
-                view_model=view_model
+    MainWindow(
+        model=view_model,
+        commands=CommandProvider(
+            load_section=LoadImageCommand(
+                repo=repo,
+                presenter=LoadSectionPresenter(
+                    view_model=view_model
+                ),
+                reader=OmeTiffReader()
             ),
-            reader=OmeTiffReader()
-        ),
-        select_channel=SelectChannelCommand(
-            repo=repo,
-            presenter=SelectChannelPresenter(
-                view_model=view_model
-            )
-        ),
-        load_atlas=LoadAtlasCommand(
-            repo=BrainglobeAtlasRepo(),
-            presenter=LoadAtlasPresenter(
-                view_model=view_model
-            )
-        ),
-        move_section=MoveSectionCommand(
-            repo=repo,
-            presenter=MoveSectionPresenter(
-                view_model=view_model
+            select_channel=SelectChannelCommand(
+                repo=repo,
+                presenter=SelectChannelPresenter(
+                    view_model=view_model
+                )
+            ),
+            load_atlas=LoadAtlasCommand(
+                repo=BrainglobeAtlasRepo(),
+                presenter=LoadAtlasPresenter(
+                    view_model=view_model
+                )
+            ),
+            move_section=MoveSectionCommand(
+                repo=repo,
+                presenter=MoveSectionPresenter(
+                    view_model=view_model
+                )
             )
         )
     )
-
-    win = MainWindow(model=view_model)
-    win.register_commands(app=commands)
     app.exec_()
 
 

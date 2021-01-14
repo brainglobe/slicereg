@@ -15,9 +15,10 @@ from slicereg.gui.base import BaseVispyView
 
 class VolumeView(BaseVispyView):
 
-    def __init__(self):
+    def __init__(self, commands: CommandProvider):
+        self.commands = commands
+
         self._canvas = SceneCanvas()
-        self.commands: Optional[CommandProvider] = None
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
         self._canvas.central_widget.add_widget(self._viewbox)
@@ -31,6 +32,10 @@ class VolumeView(BaseVispyView):
         self._section_image = Image(parent=self._viewbox.scene, cmap='grays')
         self._section_image.attach(filters.ColorFilter((0., .5, 1., 1.)))
         self._section_image.set_gl_state('additive', depth_test=False)
+
+        self._canvas.events.key_press.connect(self._handle_vispy_key_press_events)
+
+    # View Code
 
     @property
     def qt_widget(self) -> QWidget:
@@ -62,36 +67,30 @@ class VolumeView(BaseVispyView):
 
     # Controller Code
 
-    def register_commands(self, app: CommandProvider):
-        self.commands = app
+    def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:
+        """Router: Calls AppCommands functions based on the event that's given."""
 
-        def handle_vispy_key_press_events(event: KeyEvent) -> None:
-            """Router: Calls AppCommands functions based on the event that's given."""
-
-            key_commands = {
-                '1': lambda: self.commands.select_channel(1),
-                '2': lambda: self.commands.select_channel(2),
-                '3': lambda: self.commands.select_channel(3),
-                '4': lambda: self.commands.select_channel(4),
-                'W': lambda: self.move_section(z=30),
-                'S': lambda: self.move_section(z=-30),
-                'A': lambda: self.move_section(x=-30),
-                'D': lambda: self.move_section(x=30),
-                'Q': lambda: self.move_section(y=-30),
-                'E': lambda: self.move_section(y=30),
-                'I': lambda: self.move_section(rz=3),
-                'K': lambda: self.move_section(rz=-3),
-                'J': lambda: self.move_section(rx=-3),
-                'L': lambda: self.move_section(rx=3),
-                'U': lambda: self.move_section(ry=-3),
-                'O': lambda: self.move_section(ry=3),
-                'Escape': use_app().quit,
-            }
-            if command := key_commands.get(event.key.name):
-                command()
-
-        self._canvas.events.key_press.connect(handle_vispy_key_press_events)
+        key_commands = {
+            '1': lambda: self.commands.select_channel(1),
+            '2': lambda: self.commands.select_channel(2),
+            '3': lambda: self.commands.select_channel(3),
+            '4': lambda: self.commands.select_channel(4),
+            'W': lambda: self.move_section(z=30),
+            'S': lambda: self.move_section(z=-30),
+            'A': lambda: self.move_section(x=-30),
+            'D': lambda: self.move_section(x=30),
+            'Q': lambda: self.move_section(y=-30),
+            'E': lambda: self.move_section(y=30),
+            'I': lambda: self.move_section(rz=3),
+            'K': lambda: self.move_section(rz=-3),
+            'J': lambda: self.move_section(rx=-3),
+            'L': lambda: self.move_section(rx=3),
+            'U': lambda: self.move_section(ry=-3),
+            'O': lambda: self.move_section(ry=3),
+            'Escape': use_app().quit,
+        }
+        if command := key_commands.get(event.key.name):
+            command()
 
     def move_section(self, x=0, y=0, z=0., rx=0., ry=0., rz=0.):
         self.commands.move_section(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz)
-

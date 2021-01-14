@@ -10,7 +10,9 @@ from slicereg.gui.base import BaseVispyView
 
 class SliceView(BaseVispyView):
 
-    def __init__(self):
+    def __init__(self, commands: CommandProvider):
+        self.commands = commands
+
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
@@ -36,9 +38,6 @@ class SliceView(BaseVispyView):
         )
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
-
-    def register_commands(self, app: CommandProvider):
-        self.commands = app
 
         self._canvas.events.mouse_press.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_move.connect(self._vispy_mouse_event)

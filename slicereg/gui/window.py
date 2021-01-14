@@ -18,8 +18,8 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 
 class MainWindow:
 
-    def __init__(self, model: ViewModel):
-        self.commands: Optional[CommandProvider] = None
+    def __init__(self, model: ViewModel, commands: CommandProvider):
+        self.commands = commands
         self.model = model
         self.model.atlas_updated.connect(self.on_atlas_update)
         self.model.section_loaded.connect(self.on_section_loaded)
@@ -36,10 +36,10 @@ class MainWindow:
         main_layout = QHBoxLayout()
         widget.setLayout(main_layout)
 
-        self.slice_view = SliceView()
+        self.slice_view = SliceView(commands=self.commands)
         main_layout.addWidget(self.slice_view.qt_widget)
 
-        self.volume_view = VolumeView()
+        self.volume_view = VolumeView(commands=self.commands)
         main_layout.addWidget(self.volume_view.qt_widget)
 
         side_layout = QVBoxLayout()
@@ -74,6 +74,8 @@ class MainWindow:
         self._show_default_window_title()
         self.win.show()
 
+        self.commands.load_atlas.execute(resolution=25)
+
     def on_atlas_update(self):
         atlas = self.model.atlas
         self.volume_view.view_atlas(volume=atlas.volume, transform=atlas.transform)
@@ -94,10 +96,6 @@ class MainWindow:
 
     def on_error_raised(self):
         self.show_temp_title(self.model.errors[-1])
-
-
-    def show_error(self, msg: str) -> None:
-        self.show_temp_title(msg)
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
@@ -121,13 +119,6 @@ class MainWindow:
             return
         self.commands.load_section.execute(filename=filename)
 
-    # Controller Code
-
-    def register_commands(self, app: CommandProvider):
-        self.commands = app
-        self.volume_view.register_commands(app=app)
-        self.slice_view.register_commands(app=app)
-        self.commands.load_atlas.execute(resolution=25)
 
     # View Code
     def _show_default_window_title(self):
