@@ -1,16 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.application.view_model import ViewModel
-from slicereg.gui.window import MainWindow
 from slicereg.application.load_atlas.workflow import BaseLoadAtlasPresenter as BaseLoadAtlasPresenter, LoadAtlasModel
-from slicereg.application.load_section.workflow import BaseSelectChannelPresenter as BaseLoadSectionPresenter, LoadSectionResponse
+from slicereg.application.load_section.workflow import BaseSelectChannelPresenter as BaseLoadSectionPresenter, \
+    LoadSectionResponse
 from slicereg.application.move_section.workflow import BaseMoveSectionPresenter
 from slicereg.application.select_channel.workflow import BasePresenter as BaseSelectChannelPresenter
+from slicereg.application.view_model import ViewModel
 
 
 @dataclass

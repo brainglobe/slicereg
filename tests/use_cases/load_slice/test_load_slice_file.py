@@ -1,19 +1,42 @@
-from pathlib import Path
 from unittest.mock import Mock
 
+import numpy as np
 import pytest
-from numpy import ndarray
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.application.load_section import LoadImageWorkflow, OmeTiffReader
+from slicereg.application.load_section.workflow import BaseSectionRepo, LoadImageWorkflow, SliceImageData, BaseSectionReader
+from slicereg.application.view_model import ViewModel
 from slicereg.gui.presenters import LoadSectionPresenter
-from slicereg.application.shared.repos.section_repo import InMemorySectionRepo
 
 
 @pytest.fixture
-def workflow():
-    return LoadImageWorkflow(repo=InMemorySectionRepo(), presenter=Mock(LoadSectionPresenter),
-                             reader=OmeTiffReader())
+def repo():
+    repo = Mock(BaseSectionRepo)
+    repo.sections = []
+    return repo
+
+
+@pytest.fixture
+def view_model():
+    return ViewModel()
+
+
+@pytest.fixture
+def image_data():
+    return np.arange(12).reshape((2, 3, 2))
+
+
+@pytest.fixture
+def reader(image_data):
+    reader = Mock(BaseSectionReader)
+    reader.read.return_value = SliceImageData(channels=image_data, pixel_resolution_um=10)
+    return reader
+
+
+@pytest.fixture
+def workflow(repo, reader, view_model):
+    return LoadImageWorkflow(repo=repo, presenter=LoadSectionPresenter(view_model=view_model),
+                             reader=reader)
 
 
 @scenario("load_slice.feature", "Single Slice Import")
@@ -23,25 +46,21 @@ def test_outlined():
 
 @given("I have a multichannel OME-TIFF file on my computer.", target_fixture="filename")
 def filename():
-    filename = 'data/RA_10X_scans/MeA/S1_09032020.ome.tiff'
-    path = Path(filename)
-    assert path.exists()
-    assert path.name[-9:] == ".ome.tiff"
-    return filename
+    return 'a_real_file.ome.tiff'
 
 
 @given("No sections have been loaded yet")
-def no_sections_loaded(workflow):
-    assert not workflow._repo.sections
+def no_sections_loaded(repo, view_model):
+    assert not repo.sections
+    assert not view_model.current_section
 
 
 @when("I load the file")
 def load_file(workflow, filename):
-    workflow.execute(filename=filename, channel=1)
+    workflow.execute(filename=filename)
 
 
-@then("I should see the file image onscreen in 3D")
-def check_for_loaded_3d_section(workflow):
-    view_model = workflow._presenter.show.call_args[0][0]  # Grab what was passed to Presenter.show()
-    assert isinstance(view_model.section, ndarray)
-    assert view_model.model_matrix.shape == (4, 4)
+@then("I should see the slice image onscreen in 3D")
+def check_for_loaded_3d_section(view_model, image_data):
+    assert view_model.current_section
+    assert view_model.current_section.transform.shape == (4, 4)

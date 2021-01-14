@@ -119,7 +119,7 @@ class MainWindow:
         )
         if not filename:
             return
-        self.workflows.load_section.execute(filename=filename, channel=1)
+        self.workflows.load_section.execute(filename=filename)
 
     # Controller Code
 

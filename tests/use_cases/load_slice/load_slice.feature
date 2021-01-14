@@ -6,4 +6,4 @@ Feature: Slice Import
     Given I have a multichannel OME-TIFF file on my computer.
     And No sections have been loaded yet
     When I load the file
-    Then I should see the file image onscreen in 3D
+    Then I should see the slice image onscreen in 3D

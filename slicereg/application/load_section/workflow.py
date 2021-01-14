@@ -36,7 +36,7 @@ class LoadImageWorkflow:
         self._presenter = presenter
         self._reader = reader
 
-    def execute(self, filename: str, channel: int) -> None:
+    def execute(self, filename: str) -> None:
         slice_data = self._reader.read(filename=filename)
         section = Section(
             image=SliceImage(
@@ -47,7 +47,7 @@ class LoadImageWorkflow:
         )
 
         self._repo.save_section(section=section)
-        response = LoadSectionResponse(section=section.image.channels[channel - 1], model_matrix=section.affine_transform)
+        response = LoadSectionResponse(section=section.image.channels[0], model_matrix=section.affine_transform)
         self._presenter.show(response)
         # image=section.channels[0],
         # transform=section.affine_transform,

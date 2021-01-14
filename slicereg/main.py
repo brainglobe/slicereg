@@ -16,7 +16,6 @@ def launch_gui():
 
     view_model = ViewModel()
     repo = InMemorySectionRepo()
-    win = MainWindow(model=view_model)
 
     workflows = WorkflowProvider(
         load_section=LoadImageWorkflow(
@@ -45,6 +44,8 @@ def launch_gui():
             )
         )
     )
+
+    win = MainWindow(model=view_model)
     win.register_workflows(app=workflows)
     app.exec_()
 
