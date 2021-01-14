@@ -12,7 +12,7 @@ class LoadSectionResponse(NamedTuple):
     model_matrix: ndarray
 
 
-class BasePresenter(ABC):
+class BaseSelectChannelPresenter(ABC):
 
     @abstractmethod
     def show(self, data: LoadSectionResponse): ...
@@ -31,7 +31,7 @@ class BaseSectionReader(ABC):
 
 class LoadImageWorkflow:
 
-    def __init__(self, repo: BaseSectionRepo, presenter: BasePresenter, reader: BaseSectionReader):
+    def __init__(self, repo: BaseSectionRepo, presenter: BaseSelectChannelPresenter, reader: BaseSectionReader):
         self._repo = repo
         self._presenter = presenter
         self._reader = reader

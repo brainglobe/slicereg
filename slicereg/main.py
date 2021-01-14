@@ -29,7 +29,7 @@ def launch_gui():
         select_channel=SelectChannelWorkflow(
             repo=repo,
             presenter=SelectChannelPresenter(
-                view=win
+                view_model=view_model
             )
         ),
         load_atlas=LoadAtlasWorkflow(

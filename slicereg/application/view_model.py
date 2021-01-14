@@ -29,6 +29,7 @@ class ViewModel:
     section_loaded: Signal = Signal()
     section_moved: Signal = Signal()
     error_raised: Signal = Signal()
+    channel_changed: Signal = Signal()
 
     def update_atlas(self, volume: ndarray, transform: ndarray):
         self.atlas = AtlasModel(volume=volume, transform=transform)
@@ -45,3 +46,9 @@ class ViewModel:
     def show_error(self, msg: str):
         self.errors.append(msg)
         self.error_raised.emit()
+
+    def change_channel(self, channel: int, image: ndarray):
+        self.current_section = self.current_section._replace(image=image)
+        self.current_channel = channel
+
+        self.channel_changed.emit()

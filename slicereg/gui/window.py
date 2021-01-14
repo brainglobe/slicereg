@@ -25,6 +25,7 @@ class MainWindow:
         self.model.section_loaded.connect(self.on_section_loaded)
         self.model.section_moved.connect(self.on_section_moved)
         self.model.error_raised.connect(self.on_error_raised)
+        self.model.channel_changed.connect(self.on_channel_select)
 
         self.win = QMainWindow()
         self._default_window_title = self.model.main_title
@@ -85,6 +86,11 @@ class MainWindow:
     def on_section_moved(self):
         transform = self.model.current_section.transform
         self.volume_view.update_transform(transform=transform)
+
+    def on_channel_select(self):
+        image = self.model.current_section.image
+        self.volume_view.update_image(image=image)
+        self.slice_view.update_slice_image(image=image)
 
     def on_error_raised(self):
         self.show_temp_title(self.model.errors[-1])
