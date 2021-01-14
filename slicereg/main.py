@@ -2,9 +2,9 @@ from PySide2.QtWidgets import QApplication
 
 from slicereg.commands.load_atlas import LoadAtlasCommand
 from slicereg.commands.provider import CommandProvider
-from slicereg.gui.view_model import ViewModel
+from slicereg.gui.view_model import ViewModel, LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, \
+    SelectChannelPresenter
 from slicereg.gui.window import MainWindow
-from slicereg.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
 from slicereg.io.ome_tiff import OmeTiffReader
 from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand

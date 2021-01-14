@@ -5,8 +5,7 @@ import pytest
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
-from slicereg.gui.view_model import ViewModel
-from slicereg.gui.presenters import LoadSectionPresenter
+from slicereg.gui.view_model import ViewModel, LoadSectionPresenter
 from slicereg.models.section import SliceImage
 
 
