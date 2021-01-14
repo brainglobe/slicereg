@@ -18,12 +18,10 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 
 class MainWindow:
 
-    def __init__(self, model: ViewModel, commands: CommandProvider):
+    def __init__(self, model: ViewModel, commands: CommandProvider, volume_widget: QWidget):
         self.commands = commands
         self.model = model
-        self.model.atlas_updated.connect(self.on_atlas_update)
         self.model.section_loaded.connect(self.on_section_loaded)
-        self.model.section_moved.connect(self.on_section_moved)
         self.model.error_raised.connect(self.on_error_raised)
         self.model.channel_changed.connect(self.on_channel_select)
 
@@ -39,8 +37,7 @@ class MainWindow:
         self.slice_view = SliceView(commands=self.commands)
         main_layout.addWidget(self.slice_view.qt_widget)
 
-        self.volume_view = VolumeView(commands=self.commands)
-        main_layout.addWidget(self.volume_view.qt_widget)
+        main_layout.addWidget(volume_widget)
 
         side_layout = QVBoxLayout()
         main_layout.addLayout(side_layout)
@@ -76,22 +73,12 @@ class MainWindow:
 
         self.commands.load_atlas.execute(resolution=25)
 
-    def on_atlas_update(self):
-        atlas = self.model.atlas
-        self.volume_view.view_atlas(volume=atlas.volume, transform=atlas.transform)
-
     def on_section_loaded(self):
         section = self.model.current_section
-        self.volume_view.view_section(image=section.image, transform=section.transform)
         self.slice_view.update_slice_image(image=section.image)
-
-    def on_section_moved(self):
-        transform = self.model.current_section.transform
-        self.volume_view.update_transform(transform=transform)
 
     def on_channel_select(self):
         image = self.model.current_section.image
-        self.volume_view.update_image(image=image)
         self.slice_view.update_slice_image(image=image)
 
     def on_error_raised(self):
