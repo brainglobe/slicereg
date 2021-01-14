@@ -1,19 +1,9 @@
-from typing import Optional
-
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout
 from vispy.app import Timer
 
 from slicereg.commands.provider import CommandProvider
-from slicereg.gui.slice_view import SliceView
 from slicereg.gui.view_model import ViewModel
-from slicereg.gui.volume_view import VolumeView
-
-
-def restart_timer(timer: Timer, iterations=1) -> None:
-    """Restarts a Vispy Timer, even if it is already running."""
-    timer.stop()
-    timer.start(iterations=iterations)
 
 
 class MainWindow:
@@ -100,4 +90,5 @@ class MainWindow:
 
     def show_temp_title(self, title: str) -> None:
         self.win.setWindowTitle(title)
-        restart_timer(self.title_reset_timer)
+        self.title_reset_timer.stop()
+        self.title_reset_timer.start(iterations=1)
