@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.application.load_atlas.workflow import BaseLoadAtlasPresenter as BaseLoadAtlasPresenter, LoadAtlasModel
+from slicereg.application.load_atlas.workflow import BaseLoadAtlasPresenter as BaseLoadAtlasPresenter
 from slicereg.application.load_section.workflow import BaseSelectChannelPresenter as BaseLoadSectionPresenter, \
     LoadSectionResponse
 from slicereg.application.move_section.workflow import BaseMoveSectionPresenter
@@ -16,8 +16,8 @@ from slicereg.application.view_model import ViewModel
 class LoadAtlasPresenter(BaseLoadAtlasPresenter):
     view_model: ViewModel
 
-    def show(self, data: LoadAtlasModel) -> None:
-        self.view_model.update_atlas(volume=data.reference_volume, transform=data.atlas_transform)
+    def show(self, reference_volume: ndarray, atlas_transform: ndarray,  atlas_resolution: ndarray) -> None:
+        self.view_model.update_atlas(volume=reference_volume, transform=atlas_transform)
 
 
 @dataclass

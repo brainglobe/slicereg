@@ -4,9 +4,8 @@ import pytest
 from numpy import random
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.gui.presenters import LoadAtlasPresenter
 from slicereg.models.atlas import Atlas
-from slicereg.application.load_atlas.workflow import BaseLoadAtlasRepo, LoadAtlasWorkflow
+from slicereg.application.load_atlas.workflow import BaseLoadAtlasRepo, LoadAtlasWorkflow, BaseLoadAtlasPresenter
 
 
 @pytest.fixture
@@ -16,7 +15,7 @@ def workflow():
         Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=25, origin=(0, 0, 0)),
         Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=100, origin=(0, 0, 0)),
     ]
-    return LoadAtlasWorkflow(repo=repo, presenter=Mock(LoadAtlasPresenter))
+    return LoadAtlasWorkflow(repo=repo, presenter=Mock(BaseLoadAtlasPresenter))
 
 
 @scenario("load_atlas.feature", "Replace Atlas")
@@ -36,8 +35,8 @@ def load_atlas(workflow):
 
 @then("a 3D volume of the 100um allen reference atlas appears.")
 def check_3d_atlas_data_shown(workflow):
-    view_model = workflow._presenter.show.call_args[0][0]
-    assert view_model.reference_volume.ndim == 3
-    assert view_model.atlas_transform.shape == (4, 4)
-    assert view_model.atlas_resolution == 100
-    assert workflow._repo.get_atlas.call_args[1]['resolution'] == 100  # repo was last asked for a 100um atlas
+    view_model = workflow._presenter.show.call_args[1]
+    assert view_model['reference_volume'].ndim == 3
+    assert view_model['atlas_transform'].shape == (4, 4)
+    assert view_model['atlas_resolution'] == 100
+    workflow._repo.get_atlas.assert_called_with(resolution=100)
