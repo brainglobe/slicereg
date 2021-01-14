@@ -9,7 +9,7 @@ from slicereg.application.view_model import ViewModel
 from slicereg.gui.window import MainWindow
 from slicereg.application.load_atlas.workflow import BaseLoadAtlasPresenter as BaseLoadAtlasPresenter, LoadAtlasModel
 from slicereg.application.load_section.workflow import BasePresenter as BaseLoadSectionPresenter, LoadSectionResponse
-from slicereg.application.move_section.workflow import BasePresenter as BaseMoveSectionPresenter
+from slicereg.application.move_section.workflow import BaseMoveSectionPresenter
 from slicereg.application.select_channel.workflow import BasePresenter as BaseSelectChannelPresenter
 
 
@@ -28,19 +28,16 @@ class LoadSectionPresenter(BaseLoadSectionPresenter):
     def show(self, data: LoadSectionResponse):
         self.view_model.show_new_slice(image=data.section, transform=data.model_matrix)
 
-        # self.view.volume_view.view_section(image=data.section, transform=data.model_matrix)
-        # self.view.slice_view.update_slice_image(image=data.section)
-
 
 @dataclass
 class MoveSectionPresenter(BaseMoveSectionPresenter):
-    view: MainWindow
+    view_model: ViewModel
 
-    def update_transform(self, transform: ndarray):
-        self.view.volume_view.update_transform(transform=transform)
+    def show(self, transform: ndarray):
+        self.view_model.update_section_transform(transform=transform)
 
     def show_error(self, msg: str):
-        self.view.show_temp_title(title=msg)
+        self.view_model.show_error(msg=msg)
 
 
 @dataclass

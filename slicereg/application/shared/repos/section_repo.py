@@ -9,11 +9,14 @@ from slicereg.application.shared.repos.base import BaseSectionRepo
 class InMemorySectionRepo(BaseSectionRepo):
 
     def __init__(self):
-        self.__sections: List[Section] = []
+        self._sections: List[Section] = []
 
     @property
     def sections(self) -> List[Section]:
-        return self.__sections[:]
+        return self._sections[:]
 
     def save_section(self, section: Section) -> None:
-        self.__sections.append(section)
+        if not self._sections:
+            self._sections.append(section)
+        else:
+            self._sections[0] = section

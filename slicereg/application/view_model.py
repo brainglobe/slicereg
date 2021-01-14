@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional, NamedTuple, Tuple
+from typing import Optional, NamedTuple, Tuple, List
 
 from numpy import ndarray
 
@@ -24,8 +24,11 @@ class ViewModel:
     current_section: Optional[SectionModel] = None
     current_channel: int = 1
     main_title: str = "Default Title"
+    errors: List[str] = field(default_factory=list)
     atlas_updated: Signal = Signal()
     section_loaded: Signal = Signal()
+    section_moved: Signal = Signal()
+    error_raised: Signal = Signal()
 
     def update_atlas(self, volume: ndarray, transform: ndarray):
         self.atlas = AtlasModel(volume=volume, transform=transform)
@@ -34,3 +37,11 @@ class ViewModel:
     def show_new_slice(self, image: ndarray, transform: ndarray):
         self.current_section = SectionModel(image=image, transform=transform)
         self.section_loaded.emit()
+
+    def update_section_transform(self, transform: ndarray):
+        self.current_section = self.current_section._replace(transform=transform)
+        self.section_moved.emit()
+
+    def show_error(self, msg: str):
+        self.errors.append(msg)
+        self.error_raised.emit()

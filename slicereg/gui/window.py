@@ -1,6 +1,6 @@
 from typing import Optional
 
-from PySide2.QtWidgets import QMainWindow, QWidget, QApplication, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
+from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout
 from vispy.app import Timer
 
@@ -23,6 +23,8 @@ class MainWindow:
         self.model = model
         self.model.atlas_updated.connect(self.on_atlas_update)
         self.model.section_loaded.connect(self.on_section_loaded)
+        self.model.section_moved.connect(self.on_section_moved)
+        self.model.error_raised.connect(self.on_error_raised)
 
         self.win = QMainWindow()
         self._default_window_title = self.model.main_title
@@ -80,6 +82,14 @@ class MainWindow:
         self.volume_view.view_section(image=section.image, transform=section.transform)
         self.slice_view.update_slice_image(image=section.image)
 
+    def on_section_moved(self):
+        transform = self.model.current_section.transform
+        self.volume_view.update_transform(transform=transform)
+
+    def on_error_raised(self):
+        self.show_temp_title(self.model.errors[-1])
+
+
     def show_error(self, msg: str) -> None:
         self.show_temp_title(msg)
 
@@ -98,13 +108,12 @@ class MainWindow:
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.win,
             caption="Load Image",
-            dir="data/RA_10X_scans/MEA",
+            dir="../data/RA_10X_scans/MEA",
             filter="OME-TIFF (*.ome.tiff)"
         )
         if not filename:
             return
         self.workflows.load_section.execute(filename=filename, channel=1)
-
 
     # Controller Code
 
@@ -121,5 +130,3 @@ class MainWindow:
     def show_temp_title(self, title: str) -> None:
         self.win.setWindowTitle(title)
         restart_timer(self.title_reset_timer)
-
-

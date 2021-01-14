@@ -15,18 +15,19 @@ def launch_gui():
     app = QApplication([])
 
     view_model = ViewModel()
+    repo = InMemorySectionRepo()
     win = MainWindow(model=view_model)
 
     workflows = WorkflowProvider(
         load_section=LoadImageWorkflow(
-            repo=InMemorySectionRepo(),
+            repo=repo,
             presenter=LoadSectionPresenter(
                 view_model=view_model
             ),
             reader=OmeTiffReader()
         ),
         select_channel=SelectChannelWorkflow(
-            repo=InMemorySectionRepo(),
+            repo=repo,
             presenter=SelectChannelPresenter(
                 view=win
             )
@@ -38,9 +39,9 @@ def launch_gui():
             )
         ),
         move_section=MoveSectionWorkflow(
-            repo=InMemorySectionRepo(),
+            repo=repo,
             presenter=MoveSectionPresenter(
-                view=win
+                view_model=view_model
             )
         )
     )
