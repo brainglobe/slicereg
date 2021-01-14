@@ -22,6 +22,7 @@ class MainWindow:
         self.workflows: Optional[WorkflowProvider] = None
         self.model = model
         self.model.atlas_updated.connect(self.on_atlas_update)
+        self.model.section_loaded.connect(self.on_section_loaded)
 
         self.win = QMainWindow()
         self._default_window_title = self.model.main_title
@@ -73,6 +74,11 @@ class MainWindow:
     def on_atlas_update(self):
         atlas = self.model.atlas
         self.volume_view.view_atlas(volume=atlas.volume, transform=atlas.transform)
+
+    def on_section_loaded(self):
+        section = self.model.current_section
+        self.volume_view.view_section(image=section.image, transform=section.transform)
+        self.slice_view.update_slice_image(image=section.image)
 
     def show_error(self, msg: str) -> None:
         self.show_temp_title(msg)

@@ -21,11 +21,16 @@ class AtlasModel(NamedTuple):
 @dataclass
 class ViewModel:
     atlas: Optional[AtlasModel] = None
-    sections: Tuple[SectionModel, ...] = field(default_factory=list)
+    current_section: Optional[SectionModel] = None
     current_channel: int = 1
     main_title: str = "Default Title"
     atlas_updated: Signal = Signal()
+    section_loaded: Signal = Signal()
 
     def update_atlas(self, volume: ndarray, transform: ndarray):
         self.atlas = AtlasModel(volume=volume, transform=transform)
         self.atlas_updated.emit()
+
+    def show_new_slice(self, image: ndarray, transform: ndarray):
+        self.current_section = SectionModel(image=image, transform=transform)
+        self.section_loaded.emit()

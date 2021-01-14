@@ -21,7 +21,7 @@ def launch_gui():
         load_section=LoadImageWorkflow(
             repo=InMemorySectionRepo(),
             presenter=LoadSectionPresenter(
-                view=win
+                view_model=view_model
             ),
             reader=OmeTiffReader()
         ),

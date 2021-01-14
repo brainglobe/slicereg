@@ -21,14 +21,15 @@ class LoadAtlasPresenter(BaseLoadAtlasPresenter):
         self.view_model.update_atlas(volume=data.reference_volume, transform=data.atlas_transform)
 
 
+@dataclass
 class LoadSectionPresenter(BaseLoadSectionPresenter):
-
-    def __init__(self, view: MainWindow):
-        self.view = view
+    view_model: ViewModel
 
     def show(self, data: LoadSectionResponse):
-        self.view.volume_view.view_section(image=data.section, transform=data.model_matrix)
-        self.view.slice_view.update_slice_image(image=data.section)
+        self.view_model.show_new_slice(image=data.section, transform=data.model_matrix)
+
+        # self.view.volume_view.view_section(image=data.section, transform=data.model_matrix)
+        # self.view.slice_view.update_slice_image(image=data.section)
 
 
 @dataclass
