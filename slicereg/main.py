@@ -16,7 +16,6 @@ from slicereg.repos.inmemory_section import InMemorySectionRepo
 
 
 def launch_gui():
-    app = QApplication([])
 
     view_model = ViewModel()
     repo = InMemorySectionRepo()
@@ -49,6 +48,7 @@ def launch_gui():
         )
     )
 
+    app = QApplication([])
     MainWindow(
         model=view_model,
         commands=commands,
