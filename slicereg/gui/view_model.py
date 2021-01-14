@@ -21,6 +21,7 @@ class SectionModel(NamedTuple):
 class AtlasModel(NamedTuple):
     volume: ndarray
     transform: ndarray
+    resolution: int
 
 
 @dataclass
@@ -36,35 +37,15 @@ class ViewModel:
     error_raised: Signal = Signal()
     channel_changed: Signal = Signal()
 
-    def update_atlas(self, volume: ndarray, transform: ndarray):
-        self.atlas = AtlasModel(volume=volume, transform=transform)
-        self.atlas_updated.emit()
-
-    def show_new_slice(self, image: ndarray, transform: ndarray):
-        self.current_section = SectionModel(image=image, transform=transform)
-        self.section_loaded.emit()
-
-    def update_section_transform(self, transform: ndarray):
-        self.current_section = self.current_section._replace(transform=transform)
-        self.section_moved.emit()
-
-    def show_error(self, msg: str):
-        self.errors.append(msg)
-        self.error_raised.emit()
-
-    def change_channel(self, channel: int, image: ndarray):
-        self.current_section = self.current_section._replace(image=image)
-        self.current_channel = channel
-
-        self.channel_changed.emit()
-
 
 @dataclass
 class LoadAtlasPresenter(BaseLoadAtlasPresenter):
     view_model: ViewModel
 
-    def show(self, reference_volume: ndarray, atlas_transform: ndarray,  atlas_resolution: ndarray) -> None:
-        self.view_model.update_atlas(volume=reference_volume, transform=atlas_transform)
+    def show(self, reference_volume: ndarray, atlas_transform: ndarray, atlas_resolution: int) -> None:
+        self.view_model.atlas = AtlasModel(volume=reference_volume, transform=atlas_transform,
+                                           resolution=atlas_resolution)
+        self.view_model.atlas_updated.emit()
 
 
 @dataclass
@@ -72,7 +53,8 @@ class LoadSectionPresenter(BaseLoadSectionPresenter):
     view_model: ViewModel
 
     def show(self, section: ndarray, model_matrix: ndarray):
-        self.view_model.show_new_slice(image=section, transform=model_matrix)
+        self.view_model.current_section = SectionModel(image=section, transform=model_matrix)
+        self.view_model.section_loaded.emit()
 
 
 @dataclass
@@ -80,10 +62,12 @@ class MoveSectionPresenter(BaseMoveSectionPresenter):
     view_model: ViewModel
 
     def show(self, transform: ndarray):
-        self.view_model.update_section_transform(transform=transform)
+        self.view_model.current_section = self.view_model.current_section._replace(transform=transform)
+        self.view_model.section_moved.emit()
 
     def show_error(self, msg: str):
-        self.view_model.show_error(msg=msg)
+        self.view_model.errors.append(msg)
+        self.view_model.error_raised.emit()
 
 
 @dataclass
@@ -91,7 +75,11 @@ class SelectChannelPresenter(BaseSelectChannelPresenter):
     view_model: ViewModel
 
     def show(self, channel: int, image: ndarray):
-        self.view_model.change_channel(channel=channel, image=image)
+        model = self.view_model
+        model.current_section = model.current_section._replace(image=image)
+        model.current_channel = channel
+        model.channel_changed.emit()
 
     def show_error(self, msg: str):
-        self.view.show_temp_title(title=msg)
+        self.view_model.errors.append(msg)
+        self.view_model.error_raised.emit()
