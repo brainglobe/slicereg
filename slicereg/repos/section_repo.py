@@ -1,9 +1,9 @@
 from __future__ import annotations
 
-from typing import Optional, List, Tuple
+from typing import List
 
 from slicereg.models.section import Section
-from slicereg.application.shared.repos.base import BaseSectionRepo
+from slicereg.application.base import BaseSectionRepo
 
 
 class InMemorySectionRepo(BaseSectionRepo):

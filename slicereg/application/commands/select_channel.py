@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from slicereg.application.shared.repos.base import BaseSectionRepo
+from slicereg.application.base import BaseSectionRepo
 from slicereg.models.section import Section
 
 
@@ -14,7 +14,7 @@ class BaseRepo(ABC):
     def get_section(self) -> Section: ...
 
 
-class SelectChannelWorkflow:
+class SelectChannelCommand:
 
     def __init__(self, repo: BaseSectionRepo, presenter: BasePresenter):
         self._repo = repo

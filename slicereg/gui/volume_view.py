@@ -9,15 +9,15 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
+from slicereg.application.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
-from slicereg.application.provider import WorkflowProvider
 
 
 class VolumeView(BaseVispyView):
 
     def __init__(self):
         self._canvas = SceneCanvas()
-        self.workflows: Optional[WorkflowProvider] = None
+        self.commands: Optional[CommandProvider] = None
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
         self._canvas.central_widget.add_widget(self._viewbox)
@@ -62,17 +62,17 @@ class VolumeView(BaseVispyView):
 
     # Controller Code
 
-    def register_workflows(self, app: WorkflowProvider):
-        self.workflows = app
+    def register_commands(self, app: CommandProvider):
+        self.commands = app
 
         def handle_vispy_key_press_events(event: KeyEvent) -> None:
             """Router: Calls AppCommands functions based on the event that's given."""
 
             key_commands = {
-                '1': lambda: self.workflows.select_channel(1),
-                '2': lambda: self.workflows.select_channel(2),
-                '3': lambda: self.workflows.select_channel(3),
-                '4': lambda: self.workflows.select_channel(4),
+                '1': lambda: self.commands.select_channel(1),
+                '2': lambda: self.commands.select_channel(2),
+                '3': lambda: self.commands.select_channel(3),
+                '4': lambda: self.commands.select_channel(4),
                 'W': lambda: self.move_section(z=30),
                 'S': lambda: self.move_section(z=-30),
                 'A': lambda: self.move_section(x=-30),
@@ -93,5 +93,5 @@ class VolumeView(BaseVispyView):
         self._canvas.events.key_press.connect(handle_vispy_key_press_events)
 
     def move_section(self, x=0, y=0, z=0., rx=0., ry=0., rz=0.):
-        self.workflows.move_section(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz)
+        self.commands.move_section(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz)
 

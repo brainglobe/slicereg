@@ -1,9 +1,8 @@
 from abc import ABC, abstractmethod
-from typing import NamedTuple
 
 from numpy import ndarray
 
-from slicereg.application.shared.repos.base import BaseSectionRepo
+from slicereg.application.base import BaseSectionRepo
 from slicereg.models.section import Section, Plane, SliceImage
 
 
@@ -19,7 +18,7 @@ class BaseSectionReader(ABC):
     def read(self, filename: str) -> SliceImage: ...
 
 
-class LoadImageWorkflow:
+class LoadImageCommand:
 
     def __init__(self, repo: BaseSectionRepo, presenter: BaseSelectChannelPresenter, reader: BaseSectionReader):
         self._repo = repo

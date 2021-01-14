@@ -1,7 +1,7 @@
 # Use Cases
 
 This directory contains all the meaningful actions (called "Use Cases") that a user can do in the application, each action getting its own file to make it 
-easier to find.  A use case tends to be a straightforward workflow (e.g. get some data, then calculate some value, then show it onscreen).
+easier to find.  A use case tends to be a straightforward command (e.g. get some data, then calculate some value, then show it onscreen).
 
 If you were writing an academic paper about this project, each Use Case would be a sentence in the paper (e.g. Users can Move Sections to a given coordinate and orientation in the reference atlas). 
 
@@ -9,7 +9,7 @@ If you were writing an academic paper about this project, each Use Case would be
 
 ### Summary 
 
-To make it simpler to describe the workflow and keep it focused on the big-picture features, this code doesn't directly depend on any
+To make it simpler to describe the command and keep it focused on the big-picture features, this code doesn't directly depend on any
 libraries; instead, it indirectly uses them via base classes it specifies (and other code needs to implement).  
 
 ### Philosophy

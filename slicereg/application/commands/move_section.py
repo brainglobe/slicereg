@@ -4,10 +4,10 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from slicereg.application.shared.repos.base import BaseSectionRepo
+from slicereg.application.base import BaseSectionRepo
 
 
-class MoveSectionWorkflow:
+class MoveSectionCommand:
 
     def __init__(self, repo: BaseSectionRepo, presenter: BaseMoveSectionPresenter):
         self._repo = repo

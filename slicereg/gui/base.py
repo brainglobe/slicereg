@@ -2,13 +2,13 @@ from abc import abstractmethod, ABC
 
 from PySide2.QtWidgets import QWidget
 
-from slicereg.application.provider import WorkflowProvider
+from slicereg.application.commands.provider import CommandProvider
 
 
 class BaseVispyView(ABC):
 
     @abstractmethod
-    def register_workflows(self, app: WorkflowProvider) -> None: ...
+    def register_commands(self, app: CommandProvider) -> None: ...
 
     @property
     @abstractmethod

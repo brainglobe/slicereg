@@ -4,9 +4,9 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QF
     QHBoxLayout
 from vispy.app import Timer
 
-from slicereg.application.provider import WorkflowProvider
-from slicereg.application.view_model import ViewModel
+from slicereg.application.commands.provider import CommandProvider
 from slicereg.gui.slice_view import SliceView
+from slicereg.gui.view_model import ViewModel
 from slicereg.gui.volume_view import VolumeView
 
 
@@ -19,7 +19,7 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 class MainWindow:
 
     def __init__(self, model: ViewModel):
-        self.workflows: Optional[WorkflowProvider] = None
+        self.commands: Optional[CommandProvider] = None
         self.model = model
         self.model.atlas_updated.connect(self.on_atlas_update)
         self.model.section_loaded.connect(self.on_section_loaded)
@@ -105,11 +105,11 @@ class MainWindow:
 
         resolution_label = button.text()
         resolution = int("".join(filter(str.isdigit, resolution_label)))
-        self.workflows.load_atlas.execute(resolution=resolution)
+        self.commands.load_atlas.execute(resolution=resolution)
 
     # Command Routing
     def show_load_image_dialog(self):
-        if self.workflows is None:
+        if self.commands is None:
             return
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.win,
@@ -119,15 +119,15 @@ class MainWindow:
         )
         if not filename:
             return
-        self.workflows.load_section.execute(filename=filename)
+        self.commands.load_section.execute(filename=filename)
 
     # Controller Code
 
-    def register_workflows(self, app: WorkflowProvider):
-        self.workflows = app
-        self.volume_view.register_workflows(app=app)
-        self.slice_view.register_workflows(app=app)
-        self.workflows.load_atlas.execute(resolution=25)
+    def register_commands(self, app: CommandProvider):
+        self.commands = app
+        self.volume_view.register_commands(app=app)
+        self.slice_view.register_commands(app=app)
+        self.commands.load_atlas.execute(resolution=25)
 
     # View Code
     def _show_default_window_title(self):

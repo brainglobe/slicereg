@@ -17,7 +17,7 @@ class BaseLoadAtlasRepo(ABC):
     def get_downloaded_resolutions(self) -> Tuple[int, ...]: ...
 
 
-class LoadAtlasWorkflow:
+class LoadAtlasCommand:
 
     def __init__(self, repo: BaseLoadAtlasRepo, presenter: BaseLoadAtlasPresenter):
         self._repo = repo

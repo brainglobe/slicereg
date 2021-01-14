@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.application.load_section.workflow import BaseSectionRepo, LoadImageWorkflow, BaseSectionReader
+from slicereg.application.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
 from slicereg.application.view_model import ViewModel
 from slicereg.gui.presenters import LoadSectionPresenter
 from slicereg.models.section import SliceImage
@@ -35,8 +35,8 @@ def reader(image_data):
 
 
 @pytest.fixture
-def workflow(repo, reader, view_model):
-    return LoadImageWorkflow(repo=repo, presenter=LoadSectionPresenter(view_model=view_model),
+def command(repo, reader, view_model):
+    return LoadImageCommand(repo=repo, presenter=LoadSectionPresenter(view_model=view_model),
                              reader=reader)
 
 
@@ -57,8 +57,8 @@ def no_sections_loaded(repo, view_model):
 
 
 @when("I load the file")
-def load_file(workflow, filename):
-    workflow.execute(filename=filename)
+def load_file(command, filename):
+    command.execute(filename=filename)
 
 
 @then("I should see the slice image onscreen in 3D")

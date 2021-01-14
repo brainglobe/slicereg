@@ -5,9 +5,8 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
+from slicereg.application.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
-from slicereg.application.provider import WorkflowProvider
-
 
 class SliceView(BaseVispyView):
 
@@ -38,8 +37,8 @@ class SliceView(BaseVispyView):
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
 
-    def register_workflows(self, app: WorkflowProvider):
-        self.workflows = app
+    def register_commands(self, app: CommandProvider):
+        self.commands = app
 
         self._canvas.events.mouse_press.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_move.connect(self._vispy_mouse_event)
@@ -84,11 +83,11 @@ class SliceView(BaseVispyView):
         scale = 4.
         x_slice_offset = x_amp * x_dir * scale
         y_slice_offset = y_amp * y_dir * scale
-        self.workflows.move_section(x=x_slice_offset, y=y_slice_offset)
+        self.commands.move_section(x=x_slice_offset, y=y_slice_offset)
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         x_amp = abs(x2 - x1)
         x_dir = ((x2 > x1) * 2) - 1
         scale = .1
         x_slice_offset = x_amp * x_dir * scale
-        self.workflows.move_section(ry=x_slice_offset)
+        self.commands.move_section(ry=x_slice_offset)
