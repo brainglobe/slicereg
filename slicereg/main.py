@@ -2,6 +2,7 @@ from PySide2.QtWidgets import QApplication
 
 from slicereg.commands.load_atlas import LoadAtlasCommand
 from slicereg.commands.provider import CommandProvider
+from slicereg.gui.slice_view import SliceView
 from slicereg.gui.view_model import ViewModel, LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, \
     SelectChannelPresenter
 from slicereg.gui.volume_view import VolumeView
@@ -48,8 +49,12 @@ def launch_gui():
         )
     )
 
-    volume_view = VolumeView(model=view_model, commands=commands)
-    MainWindow(model=view_model, commands=commands, volume_widget=volume_view.qt_widget)
+    MainWindow(
+        model=view_model,
+        commands=commands,
+        volume_widget=VolumeView(model=view_model, commands=commands).qt_widget,
+        slice_widget=SliceView(model=view_model, commands=commands).qt_widget,
+    )
     app.exec_()
 
 

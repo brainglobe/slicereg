@@ -18,12 +18,11 @@ def restart_timer(timer: Timer, iterations=1) -> None:
 
 class MainWindow:
 
-    def __init__(self, model: ViewModel, commands: CommandProvider, volume_widget: QWidget):
+    def __init__(self, model: ViewModel, commands: CommandProvider, volume_widget: QWidget, slice_widget: QWidget):
         self.commands = commands
         self.model = model
-        self.model.section_loaded.connect(self.on_section_loaded)
         self.model.error_raised.connect(self.on_error_raised)
-        self.model.channel_changed.connect(self.on_channel_select)
+
 
         self.win = QMainWindow()
         self._default_window_title = self.model.main_title
@@ -34,9 +33,7 @@ class MainWindow:
         main_layout = QHBoxLayout()
         widget.setLayout(main_layout)
 
-        self.slice_view = SliceView(commands=self.commands)
-        main_layout.addWidget(self.slice_view.qt_widget)
-
+        main_layout.addWidget(slice_widget)
         main_layout.addWidget(volume_widget)
 
         side_layout = QVBoxLayout()
@@ -70,16 +67,6 @@ class MainWindow:
                                        start=False)
         self._show_default_window_title()
         self.win.show()
-
-        self.commands.load_atlas.execute(resolution=25)
-
-    def on_section_loaded(self):
-        section = self.model.current_section
-        self.slice_view.update_slice_image(image=section.image)
-
-    def on_channel_select(self):
-        image = self.model.current_section.image
-        self.slice_view.update_slice_image(image=image)
 
     def on_error_raised(self):
         self.show_temp_title(self.model.errors[-1])

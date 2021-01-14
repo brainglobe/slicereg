@@ -7,10 +7,13 @@ from vispy.visuals.filters import ColorFilter
 
 from slicereg.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
+from slicereg.gui.view_model import ViewModel
+
 
 class SliceView(BaseVispyView):
 
-    def __init__(self, commands: CommandProvider):
+    def __init__(self, model: ViewModel, commands: CommandProvider):
+        self.model = model
         self.commands = commands
 
         self._canvas = SceneCanvas()
@@ -43,9 +46,20 @@ class SliceView(BaseVispyView):
         self._canvas.events.mouse_move.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_release.connect(self._vispy_mouse_event)
 
+        self.model.channel_changed.connect(self.on_channel_select)
+        self.model.section_loaded.connect(self.on_section_loaded)
+
     @property
     def qt_widget(self) -> QWidget:
         return self._canvas.native
+
+    def on_section_loaded(self):
+        section = self.model.current_section
+        self.update_slice_image(image=section.image)
+
+    def on_channel_select(self):
+        image = self.model.current_section.image
+        self.update_slice_image(image=image)
 
     def update_slice_image(self, image: ndarray):
         self._slice.set_data(image)
