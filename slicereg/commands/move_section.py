@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from slicereg.application.base import BaseSectionRepo
+from slicereg.commands.base import BaseSectionRepo
 
 
 class MoveSectionCommand:

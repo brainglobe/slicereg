@@ -9,7 +9,7 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from slicereg.application.commands.provider import CommandProvider
+from slicereg.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
 
 

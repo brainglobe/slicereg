@@ -5,7 +5,7 @@ from numpy import random
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.models.atlas import Atlas
-from slicereg.application.commands.load_atlas import BaseLoadAtlasRepo, LoadAtlasCommand, BaseLoadAtlasPresenter
+from slicereg.commands import BaseLoadAtlasRepo, LoadAtlasCommand, BaseLoadAtlasPresenter
 
 
 @pytest.fixture

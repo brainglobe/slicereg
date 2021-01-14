@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 from PySide2.QtWidgets import QWidget
 
-from slicereg.application.commands.provider import CommandProvider
+from slicereg.commands.provider import CommandProvider
 
 
 class BaseVispyView(ABC):

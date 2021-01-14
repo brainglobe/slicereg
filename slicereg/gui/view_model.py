@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Optional, NamedTuple, Tuple, List
+from typing import Optional, NamedTuple, List
 
 from numpy import ndarray
 
-from slicereg.application.utils import Signal
+from slicereg.gui.utils import Signal
 
 
 class SectionModel(NamedTuple):

@@ -2,11 +2,11 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from slicereg.application.base import BaseSectionRepo
+from slicereg.commands.base import BaseSectionRepo
 from slicereg.models.section import Section, Plane, SliceImage
 
 
-class BaseSelectChannelPresenter(ABC):
+class BaseLoadSectionPresenter(ABC):
 
     @abstractmethod
     def show(self, section: ndarray, model_matrix: ndarray): ...
@@ -20,7 +20,7 @@ class BaseSectionReader(ABC):
 
 class LoadImageCommand:
 
-    def __init__(self, repo: BaseSectionRepo, presenter: BaseSelectChannelPresenter, reader: BaseSectionReader):
+    def __init__(self, repo: BaseSectionRepo, presenter: BaseLoadSectionPresenter, reader: BaseSectionReader):
         self._repo = repo
         self._presenter = presenter
         self._reader = reader

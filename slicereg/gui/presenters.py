@@ -4,10 +4,10 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.application.commands.load_atlas import BaseLoadAtlasPresenter as BaseLoadAtlasPresenter
-from slicereg.application.commands.load_section import BaseSelectChannelPresenter as BaseLoadSectionPresenter
-from slicereg.application.commands.move_section import BaseMoveSectionPresenter
-from slicereg.application.commands.select_channel import BasePresenter as BaseSelectChannelPresenter
+from slicereg.commands.load_atlas import BaseLoadAtlasPresenter
+from slicereg.commands.load_section import BaseLoadSectionPresenter
+from slicereg.commands.move_section import BaseMoveSectionPresenter
+from slicereg.commands.select_channel import BaseSelectChannelPresenter
 from slicereg.gui.view_model import ViewModel
 
 

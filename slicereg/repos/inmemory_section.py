@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import List
 
 from slicereg.models.section import Section
-from slicereg.application.base import BaseSectionRepo
+from slicereg.commands.base import BaseSectionRepo
 
 
 class InMemorySectionRepo(BaseSectionRepo):

@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.application.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
-from slicereg.application.view_model import ViewModel
+from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
+from slicereg.gui.view_model import ViewModel
 from slicereg.gui.presenters import LoadSectionPresenter
 from slicereg.models.section import SliceImage
 

@@ -1,16 +1,16 @@
 from PySide2.QtWidgets import QApplication
 
-from slicereg.application.commands.provider import CommandProvider
+from slicereg.commands.load_atlas import LoadAtlasCommand
+from slicereg.commands.provider import CommandProvider
 from slicereg.gui.view_model import ViewModel
 from slicereg.gui.window import MainWindow
 from slicereg.gui.presenters import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, SelectChannelPresenter
-from slicereg.application.commands.load_atlas import LoadAtlasCommand
-from slicereg.application.io import OmeTiffReader
-from slicereg.application.commands.load_section import LoadImageCommand
-from slicereg.application.commands.move_section import MoveSectionCommand
-from slicereg.application.commands.select_channel import SelectChannelCommand
-from slicereg.repos.bgatlas_repo import BrainglobeAtlasRepo
-from slicereg.repos.section_repo import InMemorySectionRepo
+from slicereg.io.ome_tiff import OmeTiffReader
+from slicereg.commands.load_section import LoadImageCommand
+from slicereg.commands.move_section import MoveSectionCommand
+from slicereg.commands.select_channel import SelectChannelCommand
+from slicereg.repos.brainglobe_atlas import BrainglobeAtlasRepo
+from slicereg.repos.inmemory_section import InMemorySectionRepo
 
 
 def launch_gui():

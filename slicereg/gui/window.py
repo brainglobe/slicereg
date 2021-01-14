@@ -4,7 +4,7 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QF
     QHBoxLayout
 from vispy.app import Timer
 
-from slicereg.application.commands.provider import CommandProvider
+from slicereg.commands.provider import CommandProvider
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.view_model import ViewModel
 from slicereg.gui.volume_view import VolumeView
