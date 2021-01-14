@@ -1,17 +1,10 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
-import numpy as np
 from numpy import ndarray
 
 from slicereg.application.shared.repos.base import BaseSectionRepo
-
-
-@dataclass
-class SectionTransformData:
-    transform: ndarray
 
 
 class MoveSectionWorkflow:

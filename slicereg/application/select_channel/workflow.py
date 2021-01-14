@@ -1,23 +1,17 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.models.section import Section
 from slicereg.application.shared.repos.base import BaseSectionRepo
+from slicereg.models.section import Section
 
 
 class BaseRepo(ABC):
 
     @abstractmethod
     def get_section(self) -> Section: ...
-
-
-@dataclass
-class SectionChannelData:
-    section_image: ndarray
 
 
 class SelectChannelWorkflow:
@@ -36,7 +30,7 @@ class SelectChannelWorkflow:
         except IndexError:
             self._presenter.show_error(f"Section doesn't have a Channel {num}.")
 
-        
+
 class BasePresenter(ABC):
 
     @abstractmethod
