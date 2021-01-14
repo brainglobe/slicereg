@@ -2,7 +2,7 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from slicereg.workflows.load_section.workflow import BaseSectionReader, SliceImageData
+from slicereg.application.load_section.workflow import BaseSectionReader, SliceImageData
 from slicereg.models.section import Section
 
 

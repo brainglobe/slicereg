@@ -4,7 +4,7 @@ from typing import NamedTuple, Optional
 from numpy import ndarray
 
 from slicereg.models.section import Section, Plane, SliceImage
-from slicereg.workflows.shared.repos.base import BaseSectionRepo
+from slicereg.application.shared.repos.base import BaseSectionRepo
 
 
 class LoadSectionResponse(NamedTuple):

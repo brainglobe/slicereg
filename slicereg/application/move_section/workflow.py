@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.workflows.shared.repos.base import BaseSectionRepo
+from slicereg.application.shared.repos.base import BaseSectionRepo
 
 
 @dataclass

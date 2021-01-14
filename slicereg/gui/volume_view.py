@@ -10,7 +10,7 @@ from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
 from slicereg.gui.base import BaseVispyView
-from slicereg.workflows.provider import WorkflowProvider
+from slicereg.application.provider import WorkflowProvider
 
 
 class VolumeView(BaseVispyView):

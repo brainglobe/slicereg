@@ -5,9 +5,9 @@ import pytest
 from numpy import ndarray
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.workflows.load_section import LoadImageWorkflow, OmeTiffReader
+from slicereg.application.load_section import LoadImageWorkflow, OmeTiffReader
 from slicereg.gui.presenters import LoadSectionPresenter
-from slicereg.workflows.shared.repos.section_repo import InMemorySectionRepo
+from slicereg.application.shared.repos.section_repo import InMemorySectionRepo
 
 
 @pytest.fixture

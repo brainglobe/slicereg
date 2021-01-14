@@ -2,7 +2,7 @@ from abc import abstractmethod, ABC
 
 from PySide2.QtWidgets import QWidget
 
-from slicereg.workflows.provider import WorkflowProvider
+from slicereg.application.provider import WorkflowProvider
 
 
 class BaseVispyView(ABC):

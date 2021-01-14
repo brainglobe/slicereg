@@ -6,7 +6,7 @@ from pytest_bdd import scenario, given, when, then
 
 from slicereg.gui.presenters import LoadAtlasPresenter
 from slicereg.models.atlas import Atlas
-from slicereg.workflows.load_atlas.workflow import BaseLoadAtlasRepo, LoadAtlasWorkflow
+from slicereg.application.load_atlas.workflow import BaseLoadAtlasRepo, LoadAtlasWorkflow
 
 
 @pytest.fixture

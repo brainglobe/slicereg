@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import Optional, List, Tuple
 
 from slicereg.models.section import Section
-from slicereg.workflows.shared.repos.base import BaseSectionRepo
+from slicereg.application.shared.repos.base import BaseSectionRepo
 
 
 class InMemorySectionRepo(BaseSectionRepo):
