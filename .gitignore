@@ -4,3 +4,4 @@ build/*
 .pytest_cache
 .hypothesis/
 __pycache__
+.coverage
