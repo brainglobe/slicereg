@@ -16,8 +16,7 @@ from slicereg.gui.view_model import ViewModel
 
 class VolumeView(BaseVispyView):
 
-    def __init__(self, model: ViewModel, commands: CommandProvider):
-        self.model = model
+    def __init__(self, commands: CommandProvider):
         self.commands = commands
 
         self._canvas = SceneCanvas()
@@ -36,42 +35,33 @@ class VolumeView(BaseVispyView):
         self._section_image.set_gl_state('additive', depth_test=False)
 
         self._canvas.events.key_press.connect(self._handle_vispy_key_press_events)
-        self.model.atlas_updated.connect(self.on_atlas_update)
-        self.model.section_moved.connect(self.on_section_moved)
-        self.model.section_loaded.connect(self.on_section_loaded)
-        self.model.channel_changed.connect(self.on_channel_select)
 
     # View Code
     @property
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_atlas_update(self):
-        atlas = self.model.atlas
-        self._atlas_volume.set_data(atlas.volume)
-        self._atlas_volume.transform = MatrixTransform(atlas.transform)
-        self._atlas_volume.clim = np.min(atlas.volume), np.max(atlas.volume)
+    def on_atlas_update(self, volume: ndarray, transform: ndarray):
+        self._atlas_volume.set_data(volume)
+        self._atlas_volume.transform = MatrixTransform(transform)
+        self._atlas_volume.clim = np.min(volume), np.max(volume)
         self._viewbox.camera.center = (0, 0, 0)
-        self._viewbox.camera.scale_factor = atlas.transform[0, 0] * atlas.volume.shape[0]
+        self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
         self._canvas.update()
 
-    def on_section_loaded(self):
-        section = self.model.current_section
-        image, transform = section.image, section.transform
+    def on_section_loaded(self, image: ndarray, transform: ndarray):
         self._section_image.set_data(image)
         self._section_image.clim = np.min(image), np.max(image)
         if transform is not None:
             self._section_image.transform = MatrixTransform(transform)
         self._canvas.update()
 
-    def on_channel_select(self):
-        image = self.model.current_section.image
+    def on_channel_select(self, image: ndarray, channel: int):
         self._section_image.set_data(image)
         self._section_image.clim = np.min(image), np.max(image)
         self._canvas.update()
 
-    def on_section_moved(self):
-        transform = self.model.current_section.transform
+    def on_section_moved(self, transform: ndarray):
         self._section_image.transform = MatrixTransform(transform)
         self._canvas.update()
 

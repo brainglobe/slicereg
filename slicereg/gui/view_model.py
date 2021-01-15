@@ -45,7 +45,7 @@ class LoadAtlasPresenter(BaseLoadAtlasPresenter):
     def show(self, reference_volume: ndarray, atlas_transform: ndarray, atlas_resolution: int) -> None:
         self.view_model.atlas = AtlasModel(volume=reference_volume, transform=atlas_transform,
                                            resolution=atlas_resolution)
-        self.view_model.atlas_updated.emit()
+        self.view_model.atlas_updated.emit(volume=reference_volume, transform=atlas_transform)
 
 
 @dataclass
@@ -54,7 +54,7 @@ class LoadSectionPresenter(BaseLoadSectionPresenter):
 
     def show(self, section: ndarray, model_matrix: ndarray):
         self.view_model.current_section = SectionModel(image=section, transform=model_matrix)
-        self.view_model.section_loaded.emit()
+        self.view_model.section_loaded.emit(image=section, transform=model_matrix)
 
 
 @dataclass
@@ -63,11 +63,11 @@ class MoveSectionPresenter(BaseMoveSectionPresenter):
 
     def show(self, transform: ndarray):
         self.view_model.current_section = self.view_model.current_section._replace(transform=transform)
-        self.view_model.section_moved.emit()
+        self.view_model.section_moved.emit(transform=transform)
 
     def show_error(self, msg: str):
         self.view_model.errors.append(msg)
-        self.view_model.error_raised.emit()
+        self.view_model.error_raised.emit(msg=msg)
 
 
 @dataclass
@@ -78,8 +78,8 @@ class SelectChannelPresenter(BaseSelectChannelPresenter):
         model = self.view_model
         model.current_section = model.current_section._replace(image=image)
         model.current_channel = channel
-        model.channel_changed.emit()
+        model.channel_changed.emit(image=image, channel=channel)
 
     def show_error(self, msg: str):
         self.view_model.errors.append(msg)
-        self.view_model.error_raised.emit()
+        self.view_model.error_raised.emit(msg=msg)

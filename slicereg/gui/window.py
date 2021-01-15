@@ -8,14 +8,12 @@ from slicereg.gui.view_model import ViewModel
 
 class MainWindow:
 
-    def __init__(self, model: ViewModel, commands: CommandProvider, volume_widget: QWidget, slice_widget: QWidget):
+    def __init__(self, title: str, commands: CommandProvider, volume_widget: QWidget, slice_widget: QWidget):
         self.commands = commands
-        self.model = model
-        self.model.error_raised.connect(self.on_error_raised)
 
 
         self.win = QMainWindow()
-        self._default_window_title = self.model.main_title
+        self._default_window_title = title
 
         widget = QWidget()
         self.win.setCentralWidget(widget)
@@ -58,8 +56,8 @@ class MainWindow:
         self._show_default_window_title()
         self.win.show()
 
-    def on_error_raised(self):
-        self.show_temp_title(self.model.errors[-1])
+    def on_error_raised(self, msg: str):
+        self.show_temp_title(msg)
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.

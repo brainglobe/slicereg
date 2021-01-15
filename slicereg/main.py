@@ -49,12 +49,24 @@ def launch_gui():
     )
 
     app = QApplication([])
-    MainWindow(
-        model=view_model,
+
+    volume_view = VolumeView(commands=commands)
+    view_model.atlas_updated.connect(volume_view.on_atlas_update)
+    view_model.section_loaded.connect(volume_view.on_section_loaded)
+    view_model.section_moved.connect(volume_view.on_section_moved)
+    view_model.channel_changed.connect(volume_view.on_channel_select)
+
+    slice_view = SliceView(commands=commands)
+    view_model.section_loaded.connect(slice_view.on_section_loaded)
+    view_model.channel_changed.connect(slice_view.on_channel_select)
+
+    window = MainWindow(
+        title=view_model.main_title,
         commands=commands,
-        volume_widget=VolumeView(model=view_model, commands=commands).qt_widget,
-        slice_widget=SliceView(model=view_model, commands=commands).qt_widget,
+        volume_widget=volume_view.qt_widget,
+        slice_widget=slice_view.qt_widget,
     )
+    view_model.error_raised.connect(window.on_error_raised)
     app.exec_()
 
 
