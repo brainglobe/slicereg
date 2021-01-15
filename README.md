@@ -21,7 +21,7 @@ Next steps are largely focused around deployment and development; this will ensu
   - [ ] Get builds running for executable files on Windows, Mac, and Linux and confirm they work
   - [ ] Add continuous integration tooling to:
     - [x] run tests 
-    - [ ] report test coverage
+    - [x] report test coverage
     - [ ] run static analysis tools
   - [ ] Auto-deployment and versioning.
   - Entry points for launching GUI from command line
