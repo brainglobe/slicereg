@@ -17,14 +17,13 @@ PyOpenGL-accelerate = "^3.1.5"
 vispy = { git = "https://www.github.com/vispy/vispy.git", rev = "7f3f6f6" }
 
 [tool.poetry.dev-dependencies]
-dvc = {extras = ["gdrive"], version = "^1.11.9"}
+dvc = { extras = ["gdrive"], version = "^1.11.9" }
 pytest = "^6.2.1"
 pytest-qt = "^3.3.0"
 hypothesis = "^6.0.0"
 pytest-bdd = "^4.0.2"
 result = "^0.5.0"
-coverage = "^5.3.1"
-coveralls = "^3.0.0"
+coverage = { extras = ["toml"], version = "^5.3.1" }
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -32,3 +31,6 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
 bg-slicereg = "slicereg.main:launch_gui"
+
+[tool.coverage.run]
+relative_files = true
