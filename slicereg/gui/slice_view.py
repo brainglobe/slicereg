@@ -5,14 +5,12 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
-from slicereg.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
 
 
 class SliceView(BaseVispyView):
 
-    def __init__(self, commands: CommandProvider):
-        self.commands = commands
+    def __init__(self):
 
         self._canvas = SceneCanvas()
 
@@ -89,11 +87,14 @@ class SliceView(BaseVispyView):
         scale = 4.
         x_slice_offset = x_amp * x_dir * scale
         y_slice_offset = y_amp * y_dir * scale
-        self.commands.move_section(x=x_slice_offset, y=y_slice_offset)
+        self.move_section(x=x_slice_offset, y=y_slice_offset)
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         x_amp = abs(x2 - x1)
         x_dir = ((x2 > x1) * 2) - 1
         scale = .1
         x_slice_offset = x_amp * x_dir * scale
-        self.commands.move_section(ry=x_slice_offset)
+        self.move_section(ry=x_slice_offset)
+
+    def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
+        raise NotImplementedError("Wire up to MoveSectionCommand to use this.")

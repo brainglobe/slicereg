@@ -57,7 +57,7 @@ def no_sections_loaded(repo, view_model):
 
 @when("I load the file")
 def load_file(command, filename):
-    command.execute(filename=filename)
+    command(filename=filename)
 
 
 @then("I should see the slice image onscreen in 3D")

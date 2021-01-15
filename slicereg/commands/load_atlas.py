@@ -5,6 +5,7 @@ from typing import Tuple
 
 from numpy import ndarray
 
+from slicereg.commands.base import BaseCommand
 from slicereg.models.atlas import Atlas
 
 
@@ -23,13 +24,13 @@ class BaseLoadAtlasPresenter(ABC):
     def show(self, reference_volume: ndarray, atlas_transform: ndarray, atlas_resolution: int) -> None: ...
 
 
-class LoadAtlasCommand:
+class LoadAtlasCommand(BaseCommand):
 
     def __init__(self, repo: BaseLoadAtlasRepo, presenter: BaseLoadAtlasPresenter):
         self._repo = repo
         self._presenter = presenter
 
-    def execute(self, resolution: int):
+    def __call__(self, resolution: int):
         atlas = self._repo.get_atlas(resolution=resolution)
         self._presenter.show(reference_volume=atlas.volume, atlas_transform=atlas.model_matrix,
                              atlas_resolution=int(atlas.resolution_um))

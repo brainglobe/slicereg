@@ -28,7 +28,7 @@ def check_atlas_exists(command):
 
 @when("I ask for a 25um atlas")
 def load_atlas(command):
-    command.execute(resolution=25)
+    command(resolution=25)
 
 
 @then("a 3D volume of the 25um allen reference atlas appears onscreen.")

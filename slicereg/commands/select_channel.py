@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseSectionRepo
+from slicereg.commands.base import BaseSectionRepo, BaseCommand
 from slicereg.models.section import Section
 
 
@@ -23,7 +23,7 @@ class BaseSelectChannelPresenter(ABC):
     def show_error(self, msg: str): ...
 
 
-class SelectChannelCommand:
+class SelectChannelCommand(BaseCommand):
 
     def __init__(self, repo: BaseSectionRepo, presenter: BaseSelectChannelPresenter):
         self._repo = repo

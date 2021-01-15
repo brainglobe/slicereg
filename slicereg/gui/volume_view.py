@@ -7,14 +7,12 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from slicereg.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
 
 
 class VolumeView(BaseVispyView):
 
-    def __init__(self, commands: CommandProvider):
-        self.commands = commands
+    def __init__(self):
 
         self._canvas = SceneCanvas()
 
@@ -68,10 +66,10 @@ class VolumeView(BaseVispyView):
         """Router: Calls AppCommands functions based on the event that's given."""
 
         key_commands = {
-            '1': lambda: self.commands.select_channel(1),
-            '2': lambda: self.commands.select_channel(2),
-            '3': lambda: self.commands.select_channel(3),
-            '4': lambda: self.commands.select_channel(4),
+            '1': lambda: self.select_channel(1),
+            '2': lambda: self.select_channel(2),
+            '3': lambda: self.select_channel(3),
+            '4': lambda: self.select_channel(4),
             'W': lambda: self.move_section(z=30),
             'S': lambda: self.move_section(z=-30),
             'A': lambda: self.move_section(x=-30),
@@ -89,5 +87,8 @@ class VolumeView(BaseVispyView):
         if command := key_commands.get(event.key.name):
             command()
 
+    def select_channel(self, num: int):
+        raise NotImplementedError("Connect to a SelectChannelCommand before using")
+
     def move_section(self, x=0, y=0, z=0., rx=0., ry=0., rz=0.):
-        self.commands.move_section(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz)
+        raise NotImplementedError("Connect to MoveSectionCommand before using.")

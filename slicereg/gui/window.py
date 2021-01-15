@@ -2,14 +2,10 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QF
     QHBoxLayout
 from vispy.app import Timer
 
-from slicereg.commands.provider import CommandProvider
-
 
 class MainWindow:
 
-    def __init__(self, title: str, commands: CommandProvider, volume_widget: QWidget, slice_widget: QWidget):
-        self.commands = commands
-
+    def __init__(self, title: str, volume_widget: QWidget, slice_widget: QWidget):
 
         self.win = QMainWindow()
         self._default_window_title = title
@@ -64,12 +60,10 @@ class MainWindow:
 
         resolution_label = button.text()
         resolution = int("".join(filter(str.isdigit, resolution_label)))
-        self.commands.load_atlas.execute(resolution=resolution)
+        self.load_atlas(resolution=resolution)
 
     # Command Routing
     def show_load_image_dialog(self):
-        if self.commands is None:
-            return
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.win,
             caption="Load Image",
@@ -78,8 +72,13 @@ class MainWindow:
         )
         if not filename:
             return
-        self.commands.load_section.execute(filename=filename)
+        self.load_section(filename=filename)
 
+    def load_atlas(self, resolution: int):
+        raise NotImplementedError("Connect to LoadAtlasCommand before using.")
+
+    def load_section(self, filename: str):
+        raise NotImplementedError("Connect to a LoadImageCommand before using.")
 
     # View Code
     def _show_default_window_title(self):

@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseSectionRepo
+from slicereg.commands.base import BaseSectionRepo, BaseCommand
 
 
 class BaseMoveSectionPresenter(ABC):
@@ -16,7 +16,7 @@ class BaseMoveSectionPresenter(ABC):
     def show_error(self, msg: str): ...
 
 
-class MoveSectionCommand:
+class MoveSectionCommand(BaseCommand):
 
     def __init__(self, repo: BaseSectionRepo, presenter: BaseMoveSectionPresenter):
         self._repo = repo
