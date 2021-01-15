@@ -22,9 +22,9 @@ jobs:
         with:
             python-version: 3.8
       - name: Static Type Checking (MyPy)
-          run: |
-            pip install mypy
-            mypy slicereg
+        run: |
+          pip install mypy
+          mypy slicereg
       - name: Install Python Dependencies
         run: |
           python -m pip install --upgrade pip
