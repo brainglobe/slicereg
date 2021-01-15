@@ -25,7 +25,7 @@ class LoadImageCommand(BaseCommand):
         self._presenter = presenter
         self._reader = reader
 
-    def __call__(self, filename: str) -> None:
+    def __call__(self, filename: str) -> None:  # type: ignore
         slice_image = self._reader.read(filename=filename)
         section = Section(image=slice_image, plane=Plane(x=0, y=0))
         self._repo.save_section(section=section)

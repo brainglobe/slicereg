@@ -29,7 +29,7 @@ class SelectChannelCommand(BaseCommand):
         self._repo = repo
         self._presenter = presenter
 
-    def __call__(self, num: int):
+    def __call__(self, num: int):  # type: ignore
         section = self._repo.sections[0]
         if section is None:
             self._presenter.show_error("No section loaded yet.")

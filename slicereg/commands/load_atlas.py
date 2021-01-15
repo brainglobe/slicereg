@@ -30,7 +30,7 @@ class LoadAtlasCommand(BaseCommand):
         self._repo = repo
         self._presenter = presenter
 
-    def __call__(self, resolution: int):
+    def __call__(self, resolution: int):  # type: ignore
         atlas = self._repo.get_atlas(resolution=resolution)
         self._presenter.show(reference_volume=atlas.volume, atlas_transform=atlas.model_matrix,
                              atlas_resolution=int(atlas.resolution_um))
