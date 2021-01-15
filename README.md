@@ -20,7 +20,8 @@ If you'd like to try it out, check the Installation section below.
 Next steps are largely focused around deployment and development; this will ensure the tech stack is valid and make it easier to keep updating the project:
   - [ ] Get builds running for executable files on Windows, Mac, and Linux and confirm they work
   - [ ] Add continuous integration tooling to:
-    - [ ] run tests 
+    - [x] run tests 
+    - [ ] report test coverage
     - [ ] run static analysis tools
   - [ ] Auto-deployment and versioning.
   - Entry points for launching GUI from command line
