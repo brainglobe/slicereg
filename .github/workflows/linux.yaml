@@ -34,4 +34,4 @@ jobs:
       - name: Run Tests
         env:
           QT_DEBUG_PLUGINS: 1
-        run: xvfb-run poetry run pytest
+        run: xvfb-run poetry run coverage run --source slicereg -m pytest
