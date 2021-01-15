@@ -62,7 +62,8 @@ class MoveSectionPresenter(BaseMoveSectionPresenter):
     view_model: ViewModel
 
     def show(self, transform: ndarray):
-        self.view_model.current_section = self.view_model.current_section._replace(transform=transform)
+        if self.view_model.current_section:
+            self.view_model.current_section = self.view_model.current_section._replace(transform=transform)
         self.view_model.section_moved.emit(transform=transform)
 
     def show_error(self, msg: str):
@@ -76,7 +77,8 @@ class SelectChannelPresenter(BaseSelectChannelPresenter):
 
     def show(self, channel: int, image: ndarray):
         model = self.view_model
-        model.current_section = model.current_section._replace(image=image)
+        if model.current_section:
+            model.current_section = model.current_section._replace(image=image)
         model.current_channel = channel
         model.channel_changed.emit(image=image, channel=channel)
 
