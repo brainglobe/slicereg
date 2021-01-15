@@ -1,4 +1,5 @@
 [![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
+[![Coverage Status](https://coveralls.io/repos/github/brainglobe/slicereg/badge.svg?branch=main)](https://coveralls.io/github/brainglobe/slicereg?branch=main)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/brainglobe/slicereg)
 
 # slicereg
