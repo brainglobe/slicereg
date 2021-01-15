@@ -3,7 +3,6 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QF
 from vispy.app import Timer
 
 from slicereg.commands.provider import CommandProvider
-from slicereg.gui.view_model import ViewModel
 
 
 class MainWindow:

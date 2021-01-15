@@ -1,5 +1,3 @@
-from typing import Optional
-
 import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy.core._multiarray_umath import ndarray
@@ -11,7 +9,6 @@ from vispy.visuals.transforms import MatrixTransform
 
 from slicereg.commands.provider import CommandProvider
 from slicereg.gui.base import BaseVispyView
-from slicereg.gui.view_model import ViewModel
 
 
 class VolumeView(BaseVispyView):
