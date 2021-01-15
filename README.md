@@ -23,7 +23,6 @@ Next steps are largely focused around deployment and development; this will ensu
     - [x] run tests 
     - [x] report test coverage
     - [ ] run static analysis tools
-  - [ ] Auto-deployment and versioning.
   - Entry points for launching GUI from command line
      - [x] after cloning and installing from source code 
      - [ ] after pip install
