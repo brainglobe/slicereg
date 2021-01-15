@@ -19,13 +19,12 @@ If you'd like to try it out, check the Installation section below.
 
 Next steps are largely focused around deployment and development; this will ensure the tech stack is valid and make it easier to keep updating the project:
   - [ ] Get builds running for executable files on Windows, Mac, and Linux and confirm they work
-  - [ ] Add continuous integration tooling to:
+  - [x] Add continuous integration tooling to:
     - [x] run tests 
     - [x] report test coverage
-    - [ ] run static analysis tools
+    - [x] run static analysis tools
   - Entry points for launching GUI from command line
      - [x] after cloning and installing from source code 
-     - [ ] after pip install
 
 Next features are focused on manual registration in the GUI:
   - manual registration:
