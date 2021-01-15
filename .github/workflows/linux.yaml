@@ -35,7 +35,9 @@ jobs:
       - name: Run Tests
         env:
           QT_DEBUG_PLUGINS: 1
-        run: xvfb-run poetry run coverage run --source slicereg -m pytest
+        run: |
+          xvfb-run poetry run coverage run --source slicereg -m pytest
+          poetry run mypy slicereg
       - name: Coveralls
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
