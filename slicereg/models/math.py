@@ -1,5 +1,5 @@
-from numpy.core._multiarray_umath import ndarray
-from vispy.util.transforms import scale, rotate, translate
+from numpy import ndarray  # type: ignore
+from vispy.util.transforms import scale, rotate, translate  # type: ignore
 
 
 def affine_transform(x: float, y: float, z: float, rx: float, ry: float, rz: float, s: float) -> ndarray:

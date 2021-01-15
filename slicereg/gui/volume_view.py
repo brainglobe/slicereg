@@ -1,11 +1,10 @@
-import numpy as np
+import numpy as np  # type: ignore
+from numpy import array, ndarray  # type: ignore
 from PySide2.QtWidgets import QWidget
-from numpy.core._multiarray_umath import ndarray
-from numpy.ma import array
-from vispy.app import KeyEvent, use_app
-from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
-from vispy.visuals import filters
-from vispy.visuals.transforms import MatrixTransform
+from vispy.app import KeyEvent, use_app  # type: ignore
+from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image  # type: ignore
+from vispy.visuals import filters  # type: ignore
+from vispy.visuals.transforms import MatrixTransform  # type: ignore
 
 from slicereg.gui.base import BaseVispyView
 

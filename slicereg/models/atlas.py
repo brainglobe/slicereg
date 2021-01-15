@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 from typing import Tuple
-from warnings import warn
 
-from numpy.core._multiarray_umath import ndarray
-from vispy.util.transforms import scale, translate
+from numpy import ndarray  # type: ignore
+from vispy.util.transforms import scale, translate  # type: ignore
 
 
 @dataclass

@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from typing import Tuple, NamedTuple
 
-from numpy import ndarray
-from vispy.util.transforms import translate, rotate
+from numpy import ndarray  # type: ignore
+from vispy.util.transforms import translate, rotate  # type: ignore
 
 from slicereg.models.math import affine_transform
 

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from numpy import ndarray
+from numpy import ndarray  # type: ignore
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
 from slicereg.models.section import Section, Plane, SliceImage

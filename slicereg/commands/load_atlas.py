@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from typing import Tuple
 
-from numpy import ndarray
+from numpy import ndarray  # type: ignore
 
 from slicereg.commands.base import BaseCommand
 from slicereg.models.atlas import Atlas
