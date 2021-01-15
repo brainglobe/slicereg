@@ -32,10 +32,10 @@ jobs:
           QT_DEBUG_PLUGINS: 1
         run: xvfb-run poetry run coverage run --source slicereg -m pytest
       - name: Coveralls
-            uses: AndreMiras/coveralls-python-action@develop
-            with:
-              parallel: true
-              flag-name: Unit Test
+        uses: AndreMiras/coveralls-python-action@develop
+        with:
+          parallel: true
+          flag-name: Unit Test
 
   coveralls_finish:
     needs: test
