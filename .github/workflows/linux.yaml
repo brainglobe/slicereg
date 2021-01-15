@@ -32,6 +32,7 @@ jobs:
           QT_DEBUG_PLUGINS: 1
         run: xvfb-run poetry run coverage run --source slicereg -m pytest
       - name: Post to Coveralls
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          coveralls
