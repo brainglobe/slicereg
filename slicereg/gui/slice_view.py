@@ -1,9 +1,9 @@
-import numpy as np  # type: ignore
+import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy import ndarray
-from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image  # type: ignore
-from vispy.scene.events import SceneMouseEvent  # type: ignore
-from vispy.visuals.filters import ColorFilter  # type: ignore
+from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
+from vispy.scene.events import SceneMouseEvent
+from vispy.visuals.filters import ColorFilter
 
 from slicereg.gui.base import BaseVispyView
 

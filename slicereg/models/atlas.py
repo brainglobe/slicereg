@@ -1,8 +1,8 @@
 from dataclasses import dataclass
 from typing import Tuple
 
-from numpy import ndarray  # type: ignore
-from vispy.util.transforms import scale, translate  # type: ignore
+from numpy import ndarray
+from vispy.util.transforms import scale, translate
 
 
 @dataclass

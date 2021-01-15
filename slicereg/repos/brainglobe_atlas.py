@@ -3,9 +3,9 @@ from contextlib import redirect_stdout
 from io import StringIO
 from typing import Tuple
 
-from bg_atlasapi import BrainGlobeAtlas  # type: ignore
-from bg_atlasapi.list_atlases import get_downloaded_atlases  # type: ignore
-from numpy import ndarray  # type: ignore
+from bg_atlasapi import BrainGlobeAtlas
+from bg_atlasapi.list_atlases import get_downloaded_atlases
+from numpy import ndarray
 
 from slicereg.commands.load_atlas import BaseLoadAtlasRepo
 from slicereg.models.atlas import Atlas

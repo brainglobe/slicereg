@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from numpy import ndarray  # type: ignore
+from numpy import ndarray
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
 

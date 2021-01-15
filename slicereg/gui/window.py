@@ -1,6 +1,6 @@
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout
-from vispy.app import Timer  # type: ignore
+from vispy.app import Timer
 
 
 class MainWindow:

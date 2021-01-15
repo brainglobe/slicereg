@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Optional, NamedTuple, List
 
-from numpy import ndarray  # type: ignore
+from numpy import ndarray
 
 from slicereg.commands.load_atlas import BaseLoadAtlasPresenter
 from slicereg.commands.load_section import BaseLoadSectionPresenter

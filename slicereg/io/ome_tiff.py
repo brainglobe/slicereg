@@ -1,6 +1,6 @@
-import tifffile  # type: ignore
-import xmltodict  # type: ignore
-from numpy import uint16  # type: ignore
+import tifffile
+import xmltodict
+from numpy import uint16
 
 from slicereg.commands.load_section import BaseSectionReader
 from slicereg.models.section import SliceImage
