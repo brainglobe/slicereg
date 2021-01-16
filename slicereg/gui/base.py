@@ -3,7 +3,7 @@ from abc import abstractmethod, ABC
 from PySide2.QtWidgets import QWidget
 
 
-class BaseVispyView(ABC):
+class BaseQtView(ABC):
 
     @property
     @abstractmethod

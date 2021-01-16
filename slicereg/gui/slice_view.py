@@ -5,10 +5,10 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
-from slicereg.gui.base import BaseVispyView
+from slicereg.gui.base import BaseQtView
 
 
-class SliceView(BaseVispyView):
+class SliceView(BaseQtView):
 
     def __init__(self):
 

@@ -6,10 +6,10 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from slicereg.gui.base import BaseVispyView
+from slicereg.gui.base import BaseQtView
 
 
-class VolumeView(BaseVispyView):
+class VolumeView(BaseQtView):
 
     def __init__(self):
 

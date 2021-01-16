@@ -1,14 +1,26 @@
+from typing import Optional
+
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout
 from vispy.app import Timer
 
+from slicereg.gui.base import BaseQtView
 
-class MainWindow:
 
-    def __init__(self, title: str, volume_widget: QWidget, slice_widget: QWidget):
+class MainWindow(BaseQtView):
+
+    def __init__(self, title: str = "", volume_widget: Optional[QWidget] = None, slice_widget: Optional[QWidget] = None):
+        self.title = title
+        self.volume_widget = volume_widget if volume_widget else QWidget()
+        self.slice_widget = slice_widget if slice_widget else QWidget()
+
+        self._init()
+
+    def _init(self):
+        print("Building...")
 
         self.win = QMainWindow()
-        self._default_window_title = title
+        self._default_window_title = self.title
 
         widget = QWidget()
         self.win.setCentralWidget(widget)
@@ -16,8 +28,8 @@ class MainWindow:
         main_layout = QHBoxLayout()
         widget.setLayout(main_layout)
 
-        main_layout.addWidget(slice_widget)
-        main_layout.addWidget(volume_widget)
+        main_layout.addWidget(self.slice_widget)
+        main_layout.addWidget(self.volume_widget)
 
         side_layout = QVBoxLayout()
         main_layout.addLayout(side_layout)
@@ -50,6 +62,10 @@ class MainWindow:
                                        start=False)
         self._show_default_window_title()
         self.win.show()
+
+    @property
+    def qt_widget(self) -> QWidget:
+        return self.win
 
     def on_error_raised(self, msg: str):
         self.show_temp_title(msg)
