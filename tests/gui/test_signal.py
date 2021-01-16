@@ -53,3 +53,9 @@ def test_signal_emits_to_multiple_slots():
     assert fun1.call_count == 2
     assert fun2.call_count == 2
     assert fun3.call_count == 1
+
+    signal.disconnect(fun2)
+    signal.emit()
+    assert fun1.call_count == 3
+    assert fun2.call_count == 2
+    assert fun3.call_count == 2
