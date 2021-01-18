@@ -34,7 +34,6 @@ class BrainglobeAtlasRepo(BaseLoadAtlasRepo):
             origin=(w / 2., h / 2., d / 2.)
         )
 
-    @property
     def get_downloaded_resolutions(self) -> Tuple[int, ...]:
         pattern = re.compile("allen_mouse_(\d{2,})um")  # look for the name "allen_mouse_XXXum"
         downloaded = get_downloaded_atlases()
