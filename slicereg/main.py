@@ -10,8 +10,8 @@ from slicereg.gui.view_model import ViewModel, LoadAtlasPresenter, LoadSectionPr
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
 from slicereg.io.ome_tiff import OmeTiffReader
-from slicereg.repos.brainglobe_atlas import BrainglobeAtlasRepo
-from slicereg.repos.inmemory_section import InMemorySectionRepo
+from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
+from slicereg.repos.section_repo import InMemorySectionRepo
 
 
 def launch_gui():

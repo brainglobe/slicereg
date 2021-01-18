@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from dataclasses import dataclass, field, replace
 from typing import Tuple, NamedTuple
+from uuid import UUID, uuid4
 
 from numpy import ndarray
 from vispy.util.transforms import translate, rotate
@@ -26,8 +28,9 @@ class Plane(NamedTuple):
         return (rotation @ translation).T
 
 
-class SliceImage(NamedTuple):
-    channels: ndarray
+@dataclass(frozen=True)
+class SliceImage:
+    channels: ndarray = field(repr=False)
     pixel_resolution_um: float
 
     @property
@@ -36,14 +39,14 @@ class SliceImage(NamedTuple):
         return x // 2, y // 2
 
 
-
-
-class Section(NamedTuple):
+@dataclass(frozen=True)
+class Section:
     image: SliceImage
     plane: Plane
     thickness_um: float = 16.
     position_um: Tuple[float, float, float] = (0., 0., 0.)
     rotation_deg: Tuple[float, float, float] = (0., 0., 0.)
+    id: UUID = field(default_factory=uuid4)
 
     @property
     def affine_transform(self) -> ndarray:
@@ -54,8 +57,8 @@ class Section(NamedTuple):
 
     def translate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Section:
         x, y, z = self.position_um
-        return self._replace(position_um=(x + dx, y + dy, z + dz))
+        return replace(self, position_um=(x + dx, y + dy, z + dz))
 
     def rotate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Section:
         x, y, z = self.rotation_deg
-        return self._replace(rotation_deg=(x + dx, y + dy, z + dz))
+        return replace(self, rotation_deg=(x + dx, y + dy, z + dz))
