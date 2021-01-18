@@ -48,9 +48,13 @@ def test_repo_stores_multiple_sections(repo, section1, section2):
     assert len(repo.sections) == 2
 
 
-def test_repo_overwrites_existing_section(repo, section1):
+def test_repo_overwrites_existing_section(repo, section1: Section):
     assert len(repo.sections) == 0
     repo.save_section(section=section1)
     assert len(repo.sections) == 1
     repo.save_section(section=section1)
+    assert len(repo.sections) == 1
+
+    section_moved = section1.translate(dx=3)
+    repo.save_section(section=section_moved)
     assert len(repo.sections) == 1
