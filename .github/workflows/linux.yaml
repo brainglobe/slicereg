@@ -28,6 +28,13 @@ jobs:
         run: |
           pip install mypy
           mypy slicereg
+
+        uses: actions/cache@v2
+        with:
+          path: .venv
+          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-poetry-
       - name: Install Python Dependencies
         run: |
           pip install poetry

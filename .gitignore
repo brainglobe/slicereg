@@ -5,4 +5,5 @@ build/*
 .hypothesis/
 __pycache__
 .coverage
-htmlcov/*
+htmlcov/
+.venv/
