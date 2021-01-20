@@ -88,8 +88,6 @@ Run the program:
 poetry run bg-slicereg
 ```
 
-
-
 #### Downloading Test Data
 
 Some test data can be made available for project developers.  
