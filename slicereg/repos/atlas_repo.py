@@ -20,12 +20,6 @@ class BrainglobeAtlasRepo(BaseLoadAtlasRepo):
         with redirect_stdout(StringIO()):  # blocks the BrainGlobeAtlas print to console
             bgatlas = BrainGlobeAtlas(f"allen_mouse_{resolution}um")
 
-        assert bgatlas.resolution[0] == resolution
-        assert isinstance(bgatlas.reference, ndarray)
-        assert bgatlas.reference.ndim == 3
-        assert len(set(bgatlas.resolution)) == 1, \
-            f"BGAtlas has different resolution for given dimensions ({bgatlas.resolution})"
-
         w, h, d = bgatlas.shape_um
 
         return Atlas(
