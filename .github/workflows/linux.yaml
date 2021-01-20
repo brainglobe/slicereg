@@ -36,7 +36,7 @@ jobs:
         env:
           GDRIVE_CREDENTIALS_DATA = ${{ secrets.GDRIVE_CREDENTIALS_DATA }}
         run: |
-          dvc pull
+          poetry run dvc pull
       - name: Run Tests
         env:
           QT_DEBUG_PLUGINS: 1
