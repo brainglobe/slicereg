@@ -34,21 +34,21 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     view_model.section_loaded.connect(volume_view.on_section_loaded)
     view_model.section_moved.connect(volume_view.on_section_moved)
     view_model.channel_changed.connect(volume_view.on_channel_select)
-    volume_view.move_section = move_section
-    volume_view.select_channel = select_channel
+    volume_view.move_section = move_section  # type: ignore
+    volume_view.select_channel = select_channel  # type: ignore
 
     slice_view = SliceView()
     view_model.section_loaded.connect(slice_view.on_section_loaded)
     view_model.channel_changed.connect(slice_view.on_channel_select)
-    slice_view.move_section = move_section
+    slice_view.move_section = move_section  # type: ignore
 
     window = MainWindow(
         title=view_model.main_title,
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
     )
-    window.load_atlas = load_atlas
-    window.load_section = load_section
+    window.load_atlas = load_atlas  # type: ignore
+    window.load_section = load_section  # type: ignore
     view_model.error_raised.connect(window.on_error_raised)
 
     # Start off with the first command
