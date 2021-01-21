@@ -34,8 +34,8 @@ def test_get_atlas_raises_error_on_nonallen_resolutions(resolution):
 
 @patch("slicereg.repos.atlas_repo.BrainGlobeAtlas")
 @pytest.mark.parametrize("resolution", [100, 25, 10])
-def test_get_atlas_returns_atlas_with_correct_resolution(MockBGAtlas, resolution):
-    bgatlas = MockBGAtlas.return_value  # Get instance of mock class that will be provided upon instantiation.
+def test_get_atlas_returns_atlas_with_correct_resolution(mock_bgatlas, resolution):
+    bgatlas = mock_bgatlas.return_value  # Get instance of mock class that will be provided upon instantiation.
     type(bgatlas).shape_um = PropertyMock(return_value=(20, 10, 10))
     type(bgatlas).resolution = PropertyMock(return_value=[resolution, resolution, resolution])
 

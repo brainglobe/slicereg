@@ -67,7 +67,6 @@ class SliceView(BaseQtView):
     def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:
         if event.type == 'mouse_press':
             event.handled = True
-            return
 
         elif event.type == 'mouse_move':
             if event.press_event is None:
