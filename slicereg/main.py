@@ -14,7 +14,7 @@ from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 
-def launch_gui():
+def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     # Initialize the State
     view_model = ViewModel()
     repo = InMemorySectionRepo()
@@ -26,7 +26,8 @@ def launch_gui():
     load_section = LoadImageCommand(repo=repo, presenter=LoadSectionPresenter(view_model=view_model), reader=OmeTiffReader())
 
     # Wire up the GUI
-    app = QApplication([])
+    if create_qapp:
+        app = QApplication([])
 
     volume_view = VolumeView()
     view_model.atlas_updated.connect(volume_view.on_atlas_update)
@@ -51,10 +52,14 @@ def launch_gui():
     view_model.error_raised.connect(window.on_error_raised)
 
     # Start off with the first command
-    load_atlas(resolution=25)
+    if load_atlas_on_launch:
+        load_atlas(resolution=25)
 
     # Start the Event Loop!
-    app.exec_()
+    if create_qapp:
+        app.exec_()
+
+    return window
 
 
 if __name__ == '__main__':
