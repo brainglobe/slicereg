@@ -19,8 +19,8 @@ cases = [
 def test_get_resolutions_from_bgatlas_list(atlases, resolutions):
     repo = BrainglobeAtlasRepo()
     with patch("slicereg.repos.atlas_repo.get_downloaded_atlases", side_effect=lambda: atlases):
-        resolutions = repo.get_downloaded_resolutions()
-        assert resolutions == resolutions
+        available_resolutions = repo.get_downloaded_resolutions()
+        assert resolutions == available_resolutions
 
 
 @given(resolution=integers())
