@@ -28,6 +28,9 @@ jobs:
         run: |
           pip install mypy
           mypy slicereg
+      - name: Install Poetry
+        run: |
+          pip install poetry
       - name: Environment Caching
         id: cache
         uses: actions/cache@v2
@@ -35,11 +38,7 @@ jobs:
           path: .venv
           key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
           restore-keys: |
-            ${{ runner.os }}-poetry-
-      - name: Install Poetry
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          pip install poetry
+            ${{ runner.os }}-poetry-install
       - name: Install Python Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run:
