@@ -1,6 +1,7 @@
 [![Project Status: Concept – Minimal or no implementation has been done yet, or the repository is only intended to be a limited example, demo, or proof-of-concept.](https://www.repostatus.org/badges/latest/concept.svg)](https://www.repostatus.org/#concept)
 [![Actions Status](https://github.com/brainglobe/slicereg/workflows/tests/badge.svg)](https://github.com/brainglobe/slicereg/actions)
 [![Coverage Status](https://coveralls.io/repos/github/brainglobe/slicereg/badge.svg?branch=main)](https://coveralls.io/github/brainglobe/slicereg?branch=main)
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=brainglobe_slicereg&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=brainglobe_slicereg)
 [![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/brainglobe/slicereg)
 
 # slicereg
