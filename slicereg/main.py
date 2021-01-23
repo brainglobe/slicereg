@@ -5,8 +5,6 @@ from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.slice_view import SliceView
-from slicereg.gui.view_model import LoadAtlasPresenter, LoadSectionPresenter, MoveSectionPresenter, \
-    SelectChannelPresenter
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
 from slicereg.io.ome_tiff import OmeTiffReader
@@ -19,31 +17,26 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     repo = InMemorySectionRepo()
 
     # Wire up the Commands
-    move_section_presenter = MoveSectionPresenter()
-    move_section = MoveSectionCommand(repo=repo, presenter=move_section_presenter)
-    select_channel_presenter = SelectChannelPresenter()
-    select_channel = SelectChannelCommand(repo=repo, presenter=select_channel_presenter)
-    load_atlas_presenter = LoadAtlasPresenter()
-    load_atlas = LoadAtlasCommand(repo=BrainglobeAtlasRepo(), presenter=load_atlas_presenter)
-
-    load_section_presenter = LoadSectionPresenter()
-    load_section = LoadImageCommand(repo=repo, presenter=load_section_presenter, reader=OmeTiffReader())
+    move_section = MoveSectionCommand(_repo=repo)
+    select_channel = SelectChannelCommand(_repo=repo)
+    load_atlas = LoadAtlasCommand(_repo=BrainglobeAtlasRepo())
+    load_section = LoadImageCommand(_repo=repo, _reader=OmeTiffReader())
 
     # Wire up the GUI
     if create_qapp:
         app = QApplication([])
 
     volume_view = VolumeView()
-    load_atlas_presenter.atlas_updated.connect(volume_view.on_atlas_update)
-    load_section_presenter.section_loaded.connect(volume_view.on_section_loaded)
-    move_section_presenter.section_moved.connect(volume_view.on_section_moved)
-    select_channel_presenter.channel_changed.connect(volume_view.on_channel_select)
+    load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
+    load_section.section_loaded.connect(volume_view.on_section_loaded)
+    move_section.section_moved.connect(volume_view.on_section_moved)
+    select_channel.channel_changed.connect(volume_view.on_channel_select)
     volume_view.move_section = move_section  # type: ignore
     volume_view.select_channel = select_channel  # type: ignore
 
     slice_view = SliceView()
-    load_section_presenter.section_loaded.connect(slice_view.on_section_loaded)
-    select_channel_presenter.channel_changed.connect(slice_view.on_channel_select)
+    load_section.section_loaded.connect(slice_view.on_section_loaded)
+    select_channel.channel_changed.connect(slice_view.on_channel_select)
     slice_view.move_section = move_section  # type: ignore
 
     window = MainWindow(

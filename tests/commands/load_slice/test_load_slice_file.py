@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader, \
-    BaseLoadSectionPresenter
+from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
+from slicereg.commands.utils import Signal
 from slicereg.models.section import SliceImage
 
 
@@ -30,7 +30,7 @@ def reader(image_data):
 
 @pytest.fixture
 def command(repo, reader):
-    return LoadImageCommand(repo=repo, presenter=Mock(BaseLoadSectionPresenter), reader=reader)
+    return LoadImageCommand(_repo=repo, section_loaded=Mock(Signal), _reader=reader)
 
 
 @scenario("load_slice.feature", "Single Slice Import")
@@ -55,6 +55,6 @@ def load_file(command, filename):
 
 @then("I should see the slice image onscreen in 3D")
 def check_for_loaded_3d_section(command: LoadImageCommand):
-    output = command._presenter.show.call_args[1]
-    assert output['section'].ndim == 2
-    assert output['model_matrix'].shape == (4, 4)
+    output = command.section_loaded.emit.call_args[1]
+    assert output['image'].ndim == 2
+    assert output['transform'].shape == (4, 4)

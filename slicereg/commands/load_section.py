@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
-
-from numpy import ndarray
+from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
+from slicereg.commands.utils import Signal
 from slicereg.models.section import Section, Plane, SliceImage
 
 
@@ -12,21 +12,14 @@ class BaseSectionReader(ABC):
     def read(self, filename: str) -> SliceImage: ...
 
 
-class BaseLoadSectionPresenter(ABC):
-
-    @abstractmethod
-    def show(self, section: ndarray, model_matrix: ndarray): ...
-
-
+@dataclass
 class LoadImageCommand(BaseCommand):
-
-    def __init__(self, repo: BaseSectionRepo, presenter: BaseLoadSectionPresenter, reader: BaseSectionReader):
-        self._repo = repo
-        self._presenter = presenter
-        self._reader = reader
+    _repo: BaseSectionRepo
+    _reader: BaseSectionReader
+    section_loaded: Signal = field(default_factory=Signal)
 
     def __call__(self, filename: str) -> None:  # type: ignore
         slice_image = self._reader.read(filename=filename)
         section = Section(image=slice_image, plane=Plane(x=0, y=0))
         self._repo.save_section(section=section)
-        self._presenter.show(section=section.image.channels[0], model_matrix=section.affine_transform)
+        self.section_loaded.emit(image=section.image.channels[0], transform=section.affine_transform)

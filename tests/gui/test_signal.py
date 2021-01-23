@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from slicereg.gui.utils import Signal
+from slicereg.commands.utils import Signal
 
 
 def test_signal_calls_slot_when_emitted():

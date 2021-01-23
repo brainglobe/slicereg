@@ -1,10 +1,12 @@
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 from numpy import ndarray
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
+from slicereg.commands.utils import Signal
 
 
 class BaseSelectChannelPresenter(ABC):
@@ -13,11 +15,10 @@ class BaseSelectChannelPresenter(ABC):
     def show(self, channel: int, image: ndarray): ...
 
 
+@dataclass
 class SelectChannelCommand(BaseCommand):
-
-    def __init__(self, repo: BaseSectionRepo, presenter: BaseSelectChannelPresenter):
-        self._repo = repo
-        self._presenter = presenter
+    _repo: BaseSectionRepo
+    channel_changed: Signal = Signal()
 
     def __call__(self, num: int):  # type: ignore
         section = self._repo.sections[0]
@@ -25,6 +26,6 @@ class SelectChannelCommand(BaseCommand):
         #     self._presenter.show_error("No section loaded yet.")
         # try:
         image = section.image.channels[num - 1]
-        self._presenter.show(channel=num, image=image)
+        self.channel_changed.emit(channel=num, image=image)
         # except IndexError:
         #     self._presenter.show_error(f"Section doesn't have a Channel {num}.")

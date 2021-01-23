@@ -1,23 +1,15 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
-
-from numpy import ndarray
+from dataclasses import dataclass
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
+from slicereg.commands.utils import Signal
 
 
-class BaseMoveSectionPresenter(ABC):
-
-    @abstractmethod
-    def show(self, transform: ndarray): ...
-
-
+@dataclass
 class MoveSectionCommand(BaseCommand):
-
-    def __init__(self, repo: BaseSectionRepo, presenter: BaseMoveSectionPresenter):
-        self._repo = repo
-        self._presenter = presenter
+    _repo: BaseSectionRepo
+    section_moved: Signal = Signal()
 
     def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.):
         sections = self._repo.sections
@@ -27,4 +19,4 @@ class MoveSectionCommand(BaseCommand):
         new_section = section.translate(dx=x, dy=y, dz=z).rotate(dx=rx, dy=ry, dz=rz)
 
         self._repo.save_section(new_section)
-        self._presenter.show(transform=new_section.affine_transform)
+        self.section_moved.emit(transform=new_section.affine_transform)
