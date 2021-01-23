@@ -5,13 +5,6 @@ from abc import ABC, abstractmethod
 from numpy import ndarray
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
-from slicereg.models.section import Section
-
-
-class BaseRepo(ABC):
-
-    @abstractmethod
-    def get_section(self) -> Section: ...
 
 
 class BaseSelectChannelPresenter(ABC):
