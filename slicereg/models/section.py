@@ -38,6 +38,11 @@ class SliceImage:
         _, x, y = self.channels.shape
         return x // 2, y // 2
 
+    @property
+    def num_channels(self) -> int:
+        return self.channels.shape[0]
+
+
 
 @dataclass(frozen=True)
 class Section:

@@ -86,7 +86,7 @@ class VolumeView(BaseQtView):
         if command := key_commands.get(event.key.name):
             command()
 
-    def select_channel(self, num: int):
+    def select_channel(self, channel: int):
         raise NotImplementedError("Connect to a SelectChannelCommand before using")
 
     def move_section(self, x=0, y=0, z=0., rx=0., ry=0., rz=0.):
