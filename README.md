@@ -2,7 +2,6 @@
 [![Actions Status](https://github.com/brainglobe/slicereg/workflows/tests/badge.svg)](https://github.com/brainglobe/slicereg/actions)
 [![Coverage Status](https://coveralls.io/repos/github/brainglobe/slicereg/badge.svg?branch=main)](https://coveralls.io/github/brainglobe/slicereg?branch=main)
 [![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=brainglobe_slicereg&metric=sqale_rating)](https://sonarcloud.io/dashboard?id=brainglobe_slicereg)
-[![Gitpod Ready-to-Code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/brainglobe/slicereg)
 
 # slicereg
 A 2D-3D histological brain slice registration application for mouse brains.
