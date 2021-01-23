@@ -17,27 +17,18 @@ If you'd like to try it out, check the Installation section below.
 
 ## Next Steps
 
-Next steps are largely focused around deployment and development; this will ensure the tech stack is valid and make it easier to keep updating the project:
-  - [ ] Get builds running for executable files on Windows, Mac, and Linux and confirm they work
-  - [x] Add continuous integration tooling to:
-    - [x] run tests 
-    - [x] report test coverage
-    - [x] run static analysis tools
-  - Entry points for launching GUI from command line
-     - [x] after cloning and installing from source code 
-
 Next features are focused on manual registration in the GUI:
-  - manual registration:
-    - Comparison widget between section and reference atlas
-    - Controls for full affine transforms
-  - multi-slice handling:
-    - Load multiple slices at once
-    - Slice selection and multi-slice manipulation interface.
-  - QuPath Visualization
-    - Import QuPath files onto loaded slices for 3D visualization.
-  - More control over visualization
-    - View manipulation tools (channel selector, atlas transparency controls, qupath show/hide, etc)
-    - CLim controls
+  - [ ] manual registration:
+    - [ ] Comparison widget between section and reference atlas
+    - [ ] Controls for full affine transforms
+  - [ ] multi-slice handling:
+    - [ ] Load multiple slices at once
+    - [ ] Slice selection and multi-slice manipulation interface.
+  - [ ] QuPath Visualization
+    - [ ] Import QuPath files onto loaded slices for 3D visualization.
+  - [ ] More control over visualization
+    - [ ] View manipulation tools (channel selector, atlas transparency controls, qupath show/hide, etc)
+    - [ ] CLim controls
    
 
   
