@@ -18,15 +18,15 @@ If you'd like to try it out, check the Installation section below.
 ## Next Steps
 
 Next features are focused on manual registration in the GUI:
-  - [ ] manual registration:
+  - manual registration:
     - [ ] Comparison widget between section and reference atlas
     - [ ] Controls for full affine transforms
-  - [ ] multi-slice handling:
+  - multi-slice handling:
     - [ ] Load multiple slices at once
     - [ ] Slice selection and multi-slice manipulation interface.
-  - [ ] QuPath Visualization
+  - QuPath Visualization
     - [ ] Import QuPath files onto loaded slices for 3D visualization.
-  - [ ] More control over visualization
+  - More control over visualization
     - [ ] View manipulation tools (channel selector, atlas transparency controls, qupath show/hide, etc)
     - [ ] CLim controls
    
