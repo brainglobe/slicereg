@@ -88,6 +88,7 @@ By letting these systems plug into a highly-tested set of core code, the project
   - **Do Not** do any math in the gui, repo, or io code.  Gui code should *only* transfer existing data to the screen, repos should only store/access data, io should only interact with the filesystem.
   - **Do Not** import models into the `main.py` or `gui` modules.  `repo` and `io` may pass models, though. 
   - **Do Not** send models from the Commands to whoever is calling them. The external layers shouldn't have any access!
+  - **Do Not** create a Command without first writing the test for it.  It's not easy to write a Command that is easy to test; writing the test first will push you to make solid design decisions and earlier in the process. 
   - **Do Not** make the core model code depend on any objects for third-party python libraries.  We want the inner layers of the code to be very stable!  
   
 ### References
