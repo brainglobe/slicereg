@@ -26,11 +26,6 @@ class AtlasModel(NamedTuple):
 
 @dataclass
 class ViewModel:
-    atlas: Optional[AtlasModel] = None
-    current_section: Optional[SectionModel] = None
-    current_channel: int = 1
-    main_title: str = "Default Title"
-    errors: List[str] = field(default_factory=list)
     atlas_updated: Signal = Signal()
     section_loaded: Signal = Signal()
     section_moved: Signal = Signal()
@@ -43,8 +38,6 @@ class LoadAtlasPresenter(BaseLoadAtlasPresenter):
     view_model: ViewModel
 
     def show(self, reference_volume: ndarray, atlas_transform: ndarray, atlas_resolution: int) -> None:
-        self.view_model.atlas = AtlasModel(volume=reference_volume, transform=atlas_transform,
-                                           resolution=atlas_resolution)
         self.view_model.atlas_updated.emit(volume=reference_volume, transform=atlas_transform)
 
 
@@ -53,7 +46,6 @@ class LoadSectionPresenter(BaseLoadSectionPresenter):
     view_model: ViewModel
 
     def show(self, section: ndarray, model_matrix: ndarray):
-        self.view_model.current_section = SectionModel(image=section, transform=model_matrix)
         self.view_model.section_loaded.emit(image=section, transform=model_matrix)
 
 
@@ -62,12 +54,9 @@ class MoveSectionPresenter(BaseMoveSectionPresenter):
     view_model: ViewModel
 
     def show(self, transform: ndarray):
-        if self.view_model.current_section:
-            self.view_model.current_section = self.view_model.current_section._replace(transform=transform)
         self.view_model.section_moved.emit(transform=transform)
 
     def show_error(self, msg: str):
-        self.view_model.errors.append(msg)
         self.view_model.error_raised.emit(msg=msg)
 
 
@@ -76,12 +65,7 @@ class SelectChannelPresenter(BaseSelectChannelPresenter):
     view_model: ViewModel
 
     def show(self, channel: int, image: ndarray):
-        model = self.view_model
-        if model.current_section:
-            model.current_section = model.current_section._replace(image=image)
-        model.current_channel = channel
-        model.channel_changed.emit(image=image, channel=channel)
+        self.view_model.channel_changed.emit(image=image, channel=channel)
 
     def show_error(self, msg: str):
-        self.view_model.errors.append(msg)
         self.view_model.error_raised.emit(msg=msg)

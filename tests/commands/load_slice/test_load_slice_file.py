@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
-from slicereg.gui.view_model import ViewModel, LoadSectionPresenter
+from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader, \
+    BaseLoadSectionPresenter
 from slicereg.models.section import SliceImage
 
 
@@ -14,11 +14,6 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = []
     return repo
-
-
-@pytest.fixture
-def view_model():
-    return ViewModel()
 
 
 @pytest.fixture
@@ -34,9 +29,8 @@ def reader(image_data):
 
 
 @pytest.fixture
-def command(repo, reader, view_model):
-    return LoadImageCommand(repo=repo, presenter=LoadSectionPresenter(view_model=view_model),
-                             reader=reader)
+def command(repo, reader):
+    return LoadImageCommand(repo=repo, presenter=Mock(BaseLoadSectionPresenter), reader=reader)
 
 
 @scenario("load_slice.feature", "Single Slice Import")
@@ -50,9 +44,8 @@ def filename():
 
 
 @given("No sections have been loaded yet")
-def no_sections_loaded(repo, view_model):
+def no_sections_loaded(repo):
     assert not repo.sections
-    assert not view_model.current_section
 
 
 @when("I load the file")
@@ -61,6 +54,7 @@ def load_file(command, filename):
 
 
 @then("I should see the slice image onscreen in 3D")
-def check_for_loaded_3d_section(view_model, image_data):
-    assert view_model.current_section
-    assert view_model.current_section.transform.shape == (4, 4)
+def check_for_loaded_3d_section(command: LoadImageCommand):
+    output = command._presenter.show.call_args[1]
+    assert output['section'].ndim == 2
+    assert output['model_matrix'].shape == (4, 4)

@@ -43,7 +43,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     slice_view.move_section = move_section  # type: ignore
 
     window = MainWindow(
-        title=view_model.main_title,
+        title="Default Title",
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
     )
