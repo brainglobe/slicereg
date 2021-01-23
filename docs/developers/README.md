@@ -41,10 +41,8 @@ For this, you'll need to identify which command should present that data to the 
 Right now this requires a few steps, but as the project grows we'll refactor a bit to make it easier to do and have more places for testing.  Here's what to do at the moment:
 
   1. Add the code in the gui for displaying the data as a new method in the view.
-  2. Edit the Presenter (in **gui/presenter.py**) to call your new method for the commands that are relevant.  
     - Try it out with some dummy data to make sure it appears onscreen the way you like.  This is a great chance to toy around with things and get it how you want. 
-  3. Add an argument to the both the Presenter method and the associated BasePresenter in the commands.  This way the Command can supply the data to the presenter.
-  4. Modify the Command function (under **\_\_call(self)\_\_**) to get the data from the models and give it to the presenter
+  2. Modify the Command function (under **\_\_call(self)\_\_**) to get the data from the models and give it to the presenter
     - Run it!  It should work!
     
 ### I want to add some scientific code.
