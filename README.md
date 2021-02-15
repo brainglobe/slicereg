@@ -34,6 +34,9 @@ Next features are focused on manual registration in the GUI:
   
 ## Installation
 
+**NOTE!!!**
+If you are using MacOS BigSur OpenGL will not work. We are still waiting on a solution from other developers on how to fix this
+
 ### Using Python
 
 #### Downloading the source code
