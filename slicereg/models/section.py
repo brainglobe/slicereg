@@ -62,3 +62,6 @@ class Section:
     def rotate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Section:
         x, y, z = self.rotation_deg
         return replace(self, rotation_deg=(x + dx, y + dy, z + dz))
+
+    def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
+        return 0., 0., 0.
