@@ -37,6 +37,14 @@ class SliceImage:
     def num_channels(self) -> int:
         return self.channels.shape[0]
 
+    @property
+    def width(self) -> int:
+        return self.channels.shape[2]
+
+    @property
+    def height(self) -> int:
+        return self.channels.shape[1]
+
 
 @dataclass(frozen=True)
 class Section:
@@ -63,4 +71,7 @@ class Section:
         return replace(self, rotation_deg=(x + dx, y + dy, z + dz))
 
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
+        if not 0 <= i < self.image.height or not 0 <= j < self.image.width:
+            raise ValueError(f"Coord ({i, j}) not in image.")
+
         return float(j), -float(i), 0.
