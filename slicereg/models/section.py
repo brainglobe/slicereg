@@ -38,12 +38,12 @@ class SliceImage:
         return self.channels.shape[0]
 
     @property
-    def width(self) -> int:
-        return self.channels.shape[2]
-
-    @property
     def height(self) -> int:
         return self.channels.shape[1]
+
+    @property
+    def width(self) -> int:
+        return self.channels.shape[2]
 
 
 @dataclass(frozen=True)
