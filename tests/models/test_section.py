@@ -12,12 +12,12 @@ cases = [
 ]
 @pytest.mark.parametrize("imcoord, atlascoord", cases)
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, atlascoord):
-    section = Section(
+    section = Section.from_coronal(
         image=SliceImage(
             channels=arange(24).reshape(2, 3, 4),
             pixel_resolution_um=1
         ),
-        plane=Plane(x=0, y=0, theta=0),
+        pos=(0., 0., 0.),
     )
     i, j = imcoord
     x, y, z = atlascoord

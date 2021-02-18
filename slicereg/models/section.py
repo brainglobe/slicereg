@@ -56,7 +56,7 @@ class Section:
     id: UUID = field(default_factory=uuid4)
 
     @classmethod
-    def from_coronal(cls, image: SliceImage, pos: Tuple[float, float, float], **kwargs) -> Section:
+    def from_coronal(cls, image: SliceImage, pos: Tuple[float, float, float] = (0., 0., 0.), **kwargs) -> Section:
         x, y, _ = pos
         return cls(
             image=image,
