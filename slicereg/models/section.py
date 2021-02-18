@@ -38,7 +38,6 @@ class SliceImage:
         return self.channels.shape[0]
 
 
-
 @dataclass(frozen=True)
 class Section:
     image: SliceImage
@@ -64,4 +63,4 @@ class Section:
         return replace(self, rotation_deg=(x + dx, y + dy, z + dz))
 
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
-        return 0., 0., 0.
+        return float(j), -float(i), 0.
