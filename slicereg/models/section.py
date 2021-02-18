@@ -55,6 +55,19 @@ class Section:
     rotation_deg: Tuple[float, float, float] = (0., 0., 0.)
     id: UUID = field(default_factory=uuid4)
 
+    @classmethod
+    def from_coronal(cls, image: SliceImage, pos: Tuple[float, float, float], **kwargs) -> Section:
+        x, y, _ = pos
+        return cls(
+            image=image,
+            plane=Plane(
+                x=x,
+                y=y,
+                theta=0.
+            ),
+            **kwargs,
+        )
+
     @property
     def affine_transform(self) -> ndarray:
         x, y, z = self.position_um

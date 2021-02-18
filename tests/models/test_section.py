@@ -24,7 +24,6 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, atlasc
     assert section.pos_from_coord(i=i, j=j) == (x, y, z)
 
 
-
 @given(i=st.integers(), j=st.integers())
 def test_nonexistent_image_coords_raise_error(i, j):
     section = Section(
@@ -39,3 +38,14 @@ def test_nonexistent_image_coords_raise_error(i, j):
             section.pos_from_coord(i=i, j=j)
     else:
         assert section.pos_from_coord(i=i, j=j)
+
+
+def test_coronal_sections_have_correct_base_rotation():
+    section = Section.from_coronal(
+        image=SliceImage(
+            channels=arange(180).reshape(2, 3, 30),
+            pixel_resolution_um=1
+        ),
+        pos=(0, 0, 0),
+    )
+    assert section.plane.theta == 0.
