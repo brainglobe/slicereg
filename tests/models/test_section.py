@@ -1,31 +1,34 @@
 import pytest
 from numpy.ma import array, arange
 from hypothesis import strategies as st, given
+from pytest import approx
 
 from slicereg.models.section import Section, SliceImage, Plane
 
 
 cases = [
-    ((0, 0), (0., 0., 0.)),
-    ((1, 1), (1., -1., 0.)),
-    ((2, 3), (3., -2., 0.)),
+    ((0, 0), (0., 0., 0.), 1.),
+    ((1, 1), (1., -1., 0.), 1.),
+    ((2, 3), (3., -2., 0.), 1.),
+    ((2, 3), (1.5, -1., 0.), 2.),
+    ((2, 3), (1, -0.667, 0.), 3.),
 ]
-@pytest.mark.parametrize("imcoord, atlascoord", cases)
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, atlascoord):
+@pytest.mark.parametrize("imcoord,atlascoord,res", cases)
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, atlascoord, res):
     section = Section.from_coronal(
         image=SliceImage(
             channels=arange(24).reshape(2, 3, 4),
-            pixel_resolution_um=1
+            pixel_resolution_um=res,
         ),
         pos=(0., 0., 0.),
     )
     i, j = imcoord
     x, y, z = atlascoord
-    assert section.pos_from_coord(i=i, j=j) == (x, y, z)
+    assert section.pos_from_coord(i=i, j=j) == approx((x, y, z), rel=1e-3)
 
 
 @given(i=st.integers(), j=st.integers())
-def test_nonexistent_image_coords_raise_error(i, j):
+def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
     section = Section(
         image=SliceImage(
             channels=arange(180).reshape(2, 3, 30),

@@ -87,4 +87,5 @@ class Section:
         if not 0 <= i < self.image.height or not 0 <= j < self.image.width:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
-        return float(j), -float(i), 0.
+        im_scale = 1. / self.image.pixel_resolution_um
+        return float(j) * im_scale, -float(i) * im_scale, 0. * im_scale
