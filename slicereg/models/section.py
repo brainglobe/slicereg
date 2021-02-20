@@ -4,9 +4,7 @@ from dataclasses import dataclass, field, replace
 from typing import Tuple
 from uuid import UUID, uuid4
 
-7
 from numpy import ndarray
-import numpy as np
 
 from slicereg.models.image import ImagePlane, SliceImage
 from slicereg.models.math import affine_transform
