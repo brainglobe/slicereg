@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from slicereg.models.section import Section
-from slicereg.models.image import Plane, SliceImage
+from slicereg.models.image import ImagePlane, SliceImage
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 
@@ -18,7 +18,7 @@ def section1():
             channels=np.arange(12).reshape(2, 3, 2),
             pixel_resolution_um=12,
         ),
-        plane=Plane(x=0, y=0)
+        plane=ImagePlane(x=0, y=0)
     )
 
 
@@ -29,7 +29,7 @@ def section2():
             channels=np.arange(12).reshape(2, 3, 2),
             pixel_resolution_um=12,
         ),
-        plane=Plane(x=0, y=0)
+        plane=ImagePlane(x=0, y=0)
     )
 
 

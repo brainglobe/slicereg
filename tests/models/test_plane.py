@@ -4,7 +4,7 @@ import numpy as np
 from hypothesis import given
 from hypothesis.strategies import floats
 
-from slicereg.models.image import Plane
+from slicereg.models.image import ImagePlane
 
 np.set_printoptions(suppress=True, precision=1)
 
@@ -12,20 +12,20 @@ sensible_floats = partial(floats, allow_nan=False, allow_infinity=False)
 
 
 def test_planar_translation_assigns_correct_positions():
-    plane = Plane(x=3, y=4)
+    plane = ImagePlane(x=3, y=4)
     plane2 = plane.translate(10, 5)
     assert plane2.x == 13 and plane2.y == 9
 
 
 def test_planar_rotation_assigns_correct_translations():
-    plane = Plane(x=0, y=0, theta=45)
+    plane = ImagePlane(x=0, y=0, theta=45)
     plane2 = plane.rotate(45)
     assert plane2.theta == 90
 
 
 @given(x=sensible_floats(), y=sensible_floats())
 def test_planes_affine_transform_with_no_rotation_is_correct(x, y):
-    plane = Plane(x=x, y=y, theta=0)
+    plane = ImagePlane(x=x, y=y, theta=0)
     expected_transform = np.array([
         [1, 0, 0, x],
         [0, 1, 0, y],
@@ -37,7 +37,7 @@ def test_planes_affine_transform_with_no_rotation_is_correct(x, y):
 
 @given(x=sensible_floats(), y=sensible_floats(), theta=sensible_floats())
 def test_planes_affine_transform_with_90_rotation_is_correct(x, y, theta):
-    plane = Plane(x=x, y=y, theta=theta)
+    plane = ImagePlane(x=x, y=y, theta=theta)
     t = np.radians(theta)
     expected = np.array([
         [np.cos(t), -np.sin(t), 0, x],

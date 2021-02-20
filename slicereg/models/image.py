@@ -8,15 +8,15 @@ from numpy.core.multiarray import ndarray
 from vispy.util.transforms import translate, rotate
 
 
-class Plane(NamedTuple):
-    x: float
-    y: float
+class ImagePlane(NamedTuple):
+    x: float = 0.
+    y: float = 0.
     theta: float = 0.
 
-    def translate(self, dx: float, dy: float) -> Plane:
+    def translate(self, dx: float, dy: float) -> ImagePlane:
         return self._replace(x=self.x + dx, y=self.y + dy)
 
-    def rotate(self, theta: float) -> Plane:
+    def rotate(self, theta: float) -> ImagePlane:
         return self._replace(theta=self.theta + theta)
 
     @property
@@ -44,7 +44,7 @@ class SliceImage:
         return self.channels.shape[2]
 
     @property
-    def model_matrix(self):
+    def affine_transform(self):
         scale = 1 / self.pixel_resolution_um
         return np.diag([scale, -scale, 1., 1.])
 
@@ -52,7 +52,7 @@ class SliceImage:
         if not 0 <= i < self.height or not 0 <= j < self.width:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
-        coords = np.array([[j, i, 0, 0]])
-        projection = coords @ self.model_matrix
+        coords = np.array([[j, i, 0., 1.]])
+        projection = coords @ self.affine_transform
         assert projection.shape == (1, 4)
         return projection

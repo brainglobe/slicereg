@@ -46,4 +46,4 @@ def test_image_model_matrix(width, height, channels, res):
         [0, 0, 1, 0],
         [0, 0, 0, 1],
     ])
-    assert np.all(np.isclose(image.model_matrix, expected))
+    assert np.all(np.isclose(image.affine_transform, expected))

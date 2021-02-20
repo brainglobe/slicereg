@@ -7,7 +7,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.section import Section
-from slicereg.models.image import Plane, SliceImage
+from slicereg.models.image import ImagePlane, SliceImage
 
 
 @scenario("section_affine_registration.feature", "Move Section in 3D")
@@ -19,7 +19,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=Mock(SliceImage, pixel_resolution_um=12), plane=Plane(0, 0))
+        Section(image=Mock(SliceImage, pixel_resolution_um=12), plane=ImagePlane(0, 0))
     ]
     return repo
 

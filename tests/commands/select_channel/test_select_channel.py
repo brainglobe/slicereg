@@ -8,7 +8,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.section import Section
-from slicereg.models.image import Plane, SliceImage
+from slicereg.models.image import ImagePlane, SliceImage
 
 
 @pytest.fixture
@@ -20,7 +20,7 @@ def repo():
                 channels=np.arange(12).reshape(2, 3, 2),
                 pixel_resolution_um=12
             ),
-            plane=Mock(Plane),
+            plane=Mock(ImagePlane),
         )]
     return repo
 
