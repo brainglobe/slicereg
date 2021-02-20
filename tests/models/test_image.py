@@ -37,13 +37,13 @@ def test_image_height(shape, height):
 
 
 @given(width=integers(1, 1000), height=integers(1, 1000), channels=integers(1, 6), res=floats(1, 10, allow_nan=False, allow_infinity=False))
-def test_image_model_matrix(width, height, channels, res):
+def test_image_scale_matrix_converts_pixel_resolution_to_um_space(width, height, channels, res):
     image = SliceImage(channels=np.random.random(size=(channels, height, width)), pixel_resolution_um=res)
     r = res
     expected = np.array([
         [1/r, 0, 0, 0],
-        [0, -1/r, 0, 0],
+        [0, 1/r, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1],
     ])
-    assert np.all(np.isclose(image.affine_transform, expected))
+    assert np.all(np.isclose(image.scale_matrix, expected))

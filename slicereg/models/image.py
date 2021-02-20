@@ -44,15 +44,12 @@ class SliceImage:
         return self.channels.shape[2]
 
     @property
-    def affine_transform(self):
+    def scale_matrix(self):
         scale = 1 / self.pixel_resolution_um
-        return np.diag([scale, -scale, 1., 1.])
+        return np.diag([scale, scale, 1., 1.])
 
     def project_coord(self, i: int, j: int) -> ndarray:
         if not 0 <= i < self.height or not 0 <= j < self.width:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
-        coords = np.array([[j, i, 0., 1.]])
-        projection = coords @ self.affine_transform
-        assert projection.shape == (1, 4)
-        return projection
+        return np.array([[j, -i, 0., 1.]])
