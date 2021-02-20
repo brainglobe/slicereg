@@ -1,5 +1,5 @@
 import pytest
-from numpy.ma import array, arange
+from numpy.ma import array, arange, sqrt
 from hypothesis import strategies as st, given
 from pytest import approx
 
@@ -40,13 +40,15 @@ cases = [
     ((0, 1), 1., (0., 0.), -90., (0., -1., 0.)),
     ((0, 1), 1., (0., 0.), 180., (-1., 0., 0.)),
     ((0, 1), 1., (0., 0.), 360., (1., 0., 0.)),
-    ((0, 1), 1., (0., 0.), 720., (1., 0., 0.)),
+    ((0, 1), 1., (0., 0.), -720., (1., 0., 0.)),
+    ((0, 1), 1., (0., 0.), 45., (1./sqrt(2), 1./sqrt(2), 0.)),
+    ((0, 6), 1., (0., 0.), 60., (3, 3*sqrt(3), 0.)),
 ]
 @pytest.mark.parametrize("imcoord, res, shift, theta, atlascoord", cases)
 def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(imcoord, res, shift, theta, atlascoord):
     x, y = shift
     section = Section.from_coronal(
-        image=SliceImage(channels=arange(24).reshape(2, 3, 4), pixel_resolution_um=res),
+        image=SliceImage(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=res),
         plane=ImagePlane(x=x, y=y, theta=theta),
     )
     i, j = imcoord
