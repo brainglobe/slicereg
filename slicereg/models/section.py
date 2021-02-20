@@ -41,4 +41,5 @@ class Section:
 
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
         projection = self.affine_transform @ self.image.project_coord(i=i, j=j).T
-        return tuple(projection.flatten()[:3])
+        assert projection.shape == (4, 1)
+        return tuple(projection[:3, 0])
