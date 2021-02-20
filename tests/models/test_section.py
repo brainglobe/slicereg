@@ -7,17 +7,17 @@ from slicereg.models.section import Section
 from slicereg.models.image import ImagePlane, SliceImage
 
 cases = [
-    ((0, 0), (0., 0., 0.), (0., 0., 0.), 1.),
-    ((1, 1), (0., 0., 0.), (1., -1., 0.), 1.),
-    ((2, 3), (0., 0., 0.), (3., -2., 0.), 1.),
-    ((2, 3), (0., 0., 0.), (1.5, -1., 0.), 2.),
-    ((2, 3), (0., 0., 0.), (1, -0.667, 0.), 3.),
-    ((1, 1), (0., 0., 10.), (1., -1., 10.), 1.),
-    ((2, 3), (5., 0., 50.), (6, -0.667, 50.), 3.),
-    ((2, 3), (5., 10., 50.), (6, 9.333, 50.), 3.),
+    ((0, 0), (0., 0., 0.), 1., (0., 0., 0.)),
+    ((1, 1), (0., 0., 0.), 1., (1., -1., 0.)),
+    ((2, 3), (0., 0., 0.), 1., (3., -2., 0.)),
+    ((2, 3), (0., 0., 0.), 2., (1.5, -1., 0.)),
+    ((2, 3), (0., 0., 0.), 3., (1, -0.667, 0.)),
+    ((1, 1), (0., 0., 10.), 1., (1., -1., 10.)),
+    ((2, 3), (5., 0., 50.), 3., (6, -0.667, 50.)),
+    ((2, 3), (5., 10., 50.), 3., (6, 9.333, 50.)),
 ]
-@pytest.mark.parametrize("imcoord, pos, atlascoord,res", cases)
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, atlascoord, res):
+@pytest.mark.parametrize("imcoord, pos, res, atlascoord", cases)
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, res, atlascoord):
     section = Section.from_coronal(
         image=SliceImage(
             channels=arange(24).reshape(2, 3, 4),
@@ -26,8 +26,23 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, a
         position_um=pos,
     )
     i, j = imcoord
-    x, y, z = atlascoord
-    assert section.pos_from_coord(i=i, j=j) == approx((x, y, z), rel=1e-3)
+    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord, rel=1e-3)
+
+
+cases = [
+    ((0, 1), 1., (0., 0.), 0., (1., 0., 0.)),
+    ((0, 1), 1., (1., 0.), 0., (2., 0., 0.)),
+    ((0, 1), 1., (10., 20.), 0., (11., 20., 0.)),
+]
+@pytest.mark.parametrize("imcoord, res, shift, theta, atlascoord", cases)
+def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(imcoord, res, shift, theta, atlascoord):
+    x, y = shift
+    section = Section.from_coronal(
+        image=SliceImage(channels=arange(24).reshape(2, 3, 4), pixel_resolution_um=res),
+        plane=ImagePlane(x=x, y=y, theta=theta),
+    )
+    i, j = imcoord
+    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord, rel=1e-3)
 
 
 @given(i=st.integers(), j=st.integers())

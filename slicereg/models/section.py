@@ -38,7 +38,7 @@ class Section:
         return replace(self, rotation_deg=(x + dx, y + dy, z + dz))
 
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
-        projection = self.affine_transform @ self.image.project_coord(i=i, j=j).T
+        projection = self.affine_transform @ self.plane.affine_transform @ self.image.project_coord(i=i, j=j).T
         assert projection.shape == (4, 1)
         pos = tuple(projection[:3, 0])
         assert len(pos) == 3
