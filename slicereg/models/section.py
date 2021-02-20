@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
-from typing import Tuple
+from typing import Tuple, cast
 from uuid import UUID, uuid4
 
 from numpy import ndarray
@@ -40,4 +40,6 @@ class Section:
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
         projection = self.affine_transform @ self.image.project_coord(i=i, j=j).T
         assert projection.shape == (4, 1)
-        return tuple(projection[:3, 0])
+        pos = tuple(projection[:3, 0])
+        assert len(pos) == 3
+        return cast(Tuple[float, float, float], pos)  # cast to tell mypy that pos is a 3-tuple (numpy isn't helping out here).
