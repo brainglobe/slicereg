@@ -49,10 +49,4 @@ class Section:
         return replace(self, rotation_deg=(x + dx, y + dy, z + dz))
 
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
-        if not 0 <= i < self.image.height or not 0 <= j < self.image.width:
-            raise ValueError(f"Coord ({i, j}) not in image.")
-
-        coords = np.array([[j, i, 0, 0]])
-        projection = coords @ self.image.model_matrix
-        assert projection.shape == (1, 4)
-        return tuple(projection.flatten()[:3])
+        return tuple(self.image.project_coord(i=i, j=j)[0, 0:3])

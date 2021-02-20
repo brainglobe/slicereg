@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import NamedTuple
+from typing import NamedTuple, Tuple
 
 import numpy as np
 from numpy.core.multiarray import ndarray
@@ -47,3 +47,12 @@ class SliceImage:
     def model_matrix(self):
         scale = 1 / self.pixel_resolution_um
         return np.diag([scale, -scale, 1., 1.])
+
+    def project_coord(self, i: int, j: int) -> ndarray:
+        if not 0 <= i < self.height or not 0 <= j < self.width:
+            raise ValueError(f"Coord ({i, j}) not in image.")
+
+        coords = np.array([[j, i, 0, 0]])
+        projection = coords @ self.model_matrix
+        assert projection.shape == (1, 4)
+        return projection
