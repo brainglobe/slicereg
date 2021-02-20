@@ -4,7 +4,7 @@ import numpy as np
 from hypothesis import given
 from hypothesis.strategies import floats
 
-from slicereg.models.section import Plane
+from slicereg.models.image import Plane
 
 np.set_printoptions(suppress=True, precision=1)
 

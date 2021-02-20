@@ -1,7 +1,8 @@
 import pytest
 import numpy as np
 
-from slicereg.models.section import Section, SliceImage, Plane
+from slicereg.models.section import Section
+from slicereg.models.image import Plane, SliceImage
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 

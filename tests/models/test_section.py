@@ -3,8 +3,8 @@ from numpy.ma import array, arange
 from hypothesis import strategies as st, given
 from pytest import approx
 
-from slicereg.models.section import Section, SliceImage, Plane
-
+from slicereg.models.section import Section
+from slicereg.models.image import Plane, SliceImage
 
 cases = [
     ((0, 0), (0., 0., 0.), 1.),

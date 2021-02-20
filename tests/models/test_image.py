@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from slicereg.models.section import SliceImage
+from slicereg.models.image import SliceImage
 
 cases = [
     ((2, 3, 2), 2),

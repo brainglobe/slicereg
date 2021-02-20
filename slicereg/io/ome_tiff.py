@@ -3,7 +3,7 @@ import xmltodict
 from numpy import uint16
 
 from slicereg.commands.load_section import BaseSectionReader
-from slicereg.models.section import SliceImage
+from slicereg.models.image import SliceImage
 
 
 class OmeTiffReader(BaseSectionReader):

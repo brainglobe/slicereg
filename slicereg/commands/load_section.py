@@ -3,7 +3,8 @@ from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
 from slicereg.commands.utils import Signal
-from slicereg.models.section import Section, Plane, SliceImage
+from slicereg.models.section import Section
+from slicereg.models.image import Plane, SliceImage
 
 
 class BaseSectionReader(ABC):

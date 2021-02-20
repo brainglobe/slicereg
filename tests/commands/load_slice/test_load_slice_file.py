@@ -6,7 +6,7 @@ from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
 from slicereg.commands.utils import Signal
-from slicereg.models.section import SliceImage
+from slicereg.models.image import SliceImage
 
 
 @pytest.fixture
