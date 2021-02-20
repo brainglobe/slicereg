@@ -13,6 +13,8 @@ cases = [
     ((2, 3), (0., 0., 0.), (1.5, -1., 0.), 2.),
     ((2, 3), (0., 0., 0.), (1, -0.667, 0.), 3.),
     ((1, 1), (0., 0., 10.), (1., -1., 10.), 1.),
+    ((2, 3), (5., 0., 50.), (6, -0.667, 50.), 3.),
+    ((2, 3), (5., 10., 50.), (6, 9.333, 50.), 3.),
 ]
 @pytest.mark.parametrize("imcoord, pos, atlascoord,res", cases)
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, atlascoord, res):
