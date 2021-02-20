@@ -1,5 +1,7 @@
 import numpy as np
 import pytest
+from hypothesis import given
+from hypothesis.strategies import integers, floats
 
 from slicereg.models.image import SliceImage
 
@@ -32,3 +34,16 @@ cases = [
 def test_image_height(shape, height):
     image = SliceImage(channels=np.random.random(size=shape), pixel_resolution_um=12)
     assert image.height == height
+
+
+@given(width=integers(1, 1000), height=integers(1, 1000), channels=integers(1, 6), res=floats(1, 10, allow_nan=False, allow_infinity=False))
+def test_image_model_matrix(width, height, channels, res):
+    image = SliceImage(channels=np.random.random(size=(channels, height, width)), pixel_resolution_um=res)
+    r = res
+    expected = np.array([
+        [1/r, 0, 0, 0],
+        [0, -1/r, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1],
+    ])
+    assert np.all(np.isclose(image.model_matrix, expected))

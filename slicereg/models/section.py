@@ -3,8 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass, field, replace
 from typing import Tuple
 from uuid import UUID, uuid4
-
+7
 from numpy import ndarray
+import numpy as np
 
 from slicereg.models.image import Plane, SliceImage
 from slicereg.models.math import affine_transform
@@ -51,5 +52,7 @@ class Section:
         if not 0 <= i < self.image.height or not 0 <= j < self.image.width:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
-        im_scale = 1. / self.image.pixel_resolution_um
-        return float(j) * im_scale, -float(i) * im_scale, 0. * im_scale
+        coords = np.array([[j, i, 0, 0]])
+        projection = coords @ self.image.model_matrix
+        assert projection.shape == (1, 4)
+        return tuple(projection.flatten()[:3])

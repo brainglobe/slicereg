@@ -7,20 +7,21 @@ from slicereg.models.section import Section
 from slicereg.models.image import Plane, SliceImage
 
 cases = [
-    ((0, 0), (0., 0., 0.), 1.),
-    ((1, 1), (1., -1., 0.), 1.),
-    ((2, 3), (3., -2., 0.), 1.),
-    ((2, 3), (1.5, -1., 0.), 2.),
-    ((2, 3), (1, -0.667, 0.), 3.),
+    ((0, 0), (0., 0., 0.), (0., 0., 0.), 1.),
+    ((1, 1), (0., 0., 0.), (1., -1., 0.), 1.),
+    ((2, 3), (0., 0., 0.), (3., -2., 0.), 1.),
+    ((2, 3), (0., 0., 0.), (1.5, -1., 0.), 2.),
+    ((2, 3), (0., 0., 0.), (1, -0.667, 0.), 3.),
+    # ((1, 1), (0., 0., 10.), (1., -1., 10.), 1.),  # todo
 ]
-@pytest.mark.parametrize("imcoord,atlascoord,res", cases)
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, atlascoord, res):
+@pytest.mark.parametrize("imcoord, pos, atlascoord,res", cases)
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, atlascoord, res):
     section = Section.from_coronal(
         image=SliceImage(
             channels=arange(24).reshape(2, 3, 4),
             pixel_resolution_um=res,
         ),
-        pos=(0., 0., 0.),
+        pos=pos,
     )
     i, j = imcoord
     x, y, z = atlascoord

@@ -3,6 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import NamedTuple
 
+import numpy as np
 from numpy.core.multiarray import ndarray
 from vispy.util.transforms import translate, rotate
 
@@ -41,3 +42,8 @@ class SliceImage:
     @property
     def width(self) -> int:
         return self.channels.shape[2]
+
+    @property
+    def model_matrix(self):
+        scale = 1 / self.pixel_resolution_um
+        return np.diag([scale, -scale, 1., 1.])
