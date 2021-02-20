@@ -30,10 +30,17 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, r
 
 
 cases = [
+    # Shifts, no rotation
     ((0, 1), 1., (0., 0.), 0., (1., 0., 0.)),
     ((0, 1), 1., (1., 0.), 0., (2., 0., 0.)),
     ((0, 1), 1., (10., 20.), 0., (11., 20., 0.)),
     ((0, 1), 2., (10., 20.), 0., (5.5, 10., 0.)),
+    # Rotations, no shift
+    ((0, 1), 1., (0., 0.), 90., (0., 1., 0.)),
+    ((0, 1), 1., (0., 0.), -90., (0., -1., 0.)),
+    ((0, 1), 1., (0., 0.), 180., (-1., 0., 0.)),
+    ((0, 1), 1., (0., 0.), 360., (1., 0., 0.)),
+    ((0, 1), 1., (0., 0.), 720., (1., 0., 0.)),
 ]
 @pytest.mark.parametrize("imcoord, res, shift, theta, atlascoord", cases)
 def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(imcoord, res, shift, theta, atlascoord):

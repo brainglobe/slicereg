@@ -28,7 +28,7 @@ class Section:
     def affine_transform(self) -> ndarray:
         x, y, z = self.position_um
         rx, ry, rz = self.rotation_deg
-        return (self.plane.affine_transform @ affine_transform(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz, s=1)).T
+        return affine_transform(x=x, y=y, z=z, rx=rx, ry=ry, rz=rz, s=1).T
 
     def translate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Section:
         x, y, z = self.position_um
