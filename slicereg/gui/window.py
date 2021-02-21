@@ -1,7 +1,7 @@
 from typing import Optional
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
-    QHBoxLayout
+    QHBoxLayout, QLabel
 from vispy.app import Timer
 
 from slicereg.gui.base import BaseQtView
@@ -61,11 +61,20 @@ class MainWindow(BaseQtView):
         self.title_reset_timer = Timer(interval=2, connect=lambda e: self._show_default_window_title(), iterations=1,
                                        start=False)
         self._show_default_window_title()
+
+        self.statusbar = self.win.statusBar()
+
+        self.image_coord_label = QLabel(text="Image Coords")
+        self.statusbar.addPermanentWidget(self.image_coord_label)
+
         self.win.show()
 
     @property
     def qt_widget(self) -> QWidget:
         return self.win
+
+    def on_image_coordinate_highlighted(self, i: int, j: int):
+        self.image_coord_label.setText(f"({i}, {j})")
 
     def on_error_raised(self, msg: str):
         self.show_temp_title(msg)
