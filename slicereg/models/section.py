@@ -35,3 +35,6 @@ class Section:
         pos = tuple(projection[:3, 0])
         assert len(pos) == 3
         return cast(Tuple[float, float, float], pos)  # cast to tell mypy that pos is a 3-tuple (numpy isn't helping out here).
+
+    def recenter(self) -> Section:
+        return replace(self, plane_2d=replace(self.plane_2d, x=-self.image.width / 2, y=-self.image.height / 2))

@@ -58,3 +58,10 @@ def check_for_loaded_3d_section(command: LoadImageCommand):
     output = command.section_loaded.emit.call_args[1]
     assert output['image'].ndim == 2
     assert output['transform'].shape == (4, 4)
+
+
+@then("The slice is centered on the image")
+def check_the_transform_isnt_zero(command: LoadImageCommand):
+    output = command.section_loaded.emit.call_args[1]
+    assert output['transform'][0, -1] != 0
+    assert output['transform'][1, -1] != 0

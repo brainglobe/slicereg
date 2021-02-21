@@ -1,3 +1,4 @@
+import numpy as np
 import pytest
 from hypothesis import strategies as st, given
 from hypothesis.strategies import integers, floats
@@ -5,8 +6,8 @@ from numpy import arange, sin, cos, radians
 from pytest import approx
 
 from slicereg.models.image import ImageData
-from slicereg.models.transforms import Plane2D, Plane3D
 from slicereg.models.section import Section
+from slicereg.models.transforms import Plane2D, Plane3D
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
 
@@ -55,7 +56,6 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
             channels=arange(180).reshape(2, 3, 30),
             pixel_resolution_um=1
         ),
-        plane_2d=Plane2D(x=0, y=0, theta=0),
     )
     if i < 0 or i >= section.image.height or j < 0 or j >= section.image.width:
         with pytest.raises(ValueError):
@@ -63,3 +63,10 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
     else:
         assert section.pos_from_coord(i=i, j=j)
 
+
+@given(width=st.integers(1, 1000), height=st.integers(1, 1000))
+def test_section_recenter_sets_shift_to_half_the_width_and_height(width, height):
+    section = Section(image=ImageData(channels=np.random.random((3, height, width)), pixel_resolution_um=123))
+    assert section.plane_2d.x == 0 and section.plane_2d.y == 0
+    section2 = section.recenter()
+    assert section2.plane_2d.x == approx(-width / 2) and section2.plane_2d.y == approx(-height / 2)
