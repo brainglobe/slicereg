@@ -25,4 +25,4 @@ class LoadAtlasCommand(BaseCommand):
 
     def __call__(self, resolution: int):  # type: ignore
         atlas = self._repo.get_atlas(resolution=resolution)
-        self.atlas_updated.emit(volume=atlas.volume, transform=atlas.model_matrix)
+        self.atlas_updated.emit(volume=atlas.volume, transform=atlas.affine_transform)

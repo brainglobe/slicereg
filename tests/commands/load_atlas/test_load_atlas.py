@@ -13,7 +13,7 @@ from slicereg.models.atlas import Atlas
 def command():
     repo = Mock(BaseLoadAtlasRepo)
     repo.get_downloaded_resolutions.return_value = (25,)
-    repo.get_atlas.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=25, origin=(0, 0, 0))
+    repo.get_atlas.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=25)
     return LoadAtlasCommand(_repo=repo, atlas_updated=Mock(Signal))
 
 

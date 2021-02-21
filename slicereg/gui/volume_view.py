@@ -37,7 +37,7 @@ class VolumeView(BaseQtView):
 
     def on_atlas_update(self, volume: ndarray, transform: ndarray):
         self._atlas_volume.set_data(volume)
-        self._atlas_volume.transform = MatrixTransform(transform)
+        self._atlas_volume.transform = MatrixTransform(transform.T)
         self._atlas_volume.clim = np.min(volume), np.max(volume)
         self._viewbox.camera.center = (0, 0, 0)
         self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
@@ -47,7 +47,7 @@ class VolumeView(BaseQtView):
         self._section_image.set_data(image)
         self._section_image.clim = np.min(image), np.max(image)
         if transform is not None:
-            self._section_image.transform = MatrixTransform(transform)
+            self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 
     def on_channel_select(self, image: ndarray, channel: int):
@@ -56,7 +56,7 @@ class VolumeView(BaseQtView):
         self._canvas.update()
 
     def on_section_moved(self, transform: ndarray):
-        self._section_image.transform = MatrixTransform(transform)
+        self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 
     # Controller Code

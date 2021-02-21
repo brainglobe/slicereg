@@ -19,12 +19,9 @@ class BrainglobeAtlasRepo(BaseLoadAtlasRepo):
         with redirect_stdout(StringIO()):  # blocks the BrainGlobeAtlas print to console
             bgatlas = BrainGlobeAtlas(f"allen_mouse_{resolution}um")
 
-        w, h, d = bgatlas.shape_um
-
         return Atlas(
             volume=bgatlas.reference,
             resolution_um=bgatlas.resolution[0],
-            origin=(w / 2., h / 2., d / 2.)
         )
 
     def get_downloaded_resolutions(self) -> Tuple[int, ...]:

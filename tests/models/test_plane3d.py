@@ -16,7 +16,6 @@ def test_3d_translation_gives_correct_affine_transform(x, y, z):
         [0, 0, 0, 1],
     ]
     observed = Plane3D(x=x, y=y, z=z).affine_transform
-    print(observed)
     assert np.all(np.isclose(observed, expected))
 
 
@@ -29,5 +28,4 @@ def test_3d_x_rotation_gives_correct_affine_transform(rx):
         [0, 0, 0, 1],
     ]
     observed = Plane3D(rx=rx).affine_transform
-    print(observed)
     assert np.all(np.isclose(observed, expected))
