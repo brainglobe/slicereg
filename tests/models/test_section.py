@@ -1,4 +1,5 @@
 import pytest
+from hypothesis.strategies import integers, floats
 from numpy.ma import array, arange, sqrt
 from hypothesis import strategies as st, given
 from pytest import approx
@@ -6,27 +7,26 @@ from pytest import approx
 from slicereg.models.section import Section
 from slicereg.models.image import ImagePlane, SliceImage
 
-cases = [
-    ((0, 0), (0., 0., 0.), 1., (0., 0., 0.)),
-    ((1, 1), (0., 0., 0.), 1., (1., -1., 0.)),
-    ((2, 3), (0., 0., 0.), 1., (3., -2., 0.)),
-    ((2, 3), (0., 0., 0.), 2., (1.5, -1., 0.)),
-    ((2, 3), (0., 0., 0.), 3., (1, -2/3, 0.)),
-    ((1, 1), (0., 0., 10.), 1., (1., -1., 10.)),
-    ((2, 3), (5., 0., 50.), 3., (6, -2/3, 50.)),
-    ((2, 3), (5., 10., 50.), 3., (6, 9+1/3, 50.)),
-]
-@pytest.mark.parametrize("imcoord, pos, res, atlascoord", cases)
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, res, atlascoord):
+sensible_floats = floats(allow_nan=False, allow_infinity=False)
+
+
+@given(
+    i=integers(0, 2), j=integers(0, 3), # Image coordinates
+    dx=sensible_floats, dy=sensible_floats, dz=sensible_floats,  # Section Position offsets
+    pixel_resolution=floats(min_value=0.2, max_value=50, allow_nan=False, allow_infinity=False),
+)
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, dz, pixel_resolution):
     section = Section.from_coronal(
         image=SliceImage(
             channels=arange(24).reshape(2, 3, 4),
-            pixel_resolution_um=res,
+            pixel_resolution_um=pixel_resolution,
         ),
-        position_um=pos,
+        position_um=(dx, dy, dz),
     )
-    i, j = imcoord
-    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord)
+    ox, oy, oz = section.pos_from_coord(i=i, j=j)  # observed 3D positions
+    assert ox == approx((j * 1/pixel_resolution) + dx)
+    assert oy == approx((-i * 1/pixel_resolution) + dy)
+    assert oz == approx(dz)
 
 
 cases = [
