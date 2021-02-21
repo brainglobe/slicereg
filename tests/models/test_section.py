@@ -13,7 +13,7 @@ sensible_floats = floats(allow_nan=False, allow_infinity=False)
 @given(
     i=integers(0, 2), j=integers(0, 3), # Image coordinates
     dx=sensible_floats, dy=sensible_floats, dz=sensible_floats,  # Section Position offsets
-    pixel_resolution=floats(min_value=0.2, max_value=50, allow_nan=False, allow_infinity=False),
+    pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
 )
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, dz, pixel_resolution):
     section = Section.from_coronal(
