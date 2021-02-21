@@ -20,7 +20,7 @@ class GetPixelRegistrationDataCommand(BaseCommand):
     _repo: BaseSectionRepo
     coord_data_requested: Signal = Signal()
 
-    def __call__(self, i: int, j: int):
+    def __call__(self, i: int, j: int):  # type: ignore
         sections = self._repo.sections
         section = sections[0]
         x, y, z = section.pos_from_coord(i=i, j=j)
