@@ -87,6 +87,7 @@ class SliceView(BaseQtView):
         x_slice_offset = x_amp * x_dir * scale
         y_slice_offset = y_amp * y_dir * scale
         self.move_section(x=x_slice_offset, y=y_slice_offset)
+        self.get_coord_data(i=0, j=0)  # todo: replace with mouse highlighting
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         x_amp = abs(x2 - x1)
@@ -97,3 +98,6 @@ class SliceView(BaseQtView):
 
     def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
         raise NotImplementedError("Wire up to MoveSectionCommand to use this.")
+
+    def get_coord_data(self, i: int, j: int):
+        raise NotImplementedError("Wire up to GetPixelRegistrationDataCommand to use this.")

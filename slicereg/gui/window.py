@@ -73,8 +73,10 @@ class MainWindow(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self.win
 
-    def on_image_coordinate_highlighted(self, i: int, j: int):
-        self.image_coord_label.setText(f"({i}, {j})")
+    def on_image_coordinate_highlighted(self, image_coords, atlas_coords):
+        i, j = image_coords
+        x, y, z = atlas_coords
+        self.image_coord_label.setText(f"(i={i}, j={j})      (x={x:.1f}, y={y:.1f}, z={z:.1f})")
 
     def on_error_raised(self, msg: str):
         self.show_temp_title(msg)

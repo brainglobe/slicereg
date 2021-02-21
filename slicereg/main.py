@@ -1,5 +1,6 @@
 from PySide2.QtWidgets import QApplication
 
+from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand
 from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand
@@ -57,8 +58,9 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         slice_view.move_section = move_section  # type: ignore
         move_section.section_moved.connect(volume_view.on_section_moved)
 
-
-
+        request_coord_data = GetPixelRegistrationDataCommand(_repo=repo)
+        slice_view.get_coord_data = request_coord_data  # type: ignore
+        request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
 
     # Start the Event Loop!
