@@ -1,13 +1,14 @@
 from unittest.mock import Mock
 
+import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.utils import Signal
+from slicereg.models.image import ImageData
 from slicereg.models.section import Section
-from slicereg.models.image import Plane2D, ImageData
 
 
 @scenario("section_affine_registration.feature", "Move Section in 3D")
@@ -19,7 +20,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=Mock(ImageData, pixel_resolution_um=12), plane=Plane2D(0, 0))
+        Section(image=ImageData(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.))
     ]
     return repo
 

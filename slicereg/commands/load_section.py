@@ -3,8 +3,8 @@ from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
 from slicereg.commands.utils import Signal
+from slicereg.models.image import ImageData
 from slicereg.models.section import Section
-from slicereg.models.image import Plane2D, ImageData
 
 
 class BaseSectionReader(ABC):
@@ -21,6 +21,6 @@ class LoadImageCommand(BaseCommand):
 
     def __call__(self, filename: str) -> None:  # type: ignore
         slice_image = self._reader.read(filename=filename)
-        section = Section(image=slice_image, plane=Plane2D(x=0, y=0))
+        section = Section(image=slice_image)
         self._repo.save_section(section=section)
         self.section_loaded.emit(image=section.image.channels[0], transform=section.affine_transform)

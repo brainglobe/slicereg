@@ -4,7 +4,8 @@ from hypothesis.strategies import integers, floats
 from numpy import arange, sin, cos, radians
 from pytest import approx
 
-from slicereg.models.image import Plane2D, ImageData
+from slicereg.models.image import ImageData
+from slicereg.models.transforms import Plane2D, Plane3D
 from slicereg.models.section import Section
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
@@ -21,7 +22,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, d
             channels=arange(24).reshape(2, 3, 4),
             pixel_resolution_um=pixel_resolution,
         ),
-        position_um=(dx, dy, dz),
+        plane_3d=Plane3D(x=dx, y=dy, z=dz),
     )
     x, y, z = section.pos_from_coord(i=i, j=j)  # observed 3D positions
     assert x == approx((j * 1/pixel_resolution) + dx)
@@ -38,7 +39,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, d
 def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift, theta):
     section = Section(
         image=ImageData(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution),
-        plane=Plane2D(x=x_shift, y=y_shift, theta=theta),
+        plane_2d=Plane2D(x=x_shift, y=y_shift, theta=theta),
     )
     x, y, z = section.pos_from_coord(i=0, j=j)
     assert x == approx((1 / pixel_resolution) * (j * cos(radians(theta)) + x_shift))
@@ -54,7 +55,7 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
             channels=arange(180).reshape(2, 3, 30),
             pixel_resolution_um=1
         ),
-        plane=Plane2D(x=0, y=0, theta=0),
+        plane_2d=Plane2D(x=0, y=0, theta=0),
     )
     if i < 0 or i >= section.image.height or j < 0 or j >= section.image.width:
         with pytest.raises(ValueError):
@@ -62,12 +63,3 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
     else:
         assert section.pos_from_coord(i=i, j=j)
 
-
-def test_coronal_sections_have_correct_base_rotation():
-    section = Section.from_coronal(
-        image=ImageData(
-            channels=arange(180).reshape(2, 3, 30),
-            pixel_resolution_um=1
-        ),
-    )
-    assert section.rotation_deg == (0., 0., 0.)
