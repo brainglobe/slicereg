@@ -6,7 +6,7 @@ from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
 from slicereg.commands.utils import Signal
-from slicereg.models.image import SliceImage
+from slicereg.models.image import ImageData
 
 
 @pytest.fixture
@@ -24,7 +24,7 @@ def image_data():
 @pytest.fixture
 def reader(image_data):
     reader = Mock(BaseSectionReader)
-    reader.read.return_value = SliceImage(channels=image_data, pixel_resolution_um=10)
+    reader.read.return_value = ImageData(channels=image_data, pixel_resolution_um=10)
     return reader
 
 

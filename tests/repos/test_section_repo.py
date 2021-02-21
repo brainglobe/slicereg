@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from slicereg.models.section import Section
-from slicereg.models.image import ImagePlane, SliceImage
+from slicereg.models.image import Plane2D, ImageData
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 
@@ -14,22 +14,22 @@ def repo():
 @pytest.fixture
 def section1():
     return Section(
-        image=SliceImage(
+        image=ImageData(
             channels=np.arange(12).reshape(2, 3, 2),
             pixel_resolution_um=12,
         ),
-        plane=ImagePlane(x=0, y=0)
+        plane=Plane2D(x=0, y=0)
     )
 
 
 @pytest.fixture
 def section2():
     return Section(
-        image=SliceImage(
+        image=ImageData(
             channels=np.arange(12).reshape(2, 3, 2),
             pixel_resolution_um=12,
         ),
-        plane=ImagePlane(x=0, y=0)
+        plane=Plane2D(x=0, y=0)
     )
 
 

@@ -8,7 +8,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.section import Section
-from slicereg.models.image import ImagePlane, SliceImage
+from slicereg.models.image import Plane2D, ImageData
 
 
 @pytest.fixture
@@ -16,11 +16,11 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
         Section(
-            image=SliceImage(
+            image=ImageData(
                 channels=np.arange(12).reshape(2, 3, 2),
                 pixel_resolution_um=12
             ),
-            plane=Mock(ImagePlane),
+            plane=Mock(Plane2D),
         )]
     return repo
 

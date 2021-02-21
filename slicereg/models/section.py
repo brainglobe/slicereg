@@ -7,21 +7,21 @@ from uuid import UUID, uuid4
 from numpy import ndarray
 import numpy as np
 
-from slicereg.models.image import ImagePlane, SliceImage
+from slicereg.models.image import Plane2D, ImageData
 from slicereg.models.math import affine_transform
 
 
 @dataclass(frozen=True)
 class Section:
-    image: SliceImage
-    plane: ImagePlane = field(default_factory=ImagePlane)
+    image: ImageData
+    plane: Plane2D = field(default_factory=Plane2D)
     thickness_um: float = 16.
     position_um: Tuple[float, float, float] = (0., 0., 0.)
     rotation_deg: Tuple[float, float, float] = (0., 0., 0.)
     id: UUID = field(default_factory=uuid4)
 
     @classmethod
-    def from_coronal(cls, image: SliceImage, **kwargs) -> Section:
+    def from_coronal(cls, image: ImageData, **kwargs) -> Section:
         return cls(image=image, **kwargs)
 
     @property
