@@ -11,10 +11,10 @@ cases = [
     ((1, 1), (0., 0., 0.), 1., (1., -1., 0.)),
     ((2, 3), (0., 0., 0.), 1., (3., -2., 0.)),
     ((2, 3), (0., 0., 0.), 2., (1.5, -1., 0.)),
-    ((2, 3), (0., 0., 0.), 3., (1, -0.667, 0.)),
+    ((2, 3), (0., 0., 0.), 3., (1, -2/3, 0.)),
     ((1, 1), (0., 0., 10.), 1., (1., -1., 10.)),
-    ((2, 3), (5., 0., 50.), 3., (6, -0.667, 50.)),
-    ((2, 3), (5., 10., 50.), 3., (6, 9.333, 50.)),
+    ((2, 3), (5., 0., 50.), 3., (6, -2/3, 50.)),
+    ((2, 3), (5., 10., 50.), 3., (6, 9+1/3, 50.)),
 ]
 @pytest.mark.parametrize("imcoord, pos, res, atlascoord", cases)
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, res, atlascoord):
@@ -26,7 +26,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(imcoord, pos, r
         position_um=pos,
     )
     i, j = imcoord
-    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord, rel=1e-3)
+    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord)
 
 
 cases = [
@@ -57,7 +57,7 @@ def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(imco
         plane=ImagePlane(x=x, y=y, theta=theta),
     )
     i, j = imcoord
-    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord, rel=1e-3)
+    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord)
 
 
 @given(i=st.integers(), j=st.integers())
