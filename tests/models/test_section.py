@@ -16,7 +16,7 @@ sensible_floats = floats(allow_nan=False, allow_infinity=False)
     pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
 )
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, dz, pixel_resolution):
-    section = Section.from_coronal(
+    section = Section(
         image=SliceImage(
             channels=arange(24).reshape(2, 3, 4),
             pixel_resolution_um=pixel_resolution,
@@ -36,7 +36,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, d
     theta=sensible_floats,  # planar rotations
 )
 def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift, theta):
-    section = Section.from_coronal(
+    section = Section(
         image=SliceImage(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution),
         plane=ImagePlane(x=x_shift, y=y_shift, theta=theta),
     )
