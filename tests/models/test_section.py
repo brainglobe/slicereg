@@ -43,6 +43,10 @@ cases = [
     ((0, 1), 1., (0., 0.), -720., (1., 0., 0.)),
     ((0, 1), 1., (0., 0.), 45., (1./sqrt(2), 1./sqrt(2), 0.)),
     ((0, 6), 1., (0., 0.), 60., (3, 3*sqrt(3), 0.)),
+    # Rotations & Shift: Rotation, then Shift
+    ((0, 1), 1., (5., 0.), 90., (5., 1., 0.)),
+    ((0, 1), 1., (5., 0.), -90., (5., -1., 0.)),
+    ((0, 1), 1., (5., 10.), 90., (5., 11., 0.)),
 ]
 @pytest.mark.parametrize("imcoord, res, shift, theta, atlascoord", cases)
 def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(imcoord, res, shift, theta, atlascoord):
