@@ -1,22 +1,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import NamedTuple, Tuple
+from typing import Tuple
 
 from numpy.core.multiarray import ndarray
 from vispy.util.transforms import translate, rotate
 
 
-class Plane2D(NamedTuple):
+@dataclass(frozen=True)
+class Plane2D:
     x: float = 0.
     y: float = 0.
     theta: float = 0.
 
     def translate(self, dx: float, dy: float) -> Plane2D:
-        return self._replace(x=self.x + dx, y=self.y + dy)
+        return replace(self, x=self.x + dx, y=self.y + dy)
 
     def rotate(self, theta: float) -> Plane2D:
-        return self._replace(theta=self.theta + theta)
+        return replace(self, theta=self.theta + theta)
 
     @property
     def affine_transform(self) -> ndarray:
