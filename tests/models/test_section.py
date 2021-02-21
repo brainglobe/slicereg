@@ -1,12 +1,11 @@
 import pytest
-from hypothesis.strategies import integers, floats
-from numpy.core._multiarray_umath import radians
-from numpy.ma import array, arange, sqrt, sin, cos
 from hypothesis import strategies as st, given
+from hypothesis.strategies import integers, floats
+from numpy import arange, sin, cos, radians
 from pytest import approx
 
-from slicereg.models.section import Section
 from slicereg.models.image import ImagePlane, SliceImage
+from slicereg.models.section import Section
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
 
@@ -31,7 +30,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, d
 
 
 @given(
-    j=integers(0, 39),  # image coordinates (e.g. (0, j))
+    j=integers(0, 39),  # image coordinates on i-intercept to simplify trig math (e.g. (0, j))
     pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
     x_shift=sensible_floats, y_shift=sensible_floats,  # planar shifts
     theta=sensible_floats,  # planar rotations
