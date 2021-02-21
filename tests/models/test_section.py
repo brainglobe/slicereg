@@ -70,4 +70,4 @@ def test_coronal_sections_have_correct_base_rotation():
             pixel_resolution_um=1
         ),
     )
-    assert section.plane.theta == 0.
+    assert section.rotation_deg == (0., 0., 0.)
