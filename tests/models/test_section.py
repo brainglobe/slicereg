@@ -1,6 +1,7 @@
 import pytest
 from hypothesis.strategies import integers, floats
-from numpy.ma import array, arange, sqrt
+from numpy.core._multiarray_umath import radians
+from numpy.ma import array, arange, sqrt, sin, cos
 from hypothesis import strategies as st, given
 from pytest import approx
 
@@ -23,41 +24,28 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, d
         ),
         position_um=(dx, dy, dz),
     )
-    ox, oy, oz = section.pos_from_coord(i=i, j=j)  # observed 3D positions
-    assert ox == approx((j * 1/pixel_resolution) + dx)
-    assert oy == approx((-i * 1/pixel_resolution) + dy)
-    assert oz == approx(dz)
+    x, y, z = section.pos_from_coord(i=i, j=j)  # observed 3D positions
+    assert x == approx((j * 1/pixel_resolution) + dx)
+    assert y == approx((-i * 1/pixel_resolution) + dy)
+    assert z == approx(dz)
 
 
-cases = [
-    # Shifts, no rotation
-    ((0, 1), 1., (0., 0.), 0., (1., 0., 0.)),
-    ((0, 1), 1., (1., 0.), 0., (2., 0., 0.)),
-    ((0, 1), 1., (10., 20.), 0., (11., 20., 0.)),
-    ((0, 1), 2., (10., 20.), 0., (5.5, 10., 0.)),
-    # Rotations, no shift
-    ((0, 1), 1., (0., 0.), 90., (0., 1., 0.)),
-    ((0, 1), 1., (0., 0.), -90., (0., -1., 0.)),
-    ((0, 1), 1., (0., 0.), 180., (-1., 0., 0.)),
-    ((0, 1), 1., (0., 0.), 360., (1., 0., 0.)),
-    ((0, 1), 1., (0., 0.), -720., (1., 0., 0.)),
-    ((0, 1), 1., (0., 0.), 45., (1./sqrt(2), 1./sqrt(2), 0.)),
-    ((0, 6), 1., (0., 0.), 60., (3, 3*sqrt(3), 0.)),
-    # Rotations & Shift: Rotation, then Shift
-    ((0, 1), 1., (5., 0.), 90., (5., 1., 0.)),
-    ((0, 1), 1., (5., 0.), -90., (5., -1., 0.)),
-    ((0, 1), 1., (5., 10.), 90., (5., 11., 0.)),
-    ((0, 1), 2., (5., 10.), 90., (2.5, 5.5, 0.)),
-]
-@pytest.mark.parametrize("imcoord, res, shift, theta, atlascoord", cases)
-def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(imcoord, res, shift, theta, atlascoord):
-    x, y = shift
+@given(
+    j=integers(0, 39),  # image coordinates (e.g. (0, j))
+    pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
+    x_shift=sensible_floats, y_shift=sensible_floats,  # planar shifts
+    theta=sensible_floats,  # planar rotations
+)
+def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift, theta):
     section = Section.from_coronal(
-        image=SliceImage(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=res),
-        plane=ImagePlane(x=x, y=y, theta=theta),
+        image=SliceImage(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution),
+        plane=ImagePlane(x=x_shift, y=y_shift, theta=theta),
     )
-    i, j = imcoord
-    assert section.pos_from_coord(i=i, j=j) == approx(atlascoord)
+    x, y, z = section.pos_from_coord(i=0, j=j)
+    assert x == approx((1 / pixel_resolution) * (j * cos(radians(theta)) + x_shift))
+    assert y == approx((1 / pixel_resolution) * (j * sin(radians(theta)) + y_shift))
+    assert z == 0
+
 
 
 @given(i=st.integers(), j=st.integers())
