@@ -22,6 +22,8 @@ class GetPixelRegistrationDataCommand(BaseCommand):
 
     def __call__(self, i: int, j: int):  # type: ignore
         sections = self._repo.sections
+        if not sections:
+            return
         section = sections[0]
         x, y, z = section.pos_from_coord(i=i, j=j)
         self.coord_data_requested.emit(image_coords=ImageCoord(i=i, j=j), atlas_coords=AtlasCoord(x=x, y=y, z=z))

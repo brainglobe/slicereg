@@ -13,8 +13,8 @@ class MoveSectionCommand(BaseCommand):
 
     def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.):
         sections = self._repo.sections
-        # if not sections:
-            # return self._presenter.show_error("No section available to translate.")
+        if not sections:
+            return
         section = sections[0]
         new_section = section.translate(dx=x, dy=y, dz=z).rotate(dx=rx, dy=ry, dz=rz)
 
