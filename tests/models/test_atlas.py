@@ -32,3 +32,5 @@ def test_slicing_an_atlas_gets_a_new_section_with_correct_parameters():
     assert section.plane_2d == Plane2D()
     assert section.image.pixel_resolution_um == atlas.resolution_um
     assert section.image.channels.shape == (1, 3, 3)
+
+
