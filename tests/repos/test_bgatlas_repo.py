@@ -1,10 +1,11 @@
 from unittest.mock import patch, PropertyMock
 
+import numpy as np
 import pytest
-from bg_atlasapi import BrainGlobeAtlas
 from hypothesis import given
 from hypothesis.strategies import integers
 
+from slicereg.models.atlas import Atlas
 from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
 
 cases = [
@@ -29,7 +30,7 @@ def test_get_atlas_raises_error_on_nonallen_resolutions(resolution):
         return
     repo = BrainglobeAtlasRepo()
     with pytest.raises(ValueError):
-        repo.get_atlas(resolution=resolution)
+        repo.load_atlas(resolution=resolution)
 
 
 @patch("slicereg.repos.atlas_repo.BrainGlobeAtlas")
@@ -40,5 +41,15 @@ def test_get_atlas_returns_atlas_with_correct_resolution(mock_bgatlas, resolutio
     type(bgatlas).resolution = PropertyMock(return_value=[resolution, resolution, resolution])
 
     repo = BrainglobeAtlasRepo()
-    atlas = repo.get_atlas(resolution=resolution)
+    atlas = repo.load_atlas(resolution=resolution)
     assert atlas.resolution_um == resolution
+
+
+
+def test_atlas_is_settable_gettable_for_repo_state():
+    repo = BrainglobeAtlasRepo()
+    atlas = Atlas(volume=np.random.random((3, 3, 3)), resolution_um=1)
+    assert repo.get_atlas() is None
+
+    repo.set_atlas(atlas=atlas)
+    assert repo.get_atlas() == atlas

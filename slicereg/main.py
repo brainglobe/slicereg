@@ -17,7 +17,8 @@ from slicereg.repos.section_repo import InMemorySectionRepo
 
 def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     # Initialize the State
-    repo = InMemorySectionRepo()
+    section_repo = InMemorySectionRepo()
+    atlas_repo = BrainglobeAtlasRepo()
 
     # Wire up the GUI
     if create_qapp:
@@ -32,7 +33,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     )
 
     if config.FEATURE_BRAINGLOBE_ATLAS:
-        load_atlas = LoadAtlasCommand(_repo=BrainglobeAtlasRepo())
+        load_atlas = LoadAtlasCommand(_repo=atlas_repo)
         window.load_atlas = load_atlas  # type: ignore
         load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
 
@@ -41,24 +42,24 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
             load_atlas(resolution=25)
 
     if config.FEATURE_VIEW_SECTION:
-        load_section = LoadImageCommand(_repo=repo, _reader=OmeTiffReader())
+        load_section = LoadImageCommand(_repo=section_repo, _reader=OmeTiffReader())
         window.load_section = load_section  # type: ignore
         load_section.section_loaded.connect(slice_view.on_section_loaded)
         load_section.section_loaded.connect(volume_view.on_section_loaded)
 
-        select_channel = SelectChannelCommand(_repo=repo)
+        select_channel = SelectChannelCommand(_repo=section_repo)
         volume_view.select_channel = select_channel  # type: ignore
         select_channel.channel_changed.connect(volume_view.on_channel_select)
         select_channel.channel_changed.connect(slice_view.on_channel_select)
 
 
     if config.FEATURE_VIEW_SECTION and config.FEATURE_MOVE_SECTION:
-        move_section = MoveSectionCommand(_repo=repo)
+        move_section = MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo)
         volume_view.move_section = move_section  # type: ignore
         slice_view.move_section = move_section  # type: ignore
         move_section.section_moved.connect(volume_view.on_section_moved)
 
-        request_coord_data = GetPixelRegistrationDataCommand(_repo=repo)
+        request_coord_data = GetPixelRegistrationDataCommand(_repo=section_repo)
         slice_view.get_coord_data = request_coord_data  # type: ignore
         request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 

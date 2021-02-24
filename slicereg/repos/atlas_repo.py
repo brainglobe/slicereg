@@ -1,18 +1,36 @@
 import re
+from abc import ABC, abstractmethod
 from contextlib import redirect_stdout
 from io import StringIO
-from typing import Tuple
+from typing import Tuple, Optional
 
 from bg_atlasapi import BrainGlobeAtlas
 from bg_atlasapi.list_atlases import get_downloaded_atlases
 
-from slicereg.commands.load_atlas import BaseLoadAtlasRepo
 from slicereg.models.atlas import Atlas
 
 
-class BrainglobeAtlasRepo(BaseLoadAtlasRepo):
+class BaseAtlasRepo(ABC):
 
-    def get_atlas(self, resolution: int) -> Atlas:
+    @abstractmethod
+    def load_atlas(self, resolution: int) -> Atlas: ...
+
+    @abstractmethod
+    def get_downloaded_resolutions(self) -> Tuple[int, ...]: ...
+
+    @abstractmethod
+    def get_atlas(self) -> Optional[Atlas]: ...
+
+    @abstractmethod
+    def set_atlas(self, atlas: Atlas) -> None: ...
+
+
+class BrainglobeAtlasRepo(BaseAtlasRepo):
+
+    def __init__(self):
+        self._atlas: Optional[Atlas] = None
+
+    def load_atlas(self, resolution: int) -> Atlas:
         if resolution not in [10, 25, 100]:
             raise ValueError("Only 10um, 25um and 100um atlas resolutions available.")
 
@@ -30,3 +48,9 @@ class BrainglobeAtlasRepo(BaseLoadAtlasRepo):
         maybe_matches = [re.match(pattern, name) for name in downloaded]
         resolutions = [int(match.group(1)) for match in maybe_matches if match]
         return tuple(resolutions)
+
+    def get_atlas(self) -> Optional[Atlas]:
+        return self._atlas
+
+    def set_atlas(self, atlas: Atlas) -> None:
+        self._atlas = atlas
