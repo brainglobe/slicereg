@@ -22,11 +22,11 @@ class Atlas:
         w, h, d = self.volume.shape
         return (translate((-w / 2, -h / 2, -d / 2)) @ scale((self.resolution_um,) * 3)).T
 
-    def slice(self, plane: Plane3D, thickness_um: float) -> Section:
+    def slice(self, plane: Plane3D) -> Section:
         new_volume = affine_transform(self.volume, matrix=plane.affine_transform, cval=0.)
-        slice_image = new_volume[0][newaxis, :, :]
+        slice_image = new_volume[:, :, 0][newaxis, :, :]
         return Section(
             image=ImageData(channels=slice_image, pixel_resolution_um=self.resolution_um),
             plane_3d=plane,
-            thickness_um=thickness_um
+            thickness_um=self.resolution_um
         )
