@@ -1,9 +1,6 @@
 from dataclasses import dataclass
-from typing import Tuple
 
-import numpy as np
 from numpy import ndarray, newaxis
-from numpy.linalg import inv
 from scipy.ndimage import affine_transform
 from vispy.util.transforms import scale, translate
 
