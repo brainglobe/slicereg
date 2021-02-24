@@ -17,6 +17,7 @@ class MoveSectionCommand(BaseCommand):
         sections = self._section_repo.sections
         atlas = self._atlas_repo.get_atlas()
         if not sections or not atlas:
+            print("not atlas", atlas)
             return
         section = sections[0]
         new_section = section.translate(dx=x, dy=y, dz=z).rotate(dx=rx, dy=ry, dz=rz)

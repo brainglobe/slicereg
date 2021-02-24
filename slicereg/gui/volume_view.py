@@ -55,7 +55,7 @@ class VolumeView(BaseQtView):
         self._section_image.clim = np.min(image), np.max(image)
         self._canvas.update()
 
-    def on_section_moved(self, transform: ndarray):
+    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray):
         self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 

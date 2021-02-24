@@ -26,6 +26,7 @@ def test_outlined():
 @given("the 25um atlas is already on my computer")
 def check_atlas_exists(command):
     assert 25 in command._repo.get_downloaded_resolutions()
+    assert command._repo.call_count == 0
 
 
 @when("I ask for a 25um atlas")
@@ -39,3 +40,8 @@ def check_3d_atlas_data_shown(command):
     assert output['volume'].ndim == 3
     assert output['transform'].shape == (4, 4)
     command._repo.load_atlas.assert_called_with(resolution=25)
+
+
+@then("it is set as the current atlas for the session.")
+def check_atlas_set_in_repo(command: BaseAtlasRepo):
+    assert command._repo.set_atlas.call_count == 1
