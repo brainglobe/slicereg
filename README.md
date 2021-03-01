@@ -74,6 +74,27 @@ conda create -n py38 python=3.8
 conda activate py38
 ```
 
+#### Troubleshooting
+##### "Virtual environment already activated:"
+To solve this you will need to use pip to install the dependencies:
+```
+poetry export -f requirements.txt --dev --without-hashes --output requirements.txt
+pip install -r requirements.txt
+```
+##### Display issues
+In some cases (e.g. using WSL), you might need to export the display.
+
+  1. `export DISPLAY=:0`
+  2. run Xming
+
+##### Data download
+In case DVC pull is not working
+```
+ERROR: failed to pull data from the cloud - Checkout failed for following targets:
+```
+  1. delete the folder **cache** in **.dvc**
+  2. rerun `dvc pull`
+
 #### Running the Project
 
 Run the program:
