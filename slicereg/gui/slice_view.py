@@ -41,6 +41,7 @@ class SliceView(BaseQtView):
         self._canvas.events.mouse_press.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_move.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_release.connect(self._vispy_mouse_event)
+        self._canvas.events.mouse_wheel.connect(self._vispy_mouse_event)
 
     @property
     def qt_widget(self) -> QWidget:
@@ -78,6 +79,9 @@ class SliceView(BaseQtView):
             elif event.button == 2:  # Right Mouse Button
                 self._on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
 
+        elif event.type == 'mouse_wheel':
+            self._on_mousewheel_move(increment=int(event.delta[1]))
+
     def _on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         x_amp = abs(x2 - x1)
         y_amp = abs(y2 - y1)
@@ -95,6 +99,9 @@ class SliceView(BaseQtView):
         scale = .1
         x_slice_offset = x_amp * x_dir * scale
         self.move_section(ry=x_slice_offset)
+
+    def _on_mousewheel_move(self, increment: int):
+        self.move_section(z=10 * increment)
 
     def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
         raise NotImplementedError("Wire up to MoveSectionCommand to use this.")
