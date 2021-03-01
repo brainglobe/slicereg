@@ -31,17 +31,8 @@ jobs:
       - name: Install Poetry
         run: |
           pip install poetry
-      - name: Environment Caching
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: .venv
-          key: ${{ runner.os }}-poetry-${{ hashFiles('poetry.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-poetry-install
       - name: Install Python Dependencies
-        if: steps.cache.outputs.cache-hit != 'true'
-        run:
+        run: |
           poetry install
       - name: Download Test Data
         env:
