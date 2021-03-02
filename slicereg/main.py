@@ -58,6 +58,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         volume_view.move_section = move_section  # type: ignore
         slice_view.move_section = move_section  # type: ignore
         move_section.section_moved.connect(volume_view.on_section_moved)
+        move_section.section_moved.connect(slice_view.on_section_moved)
 
         request_coord_data = GetPixelRegistrationDataCommand(_repo=section_repo)
         slice_view.get_coord_data = request_coord_data  # type: ignore
