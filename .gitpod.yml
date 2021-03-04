@@ -2,5 +2,5 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: python -m pip install --upgrade pip && pip install poetry && poetry install
-    command: poetry run pytest
+  - init: python -m pip install --upgrade pip && pip install poetry && poetry export -f requirements.txt --dev --without-hashes --output requirements.txt && pip install -r requirements.txt
+    command: pytest
