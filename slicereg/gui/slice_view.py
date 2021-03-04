@@ -24,17 +24,11 @@ class SliceView(BaseQtView):
             elevation=-90,
         )
 
-        self._reference_slice = Image(
-            cmap='grays',
-            parent=self._viewbox.scene
-        )
+        self._reference_slice = Image(cmap='grays', parent=self._viewbox.scene)
         self._reference_slice.attach(ColorFilter((1., .5, 0., 1.)))
         self._reference_slice.set_gl_state('additive', depth_test=False)
 
-        self._slice = Image(
-            cmap='grays',
-            parent=self._viewbox.scene
-        )
+        self._slice = Image(cmap='grays', parent=self._viewbox.scene)
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
 
@@ -47,11 +41,14 @@ class SliceView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_section_loaded(self, image: ndarray, transform: ndarray):
+    def on_section_loaded(self, image: ndarray, transform: ndarray) -> None:
         self.update_slice_image(image=image)
 
-    def on_channel_select(self, image: ndarray, channel: int):
+    def on_channel_select(self, image: ndarray, channel: int) -> None:
         self.update_slice_image(image=image)
+
+    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
+        self.update_ref_slice_image(image=atlas_slice_image)
 
     def update_slice_image(self, image: ndarray):
         self._slice.set_data(image)
@@ -61,8 +58,8 @@ class SliceView(BaseQtView):
         self._canvas.update()
 
     def update_ref_slice_image(self, image: ndarray):
-        self._slice.set_data(image)
-        self._slice.clim = np.min(image), np.max(image)
+        self._reference_slice.set_data(image)
+        self._reference_slice.clim = (np.min(image), np.max(image))  if np.max(image) - np.min(image) > 0 else (0, 1)
         self._canvas.update()
 
     def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:
@@ -81,6 +78,7 @@ class SliceView(BaseQtView):
 
         elif event.type == 'mouse_wheel':
             self._on_mousewheel_move(increment=int(event.delta[1]))
+
 
     def _on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         x_amp = abs(x2 - x1)
