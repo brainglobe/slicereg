@@ -17,7 +17,7 @@ PyOpenGL-accelerate = "^3.1.5"
 vispy = { git = "https://www.github.com/vispy/vispy.git", rev = "7f3f6f6" }
 
 [tool.poetry.dev-dependencies]
-dvc = { extras = ["gdrive"], version = "^1.11.9" }
+dvc = { extras = ["gdrive"], version = "^2.0" }
 pytest = "^6.2.1"
 pytest-qt = "^3.3.0"
 hypothesis = "^6.0.0"
