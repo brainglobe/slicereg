@@ -2,5 +2,7 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
+  - init: python -m pip install --upgrade pip
+    command: pip install poetry
   - init: poetry install
-    command: poetry run bg-slicereg
+    command: poetry run pytest
