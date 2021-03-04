@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from numpy import ndarray, newaxis, floor, zeros
 from scipy.ndimage import affine_transform
@@ -11,7 +11,7 @@ from slicereg.models.transforms import Plane3D
 
 @dataclass
 class Atlas:
-    volume: ndarray
+    volume: ndarray = field(repr=False)
     resolution_um: float
 
     @property
