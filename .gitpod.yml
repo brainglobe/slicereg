@@ -4,3 +4,7 @@ image:
 tasks:
   - init: export PIP_USER=false && python -m pip install --upgrade pip && pip install poetry && poetry install && poetry shell
     command: pytest
+
+vscode:
+  extensions:
+    - genuitecllc.codetogether@3.2.0:uGCWwQ8zxoiipOQSASw/dA==
