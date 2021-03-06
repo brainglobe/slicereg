@@ -1,19 +1,19 @@
 FROM gitpod/workspace-full-vnc
 
+# Have all the qt stuff appear upon running (easier to debug root problems)
+ENV QT_DEBUG_PLUGINS=1
+
+# Have poetry use global pip by default (pip install --user isn't working in docker for some reason)
+ENV PIP_USER=false 
+
+# Install linux packages
 RUN sudo apt-get update \ 
     && sudo apt-get install -y \
     mesa-utils freeglut3-dev \
     libgl1 \ 
-    libxkbcommon-x11-0 \
+    libxkbcommon-x11-0 \ 
     x11-xserver-utils \
     && sudo rm -rf /var/lib/apt/lists/*
-
-ENV QT_DEBUG_PLUGINS=1
-# Install custom tools, runtimes, etc.
-# For example "bastet", a command-line tetris clone:
-# RUN brew install bastet
-#
-# More information: https://www.gitpod.io/docs/config-docker/
 
 
 # Maybe need:
@@ -24,3 +24,11 @@ ENV QT_DEBUG_PLUGINS=1
 # libgtk-3-dev 
 # mesa-utils freeglut3-dev   # gl funcs and glu funcs
 # libsdl2-dev
+
+# Install python package manager
+RUN python -m pip install --upgrade pip \
+    && pip install poetry 
+
+# Install python packages    
+RUN poetry install
+
