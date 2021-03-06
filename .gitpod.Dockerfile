@@ -2,7 +2,7 @@ FROM gitpod/workspace-full-vnc
 
 RUN sudo apt-get update \ 
     && sudo apt-get install -y x11-apps libgtk-3-dev freeglut3-dev mesa-utils libgl1 \ 
-    && rm -rf /var/lib/apt/lists/*
+    && sudo rm -rf /var/lib/apt/lists/*
 
 ENV QT_DEBUG_PLUGINS=1
 # Install custom tools, runtimes, etc.
