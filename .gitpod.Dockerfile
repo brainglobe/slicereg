@@ -1,7 +1,7 @@
 FROM gitpod/workspace-full-vnc
 
 RUN sudo apt-get update \ 
-    && sudo apt-get install -y mesa-utils xll-utils \
+    && sudo apt-get install -y mesa-utils x11-utils \
     && sudo rm -rf /var/lib/apt/lists/*
 
 ENV QT_DEBUG_PLUGINS=1
