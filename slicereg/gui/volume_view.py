@@ -19,8 +19,7 @@ class VolumeView(BaseQtView):
         self._canvas.central_widget.add_widget(self._viewbox)
         self._viewbox.camera = TurntableCamera(fov=0, azimuth=0, elevation=90, distance=1000)
 
-        self._atlas_volume = Volume(array([[[1, 2]]]) * 1000, parent=self._viewbox.scene, interpolation='nearest')
-        self._atlas_volume.clim = (0., 1000.)
+        self._atlas_volume = Volume(array([[[1, 2]]]) * 1000, parent=self._viewbox.scene)#, interpolation='nearest')
         self._atlas_volume.attach(filters.ColorFilter((1., .5, 0., 1.)))
         self._atlas_volume.set_gl_state('additive', depth_test=False)
 
@@ -36,9 +35,8 @@ class VolumeView(BaseQtView):
         return self._canvas.native
 
     def on_atlas_update(self, volume: ndarray, transform: ndarray):
-        self._atlas_volume.set_data(volume)
+        self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
         self._atlas_volume.transform = MatrixTransform(transform.T)
-        self._atlas_volume.clim = np.min(volume), np.max(volume)
         self._viewbox.camera.center = (0, 0, 0)
         self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
         self._canvas.update()
