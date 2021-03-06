@@ -26,6 +26,7 @@ result = "^0.5.0"
 coverage = {extras = ["toml"], version = "^5.3.1"}
 mypy = "^0.790"
 matplotlib = "^3.3.4"
+jupyterlab = "^3.0.9"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
