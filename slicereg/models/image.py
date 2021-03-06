@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 import numpy as np
-from numpy.core.multiarray import ndarray
+from numpy import ndarray
 
 
 @dataclass(frozen=True)

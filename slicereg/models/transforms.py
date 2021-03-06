@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Tuple
 
-from numpy.core.multiarray import ndarray
+from numpy import ndarray
 from vispy.util.transforms import translate, rotate
 
 
