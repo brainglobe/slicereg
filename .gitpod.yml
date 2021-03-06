@@ -4,3 +4,7 @@ image:
 tasks:
   - init: poetry shell
     command: pytest
+
+vscode:
+  extensions:
+    - genuitecllc.codetogether@3.2.0:uGCWwQ8zxoiipOQSASw/dA==
