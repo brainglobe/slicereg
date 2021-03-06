@@ -1,7 +1,10 @@
 FROM gitpod/workspace-full-vnc
 
 RUN sudo apt-get update \ 
-    && sudo apt-get install -y mesa-utils x11-utils \
+    && sudo apt-get install -y \
+    mesa-utils \
+    libgl1 \ 
+    libx11-xcb1 \
     && sudo rm -rf /var/lib/apt/lists/*
 
 ENV QT_DEBUG_PLUGINS=1
@@ -13,4 +16,9 @@ ENV QT_DEBUG_PLUGINS=1
 
 
 # Maybe need:
-#  libxkbcommon-x11-0 \
+# libxkbcommon-x11-0 \
+# x11-xserver-utils 
+# x11-apps 
+# libgtk-3-dev 
+# freeglut3-dev 
+# libsdl2-dev
