@@ -4,7 +4,6 @@ RUN sudo apt-get update \
     && sudo apt-get install -y \
     mesa-utils \
     libgl1 \ 
-    libx11-xcb1 \
     libxkbcommon-x11-0 \
     && sudo rm -rf /var/lib/apt/lists/*
 
@@ -17,7 +16,8 @@ ENV QT_DEBUG_PLUGINS=1
 
 
 # Maybe need:
-# libxkbcommon-x11-0 \
+# libx11-xcb1 \
+# libxkbcommon-x11-0 \  # needed for qt's xcb 
 # x11-xserver-utils 
 # x11-apps  # provides xeyes, a nice test for if graphics are working at all on x11
 # libgtk-3-dev 
