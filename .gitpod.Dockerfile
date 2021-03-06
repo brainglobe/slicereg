@@ -2,7 +2,7 @@ FROM gitpod/workspace-full-vnc
 
 RUN sudo apt-get update \ 
     && sudo apt-get install -y \
-    mesa-utils \
+    mesa-utils freeglut3-dev \
     libgl1 \ 
     libxkbcommon-x11-0 \
     x11-xserver-utils \
