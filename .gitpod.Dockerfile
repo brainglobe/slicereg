@@ -25,5 +25,3 @@ RUN sudo apt-get update \
 # Install python package manager
 RUN python -m pip install --upgrade pip \
     && pip install poetry 
-
-RUN cd $GITPOD_REPO_ROOT && export PIP_USER=false && poetry install
