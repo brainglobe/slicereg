@@ -2,9 +2,5 @@ image:
   file: .gitpod.Dockerfile
 
 tasks:
-  - init: poetry shell
+  - init: export PIP_USER=false && poetry install && poetry shell
     command: pytest
-
-vscode:
-  extensions:
-    - genuitecllc.codetogether@3.2.0:uGCWwQ8zxoiipOQSASw/dA==

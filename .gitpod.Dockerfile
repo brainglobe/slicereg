@@ -3,9 +3,6 @@ FROM gitpod/workspace-full-vnc
 # Have all the qt stuff appear upon running (easier to debug root problems)
 ENV QT_DEBUG_PLUGINS=1
 
-# Have poetry use global pip by default (pip install --user isn't working in docker for some reason)
-ENV PIP_USER=false 
-
 # Install linux packages
 RUN sudo apt-get update \ 
     && sudo apt-get install -y \
@@ -29,6 +26,5 @@ RUN sudo apt-get update \
 RUN python -m pip install --upgrade pip \
     && pip install poetry 
 
-# Install python packages    
-RUN poetry install
+
 
