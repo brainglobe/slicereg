@@ -42,7 +42,7 @@ class ImageData:
         elif scale < max(1 / self.height, 1 / self.width):
             raise ValueError("Scale is too small, will result in undefined pixel resolution.")
         elif scale > 1:
-            raise NotImplemented("Upsampling not yet supported.")
+            raise NotImplementedError("Upsampling not yet supported.")
         
         return ImageData(
             channels=self.channels[:, ::int(1/scale), ::int(1/scale)],
