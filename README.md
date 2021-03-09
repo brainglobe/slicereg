@@ -124,3 +124,8 @@ Developer documentation is found in README files in the subdirectories.
 Open different folders to learn more about what their purpose is.
 
 
+## Contributors
+
+Many thanks to:
+
+  - Harald Reingruber: Organized Software Crafters to contribute to this project!
