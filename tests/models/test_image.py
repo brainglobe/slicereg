@@ -47,3 +47,11 @@ def test_image_scale_matrix_converts_pixel_resolution_to_um_space(width, height,
         [0, 0, 0, 1],
     ])
     assert np.all(np.isclose(image.scale_matrix, expected))
+
+
+
+@pytest.mark.parametrize("scale", [0.5, 0.25])
+def test_downsampling_image_produces_correct_resolution_and_data_shape(scale):
+    image = ImageData(channels=np.arange(24).reshape(1, 6, 4), pixel_resolution_um=12)
+    image2 = image.resample(scale)
+    assert image2.pixel_resolution_um == (image.pixel_resolution_um / scale)

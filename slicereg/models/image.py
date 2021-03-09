@@ -35,3 +35,10 @@ class ImageData:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
         return np.array([[j, -i, 0., 1.]])
+
+    def resample(self, scale: float) -> ImageData:
+
+        return ImageData(
+            channels=self.channels[:, ::int(1/scale), ::int(1/scale)],
+            pixel_resolution_um=self.pixel_resolution_um / scale
+        )
