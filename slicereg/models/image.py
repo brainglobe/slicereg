@@ -37,6 +37,13 @@ class ImageData:
         return np.array([[j, -i, 0., 1.]])
 
     def resample(self, scale: float) -> ImageData:
+        if scale <= 0:
+            raise ValueError("Scale when resampling must be positive.")
+        elif scale < max(1 / self.height, 1 / self.width):
+            raise ValueError("Scale is too small, will result in undefined pixel resolution.")
+        elif scale > 1:
+            raise NotImplemented("Upsampling not yet supported.")
+        
 
         return ImageData(
             channels=self.channels[:, ::int(1/scale), ::int(1/scale)],

@@ -55,3 +55,14 @@ def test_downsampling_image_produces_correct_resolution_and_data_shape(scale):
     image = ImageData(channels=np.arange(24).reshape(1, 6, 4), pixel_resolution_um=12)
     image2 = image.resample(scale)
     assert image2.pixel_resolution_um == (image.pixel_resolution_um / scale)
+
+
+@given(scale=floats(allow_infinity=False, allow_nan=False, max_value=1))
+def test_downsampling_beyond_dimensions_produces_valueerror(scale):
+    image = ImageData(channels=np.arange(24).reshape(1, 4, 6), pixel_resolution_um=12)
+    if scale <= 0:
+        with pytest.raises(ValueError,  match=r".* positive.*"):
+            image.resample(scale)
+    elif scale < 0.25:
+        with pytest.raises(ValueError,  match=r".* small.*"):
+            image.resample(scale)
