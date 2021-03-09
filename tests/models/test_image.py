@@ -1,5 +1,6 @@
 import numpy as np
 import pytest
+from pytest import approx
 from hypothesis import given
 from hypothesis.strategies import integers, floats
 
@@ -55,6 +56,9 @@ def test_downsampling_image_produces_correct_resolution_and_data_shape(scale):
     image = ImageData(channels=np.arange(24).reshape(1, 6, 4), pixel_resolution_um=12)
     image2 = image.resample(scale)
     assert image2.pixel_resolution_um == (image.pixel_resolution_um / scale)
+    assert image2.num_channels == image.num_channels
+    assert approx(image.width * scale == image2.width, abs=1)
+    assert approx(image.height * scale == image2.height, abs=1)
 
 
 @given(scale=floats(allow_infinity=False, allow_nan=False, max_value=1))
@@ -66,3 +70,12 @@ def test_downsampling_beyond_dimensions_produces_valueerror(scale):
     elif scale < 0.25:
         with pytest.raises(ValueError,  match=r".* small.*"):
             image.resample(scale)
+
+
+@pytest.mark.parametrize("scale", [0.5, 0.33, 0.25, 0.242])
+def test_downsampling_image_produces_im_with_similar_statistical_properties_as_original(scale):
+    image = ImageData(channels=np.random.random((2, 120, 120)), pixel_resolution_um=12)
+    im2 = image.resample(scale)
+    assert np.all(np.isclose(image.channels.mean(), im2.channels.mean(), rtol=3e-2))
+    assert np.all(np.isclose(image.channels.std(), im2.channels.std(), rtol=3e-2))
+    

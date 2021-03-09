@@ -44,7 +44,6 @@ class ImageData:
         elif scale > 1:
             raise NotImplemented("Upsampling not yet supported.")
         
-
         return ImageData(
             channels=self.channels[:, ::int(1/scale), ::int(1/scale)],
             pixel_resolution_um=self.pixel_resolution_um / scale
