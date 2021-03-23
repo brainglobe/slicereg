@@ -7,6 +7,7 @@ from pytest import approx
 
 from slicereg.models.image import ImageData
 from slicereg.models.section import Section
+from slicereg.models.atlas import Atlas
 from slicereg.models.transforms import Plane2D, Plane3D
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
@@ -77,4 +78,25 @@ def test_resample_section_gets_new_section_with_resampled_image():
     section2 = section.resample(0.5)
     assert isinstance(section2, Section)
     assert section2.image.pixel_resolution_um == 24
+    
+
+def test_section_registration_cuts_correctly():
+    volume = np.zeros((3, 3, 3))
+    volume[1, 1, 1] = 1 
+
+    atlas = Atlas(
+        volume=volume,
+        resolution_um=1.,
+    )
+    section = Section(
+        image=ImageData(channels=np.ones((1, 3, 3)), pixel_resolution_um=1.),
+        plane_3d=Plane3D(z=1),
+    )
+    atlas_slice = section.register(atlas).image.channels[0]
+    expected_slice = np.array([
+        [0, 0, 0],
+        [0, 1, 0],
+        [0, 0, 0],
+    ])
+    assert np.all(atlas_slice == expected_slice)
     

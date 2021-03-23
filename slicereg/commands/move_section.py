@@ -22,9 +22,7 @@ class MoveSectionCommand(BaseCommand):
         section = sections[0]
         new_section = section.translate(dx=x, dy=y, dz=z).rotate(dx=rx, dy=ry, dz=rz)
 
-        atlas_section = atlas.slice(plane=new_section.plane_3d)
-        assert atlas_section.image.num_channels == 1, f"{atlas_section.image.num_channels, atlas_section.image.shape}"
-        atlas_slice_image = atlas_section.image.channels[0]
+        atlas_section = section.register(atlas=atlas)
 
         self._section_repo.save_section(new_section)
-        self.section_moved.emit(transform=new_section.affine_transform, atlas_slice_image=atlas_slice_image)
+        self.section_moved.emit(transform=new_section.affine_transform, atlas_slice_image=atlas_section.image.channels[0])

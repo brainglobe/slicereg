@@ -3,8 +3,11 @@ from __future__ import annotations
 from dataclasses import dataclass, field, replace
 from typing import Tuple, cast
 from uuid import UUID, uuid4
+from functools import lru_cache
 
 from numpy import ndarray
+import numpy as np
+from numba import njit, prange
 
 from slicereg.models.image import ImageData
 from slicereg.models.transforms import Plane2D, Plane3D
@@ -41,3 +44,39 @@ class Section:
 
     def resample(self, scale: float) -> Section:
         return replace(self, image=self.image.resample(scale=scale))
+
+    def register(self, atlas: Atlas) -> Section:
+        width, height = self.image.width, self.image.height
+        inds = inds_homog(height=height, width=width)
+        res = 1 / atlas.resolution_um
+        scale_mat = np.diag([res, res, res, 1.])
+        brightness_3d = _register(inds, volume=atlas.volume, transform=scale_mat @ self.affine_transform)
+        registered_slice = Section(
+            image=ImageData(channels=brightness_3d.reshape(1, width, height), pixel_resolution_um=atlas.resolution_um),
+            plane_3d=self.plane_3d,
+            thickness_um=self.thickness_um
+        )
+        return registered_slice
+
+
+
+
+@lru_cache()
+def inds_homog(height, width):
+    grid = np.mgrid[:width, :height, :1].reshape(-1, width*height)
+    ones = np.ones(width*height, dtype=int)
+    full = np.vstack((grid, ones)).astype(float)
+    return full
+
+
+@njit(parallel=True, fastmath=True)
+def _register(inds, volume, transform):
+    atlas_coords =  inds.T @ transform.T
+    atlas_coords = atlas_coords[:, :3]
+    
+    vals = np.empty(atlas_coords.shape[0], dtype=volume.dtype)
+    for ind in prange(atlas_coords.shape[0]):
+        vals[ind] = volume[int(atlas_coords[ind, 0]), int(atlas_coords[ind, 1]), int(atlas_coords[ind, 2])]
+    return vals
+
+

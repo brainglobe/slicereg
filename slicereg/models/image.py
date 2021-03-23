@@ -48,3 +48,6 @@ class ImageData:
             channels=self.channels[:, ::int(1/scale), ::int(1/scale)],
             pixel_resolution_um=self.pixel_resolution_um / scale
         )
+
+    
+
