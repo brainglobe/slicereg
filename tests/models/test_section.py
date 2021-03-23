@@ -100,3 +100,24 @@ def test_section_registration_cuts_correctly():
     ])
     assert np.all(atlas_slice == expected_slice)
     
+
+def test_section_registration_cuts_correctly_with_diff_resolutions():
+    volume = np.zeros((3, 3, 3))
+    volume[1, 1, 1] = 1 
+
+    atlas = Atlas(
+        volume=volume,
+        resolution_um=10.,
+    )
+    section = Section(
+        image=ImageData(channels=np.ones((1, 3, 3)), pixel_resolution_um=1.),
+        plane_3d=Plane3D(x=8, y=8, z=15),
+    )
+    atlas_slice = section.register(atlas).image.channels[0]
+    expected_slice = np.array([
+        [0, 0, 0],
+        [0, 0, 0],
+        [0, 0, 1],
+    ])
+    assert np.all(atlas_slice == expected_slice)
+    
