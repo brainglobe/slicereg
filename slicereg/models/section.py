@@ -38,3 +38,6 @@ class Section:
 
     def recenter(self) -> Section:
         return replace(self, plane_2d=replace(self.plane_2d, x=-self.image.width / 2, y=-self.image.height / 2))
+
+    def resample(self, scale: float) -> Section:
+        return replace(self, image=self.image.resample(scale=scale))

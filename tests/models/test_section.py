@@ -70,3 +70,11 @@ def test_section_recenter_sets_shift_to_half_the_width_and_height(width, height)
     assert section.plane_2d.x == 0 and section.plane_2d.y == 0
     section2 = section.recenter()
     assert section2.plane_2d.x == approx(-width / 2) and section2.plane_2d.y == approx(-height / 2)
+
+
+def test_resample_section_gets_new_section_with_resampled_image():
+    section = Section(image=ImageData(channels=np.random.random((3, 4, 4)), pixel_resolution_um=12))
+    section2 = section.resample(0.5)
+    assert isinstance(section2, Section)
+    assert section2.image.pixel_resolution_um == 24
+    
