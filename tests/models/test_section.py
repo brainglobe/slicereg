@@ -101,11 +101,11 @@ def test_section_registration_cuts_correctly():
     ])
     assert np.all(atlas_slice == expected_slice)
     
-    
+
 cases = [
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 8, "y": 8, "z": 15},
         "expected": [
             [0, 0, 0],
@@ -115,7 +115,7 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 8, "y": 19, "z": 15},
         "expected": [
             [0, 0, 0],
@@ -125,7 +125,7 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 19, "y": 8, "z": 15},
         "expected": [
             [0, 0, 1],
@@ -135,7 +135,7 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 19, "y": 19, "z": 15},
         "expected": [
             [1, 0, 0],
@@ -145,7 +145,7 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 19, "y": 15, "z": 15},
         "expected": [
             [1, 1, 1],
@@ -155,7 +155,7 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 15, "y": 19, "z": 15},
         "expected": [
             [1, 0, 0],
@@ -165,7 +165,7 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 15, "y": 15, "z": 15},
         "expected": [
             [1, 1, 1],
@@ -175,29 +175,82 @@ cases = [
     },
     {
         "atlas_res": 10,
-        "pixel_res": 1,
+        "section_res": 1,
         "pos": {"x": 9, "y": 8, "z": 15},
         "expected": [
             [0, 0, 0],
             [0, 0, 1],
             [0, 0, 1],
         ]
-    }
+    },
+    {
+        "atlas_res": 10,
+        "section_res": 1,
+        "pos": {"x": 13, "y": 16, "z": 12},
+        "expected": [
+            [1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "section_res": 1,
+        "pos": {"x": 5, "y": 23, "z": 28},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "section_res": 1,
+        "pos": {"x": 500, "y": 230, "z": 280},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 4,
+        "section_res": 2,
+        "pos": {"x": 5, "y": 3, "z": 5},
+        "expected": [
+            [0, 0, 1],
+            [0, 0, 1],
+            [0, 0, 1],
+        ]
+    },
+    {
+        "atlas_res": 4,
+        "section_res": 4,
+        "pos": {"x": 0, "y": 0, "z": 0},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
 ]
 @pytest.mark.parametrize("case", cases)
 def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
-    volume[1, 1, 1] = 1 
+    volume[1, 1, 1] = 1
     atlas = Atlas(
         volume=volume,
         resolution_um=case['atlas_res'],
     )
     section = Section(
-        image=ImageData(channels=np.ones((1, 3, 3)), pixel_resolution_um=case['pixel_res']),
-        plane_3d=Plane3D(**case['pos']),
+        image=ImageData(
+            channels=np.ones((1, 3, 3)), 
+            pixel_resolution_um=case["section_res"],
+        ),
+        plane_3d=Plane3D(**case["pos"]),
     )
-    atlas_slice = section.register(atlas).image.channels[0]
-    expected_slice = np.array(case['expected'])
+    atlas_slice = section.register(atlas).image.channels[0].astype(int)
+    expected_slice = np.array(case['expected']).astype(int)
     assert np.all(atlas_slice == expected_slice)
 
 
