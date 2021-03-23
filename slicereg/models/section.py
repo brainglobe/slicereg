@@ -45,14 +45,16 @@ class Section:
     def resample(self, scale: float) -> Section:
         return replace(self, image=self.image.resample(scale=scale))
 
-    def register(self, atlas: Atlas) -> Section:
+    def register(self, atlas: Atlas) -> Section:  # type: ignore
         width, height = self.image.width, self.image.height
         inds = inds_homog(height=height, width=width)
         res = 1 / atlas.resolution_um
         scale_mat = np.diag([res, res, res, 1.])
         brightness_3d = _register(inds, volume=atlas.volume, transform=scale_mat @ self.affine_transform)
         registered_slice = Section(
-            image=ImageData(channels=brightness_3d.reshape(1, width, height), pixel_resolution_um=atlas.resolution_um),
+            image=ImageData(
+                channels=brightness_3d.reshape(1, width, height), 
+                pixel_resolution_um=self.image.pixel_resolution_um),
             plane_3d=self.plane_3d,
             thickness_um=self.thickness_um
         )
