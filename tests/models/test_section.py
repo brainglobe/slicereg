@@ -13,6 +13,7 @@ from slicereg.models.transforms import Plane2D, Plane3D
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
 
 
+
 @given(
     i=integers(0, 2), j=integers(0, 3), # Image coordinates
     dx=sensible_floats, dy=sensible_floats, dz=sensible_floats,  # Section Position offsets
@@ -100,24 +101,109 @@ def test_section_registration_cuts_correctly():
     ])
     assert np.all(atlas_slice == expected_slice)
     
-
-def test_section_registration_cuts_correctly_with_diff_resolutions():
+    
+cases = [
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 8, "y": 8, "z": 15},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 1],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 8, "y": 19, "z": 15},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [1, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 19, "y": 8, "z": 15},
+        "expected": [
+            [0, 0, 1],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 19, "y": 19, "z": 15},
+        "expected": [
+            [1, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 19, "y": 15, "z": 15},
+        "expected": [
+            [1, 1, 1],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 15, "y": 19, "z": 15},
+        "expected": [
+            [1, 0, 0],
+            [1, 0, 0],
+            [1, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 15, "y": 15, "z": 15},
+        "expected": [
+            [1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "pixel_res": 1,
+        "pos": {"x": 9, "y": 8, "z": 15},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 1],
+        ]
+    }
+]
+@pytest.mark.parametrize("case", cases)
+def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
     volume[1, 1, 1] = 1 
-
     atlas = Atlas(
         volume=volume,
-        resolution_um=10.,
+        resolution_um=case['atlas_res'],
     )
     section = Section(
-        image=ImageData(channels=np.ones((1, 3, 3)), pixel_resolution_um=1.),
-        plane_3d=Plane3D(x=8, y=8, z=15),
+        image=ImageData(channels=np.ones((1, 3, 3)), pixel_resolution_um=case['pixel_res']),
+        plane_3d=Plane3D(**case['pos']),
     )
     atlas_slice = section.register(atlas).image.channels[0]
-    expected_slice = np.array([
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 1],
-    ])
+    expected_slice = np.array(case['expected'])
     assert np.all(atlas_slice == expected_slice)
+
+
+
+# different dimensions  
+# rotate
+# plane_2d: image origin
+# (get visibility on atlas indices)
     
