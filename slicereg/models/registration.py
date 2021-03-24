@@ -7,6 +7,7 @@ from numba import njit, prange
 
 from slicereg.models.section import Section, ImageData
 from slicereg.models.atlas import Atlas
+from slicereg.models.transforms import Plane3D
 
 def register(section: Section, atlas: Atlas) -> Section:
     width, height = section.image.width, section.image.height
@@ -33,9 +34,13 @@ def inds_homog(height, width):
     return full
 
 
+flip_xy = Plane3D(rz=-90).affine_transform
+
+
 @njit(parallel=True, fastmath=True)
-def _register(inds, volume, transform):
-    atlas_coords =  inds.T @ transform.T
+def _register(inds, volume, transform, flip_xy=flip_xy):
+    atlas_coords =  inds.T @ flip_xy.T @ transform.T
+    # atlas_coords =  inds.T @ transform
     atlas_coords = atlas_coords[:, :3]
     
     ii, jj, kk = volume.shape
