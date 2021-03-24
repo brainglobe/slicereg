@@ -34,13 +34,12 @@ def inds_homog(height, width):
     return full
 
 
-flip_xy = Plane3D(rz=-90).affine_transform
+# flip_xy = Plane3D(rz=-90).affine_transform
 
 
 @njit(parallel=True, fastmath=True)
-def _register(inds, volume, transform, flip_xy=flip_xy):
-    atlas_coords =  inds.T @ flip_xy.T @ transform.T
-    # atlas_coords =  inds.T @ transform
+def _register(inds, volume, transform):
+    atlas_coords =  inds.T @ transform.T
     atlas_coords = atlas_coords[:, :3]
     
     ii, jj, kk = volume.shape
