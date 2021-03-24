@@ -6,6 +6,9 @@ from hypothesis.strategies import integers, floats
 
 from slicereg.models.image import ImageData
 
+
+np.random.seed(100)  # todo: replace with SeedGenerator, get better control
+
 cases = [
     ((2, 3, 2), 2),
     ((6, 30, 10), 6),
