@@ -1,7 +1,8 @@
 from typing import Optional
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
-    QHBoxLayout, QLabel
+    QHBoxLayout, QLabel, QSlider
+from PySide2.QtCore import Qt
 from vispy.app import Timer
 
 from slicereg.gui.base import BaseQtView
@@ -34,9 +35,26 @@ class MainWindow(BaseQtView):
         side_layout = QVBoxLayout()
         main_layout.addLayout(side_layout)
 
+        # Section Buttons
         load_image_button = QPushButton("Load Section")
         side_layout.addWidget(load_image_button)
         load_image_button.clicked.connect(self.show_load_image_dialog)
+
+        # Scale Slider (Set Section Resolution)
+        scale_hbox = QHBoxLayout()
+        side_layout.addLayout(scale_hbox)
+
+        self.resample_slider = QSlider(Qt.Horizontal)
+        scale_hbox.addWidget(self.resample_slider)
+        self.resample_slider.setMinimum(1)
+        self.resample_slider.setMaximum(100)
+        self.resample_slider.valueChanged.connect(self._on_resample_slider_valuechange)
+        self.resample_slider.sliderReleased.connect(self._on_resample_slider_released)
+        
+        self.sample_label = QLabel(text="Scale")
+        scale_hbox.addWidget(self.sample_label)
+
+
 
         # Atlas BUttons
         button_hbox = QHBoxLayout()
@@ -45,6 +63,8 @@ class MainWindow(BaseQtView):
         atlas_buttons = QButtonGroup(self.win)
         atlas_buttons.setExclusive(True)
         atlas_buttons.buttonToggled.connect(self.atlas_button_toggled)
+
+        
 
         for resolution in [100, 25, 10]:
             atlas_button = QPushButton(f"{resolution}um")
@@ -80,6 +100,17 @@ class MainWindow(BaseQtView):
 
     def on_error_raised(self, msg: str):
         self.show_temp_title(msg)
+
+    def _on_resample_slider_valuechange(self, res: int):
+        self.sample_label.setText(str(res))
+
+    def _on_resample_slider_released(self):
+        resolution = self.resample_slider.value()
+        self.set_section_image_resolution(res=float(resolution))
+
+    def set_section_image_resolution(self, res: float):
+        raise NotImplementedError("Connect to ResampleSectionCommand before using.")
+        
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.

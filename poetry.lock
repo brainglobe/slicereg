@@ -356,7 +356,7 @@ watch = ["pyinotify"]
 
 [[package]]
 name = "dvc"
-version = "2.0.7"
+version = "2.0.10"
 description = "Git for data scientists - manage your code and data together"
 category = "dev"
 optional = false
@@ -416,7 +416,7 @@ oss = ["oss2 (==2.6.1)", "pycryptodome (<3.9.9)"]
 s3 = ["boto3 (>=1.9.201)"]
 ssh = ["paramiko[invoke] (>=2.7.0)"]
 ssh_gssapi = ["paramiko[gssapi,invoke] (>=2.7.0)"]
-tests = ["wheel (>=0.31.1)", "pytest (>=6.0.1,<6.2.2)", "pytest-docker (>=0.7.2)", "pytest-timeout (>=1.3.3)", "pytest-cov (>=2.6.1)", "pytest-xdist (>=1.26.1)", "pytest-mock (==1.11.2)", "pytest-lazy-fixture", "pytest-tap", "flaky (>=3.5.3)", "mock (>=3.0.0)", "xmltodict (>=0.11.0)", "google-compute-engine (==2.8.13)", "pygments", "collective.checkdocs", "psutil", "pydocstyle (<4.0)", "jaraco.windows (==3.9.2)", "mock-ssh-server (>=0.8.2)", "moto (==1.3.16.dev122)", "aws-sam-translator (<1.29.0)", "urllib3 (<1.26.0)", "rangehttpserver (==1.2.0)", "beautifulsoup4 (==4.4.0)", "pylint (==2.7.2)", "pylint-pytest (==0.3.0)", "pylint-plugin-utils (==0.6)", "wget", "filelock", "mypy", "wsgidav", "crc32c", "google-cloud-storage (==1.19.0)"]
+tests = ["wheel (>=0.31.1)", "pytest (>=6.0.1,<6.2.2)", "pytest-docker (>=0.7.2)", "pytest-timeout (>=1.3.3)", "pytest-cov (>=2.6.1)", "pytest-xdist (>=1.26.1)", "pytest-mock (==1.11.2)", "pytest-lazy-fixture", "pytest-tap", "flaky (>=3.5.3)", "mock (>=3.0.0)", "xmltodict (>=0.11.0)", "google-compute-engine (==2.8.13)", "pygments", "collective.checkdocs", "psutil", "pydocstyle (<4.0)", "jaraco.windows (==3.9.2)", "mock-ssh-server (>=0.8.2)", "moto (==1.3.16.dev122)", "aws-sam-translator (<1.29.0)", "urllib3 (<1.26.0)", "rangehttpserver (==1.2.0)", "beautifulsoup4 (==4.4.0)", "pylint (==2.7.2)", "pylint-pytest (==1.0.3)", "pylint-plugin-utils (==0.6)", "wget", "filelock", "mypy", "wsgidav", "crc32c", "google-cloud-storage (==1.19.0)"]
 webdav = ["webdavclient3 (>=3.14.5)"]
 webhdfs = ["hdfs (==2.5.8)"]
 
@@ -1787,6 +1787,17 @@ typing-extensions = ">=3.7.4,<4.0.0"
 jupyter = ["ipywidgets (>=7.5.1,<8.0.0)"]
 
 [[package]]
+name = "rope"
+version = "0.18.0"
+description = "a python refactoring library..."
+category = "dev"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["pytest"]
+
+[[package]]
 name = "rsa"
 version = "4.7.2"
 description = "Pure-Python RSA implementation"
@@ -2121,7 +2132,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8,<3.9"
-content-hash = "f9eaf74171591323b5c1dcb956e56bbad8a30679c1bf955eb4799caba4edb848"
+content-hash = "46f3e153028acf49082428c2e89aad2094013af9f82138d4613aa2bcce71d510"
 
 [metadata.files]
 anyio = [
@@ -2375,8 +2386,8 @@ dulwich = [
     {file = "dulwich-0.20.20.tar.gz", hash = "sha256:426959b9705fadcc6c820e5adf3291d71a48aba0afccf7411422e3308f115f87"},
 ]
 dvc = [
-    {file = "dvc-2.0.7-py2.py3-none-any.whl", hash = "sha256:d1b021d4c216a542fdb2d293b233daf61aeff6bb6b37e9cca9180d3fcd37c968"},
-    {file = "dvc-2.0.7.tar.gz", hash = "sha256:e1c230c4fb367ce30f10e1f2c7c03fa7e4b10c086f872fe27b66c35d74cd92a2"},
+    {file = "dvc-2.0.10-py2.py3-none-any.whl", hash = "sha256:29545589cd79e11c617028e71b4384da35fb6f30dfc3844ca02ea43bc5374910"},
+    {file = "dvc-2.0.10.tar.gz", hash = "sha256:e7efa0777c4edc0628f8731ff664b98052e1c5036a2402f4071325db80d55218"},
 ]
 entrypoints = [
     {file = "entrypoints-0.3-py2.py3-none-any.whl", hash = "sha256:589f874b313739ad35be6e0cd7efde2a4e9b6fea91edcc34e58ecbb8dbe56d19"},
@@ -3159,6 +3170,9 @@ result = [
 rich = [
     {file = "rich-9.13.0-py3-none-any.whl", hash = "sha256:9004f6449c89abadf689dad6f92393e760b8c3a8a8c4ea6d8d474066307c0e66"},
     {file = "rich-9.13.0.tar.gz", hash = "sha256:d59e94a0e3e686f0d268fe5c7060baa1bd6744abca71b45351f5850a3aaa6764"},
+]
+rope = [
+    {file = "rope-0.18.0.tar.gz", hash = "sha256:786b5c38c530d4846aa68a42604f61b4e69a493390e3ca11b88df0fbfdc3ed04"},
 ]
 rsa = [
     {file = "rsa-4.7.2-py3-none-any.whl", hash = "sha256:78f9a9bf4e7be0c5ded4583326e7461e3a3c5aae24073648b4bdfa797d78c9d2"},
