@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"name": "Project Root",
+			"path": "."
+		},
+		{
+			"name": "Source Code",
+			"path": "./slicereg"
+		},
+		{
+			"name": "Tests",
+			"path": "./tests"
+		},
+	],
+	"settings": {
+		"python.pythonPath": ".venv\\Scripts\\python.exe",
+		"files.exclude": {
+			"**/.git": true,
+			"**/.svn": true,
+			"**/.hg": true,
+			"**/CVS": true,
+			"**/.DS_Store": true,
+			"**/.*": true,
+			"**/__*": true
+		}
+	}
+}
