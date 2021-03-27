@@ -54,31 +54,23 @@ def test_image_scale_matrix_converts_pixel_resolution_to_um_space(width, height,
 
 
 
-@pytest.mark.parametrize("scale", [0.5, 0.25])
-def test_downsampling_image_produces_correct_resolution_and_data_shape(scale):
-    image = ImageData(channels=np.arange(24).reshape(1, 6, 4), pixel_resolution_um=12)
-    image2 = image.resample(scale)
-    assert image2.pixel_resolution_um == (image.pixel_resolution_um / scale)
+@given(to_resolution=floats(allow_nan=False, allow_infinity=False, min_value=0.5, max_value=200))
+def test_downsampling_image_produces_correct_resolution_and_data_shape(to_resolution):
+    from_resolution = 12
+    image = ImageData(channels=np.arange(24).reshape(1, 6, 4), pixel_resolution_um=from_resolution)
+    image2 = image.resample(resolution_um=to_resolution)
+    assert image2.pixel_resolution_um == to_resolution
     assert image2.num_channels == image.num_channels
-    assert approx(image.width * scale == image2.width, abs=1)
-    assert approx(image.height * scale == image2.height, abs=1)
+
+    scale_ratio = from_resolution / to_resolution
+    assert approx(image.width * scale_ratio == image2.width, abs=1)
+    assert approx(image.height * scale_ratio == image2.height, abs=1)
 
 
-@given(scale=floats(allow_infinity=False, allow_nan=False, max_value=1))
-def test_downsampling_beyond_dimensions_produces_valueerror(scale):
+@given(to_resolution=floats(allow_infinity=False, allow_nan=False, max_value=0))
+def test_downsampling_beyond_dimensions_produces_valueerror(to_resolution):
     image = ImageData(channels=np.arange(24).reshape(1, 4, 6), pixel_resolution_um=12)
-    if scale <= 0:
-        with pytest.raises(ValueError,  match=r".* positive.*"):
-            image.resample(scale)
-    elif scale < 0.25:
-        with pytest.raises(ValueError,  match=r".* small.*"):
-            image.resample(scale)
-
-
-@pytest.mark.parametrize("scale", [0.5, 0.33, 0.25, 0.242])
-def test_downsampling_image_produces_im_with_similar_statistical_properties_as_original(scale):
-    image = ImageData(channels=np.random.random((2, 120, 120)), pixel_resolution_um=12)
-    im2 = image.resample(scale)
-    assert np.all(np.isclose(image.channels.mean(), im2.channels.mean(), rtol=3e-2))
-    assert np.all(np.isclose(image.channels.std(), im2.channels.std(), rtol=3e-2))
+    with pytest.raises(ValueError,  match=r".* positive.*"):
+        image.resample(resolution_um=to_resolution)
     
+

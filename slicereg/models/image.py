@@ -4,6 +4,7 @@ from dataclasses import dataclass, field
 
 import numpy as np
 from numpy import ndarray
+from scipy import ndimage
 
 
 @dataclass(frozen=True)
@@ -36,17 +37,15 @@ class ImageData:
 
         return np.array([[j, -i, 0., 1.]])
 
-    def resample(self, scale: float) -> ImageData:
-        if scale <= 0:
-            raise ValueError("Scale when resampling must be positive.")
-        elif scale < max(1 / self.height, 1 / self.width):
-            raise ValueError("Scale is too small, will result in undefined pixel resolution.")
-        elif scale > 1:
-            raise NotImplementedError("Upsampling not yet supported.")
-        
+    def resample(self, resolution_um: float) -> ImageData:
+        if resolution_um <= 0:
+            raise ValueError("Resolution must be positive.")
+
+        zoom_level = resolution_um / self.pixel_resolution_um
+        zoomed_channels = ndimage.zoom(self.channels, zoom=(1, zoom_level, zoom_level))
         return ImageData(
-            channels=self.channels[:, ::int(1/scale), ::int(1/scale)],
-            pixel_resolution_um=self.pixel_resolution_um / scale
+            channels=zoomed_channels,
+            pixel_resolution_um=resolution_um,
         )
 
     

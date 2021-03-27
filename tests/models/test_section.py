@@ -76,7 +76,7 @@ def test_section_recenter_sets_shift_to_half_the_width_and_height(width, height)
 
 def test_resample_section_gets_new_section_with_resampled_image():
     section = Section(image=ImageData(channels=np.random.random((3, 4, 4)), pixel_resolution_um=12))
-    section2 = section.resample(0.5)
+    section2 = section.resample(resolution_um=24)
     assert isinstance(section2, Section)
     assert section2.image.pixel_resolution_um == 24
     
