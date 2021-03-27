@@ -13,7 +13,7 @@ class MoveSectionCommand(BaseCommand):
     _atlas_repo: BaseAtlasRepo
     section_moved: Signal = Signal()
 
-    def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.):
+    def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.):  # type: ignore
         sections = self._section_repo.sections
         atlas = self._atlas_repo.get_atlas()
         if not sections or not atlas:

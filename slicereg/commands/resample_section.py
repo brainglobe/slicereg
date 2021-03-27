@@ -10,7 +10,7 @@ class ResampleSectionCommand(BaseCommand):
     _repo: BaseSectionRepo
     section_resampled: Signal
 
-    def __call__(self, resolution_um: float) -> None:
+    def __call__(self, resolution_um: float) -> None:  # type: ignore
         section = self._repo.sections[0]
         new_section = section.resample(resolution_um=resolution_um)
         self._repo.save_section(section=new_section)
