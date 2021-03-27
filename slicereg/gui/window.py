@@ -4,6 +4,7 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QF
     QHBoxLayout, QLabel, QSlider
 from PySide2.QtCore import Qt
 from vispy.app import Timer
+import numpy as np
 
 from slicereg.gui.base import BaseQtView
 
@@ -102,15 +103,17 @@ class MainWindow(BaseQtView):
         self.show_temp_title(msg)
 
     def _on_resample_slider_valuechange(self, res: int):
-        self.sample_label.setText(str(res))
+        self.sample_label.setText(str(res) + "...")
 
     def _on_resample_slider_released(self):
         resolution = self.resample_slider.value()
-        self.set_section_image_resolution(res=float(resolution))
+        self.set_section_image_resolution(resolution_um=float(resolution))
 
-    def set_section_image_resolution(self, res: float):
+    def set_section_image_resolution(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
+    def on_section_resampled(self, resolution_um: float, section_image: np.ndarray, transform: np.ndarray):
+        self.sample_label.setText(str(resolution_um))
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.

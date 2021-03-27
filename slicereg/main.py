@@ -5,6 +5,7 @@ from slicereg.commands.load_atlas import LoadAtlasCommand
 from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
+from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg import config
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
@@ -63,6 +64,12 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         request_coord_data = GetPixelRegistrationDataCommand(_repo=section_repo)
         slice_view.get_coord_data = request_coord_data  # type: ignore
         request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
+
+        resample_section = ResampleSectionCommand(_repo=section_repo)
+        window.set_section_image_resolution = resample_section  # type: ignore
+        resample_section.section_resampled.connect(window.on_section_resampled)
+        resample_section.section_resampled.connect(slice_view.on_section_resampled)
+        resample_section.section_resampled.connect(volume_view.on_section_resampled)
 
 
     # Start the Event Loop!

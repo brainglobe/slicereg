@@ -57,6 +57,11 @@ class VolumeView(BaseQtView):
         self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 
+    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray):
+        self._section_image.set_data(section_image)
+        self._section_image.transform = MatrixTransform(transform.T)
+        self._canvas.update()
+
     # Controller Code
 
     def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:

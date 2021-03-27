@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.base import BaseCommand
@@ -8,7 +8,7 @@ from slicereg.commands.utils import Signal
 @dataclass
 class ResampleSectionCommand(BaseCommand):
     _repo: BaseSectionRepo
-    section_resampled: Signal
+    section_resampled: Signal = field(default_factory=Signal)
 
     def __call__(self, resolution_um: float) -> None:  # type: ignore
         section = self._repo.sections[0]

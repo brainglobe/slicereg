@@ -41,7 +41,7 @@ class ImageData:
         if resolution_um <= 0:
             raise ValueError("Resolution must be positive.")
 
-        zoom_level = resolution_um / self.pixel_resolution_um
+        zoom_level = self.pixel_resolution_um / resolution_um
         zoomed_channels = ndimage.zoom(self.channels, zoom=(1, zoom_level, zoom_level))
         return ImageData(
             channels=zoomed_channels,
