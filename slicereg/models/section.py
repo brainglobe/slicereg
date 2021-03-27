@@ -40,7 +40,8 @@ class Section:
         return replace(self, plane_2d=replace(self.plane_2d, x=-self.image.width / 2, y=-self.image.height / 2))
 
     def resample(self, resolution_um: float) -> Section:
-        return replace(self, image=self.image.resample(resolution_um=resolution_um))
+        new_section = replace(self, image=self.image.resample(resolution_um=resolution_um))
+        return new_section.recenter()
 
     def with_new_image(self, image: ImageData) -> Section:
         return replace(self, image=image, id=uuid4())

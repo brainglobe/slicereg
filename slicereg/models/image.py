@@ -26,7 +26,7 @@ class ImageData:
 
     @property
     def scale_matrix(self):
-        scale = 1 / self.pixel_resolution_um
+        scale = self.pixel_resolution_um
         matrix = np.diag([scale, scale, 1., 1.])
         assert matrix.shape == (4, 4)
         return matrix

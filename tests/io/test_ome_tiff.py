@@ -13,4 +13,4 @@ def test_tiff_reader_gets_sliceimages_from_example_files(filename, shape, pixel_
     assert slice_image.channels.ndim == 3
     assert slice_image.channels.shape == shape
     assert not np.any(np.isnan(slice_image.channels))
-    assert slice_image.pixel_resolution_um == approx(1 / pixel_size_um, abs=1e-2)
+    assert slice_image.pixel_resolution_um == approx(pixel_size_um, abs=1e-2)

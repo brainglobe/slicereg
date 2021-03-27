@@ -20,4 +20,4 @@ class OmeTiffReader(BaseSectionReader):
         assert res_x == res_y, \
             "Pixels are not square"
 
-        return ImageData(channels=image, pixel_resolution_um=1 / float(res_x))
+        return ImageData(channels=image, pixel_resolution_um=float(res_x))

@@ -28,14 +28,14 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, d
         plane_3d=Plane3D(x=dx, y=dy, z=dz),
     )
     x, y, z = section.pos_from_coord(i=i, j=j)  # observed 3D positions
-    assert x == approx((j * 1/pixel_resolution) + dx)
-    assert y == approx((-i * 1/pixel_resolution) + dy)
+    assert x == approx((j * pixel_resolution) + dx)
+    assert y == approx((-i * pixel_resolution) + dy)
     assert z == approx(dz)
 
 
 @given(
     j=integers(0, 39),  # image coordinates on i-intercept to simplify trig math (e.g. (0, j))
-    pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
+    pixel_resolution=floats(min_value=.0001, max_value=1000, allow_nan=False, allow_infinity=False),
     x_shift=sensible_floats, y_shift=sensible_floats,  # planar shifts
     theta=sensible_floats,  # planar rotations
 )
@@ -45,8 +45,8 @@ def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, p
         plane_2d=Plane2D(x=x_shift, y=y_shift, theta=theta),
     )
     x, y, z = section.pos_from_coord(i=0, j=j)
-    assert x == approx((1 / pixel_resolution) * (j * cos(radians(theta)) + x_shift))
-    assert y == approx((1 / pixel_resolution) * (j * sin(radians(theta)) + y_shift))
+    assert x == approx((pixel_resolution) * (j * cos(radians(theta)) + x_shift))
+    assert y == approx((pixel_resolution) * (j * sin(radians(theta)) + y_shift))
     assert z == 0
 
 

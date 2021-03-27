@@ -45,8 +45,8 @@ def test_image_scale_matrix_converts_pixel_resolution_to_um_space(width, height,
     image = ImageData(channels=np.random.random(size=(channels, height, width)), pixel_resolution_um=res)
     r = res
     expected = np.array([
-        [1/r, 0, 0, 0],
-        [0, 1/r, 0, 0],
+        [r, 0, 0, 0],
+        [0, r, 0, 0],
         [0, 0, 1, 0],
         [0, 0, 0, 1],
     ])
