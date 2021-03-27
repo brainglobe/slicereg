@@ -100,9 +100,6 @@ class MainWindow(BaseQtView):
     def set_section_image_resolution(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
-    def on_section_resampled(self, resolution_um: float, section_image: np.ndarray, transform: np.ndarray):
-        self.resample_widget.label.setText(str(resolution_um))
-
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
             return

@@ -67,7 +67,6 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
         resample_section = ResampleSectionCommand(_repo=section_repo)
         window.set_section_image_resolution = resample_section  # type: ignore
-        resample_section.section_resampled.connect(window.on_section_resampled)
         resample_section.section_resampled.connect(slice_view.on_section_resampled)
         resample_section.section_resampled.connect(volume_view.on_section_resampled)
 

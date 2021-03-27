@@ -22,10 +22,10 @@ class LabelledSliderWidget:
         self.slider.sliderReleased.connect(self._on_slider_release)
         
     def _on_slider_valuechange(self, value: int):
-        self.label.setText(str(value) + "...")
+        self.label.setText(str(value))
         
     def _on_slider_release(self):
-        self.label.setText(str(self.slider.value))
+        self.label.setText(str(self.value))
 
     def connect(self, fun: Callable[[], None]):
         self.slider.sliderReleased.connect(fun)
