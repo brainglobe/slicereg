@@ -7,6 +7,7 @@ from vispy.app import Timer
 import numpy as np
 
 from slicereg.gui.base import BaseQtView
+from slicereg.gui.slider import LabelledSliderWidget
 
 
 class MainWindow(BaseQtView):
@@ -42,19 +43,9 @@ class MainWindow(BaseQtView):
         load_image_button.clicked.connect(self.show_load_image_dialog)
 
         # Scale Slider (Set Section Resolution)
-        scale_hbox = QHBoxLayout()
-        side_layout.addLayout(scale_hbox)
-
-        self.resample_slider = QSlider(Qt.Horizontal)
-        scale_hbox.addWidget(self.resample_slider)
-        self.resample_slider.setMinimum(1)
-        self.resample_slider.setMaximum(100)
-        self.resample_slider.valueChanged.connect(self._on_resample_slider_valuechange)
-        self.resample_slider.sliderReleased.connect(self._on_resample_slider_released)
-        
-        self.sample_label = QLabel(text="Scale")
-        scale_hbox.addWidget(self.sample_label)
-
+        self.resample_widget = LabelledSliderWidget(min=1, max=100, default_text="Scale")
+        side_layout.addLayout(self.resample_widget.layout)
+        self.resample_widget.connect(self._on_resample_slider_released)
 
 
         # Atlas BUttons
@@ -102,18 +93,15 @@ class MainWindow(BaseQtView):
     def on_error_raised(self, msg: str):
         self.show_temp_title(msg)
 
-    def _on_resample_slider_valuechange(self, res: int):
-        self.sample_label.setText(str(res) + "...")
-
     def _on_resample_slider_released(self):
-        resolution = self.resample_slider.value()
+        resolution = self.resample_widget.value
         self.set_section_image_resolution(resolution_um=float(resolution))
 
     def set_section_image_resolution(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
     def on_section_resampled(self, resolution_um: float, section_image: np.ndarray, transform: np.ndarray):
-        self.sample_label.setText(str(resolution_um))
+        self.resample_widget.label.setText(str(resolution_um))
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
