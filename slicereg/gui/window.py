@@ -44,7 +44,7 @@ class MainWindow(BaseQtView):
         load_image_button.clicked.connect(self.show_load_image_dialog)
 
         # Scale Slider (Set Section Resolution)
-        self.resample_widget = LabelledSliderWidget(min=1, max=100, default_text="Scale")
+        self.resample_widget = LabelledSliderWidget(min=5, max=200, default_text="Scale")
         side_layout.addLayout(self.resample_widget.layout)
         self.resample_widget.connect(self._on_resample_slider_released)
 

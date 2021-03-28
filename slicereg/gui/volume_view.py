@@ -2,7 +2,7 @@ import numpy as np
 from numpy import array, ndarray
 from PySide2.QtWidgets import QWidget
 from vispy.app import KeyEvent, use_app
-from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image
+from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
@@ -17,7 +17,7 @@ class VolumeView(BaseQtView):
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
         self._canvas.central_widget.add_widget(self._viewbox)
-        self._viewbox.camera = TurntableCamera(fov=0, azimuth=0, elevation=90, distance=1000)
+        self._viewbox.camera = ArcballCamera(fov=0)
 
         self._atlas_volume = Volume(array([[[1, 2]]]) * 1000, parent=self._viewbox.scene)#, interpolation='nearest')
         self._atlas_volume.attach(filters.ColorFilter((1., .5, 0., 1.)))
