@@ -14,6 +14,7 @@ def register(section: Section, atlas: Atlas) -> Section:
     inds = inds_homog(height=height, width=width)
     res = 1 / atlas.resolution_um
     scale_mat = np.diag([res, res, res, 1.])
+
     brightness_3d = _register(inds, volume=atlas.volume, transform=scale_mat @ section.affine_transform)
     registered_slice = section.with_new_image(
         ImageData(
@@ -28,13 +29,7 @@ def register(section: Section, atlas: Atlas) -> Section:
 
 @lru_cache()
 def inds_homog(height, width):
-    grid = np.mgrid[:width, :height, :1].reshape(-1, width*height)
-    ones = np.ones(width*height, dtype=int)
-    full = np.vstack((grid, ones)).astype(float)
-    return full
-
-
-# flip_xy = Plane3D(rz=-90).affine_transform
+    return np.mgrid[:height, :width, :1, 1:2].reshape(-1, width*height).astype(float)
 
 
 @njit(parallel=True, fastmath=True)
