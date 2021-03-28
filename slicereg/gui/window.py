@@ -1,4 +1,5 @@
 from typing import Optional
+from functools import partial
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout, QLabel, QSlider
@@ -47,6 +48,13 @@ class MainWindow(BaseQtView):
         side_layout.addLayout(self.resample_widget.layout)
         self.resample_widget.connect(self._on_resample_slider_released)
 
+        self.dim_widgets = []
+        for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
+            widget = LabelledSliderWidget(min=-1000 if not 'r' in dim else -90, max=1000 if not 'r' in dim else 90, default_text=dim)
+            side_layout.addLayout(widget.layout)
+            fun = partial(lambda dim, widget: self.move_section(**{dim: widget.value}), widget=widget, dim=dim)
+            widget.connect(fun)
+            self.dim_widgets.append((widget, fun))
 
         # Atlas BUttons
         button_hbox = QHBoxLayout()
@@ -92,6 +100,9 @@ class MainWindow(BaseQtView):
 
     def on_error_raised(self, msg: str):
         self.show_temp_title(msg)
+
+    def move_section(self, x=0):
+        raise NotImplementedError("Connect to MoveSectionCommand before using.")
 
     def _on_resample_slider_released(self):
         resolution = self.resample_widget.value
