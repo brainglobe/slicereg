@@ -35,14 +35,12 @@ def inds_homog(height, width):
 @njit(parallel=True, fastmath=True)
 def _register(inds, volume, transform):
     atlas_coords =  inds.T @ transform.T
-    atlas_coords = atlas_coords[:, :3]
+    atlas_coords = atlas_coords[:, :3].astype(np.int32)
     
     ii, jj, kk = volume.shape
     vals = np.empty(atlas_coords.shape[0], dtype=volume.dtype)
     for ind in prange(atlas_coords.shape[0]):
-        i = int(atlas_coords[ind, 0])
-        j = int(atlas_coords[ind, 1])
-        k = int(atlas_coords[ind, 2])
+        i, j, k = atlas_coords[ind]
         if 0 <= i < ii and 0 <= j < jj and 0 <= k < kk:
             vals[ind] = volume[i, j, k]
         else:
