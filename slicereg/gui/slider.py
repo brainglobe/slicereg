@@ -6,7 +6,7 @@ from PySide2.QtCore import Qt
 
 class LabelledSliderWidget:
 
-    def __init__(self, min: float, max: float, default_text: str):
+    def __init__(self, min: int, max: int, default_text: str):
 
         self.layout = QHBoxLayout()
 
@@ -16,8 +16,8 @@ class LabelledSliderWidget:
         self.label = QLabel(text=default_text)
         self.layout.addWidget(self.label)
 
-        self.slider.setMinimum(min)
-        self.slider.setMaximum(max)
+        self.slider.setMinimum(int(min))
+        self.slider.setMaximum(int(max))
         self.slider.valueChanged.connect(self._on_slider_valuechange)
         self.slider.sliderReleased.connect(self._on_slider_release)
         
