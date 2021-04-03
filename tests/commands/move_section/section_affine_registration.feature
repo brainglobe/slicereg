@@ -8,6 +8,12 @@ Feature: Section 3D Affine Registration
     Then the image is updated with a new 3D transform
     And an atlas section image at that transform is shown.
 
+  Scenario: Set Section's 3D Coordinates
+    Given I have loaded a section
+    When I give new translation and/or rotation values
+    Then the image is updated with a new 3D transform with indicated paramters set to the requested value
+    And an atlas section image at that transform is shown.
+
   Scenario: Check Pixel Coordinate in Atlas Space
     Given I have loaded a section
     When I indicate a section image coordinate

@@ -6,6 +6,7 @@ from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
+from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg import config
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
@@ -59,12 +60,16 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
     if config.FEATURE_VIEW_SECTION and config.FEATURE_MOVE_SECTION:
         move_section = MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo)
+        transform_section = UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo)
+        
         volume_view.move_section = move_section  # type: ignore
         slice_view.move_section = move_section  # type: ignore
-        sidebar_view.move_section = move_section  # type: ignore
+        sidebar_view.transform_section = transform_section  # type: ignore
 
         move_section.section_moved.connect(volume_view.on_section_moved)
         move_section.section_moved.connect(slice_view.on_section_moved)
+        transform_section.section_moved.connect(volume_view.on_section_moved)
+        transform_section.section_moved.connect(slice_view.on_section_moved)
         
 
         request_coord_data = GetPixelRegistrationDataCommand(_repo=section_repo)

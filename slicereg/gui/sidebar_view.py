@@ -31,7 +31,7 @@ class SidebarView(BaseQtView):
         for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
             widget = LabelledSliderWidget(min=-1000 if not 'r' in dim else -90, max=1000 if not 'r' in dim else 90, label=dim)
             layout.addLayout(widget.layout)
-            fun = lambda d, value: self.move_section(**{d: value})
+            fun = lambda d, value: self.transform_section(**{d: value})
             widget.connect(partial(fun, dim))
             self.dim_widgets.append((widget, fun))
 
@@ -83,8 +83,8 @@ class SidebarView(BaseQtView):
     def load_section(self, filename: str):
         raise NotImplementedError("Connect to a LoadImageCommand before using.")
 
-    def move_section(self, **kwargs):
-        raise NotImplementedError("Connect to MoveSectionCommand before using.")
+    def transform_section(self, **kwargs):
+        raise NotImplementedError("Connect to UpdateSectionTransformCommand before using.")
     
     def set_section_image_resolution(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
