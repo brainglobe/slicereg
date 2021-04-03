@@ -29,7 +29,7 @@ class SidebarView(BaseQtView):
 
         self.dim_widgets = []
         for dim in ['right', 'superior', 'anterior', 'rot_lateral', 'rot_axial', 'rot_median']:
-            widget = LabelledSliderWidget(min=-1000 if not dim.startswith('r') else -90, max=1000 if not 'r' in dim else 90, label=dim)
+            widget = LabelledSliderWidget(min=-1000 if not dim.startswith('rot_') else -90, max=1000 if not 'r' in dim else 90, label=dim)
             layout.addLayout(widget.layout)
             fun = lambda d, value: self.transform_section(**{d: value})
             widget.connect(partial(fun, dim))
