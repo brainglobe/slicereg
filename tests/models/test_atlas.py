@@ -52,7 +52,7 @@ def test_slicing_atlas_along_leftright_axis_gets_correct_section_image(right, ou
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)).swapaxes(0, 2),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(right=right, ry=-90))
+    section = atlas.slice(Plane3D(right=right, rot_axial=-90))
     assert np.all(section.image.channels == out)
 
 
@@ -62,5 +62,5 @@ def test_slicing_atlas_along_infsup_axis_gets_correct_section_image(superior, ou
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)).swapaxes(1, 2),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(superior=superior, rx=90))
+    section = atlas.slice(Plane3D(superior=superior, rot_lateral=90))
     assert np.all(section.image.channels == out)

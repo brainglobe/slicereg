@@ -19,13 +19,13 @@ def test_3d_translation_gives_correct_affine_transform(right, superior, anterior
     assert np.all(np.isclose(observed, expected))
 
 
-@given(rx=sensible_floats)
-def test_3d_x_rotation_gives_correct_affine_transform(rx):
+@given(rot_lateral=sensible_floats)
+def test_3d_x_rotation_gives_correct_affine_transform(rot_lateral):
     expected = [
         [1, 0, 0, 0],
-        [0, np.cos(np.radians(rx)), -np.sin(np.radians(rx)), 0],
-        [0, np.sin(np.radians(rx)), np.cos(np.radians(rx)), 0],
+        [0, np.cos(np.radians(rot_lateral)), -np.sin(np.radians(rot_lateral)), 0],
+        [0, np.sin(np.radians(rot_lateral)), np.cos(np.radians(rot_lateral)), 0],
         [0, 0, 0, 1],
     ]
-    observed = Plane3D(rx=rx).affine_transform
+    observed = Plane3D(rot_lateral=rot_lateral).affine_transform
     assert np.all(np.isclose(observed, expected))

@@ -101,7 +101,7 @@ class SliceView(BaseQtView):
     def _on_mousewheel_move(self, increment: int):
         self.move_section(z=10 * increment)
 
-    def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
+    def move_section(self, right=0., superior=0., anterior=0., rot_lateral=0., rot_axial=0., rot_median=0.) -> None:
         raise NotImplementedError("Wire up to MoveSectionCommand to use this.")
 
     def get_coord_data(self, i: int, j: int):

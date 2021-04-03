@@ -75,18 +75,18 @@ class VolumeView(BaseQtView):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self.move_section(z=30),
-            'S': lambda: self.move_section(z=-30),
-            'A': lambda: self.move_section(x=-30),
-            'D': lambda: self.move_section(x=30),
-            'Q': lambda: self.move_section(y=-30),
-            'E': lambda: self.move_section(y=30),
-            'I': lambda: self.move_section(rz=3),
-            'K': lambda: self.move_section(rz=-3),
-            'J': lambda: self.move_section(rx=-3),
-            'L': lambda: self.move_section(rx=3),
-            'U': lambda: self.move_section(ry=-3),
-            'O': lambda: self.move_section(ry=3),
+            'W': lambda: self.move_section(anterior=30),
+            'S': lambda: self.move_section(anterior=-30),
+            'A': lambda: self.move_section(right=-30),
+            'D': lambda: self.move_section(right=30),
+            'Q': lambda: self.move_section(posterior=-30),
+            'E': lambda: self.move_section(posterior=30),
+            'I': lambda: self.move_section(rot_median=3),
+            'K': lambda: self.move_section(rot_median=-3),
+            'J': lambda: self.move_section(rot_lateral=-3),
+            'L': lambda: self.move_section(rot_lateral=3),
+            'U': lambda: self.move_section(rot_axial=-3),
+            'O': lambda: self.move_section(rot_axial=3),
             'Escape': use_app().quit,
         }
         if command := key_commands.get(event.key.name):
@@ -95,5 +95,5 @@ class VolumeView(BaseQtView):
     def select_channel(self, channel: int):
         raise NotImplementedError("Connect to a SelectChannelCommand before using")
 
-    def move_section(self, x=0, y=0, z=0., rx=0., ry=0., rz=0.):
+    def move_section(self, right=0, superior=0, anterior=0., rot_lateral=0., rot_axial=0., rot_median=0.):
         raise NotImplementedError("Connect to MoveSectionCommand before using.")
