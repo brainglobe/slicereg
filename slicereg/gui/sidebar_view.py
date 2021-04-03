@@ -28,8 +28,8 @@ class SidebarView(BaseQtView):
         self.resample_widget.connect(lambda val: self.set_section_image_resolution(val))
 
         self.dim_widgets = []
-        for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
-            widget = LabelledSliderWidget(min=-1000 if not 'r' in dim else -90, max=1000 if not 'r' in dim else 90, label=dim)
+        for dim in ['right', 'superior', 'anterior', 'rx', 'ry', 'rz']:
+            widget = LabelledSliderWidget(min=-1000 if not dim.startswith('r') else -90, max=1000 if not 'r' in dim else 90, label=dim)
             layout.addLayout(widget.layout)
             fun = lambda d, value: self.transform_section(**{d: value})
             widget.connect(partial(fun, dim))
