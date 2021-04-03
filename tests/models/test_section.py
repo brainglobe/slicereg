@@ -7,7 +7,7 @@ from pytest import approx
 
 from slicereg.models.image import ImageData
 from slicereg.models.section import Section
-from slicereg.models.transforms import Plane2D, Plane3D
+from slicereg.models.transforms import Plane2D, AtlasTransform
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
 
@@ -24,7 +24,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, right, su
             channels=arange(24).reshape(2, 3, 4),
             pixel_resolution_um=pixel_resolution,
         ),
-        plane_3d=Plane3D(right=right, superior=superior, anterior=anterior),
+        plane_3d=AtlasTransform(right=right, superior=superior, anterior=anterior),
     )
     x, y, z = section.pos_from_coord(i=i, j=j)  # observed 3D positions
     assert x == approx((j * pixel_resolution) + right)

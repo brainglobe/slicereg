@@ -3,7 +3,7 @@ import pytest
 
 from slicereg.models.registration import register
 from slicereg.models.section import Section, ImageData
-from slicereg.models.transforms import Plane2D, Plane3D
+from slicereg.models.transforms import Plane2D, AtlasTransform
 from slicereg.models.atlas import Atlas
 
 
@@ -14,7 +14,7 @@ def test_section_registration_to_an_atlas_gets_a_section_that_matches_sections_p
             pixel_resolution_um=10,
         ),
         plane_2d=Plane2D(x=3, y=5, theta=20),
-        plane_3d=Plane3D(right=10, superior=-5, anterior=10),
+        plane_3d=AtlasTransform(right=10, superior=-5, anterior=10),
         )
     atlas = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=20)
     s2 = register(section, atlas)
@@ -144,7 +144,7 @@ def test_section_registration_cuts_correctly_with_diff_resolutions(case):
             channels=np.ones((1, 3, 3)), 
             pixel_resolution_um=case["section_res"],
         ),
-        plane_3d=Plane3D(**case["pos"]),
+        plane_3d=AtlasTransform(**case["pos"]),
     )
     atlas_slice = register(section, atlas).image.channels[0]
     expected_slice = np.array(case['expected']).astype(float)

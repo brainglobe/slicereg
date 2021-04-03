@@ -29,7 +29,7 @@ class Plane2D:
 
 
 @dataclass(frozen=True)
-class Plane3D:
+class AtlasTransform:
     right: float = 0.
     superior: float = 0.
     anterior: float = 0.
@@ -37,10 +37,10 @@ class Plane3D:
     rot_axial: float = 0.
     rot_median: float = 0.
 
-    def translate(self, right: float = 0., superior: float = 0., anterior: float = 0.) -> Plane3D:
+    def translate(self, right: float = 0., superior: float = 0., anterior: float = 0.) -> AtlasTransform:
         return replace(self, right=self.right + right, superior=self.superior + superior, anterior=self.anterior + anterior)
 
-    def rotate(self, rot_lateral: float = 0., rot_axial: float = 0., rot_median: float = 0.) -> Plane3D:
+    def rotate(self, rot_lateral: float = 0., rot_axial: float = 0., rot_median: float = 0.) -> AtlasTransform:
         return replace(self, rot_lateral=self.rot_lateral + rot_lateral, rot_axial=self.rot_axial + rot_axial, rot_median=self.rot_median + rot_median)
 
     @property

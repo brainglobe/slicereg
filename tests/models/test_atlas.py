@@ -5,7 +5,7 @@ from hypothesis.strategies import integers
 
 from slicereg.models.atlas import Atlas
 from slicereg.models.section import Section
-from slicereg.models.transforms import Plane3D, Plane2D
+from slicereg.models.transforms import AtlasTransform, Plane2D
 
 
 @given(res=integers(1, 1000), w=integers(1, 100), h=integers(1, 100), d=integers(1, 100))
@@ -26,7 +26,7 @@ def test_slicing_an_atlas_gets_a_new_section_with_correct_parameters():
         volume=np.broadcast_to(np.array([10, 20, 30]), (3, 3, 3)).swapaxes(0, 2),
         resolution_um=1
     )
-    plane = Plane3D()
+    plane = AtlasTransform()
     section = atlas.slice(plane)
     assert isinstance(section, Section)
     assert section.plane_3d == plane
@@ -42,7 +42,7 @@ def test_slicing_atlas_along_postant_axis_gets_correct_section_image(anterior, o
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(anterior=anterior))
+    section = atlas.slice(AtlasTransform(anterior=anterior))
     assert np.all(section.image.channels == out)
 
 
@@ -52,7 +52,7 @@ def test_slicing_atlas_along_leftright_axis_gets_correct_section_image(right, ou
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)).swapaxes(0, 2),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(right=right, rot_axial=-90))
+    section = atlas.slice(AtlasTransform(right=right, rot_axial=-90))
     assert np.all(section.image.channels == out)
 
 
@@ -62,5 +62,5 @@ def test_slicing_atlas_along_infsup_axis_gets_correct_section_image(superior, ou
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)).swapaxes(1, 2),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(superior=superior, rot_lateral=90))
+    section = atlas.slice(AtlasTransform(superior=superior, rot_lateral=90))
     assert np.all(section.image.channels == out)

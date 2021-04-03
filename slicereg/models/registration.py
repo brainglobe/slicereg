@@ -7,7 +7,7 @@ from numba import njit, prange
 
 from slicereg.models.section import Section, ImageData
 from slicereg.models.atlas import Atlas
-from slicereg.models.transforms import Plane3D
+from slicereg.models.transforms import AtlasTransform
 
 def register(section: Section, atlas: Atlas) -> Section:
     width, height = section.image.width, section.image.height

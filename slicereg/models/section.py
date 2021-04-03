@@ -7,14 +7,14 @@ from uuid import UUID, uuid4
 from numpy import ndarray
 
 from slicereg.models.image import ImageData
-from slicereg.models.transforms import Plane2D, Plane3D
+from slicereg.models.transforms import Plane2D, AtlasTransform
 
 
 @dataclass(frozen=True)
 class Section:
     image: ImageData
     plane_2d: Plane2D = field(default_factory=Plane2D)
-    plane_3d: Plane3D = field(default_factory=Plane3D)
+    plane_3d: AtlasTransform = field(default_factory=AtlasTransform)
     thickness_um: float = 16.
     id: UUID = field(default_factory=uuid4)
 
