@@ -23,7 +23,7 @@ class SidebarView(BaseQtView):
         load_image_button.clicked.connect(self.show_load_image_dialog)
 
         # Scale Slider (Set Section Resolution)
-        self.resample_widget = LabelledSliderWidget(min=5, max=200, label="Scale")
+        self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Scale")
         layout.addLayout(self.resample_widget.layout)
         self.resample_widget.connect(lambda val: self.set_section_image_resolution(val))
 

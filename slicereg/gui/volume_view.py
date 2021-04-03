@@ -35,6 +35,10 @@ class VolumeView(BaseQtView):
         return self._canvas.native
 
     def on_atlas_update(self, volume: ndarray, transform: ndarray):
+        # volume = np.flip(volume, axis=0)
+        # volume = np.flip(volume, axis=2)
+        volume = volume.swapaxes(0, 2)
+        
         self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
         self._atlas_volume.transform = MatrixTransform(transform.T)
         self._viewbox.camera.center = (0, 0, 0)
@@ -63,7 +67,6 @@ class VolumeView(BaseQtView):
         self._canvas.update()
 
     # Controller Code
-
     def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:
         """Router: Calls AppCommands functions based on the event that's given."""
 

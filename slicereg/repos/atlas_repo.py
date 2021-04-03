@@ -37,8 +37,10 @@ class BrainglobeAtlasRepo(BaseAtlasRepo):
         with redirect_stdout(StringIO()):  # blocks the BrainGlobeAtlas print to console
             bgatlas = BrainGlobeAtlas(f"allen_mouse_{resolution}um")
 
+        new_reference = bgatlas.space.map_stack_to("lip", bgatlas.reference)
+
         return Atlas(
-            volume=bgatlas.reference,
+            volume=new_reference,
             resolution_um=bgatlas.resolution[0],
         )
 
