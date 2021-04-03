@@ -64,3 +64,15 @@ def test_slicing_atlas_along_infsup_axis_gets_correct_section_image(superior, ou
     )
     section = atlas.slice(AtlasTransform(superior=superior, rot_lateral=90))
     assert np.all(section.image.channels == out)
+
+
+def test_atlas_scale_matrix_is_3D_and_matches_resolution():
+    res = 10
+    atlas = Atlas(volume=np.empty(shape=(5, 5, 5)), resolution_um=res)
+    expected_matrix = [
+        [res, 0, 0, 0],
+        [0, res, 0, 0],
+        [0, 0, res, 0],
+        [0, 0, 0, 1],
+    ]
+    assert np.all(np.isclose(atlas.scale_matrix, expected_matrix))

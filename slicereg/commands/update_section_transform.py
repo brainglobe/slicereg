@@ -23,6 +23,6 @@ class UpdateSectionTransformCommand(BaseCommand):
                 
         new_section = replace(section, plane_3d=replace(section.plane_3d, **dims))
         atlas_section = register(section=new_section, atlas=atlas)
-        print(new_section.plane_3d, atlas_section.plane_3d)
+        print(new_section.affine_transform)
         self._section_repo.save_section(new_section)
         self.section_moved.emit(transform=new_section.affine_transform, atlas_slice_image=atlas_section.image.channels[0])
