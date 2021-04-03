@@ -9,6 +9,7 @@ from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg import config
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
+from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.window import MainWindow
 from slicereg.io.ome_tiff import OmeTiffReader
 from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
@@ -27,15 +28,17 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
     volume_view = VolumeView()
     slice_view = SliceView()
+    sidebar_view = SidebarView()
     window = MainWindow(
         title=config.WINDOW_TITLE,
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
+        side_controls=sidebar_view.qt_widget,
     )
 
     if config.FEATURE_BRAINGLOBE_ATLAS:
         load_atlas = LoadAtlasCommand(_repo=atlas_repo)
-        window.load_atlas = load_atlas  # type: ignore
+        sidebar_view.load_atlas = load_atlas  # type: ignore
         load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
 
         # Start off with the first command
@@ -44,7 +47,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
     if config.FEATURE_VIEW_SECTION:
         load_section = LoadImageCommand(_repo=section_repo, _reader=OmeTiffReader())
-        window.load_section = load_section  # type: ignore
+        sidebar_view.load_section = load_section  # type: ignore
         load_section.section_loaded.connect(slice_view.on_section_loaded)
         load_section.section_loaded.connect(volume_view.on_section_loaded)
 
@@ -58,7 +61,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         move_section = MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo)
         volume_view.move_section = move_section  # type: ignore
         slice_view.move_section = move_section  # type: ignore
-        window.move_section = move_section  # type: ignore
+        sidebar_view.move_section = move_section  # type: ignore
 
         move_section.section_moved.connect(volume_view.on_section_moved)
         move_section.section_moved.connect(slice_view.on_section_moved)
@@ -69,7 +72,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
         resample_section = ResampleSectionCommand(_repo=section_repo)
-        window.set_section_image_resolution = resample_section  # type: ignore
+        sidebar_view.set_section_image_resolution = resample_section  # type: ignore
         resample_section.section_resampled.connect(slice_view.on_section_resampled)
         resample_section.section_resampled.connect(volume_view.on_section_resampled)
 
