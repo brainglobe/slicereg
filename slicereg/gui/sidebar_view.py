@@ -23,16 +23,16 @@ class SidebarView(BaseQtView):
         load_image_button.clicked.connect(self.show_load_image_dialog)
 
         # Scale Slider (Set Section Resolution)
-        self.resample_widget = LabelledSliderWidget(min=5, max=200, default_text="Scale")
+        self.resample_widget = LabelledSliderWidget(min=5, max=200, label="Scale")
         layout.addLayout(self.resample_widget.layout)
-        self.resample_widget.connect(self._on_resample_slider_released)
+        self.resample_widget.connect(lambda val: self.set_section_image_resolution(val))
 
         self.dim_widgets = []
         for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
-            widget = LabelledSliderWidget(min=-1000 if not 'r' in dim else -90, max=1000 if not 'r' in dim else 90, default_text=dim)
+            widget = LabelledSliderWidget(min=-1000 if not 'r' in dim else -90, max=1000 if not 'r' in dim else 90, label=dim)
             layout.addLayout(widget.layout)
-            fun = partial(lambda dim, widget: self.move_section(**{dim: widget.value}), widget=widget, dim=dim)
-            widget.connect(fun)
+            fun = lambda d, value: self.move_section(**{d: value})
+            widget.connect(partial(fun, dim))
             self.dim_widgets.append((widget, fun))
 
         # Atlas BUttons
@@ -42,7 +42,6 @@ class SidebarView(BaseQtView):
         atlas_buttons = QButtonGroup(self.widget)
         atlas_buttons.setExclusive(True)
         atlas_buttons.buttonToggled.connect(self.atlas_button_toggled)
-
         
 
         for resolution in [100, 25, 10]:
@@ -80,18 +79,13 @@ class SidebarView(BaseQtView):
         resolution = int("".join(filter(str.isdigit, resolution_label)))
         self.load_atlas(resolution=resolution)
 
-    def _on_resample_slider_released(self):
-        resolution = self.resample_widget.value
-        self.set_section_image_resolution(resolution_um=float(resolution))
-
     # Comand Routing
     def load_section(self, filename: str):
         raise NotImplementedError("Connect to a LoadImageCommand before using.")
 
-    def move_section(self, x=0):
+    def move_section(self, **kwargs):
         raise NotImplementedError("Connect to MoveSectionCommand before using.")
     
-
     def set_section_image_resolution(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
