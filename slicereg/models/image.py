@@ -3,13 +3,12 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 import numpy as np
-from numpy import ndarray
 from scipy import ndimage
 
 
 @dataclass(frozen=True)
 class ImageData:
-    channels: ndarray = field(repr=False)
+    channels: np.ndarray = field(repr=False)
     pixel_resolution_um: float
 
     @property
@@ -31,7 +30,7 @@ class ImageData:
         assert matrix.shape == (4, 4)
         return matrix
 
-    def project_coord(self, i: int, j: int) -> ndarray:
+    def project_coord(self, i: int, j: int) -> np.ndarray:
         if not 0 <= i < self.height or not 0 <= j < self.width:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
