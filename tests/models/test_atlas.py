@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 from hypothesis import given
-from hypothesis.strategies import integers
+from hypothesis.strategies import integers, floats
 
 from slicereg.models.atlas import Atlas
 from slicereg.models.section import Section
@@ -66,8 +66,8 @@ def test_slicing_atlas_along_infsup_axis_gets_correct_section_image(superior, ou
     assert np.all(section.image.channels == out)
 
 
-def test_atlas_scale_matrix_is_3D_and_matches_resolution():
-    res = 10
+@given(res=floats(allow_nan=False, allow_infinity=False, min_value=-1000, max_value=1000))
+def test_atlas_scale_matrix_is_3D_and_matches_resolution(res):
     atlas = Atlas(volume=np.empty(shape=(5, 5, 5)), resolution_um=res)
     expected_matrix = [
         [res, 0, 0, 0],
