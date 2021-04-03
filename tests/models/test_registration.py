@@ -14,7 +14,7 @@ def test_section_registration_to_an_atlas_gets_a_section_that_matches_sections_p
             pixel_resolution_um=10,
         ),
         plane_2d=Plane2D(x=3, y=5, theta=20),
-        plane_3d=Plane3D(x=10, y=-5, z=10),
+        plane_3d=Plane3D(right=10, superior=-5, anterior=10),
         )
     atlas = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=20)
     s2 = register(section, atlas)
@@ -31,7 +31,7 @@ cases = [
     {
         "atlas_res": 1,
         "section_res": 1,
-        "pos": {"x": 0, "y": 0, "z": 1},
+        "pos": {"right": 0, "superior": 0, "anterior": 1},
         "expected": [
             [0, 0, 0],
             [0, 1, 0],
@@ -41,7 +41,7 @@ cases = [
     {
         "atlas_res": 1,
         "section_res": 1,
-        "pos": {"x": 1, "y": 1, "z": 1},
+        "pos": {"right": 1, "superior": 1, "anterior": 1},
         "expected": [
             [1, 0, 0],
             [0, 0, 0],

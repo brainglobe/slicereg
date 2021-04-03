@@ -36,31 +36,31 @@ def test_slicing_an_atlas_gets_a_new_section_with_correct_parameters():
     assert section.thickness_um == atlas.resolution_um
 
 
-@pytest.mark.parametrize('z,out', [(0, 10), (1, 16), (2, 21), (3, 0), (-1, 0)])
-def test_slicing_atlas_along_z_axis_gets_correct_section_image(z, out):
+@pytest.mark.parametrize('anterior,out', [(0, 10), (1, 16), (2, 21), (3, 0), (-1, 0)])
+def test_slicing_atlas_along_postant_axis_gets_correct_section_image(anterior, out):
     atlas = Atlas(
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(z=z))
+    section = atlas.slice(Plane3D(anterior=anterior))
     assert np.all(section.image.channels == out)
 
 
-@pytest.mark.parametrize('x,out', [(0, 10), (1, 16), (2, 21), (3, 0), (-1, 0)])
-def test_slicing_atlas_along_x_axis_gets_correct_section_image(x, out):
+@pytest.mark.parametrize('right,out', [(0, 10), (1, 16), (2, 21), (3, 0), (-1, 0)])
+def test_slicing_atlas_along_leftright_axis_gets_correct_section_image(right, out):
     atlas = Atlas(
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)).swapaxes(0, 2),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(x=x, ry=-90))
+    section = atlas.slice(Plane3D(right=right, ry=-90))
     assert np.all(section.image.channels == out)
 
 
-@pytest.mark.parametrize('y,out', [(0, 10), (1, 16), (2, 21), (3, 0), (-1, 0)])
-def test_slicing_atlas_along_y_axis_gets_correct_section_image(y, out):
+@pytest.mark.parametrize('superior,out', [(0, 10), (1, 16), (2, 21), (3, 0), (-1, 0)])
+def test_slicing_atlas_along_infsup_axis_gets_correct_section_image(superior, out):
     atlas = Atlas(
         volume=np.broadcast_to(np.array([10, 16, 21]), (3, 3, 3)).swapaxes(1, 2),
         resolution_um=1,
     )
-    section = atlas.slice(Plane3D(y=y, rx=90))
+    section = atlas.slice(Plane3D(superior=superior, rx=90))
     assert np.all(section.image.channels == out)

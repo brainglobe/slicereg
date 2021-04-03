@@ -30,22 +30,22 @@ class Plane2D:
 
 @dataclass(frozen=True)
 class Plane3D:
-    x: float = 0.
-    y: float = 0.
-    z: float = 0.
+    right: float = 0.
+    superior: float = 0.
+    anterior: float = 0.
     rx: float = 0.
     ry: float = 0.
     rz: float = 0.
 
-    def translate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Plane3D:
-        return replace(self, x=self.x + dx, y=self.y + dy, z=self.z + dz)
+    def translate(self, right: float = 0., superior: float = 0., anterior: float = 0.) -> Plane3D:
+        return replace(self, right=self.right + right, superior=self.superior + superior, anterior=self.anterior + anterior)
 
     def rotate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Plane3D:
         return replace(self, rx=self.rx + dx, ry=self.ry + dy, rz=self.rz + dz)
 
     @property
     def position(self) -> Tuple[float, float, float]:
-        return self.x, self.y, self.z
+        return self.right, self.superior, self.anterior
 
     @property
     def rotation(self) -> Tuple[float, float, float]:
@@ -54,7 +54,7 @@ class Plane3D:
     @property
     def affine_transform(self) -> ndarray:
         r = rotate(self.rx, (1, 0, 0)) @ rotate(self.ry, (0, 1, 0)) @ rotate(self.rz, (0, 0, 1))
-        t = translate((self.x, self.y, self.z))
+        t = translate((self.right, self.superior, self.anterior))
         matrix = (r @ t).T
         assert matrix.shape == (4, 4)
         return matrix

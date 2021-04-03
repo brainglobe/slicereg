@@ -54,6 +54,6 @@ def test_repo_overwrites_existing_section(repo, section1: Section):
     repo.save_section(section=section1)
     assert len(repo.sections) == 1
 
-    section_moved = section1.translate(dx=3)
+    section_moved = section1.translate(right=3)
     repo.save_section(section=section_moved)
     assert len(repo.sections) == 1

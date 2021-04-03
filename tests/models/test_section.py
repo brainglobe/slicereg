@@ -7,7 +7,6 @@ from pytest import approx
 
 from slicereg.models.image import ImageData
 from slicereg.models.section import Section
-from slicereg.models.atlas import Atlas
 from slicereg.models.transforms import Plane2D, Plane3D
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
@@ -16,21 +15,21 @@ sensible_floats = floats(allow_nan=False, allow_infinity=False)
 
 @given(
     i=integers(0, 2), j=integers(0, 3), # Image coordinates
-    dx=sensible_floats, dy=sensible_floats, dz=sensible_floats,  # Section Position offsets
+    right=sensible_floats, superior=sensible_floats, anterior=sensible_floats,
     pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
 )
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, dx, dy, dz, pixel_resolution):
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, right, superior, anterior, pixel_resolution):
     section = Section(
         image=ImageData(
             channels=arange(24).reshape(2, 3, 4),
             pixel_resolution_um=pixel_resolution,
         ),
-        plane_3d=Plane3D(x=dx, y=dy, z=dz),
+        plane_3d=Plane3D(right=right, superior=superior, anterior=anterior),
     )
     x, y, z = section.pos_from_coord(i=i, j=j)  # observed 3D positions
-    assert x == approx((j * pixel_resolution) + dx)
-    assert y == approx((-i * pixel_resolution) + dy)
-    assert z == approx(dz)
+    assert x == approx((j * pixel_resolution) + right)
+    assert y == approx((-i * pixel_resolution) + superior)
+    assert z == approx(anterior)
 
 
 @given(

@@ -48,7 +48,7 @@ def step_impl(repo: BaseSectionRepo):
 
 @when("I ask for the section to be translated and rotated")
 def step_impl(command: MoveSectionCommand):
-    command(x=2, y=5, z=10, rx=0, ry=0, rz=0)
+    command(right=2, superior=5, anterior=10, rx=0, ry=0, rz=0)
 
 
 @then("the image is updated with a new 3D transform")

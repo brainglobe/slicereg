@@ -18,8 +18,8 @@ class Section:
     thickness_um: float = 16.
     id: UUID = field(default_factory=uuid4)
 
-    def translate(self, dx: float = 0., dy: float = 0., dz: float = 0.) -> Section:
-        return replace(self, plane_3d=self.plane_3d.translate(dx=dx, dy=dy, dz=dz))
+    def translate(self, right: float = 0., superior: float = 0., anterior: float = 0.) -> Section:
+        return replace(self, plane_3d=self.plane_3d.translate(right=right, superior=superior, anterior=anterior))
 
     def rotate(self, dx: float = 0., dy: float = 0., dz: float =0.) -> Section:
         return replace(self, plane_3d=self.plane_3d.rotate(dx=dx, dy=dy, dz=dz))

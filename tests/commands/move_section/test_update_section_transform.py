@@ -25,7 +25,7 @@ def repo():
     repo.sections = [
         Section(
             image=ImageData(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.),
-            plane_3d=Plane3D(x=5, y=2, z=20),
+            plane_3d=Plane3D(right=5, superior=2, anterior=20),
         )
     ]
     return repo
@@ -51,7 +51,7 @@ def step_impl(repo: BaseSectionRepo):
 
 @when("I give new translation and/or rotation values")
 def step_impl(command: UpdateSectionTransformCommand):
-    command(x=2, y=5, z=10, rx=0, ry=0, rz=0)
+    command(right=2, superior=5, anterior=10, rx=0, ry=0, rz=0)
 
 
 @then("the image is updated with a new 3D transform with indicated paramters set to the requested value")
