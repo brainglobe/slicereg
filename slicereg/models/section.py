@@ -26,9 +26,8 @@ class Section:
 
     @property
     def affine_transform(self) -> ndarray:
-        reflect_to_right = np.diag([-1, 1, 1, 1])
-        return self.plane_3d.affine_transform @ self.image.affine_transform
-        # return self.plane_3d.affine_transform @ reflect_to_right @ self.image.affine_transform
+        reflection_mat = np.diag([-1, 1, 1, 1])
+        return self.plane_3d.affine_transform @ reflection_mat @ self.image.affine_transform
 
     def pos_from_coord(self, i: int, j: int) -> Tuple[float, float, float]:
         projection = self.affine_transform @ self.image.project_coord(i=i, j=j).T
