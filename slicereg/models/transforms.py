@@ -3,29 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Tuple
 
+import numpy as np
 from numpy import ndarray
 from vispy.util.transforms import translate, rotate
 
-
-@dataclass(frozen=True)
-class Image2DTransform:
-    i: float = 0.
-    j: float = 0.
-    theta: float = 0.
-
-    def translate(self, i: float, j: float) -> Image2DTransform:
-        return replace(self, i=self.i + i, j=self.j + j)
-
-    def rotate(self, theta: float) -> Image2DTransform:
-        return replace(self, theta=self.theta + theta)
-
-    @property
-    def affine_transform(self) -> ndarray:
-        translation = translate((self.i, self.j, 0), dtype=float)
-        rotation = rotate(self.theta, (0, 0, 1), dtype=float)
-        matrix = (rotation @ translation).T
-        assert matrix.shape == (4, 4)
-        return matrix
 
 
 @dataclass(frozen=True)
@@ -53,8 +34,41 @@ class AtlasTransform:
 
     @property
     def affine_transform(self) -> ndarray:
-        r = rotate(self.rot_lateral, (1, 0, 0)) @ rotate(self.rot_axial, (0, 1, 0)) @ rotate(self.rot_median, (0, 0, 1))
-        t = translate((self.right, self.superior, self.anterior))
-        matrix = (r @ t).T
-        assert matrix.shape == (4, 4)
-        return matrix
+
+        # r = rotate(self.rot_lateral, (1, 0, 0)).T @ rotate(self.rot_axial, (0, 1, 0)).T @ rotate(self.rot_median, (0, 0, 1)).T
+        # t = translate((self.right, self.superior, self.anterior)).T
+        # matrix = t @ r
+
+        translate = np.array([
+            [1, 0, 0, self.right],
+            [0, 1, 0, self.superior],
+            [0, 0, 1, self.anterior],
+            [0, 0, 0, 1],
+        ])
+
+        # assert matrix.shape == (4, 4)
+        s, c, t = np.sin, np.cos, np.radians(self.rot_lateral)
+        rot_lateral = np.array([
+            [1,    0,     0, 0],
+            [0, c(t), -s(t), 0],
+            [0, s(t),  c(t), 0],
+            [0,    0,     0, 1],
+        ])
+
+        s, c, t = np.sin, np.cos, np.radians(self.rot_axial)
+        rot_axial = np.array([
+            [c(t), 0, -s(t), 0],
+            [   0, 1,     0, 0],
+            [s(t), 0,  c(t), 0],
+            [   0, 0,     0, 1],
+        ])
+
+        s, c, t = np.sin, np.cos, np.radians(self.rot_median)
+        rot_median = np.array([
+            [c(t), -s(t), 0, 0],
+            [s(t),  c(t), 0, 0],
+            [   0,     0, 1, 0],
+            [   0,     0, 0, 1],
+        ])
+
+        return translate @ rot_lateral @ rot_axial @ rot_median

@@ -11,11 +11,13 @@ class ResampleSectionCommand(BaseCommand):
     section_resampled: Signal = field(default_factory=Signal)
 
     def __call__(self, resolution_um: float) -> None:  # type: ignore
-        section = self._repo.sections[0]
-        new_section = section.resample(resolution_um=resolution_um)
-        self._repo.save_section(section=new_section)
+        section = \
+            self._repo.sections[0] \
+            .resample(resolution_um=resolution_um)
+        self._repo.save_section(section=section)
+
         self.section_resampled.emit(
-            resolution_um=new_section.image.pixel_resolution_um,
-            section_image=new_section.image.channels[0],  # todo: get current channel
-            transform=new_section.affine_transform,
+            resolution_um=section.image.pixel_resolution_um,
+            section_image=section.image.channels[0],  # todo: get current channel
+            transform=section.affine_transform,
         )

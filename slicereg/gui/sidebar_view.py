@@ -22,6 +22,10 @@ class SidebarView(BaseQtView):
         layout.addWidget(load_image_button)
         load_image_button.clicked.connect(self.show_load_image_dialog)
 
+        load_image_button2 = QPushButton("Quick Load Section")
+        layout.addWidget(load_image_button2)
+        load_image_button2.clicked.connect(lambda: self.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff"))
+
         # Scale Slider (Set Section Resolution)
         self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Scale")
         layout.addLayout(self.resample_widget.layout)
@@ -29,7 +33,7 @@ class SidebarView(BaseQtView):
 
         self.dim_widgets = []
         for dim in ['right', 'superior', 'anterior', 'rot_lateral', 'rot_axial', 'rot_median']:
-            widget = LabelledSliderWidget(min=-1000 if not dim.startswith('rot_') else -90, max=1000 if not 'r' in dim else 90, label=dim)
+            widget = LabelledSliderWidget(min=-10000 if not dim.startswith('rot_') else -180, max=10000 if not dim.startswith('rot_') else 180, label=dim)
             layout.addLayout(widget.layout)
             fun = lambda d, value: self.transform_section(**{d: value})
             widget.connect(partial(fun, dim))

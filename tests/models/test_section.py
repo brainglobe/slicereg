@@ -65,12 +65,21 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
         assert section.pos_from_coord(i=i, j=j)
 
 
-@given(width=st.integers(1, 1000), height=st.integers(1, 1000))
-def test_section_recenter_sets_shift_to_half_the_width_and_height(width, height):
-    section = Section(image=ImageData(channels=np.random.random((3, height, width)), pixel_resolution_um=123))
+@given(width=st.integers(2, 1000), height=st.integers(2, 1000))
+def test_section_origin_set_sets_shift_to_half_half_and_shift_matrix_to_half_width_height(width, height):
+    section = Section(image=ImageData(channels=np.random.random((3, height, width)), pixel_resolution_um=120))
     assert section.plane_2d.i == 0 and section.plane_2d.j == 0
-    section2 = section.recenter()
-    assert section2.plane_2d.i == approx(-height / 2) and section2.plane_2d.j == approx(-width / 2)
+    section2 = section.set_image_origin_to_center()
+    res = section2.image.pixel_resolution_um
+    height, width = section2.image.height, section2.image.width
+    assert section2.plane_2d.i == -0.5 and section2.plane_2d.j == -0.5
+    expected_shift_matrix = np.array([
+        [res, 0, 0, -res * height / 2],
+        [0, res, 0, -res * width / 2],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1],
+    ])
+    assert np.all(np.isclose(section2.shift_matrix, expected_shift_matrix))
 
 
 def test_resample_section_gets_new_section_with_resampled_image():

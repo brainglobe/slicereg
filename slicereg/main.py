@@ -16,7 +16,8 @@ from slicereg.io.ome_tiff import OmeTiffReader
 from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
-
+import numpy as np
+np.set_printoptions(suppress=True, precision=2)
 
 def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     # Initialize the State
