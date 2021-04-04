@@ -1,13 +1,10 @@
-from typing import Callable
-
-from PySide2.QtWidgets import QSlider, QLabel, QHBoxLayout
 from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QSlider, QLabel, QHBoxLayout
 
 
 class LabelledSliderWidget:
 
     def __init__(self, min: int, max: int, label: str):
-
         self.layout = QHBoxLayout()
 
         self.slider = QSlider(Qt.Horizontal)
@@ -19,7 +16,7 @@ class LabelledSliderWidget:
         self.slider.setMinimum(int(min))
         self.slider.setMaximum(int(max))
         self.slider.valueChanged.connect(self._on_slider_valuechange)
-        
+
     def _on_slider_valuechange(self, value: int):
         self.label.setText(str(value))
 

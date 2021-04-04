@@ -1,13 +1,11 @@
-from copy import copy
 from functools import lru_cache
-from dataclasses import replace
 
 import numpy as np
 from numba import njit, prange
 
-from slicereg.models.section import Section, ImageData
 from slicereg.models.atlas import Atlas
-from slicereg.models.transforms import AtlasTransform
+from slicereg.models.section import Section, ImageData
+
 
 def register(section: Section, atlas: Atlas) -> Section:
     width, height = section.image.width, section.image.height

@@ -5,8 +5,6 @@ from typing import Tuple
 
 import numpy as np
 from numpy import ndarray
-from vispy.util.transforms import translate, rotate
-
 
 
 @dataclass(frozen=True)
@@ -19,10 +17,12 @@ class AtlasTransform:
     rot_median: float = 0.
 
     def translate(self, right: float = 0., superior: float = 0., anterior: float = 0.) -> AtlasTransform:
-        return replace(self, right=self.right + right, superior=self.superior + superior, anterior=self.anterior + anterior)
+        return replace(self, right=self.right + right, superior=self.superior + superior,
+                       anterior=self.anterior + anterior)
 
     def rotate(self, rot_lateral: float = 0., rot_axial: float = 0., rot_median: float = 0.) -> AtlasTransform:
-        return replace(self, rot_lateral=self.rot_lateral + rot_lateral, rot_axial=self.rot_axial + rot_axial, rot_median=self.rot_median + rot_median)
+        return replace(self, rot_lateral=self.rot_lateral + rot_lateral, rot_axial=self.rot_axial + rot_axial,
+                       rot_median=self.rot_median + rot_median)
 
     @property
     def position(self) -> Tuple[float, float, float]:

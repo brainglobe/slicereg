@@ -36,10 +36,10 @@ class ImageData:
     @property
     def shift_matrix(self) -> np.ndarray:
         return np.array([
-            [1, 0, 0,  self.y_shift * self.width],
-            [0, 1, 0,  self.x_shift * self.height],
-            [0, 0, 1,                          0],
-            [0, 0, 0,                          1],
+            [1, 0, 0, self.y_shift * self.width],
+            [0, 1, 0, self.x_shift * self.height],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
         ])
 
     @property
@@ -50,9 +50,9 @@ class ImageData:
         t, cos, sin = np.radians(self.theta), np.cos, np.sin
         return np.array([
             [cos(t), -sin(t), 0, 0],
-            [sin(t),  cos(t), 0, 0],
-            [     0,       0, 1, 0],
-            [     0,       0, 0, 1],
+            [sin(t), cos(t), 0, 0],
+            [0, 0, 1, 0],
+            [0, 0, 0, 1],
         ])
 
     @property
@@ -78,4 +78,3 @@ class ImageData:
         zoom_level = self.pixel_resolution_um / resolution_um
         zoomed_channels = ndimage.zoom(self.channels, zoom=(1, zoom_level, zoom_level))
         return replace(self, channels=zoomed_channels, pixel_resolution_um=resolution_um)
-

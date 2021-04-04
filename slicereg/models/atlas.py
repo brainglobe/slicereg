@@ -33,5 +33,3 @@ class Atlas:
     def scale_matrix(self) -> np.ndarray:
         res = self.resolution_um
         return np.diag((res, res, res, 1))
-
-

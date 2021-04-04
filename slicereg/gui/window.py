@@ -1,10 +1,7 @@
 from typing import Optional
 
-from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
-    QHBoxLayout, QLabel, QSlider
-from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel
 from vispy.app import Timer
-import numpy as np
 
 from slicereg.gui.base import BaseQtView
 
@@ -12,11 +9,11 @@ from slicereg.gui.base import BaseQtView
 class MainWindow(BaseQtView):
 
     def __init__(
-        self, 
-        title: str = "", 
-        volume_widget: Optional[QWidget] = None, 
-        slice_widget: Optional[QWidget] = None,
-        side_controls: Optional[QWidget] = None,
+            self,
+            title: str = "",
+            volume_widget: Optional[QWidget] = None,
+            slice_widget: Optional[QWidget] = None,
+            side_controls: Optional[QWidget] = None,
     ):
         self.title = title
         self.volume_widget = volume_widget if volume_widget else QWidget()

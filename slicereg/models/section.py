@@ -4,7 +4,6 @@ from dataclasses import dataclass, field, replace
 from typing import Tuple, cast
 from uuid import UUID, uuid4
 
-import numpy as np
 from numpy import ndarray
 
 from slicereg.models.image import ImageData
@@ -34,7 +33,7 @@ class Section:
         assert projection.shape == (4, 1)
         pos = tuple(projection[:3, 0])
         assert len(pos) == 3
-        return cast(Tuple[float, float, float], pos)  # cast to tell mypy that pos is a 3-tuple (numpy isn't helping out here).
+        return cast(Tuple[float, float, float], pos)  # cast to tell mypy that pos is a 3-tuple.
 
     def set_image_origin_to_center(self) -> Section:
         return replace(self, image=self.image.shift_origin_to_center())

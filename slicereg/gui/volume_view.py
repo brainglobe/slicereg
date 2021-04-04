@@ -19,7 +19,7 @@ class VolumeView(BaseQtView):
         self._canvas.central_widget.add_widget(self._viewbox)
         self._viewbox.camera = ArcballCamera(fov=0)
 
-        self._atlas_volume = Volume(array([[[1, 2]]]) * 1000, parent=self._viewbox.scene)#, interpolation='nearest')
+        self._atlas_volume = Volume(array([[[1, 2]]]) * 1000, parent=self._viewbox.scene)  # , interpolation='nearest')
         self._atlas_volume.attach(filters.ColorFilter((1., .5, 0., 1.)))
         self._atlas_volume.set_gl_state('additive', depth_test=False)
 
@@ -38,7 +38,7 @@ class VolumeView(BaseQtView):
         # volume = np.flip(volume, axis=0)
         # volume = np.flip(volume, axis=2)
         volume = volume.swapaxes(0, 2)
-        
+
         self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
         self._atlas_volume.transform = MatrixTransform(transform.T)
         self._viewbox.camera.center = (0, 0, 0)
