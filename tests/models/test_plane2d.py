@@ -2,7 +2,7 @@ from functools import partial
 
 import numpy as np
 from hypothesis import given
-from hypothesis.strategies import floats
+from hypothesis.strategies import floats, booleans
 
 from slicereg.models.transforms import Image2DTransform
 
@@ -11,28 +11,15 @@ np.set_printoptions(suppress=True, precision=1)
 sensible_floats = partial(floats, allow_nan=False, allow_infinity=False)
 
 
-def test_planar_translation_assigns_correct_positions():
-    plane = Image2DTransform(i=3, j=4)
-    plane2 = plane.translate(i=10, j=5)
-    assert plane2.i == 13 and plane2.j == 9
-
-
-def test_planar_rotation_assigns_correct_translations():
-    plane = Image2DTransform(i=0, j=0, theta=45)
-    plane2 = plane.rotate(45)
-    assert plane2.theta == 90
-
-
-@given(i=sensible_floats(), j=sensible_floats())
-def test_planes_affine_transform_with_no_rotation_is_correct(i, j):
-    plane = Image2DTransform(i=i, j=j, theta=0)
-    expected_transform = np.array([
-        [1, 0, 0, i],
-        [0, 1, 0, j],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1]
-    ], dtype=float)
-    assert np.all(np.isclose(plane.affine_transform, expected_transform))
+@given(i=sensible_floats(), j=sensible_floats(), i2=sensible_floats(), j2=sensible_floats(), theta=sensible_floats(), rot=sensible_floats(), rot_first=booleans())
+def test_planar_rotation_and_translate_updates_correct_parameters_with_order_independent(i, j, i2, j2, theta, rot, rot_first):
+    plane = Image2DTransform(i=i, j=j, theta=theta)
+    if rot_first:
+        plane2 = plane.rotate(theta=rot).translate(i=i2, j=j2)
+    else:
+        plane2 = plane.translate(i=i2, j=j2).rotate(theta=rot)
+    assert plane2.theta == theta + rot
+    assert plane2.i == i + i2 and plane2.j == j + j2
 
 
 @given(i=sensible_floats(), j=sensible_floats(), theta=sensible_floats())
