@@ -34,11 +34,6 @@ class AtlasTransform:
 
     @property
     def affine_transform(self) -> ndarray:
-
-        # r = rotate(self.rot_lateral, (1, 0, 0)).T @ rotate(self.rot_axial, (0, 1, 0)).T @ rotate(self.rot_median, (0, 0, 1)).T
-        # t = translate((self.right, self.superior, self.anterior)).T
-        # matrix = t @ r
-
         translate = np.array([
             [1, 0, 0, self.right],
             [0, 1, 0, self.superior],
@@ -46,7 +41,6 @@ class AtlasTransform:
             [0, 0, 0, 1],
         ])
 
-        # assert matrix.shape == (4, 4)
         s, c, t = np.sin, np.cos, np.radians(self.rot_lateral)
         rot_lateral = np.array([
             [1,    0,     0, 0],
