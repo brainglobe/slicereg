@@ -5,7 +5,7 @@ from hypothesis.strategies import integers, floats
 
 from slicereg.models.atlas import Atlas
 from slicereg.models.section import Section
-from slicereg.models.transforms import AtlasTransform, Plane2D
+from slicereg.models.transforms import AtlasTransform, Image2DTransform
 
 
 @given(res=integers(1, 1000), w=integers(1, 100), h=integers(1, 100), d=integers(1, 100))
@@ -30,7 +30,7 @@ def test_slicing_an_atlas_gets_a_new_section_with_correct_parameters():
     section = atlas.slice(plane)
     assert isinstance(section, Section)
     assert section.plane_3d == plane
-    assert section.plane_2d == Plane2D()
+    assert section.plane_2d == Image2DTransform()
     assert section.image.pixel_resolution_um == atlas.resolution_um
     assert section.image.channels.shape == (1, 3, 3)
     assert section.thickness_um == atlas.resolution_um

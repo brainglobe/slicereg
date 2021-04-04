@@ -7,13 +7,13 @@ from uuid import UUID, uuid4
 from numpy import ndarray
 
 from slicereg.models.image import ImageData
-from slicereg.models.transforms import Plane2D, AtlasTransform
+from slicereg.models.transforms import Image2DTransform, AtlasTransform
 
 
 @dataclass(frozen=True)
 class Section:
     image: ImageData
-    plane_2d: Plane2D = field(default_factory=Plane2D)
+    plane_2d: Image2DTransform = field(default_factory=Image2DTransform)
     plane_3d: AtlasTransform = field(default_factory=AtlasTransform)
     thickness_um: float = 16.
     id: UUID = field(default_factory=uuid4)
@@ -37,7 +37,7 @@ class Section:
         return cast(Tuple[float, float, float], pos)  # cast to tell mypy that pos is a 3-tuple (numpy isn't helping out here).
 
     def recenter(self) -> Section:
-        return replace(self, plane_2d=replace(self.plane_2d, x=-self.image.width / 2, y=-self.image.height / 2))
+        return replace(self, plane_2d=replace(self.plane_2d, i=-self.image.height / 2, j=-self.image.width / 2))
 
     def resample(self, resolution_um: float) -> Section:
         new_section = replace(self, image=self.image.resample(resolution_um=resolution_um))

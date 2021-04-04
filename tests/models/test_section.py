@@ -7,7 +7,7 @@ from pytest import approx
 
 from slicereg.models.image import ImageData
 from slicereg.models.section import Section
-from slicereg.models.transforms import Plane2D, AtlasTransform
+from slicereg.models.transforms import Image2DTransform, AtlasTransform
 
 sensible_floats = floats(allow_nan=False, allow_infinity=False)
 
@@ -41,7 +41,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, right, su
 def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift, theta):
     section = Section(
         image=ImageData(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution),
-        plane_2d=Plane2D(x=x_shift, y=y_shift, theta=theta),
+        plane_2d=Image2DTransform(i=x_shift, j=y_shift, theta=theta),
     )
     x, y, z = section.pos_from_coord(i=0, j=j)
     assert x == approx((pixel_resolution) * (j * cos(radians(theta)) + x_shift))
@@ -68,9 +68,9 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
 @given(width=st.integers(1, 1000), height=st.integers(1, 1000))
 def test_section_recenter_sets_shift_to_half_the_width_and_height(width, height):
     section = Section(image=ImageData(channels=np.random.random((3, height, width)), pixel_resolution_um=123))
-    assert section.plane_2d.x == 0 and section.plane_2d.y == 0
+    assert section.plane_2d.i == 0 and section.plane_2d.j == 0
     section2 = section.recenter()
-    assert section2.plane_2d.x == approx(-width / 2) and section2.plane_2d.y == approx(-height / 2)
+    assert section2.plane_2d.i == approx(-height / 2) and section2.plane_2d.j == approx(-width / 2)
 
 
 def test_resample_section_gets_new_section_with_resampled_image():

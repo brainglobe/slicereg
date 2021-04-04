@@ -8,20 +8,20 @@ from vispy.util.transforms import translate, rotate
 
 
 @dataclass(frozen=True)
-class Plane2D:
-    x: float = 0.
-    y: float = 0.
+class Image2DTransform:
+    i: float = 0.
+    j: float = 0.
     theta: float = 0.
 
-    def translate(self, dx: float, dy: float) -> Plane2D:
-        return replace(self, x=self.x + dx, y=self.y + dy)
+    def translate(self, i: float, j: float) -> Image2DTransform:
+        return replace(self, i=self.i + i, j=self.j + j)
 
-    def rotate(self, theta: float) -> Plane2D:
+    def rotate(self, theta: float) -> Image2DTransform:
         return replace(self, theta=self.theta + theta)
 
     @property
     def affine_transform(self) -> ndarray:
-        translation = translate((self.x, self.y, 0), dtype=float)
+        translation = translate((self.i, self.j, 0), dtype=float)
         rotation = rotate(self.theta, (0, 0, 1), dtype=float)
         matrix = (rotation @ translation).T
         assert matrix.shape == (4, 4)

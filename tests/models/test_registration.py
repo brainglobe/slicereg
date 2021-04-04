@@ -3,7 +3,7 @@ import pytest
 
 from slicereg.models.registration import register
 from slicereg.models.section import Section, ImageData
-from slicereg.models.transforms import Plane2D, AtlasTransform
+from slicereg.models.transforms import Image2DTransform, AtlasTransform
 from slicereg.models.atlas import Atlas
 
 
@@ -13,7 +13,7 @@ def test_section_registration_to_an_atlas_gets_a_section_that_matches_sections_p
             channels=np.random.random((3, 4, 5)), 
             pixel_resolution_um=10,
         ),
-        plane_2d=Plane2D(x=3, y=5, theta=20),
+        plane_2d=Image2DTransform(i=3, j=5, theta=20),
         plane_3d=AtlasTransform(right=10, superior=-5, anterior=10),
         )
     atlas = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=20)
@@ -51,7 +51,7 @@ cases = [
     # {
     #     "atlas_res": 1,
     #     "section_res": 1,
-    #     "pos": {"x": 1, "y": 0, "z": 1},
+    #     "pos": {"i": 1, "j": 0, "z": 1},
     #     "expected": [
     #         [0, 1, 0],
     #         [0, 0, 0],
@@ -61,7 +61,7 @@ cases = [
     # {
     #     "atlas_res": 1,
     #     "section_res": 1,
-    #     "pos": {"x": 0, "y": 1, "z": 1},
+    #     "pos": {"i": 0, "j": 1, "z": 1},
     #     "expected": [
     #         [0, 0, 0],
     #         [1, 0, 0],
@@ -71,7 +71,7 @@ cases = [
     # {
     #     "atlas_res": 10,
     #     "section_res": 1,
-    #     "pos": {"x": 19, "y": 8, "z": 15},
+    #     "pos": {"i": 19, "j": 8, "z": 15},
     #     "expected": [
     #         [0, 0, 1],
     #         [0, 0, 0],
@@ -81,7 +81,7 @@ cases = [
     # {
     #     "atlas_res": 10,
     #     "section_res": 1,
-    #     "pos": {"x": 9, "y": 8, "z": 15},
+    #     "pos": {"i": 9, "j": 8, "z": 15},
     #     "expected": [
     #         [0, 0, 0],
     #         [0, 0, 1],
@@ -91,7 +91,7 @@ cases = [
     # {
     #     "atlas_res": 10,
     #     "section_res": 1,
-    #     "pos": {"x": 15, "y": 15, "z": 11},
+    #     "pos": {"i": 15, "j": 15, "z": 11},
     #     "expected": [
     #         [1, 1, 1],
     #         [1, 1, 1],
@@ -101,7 +101,7 @@ cases = [
     # {
     #     "atlas_res": 4,  # 0:4, 4:8, 8:12
     #     "section_res": 2,
-    #     "pos": {"x": 4, "y": 0, "z": 6},
+    #     "pos": {"i": 4, "j": 0, "z": 6},
     #     "expected": [
     #         [0, 0, 1],
     #         [0, 0, 1],
@@ -111,7 +111,7 @@ cases = [
     # {
     #     "atlas_res": 4,  # 0:4, 4:8, 8:12
     #     "section_res": 4,
-    #     "pos": {"x": 0, "y": 0, "z": 4},
+    #     "pos": {"i": 0, "j": 0, "z": 4},
     #     "expected": [
     #         [0, 0, 0],
     #         [0, 1, 0],
@@ -121,7 +121,7 @@ cases = [
     # {
     #     "atlas_res": 1,  # 0:4, 4:8, 8:12
     #     "section_res": 2,
-    #     "pos": {"x": 1, "y": 1, "z": 1},
+    #     "pos": {"i": 1, "j": 1, "z": 1},
     #     "expected": [
     #         [1, 0, 0],
     #         [0, 0, 0],
