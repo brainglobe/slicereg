@@ -12,7 +12,7 @@ from slicereg.models.transforms import AtlasTransform
 def register(section: Section, atlas: Atlas) -> Section:
     width, height = section.image.width, section.image.height
     inds = inds_homog(height=height, width=width)
-    transform = np.linalg.inv(atlas.scale_matrix) @ section.affine_transform
+    transform = np.linalg.inv(atlas.affine_transform) @ section.affine_transform
     brightness_3d = _register(inds, volume=atlas.volume, transform=transform)
     registered_slice = section.with_new_image(
         ImageData(

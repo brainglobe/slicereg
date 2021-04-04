@@ -1,8 +1,8 @@
 import numpy as np
-from numpy import array, ndarray
 from PySide2.QtWidgets import QWidget
+from numpy import array, ndarray
 from vispy.app import KeyEvent, use_app
-from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Volume, Image, ArcballCamera
+from vispy.scene import SceneCanvas, ViewBox, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
