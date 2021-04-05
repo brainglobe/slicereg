@@ -20,8 +20,8 @@ If you'd like to try it out, check the Installation section below.
 
 Next features are focused on manual registration in the GUI:
   - manual registration:
-    - [ ] Comparison widget between section and reference atlas
-    - [ ] Controls for full affine transforms
+    - [x] Comparison widget between section and reference atlas
+    - [x] Controls for full affine transforms
   - multi-slice handling:
     - [ ] Load multiple slices at once
     - [ ] Slice selection and multi-slice manipulation interface.
