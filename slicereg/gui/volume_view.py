@@ -46,14 +46,14 @@ class VolumeView(BaseQtView):
         self._canvas.update()
 
     def on_section_loaded(self, image: ndarray, transform: ndarray):
-        self._section_image.set_data(image)
+        self._section_image.set_data(image.T)
         self._section_image.clim = np.min(image), np.max(image)
         if transform is not None:
             self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 
     def on_channel_select(self, image: ndarray, channel: int):
-        self._section_image.set_data(image)
+        self._section_image.set_data(image.T)
         self._section_image.clim = np.min(image), np.max(image)
         self._canvas.update()
 
@@ -62,7 +62,7 @@ class VolumeView(BaseQtView):
         self._canvas.update()
 
     def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray):
-        self._section_image.set_data(section_image)
+        self._section_image.set_data(section_image.T)
         self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 
