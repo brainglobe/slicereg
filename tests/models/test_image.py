@@ -4,9 +4,14 @@ import numpy as np
 import pytest
 from pytest import approx
 from hypothesis import given
-from hypothesis.strategies import integers, floats
+from hypothesis.strategies import integers, floats, booleans
 
 from slicereg.models.image import ImageData
+
+
+np.set_printoptions(suppress=True, precision=1)
+
+sensible_floats = partial(floats, allow_nan=False, allow_infinity=False)
 
 np.random.seed(100)  # todo: replace with SeedGenerator, get better control
 
@@ -14,8 +19,6 @@ cases = [
     ((2, 3, 2), 2),
     ((6, 30, 10), 6),
 ]
-
-
 @pytest.mark.parametrize('shape,num_channels', cases)
 def test_image_reports_correct_number_of_channels(shape, num_channels):
     image = ImageData(channels=np.random.random(size=shape), pixel_resolution_um=12)
@@ -26,8 +29,6 @@ cases = [
     ((2, 3, 4), 4),
     ((6, 30, 10), 10),
 ]
-
-
 @pytest.mark.parametrize('shape,width', cases)
 def test_image_width(shape, width):
     image = ImageData(channels=np.random.random(size=shape), pixel_resolution_um=12)
@@ -38,8 +39,6 @@ cases = [
     ((2, 3, 2), 3),
     ((6, 30, 10), 30),
 ]
-
-
 @pytest.mark.parametrize('shape,height', cases)
 def test_image_height(shape, height):
     image = ImageData(channels=np.random.random(size=shape), pixel_resolution_um=12)
@@ -85,13 +84,27 @@ def test_image_aspect_ratio_calculation(width, height):
     image = ImageData(channels=np.random.random((2, height, width)), pixel_resolution_um=10)
     assert approx(image.aspect_ratio == width / height)
 
-@given(width=integers(min_value=1, max_value=1000), height=integers(min_value=1, max_value=1000))
-def test_image_shape_matrix_calculation(width, height):
-    image = ImageData(channels=np.random.random((2, height, width)), pixel_resolution_um=10)
+
+@given(y_shift=sensible_floats(), x_shift=sensible_floats(), y_shift2=sensible_floats(), x_shift2=sensible_floats(), theta=sensible_floats(), rot=sensible_floats(), rot_first=booleans())
+def test_planar_rotation_and_translate_updates_correct_parameters_with_order_independent(y_shift, x_shift, y_shift2, x_shift2, theta, rot, rot_first):
+    image = ImageData(channels=np.random.random((2, 10, 10)), pixel_resolution_um=10, y_shift=y_shift, x_shift=x_shift, theta=theta)
+    if rot_first:
+        image2 = image.rotate(theta=rot).translate(y_shift=y_shift2, x_shift=x_shift2)
+    else:
+        image2 = image.translate(y_shift=y_shift2, x_shift=x_shift2).rotate(theta=rot)
+    assert image2.theta == theta + rot
+    assert image2.y_shift == y_shift + y_shift2 and image2.x_shift == x_shift + x_shift2
+
+
+@given(y_shift=sensible_floats(), x_shift=sensible_floats(), theta=sensible_floats())
+def test_planes_affine_transform_with_rotation_is_correct(y_shift, x_shift, theta):
+    plane = ImageData(channels=np.random.random((2, 10, 10)), pixel_resolution_um=10, y_shift=y_shift, x_shift=x_shift, theta=theta)
+    t = np.radians(theta)
     expected = np.array([
-        [1, 0, 0, image.height],
-        [0, 1, 0, image.width],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1],
-    ])
-    assert approx(image.shape_matrix == expected)
+        [np.cos(t), -np.sin(t), 0, y_shift],
+        [np.sin(t),  np.cos(t), 0, x_shift],
+        [        0,          0, 1, 0],
+        [        0,          0, 0, 1],
+    ], dtype=float)
+    observed = plane.affine_transform
+    assert np.all(np.isclose(observed, expected))

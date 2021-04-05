@@ -3,7 +3,7 @@ import pytest
 
 from slicereg.models.registration import register
 from slicereg.models.section import Section, ImageData
-from slicereg.models.transforms import Image2DTransform, AtlasTransform
+from slicereg.models.transforms import AtlasTransform
 from slicereg.models.atlas import Atlas
 
 
@@ -12,8 +12,10 @@ def test_section_registration_to_an_atlas_gets_a_section_that_matches_sections_p
         image=ImageData(
             channels=np.random.random((3, 4, 5)), 
             pixel_resolution_um=10,
+            y_shift=3,
+            x_shift=5,
+            theta=20
         ),
-        plane_2d=Image2DTransform(i=3, j=5, theta=20),
         plane_3d=AtlasTransform(right=10, superior=-5, anterior=10),
         )
     atlas = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=20)
@@ -150,7 +152,7 @@ def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     expected_slice = np.array(case['expected']).astype(float)
     try:
         assert np.all(np.isclose(atlas_slice, expected_slice))
-    except:
+    except AssertionError:
         assert np.all(atlas_slice == expected_slice)  # similar, but nicer printout of arrays in pytest
 
 
