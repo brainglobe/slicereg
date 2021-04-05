@@ -23,6 +23,13 @@ class Section:
     def rotate(self, rot_lateral: float = 0., rot_axial: float = 0., rot_median: float =0.) -> Section:
         return replace(self, plane_3d=self.plane_3d.rotate(rot_lateral=rot_lateral, rot_axial=rot_axial, rot_median=rot_median))
 
+    def set_plane_3d(self, **dims) -> Section:
+        for dim in dims:
+            if dim not in ['right', 'superior', 'anterior', 'rot_lateral', 'rot_axial', 'rot_median']:
+                raise TypeError(f'Unknown dimension "{dim}"')
+
+        return replace(self, plane_3d=replace(self.plane_3d, **dims))
+
     @property
     def affine_transform(self) -> ndarray:
         # reflection_mat = np.diag([-1, 1, 1, 1])
