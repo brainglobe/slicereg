@@ -32,7 +32,7 @@ cases = [
     {
         "atlas_res": 1,
         "section_res": 1,
-        "pos": {"right": 0, "superior": 0, "anterior": -1},
+        "pos": {"right": 0, "superior": 0, "anterior": 0},
         "expected": [
             [0, 0, 0],
             [0, 1, 0],
