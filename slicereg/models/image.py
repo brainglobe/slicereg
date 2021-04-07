@@ -36,8 +36,8 @@ class ImageData:
     @property
     def shift_matrix(self) -> np.ndarray:
         return np.array([
-            [1, 0, 0, self.y_shift * self.width],
-            [0, 1, 0, self.x_shift * self.height],
+            [1, 0, 0, self.y_shift * self.height],
+            [0, 1, 0, self.x_shift * self.width],
             [0, 0, 1, 0],
             [0, 0, 0, 1],
         ])
@@ -70,6 +70,12 @@ class ImageData:
             raise ValueError(f"Coord ({i, j}) not in image.")
 
         return np.array([[j, -i, 0., 1.]])
+
+    def translate(self, dy: float, dx: float) -> ImageData:
+        return replace(self, x_shift=self.x_shift + dx, y_shift=self.y_shift + dy)
+
+    def rotate(self, theta: float) -> ImageData:
+        return replace(self, theta=self.theta + theta)
 
     def resample(self, resolution_um: float) -> ImageData:
         if resolution_um <= 0:

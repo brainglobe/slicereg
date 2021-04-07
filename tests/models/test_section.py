@@ -31,22 +31,36 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, right, su
     assert z == approx(anterior)
 
 
-@given(
-    j=integers(0, 39),  # image coordinates on i-intercept to simplify trig math (e.g. (0, j))
-    pixel_resolution=floats(min_value=.0001, max_value=1000, allow_nan=False, allow_infinity=False),
-    x_shift=sensible_floats, y_shift=sensible_floats,  # planar shifts
-    theta=sensible_floats,  # planar rotations
-)
-def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift,
-                                                                            theta):
+def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations():
     section = Section(
-        image=ImageData(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution,
-                        x_shift=x_shift, y_shift=y_shift, theta=theta),
+        image=ImageData(
+            channels=arange(2400).reshape(2, 30, 40), 
+            pixel_resolution_um=10,
+            x_shift=0., y_shift=0, theta=0
+        ),
     )
-    x, y, z = section.pos_from_coord(i=0, j=j)
-    assert x == approx((pixel_resolution) * (j * cos(radians(theta)) + x_shift))
-    assert y == approx((pixel_resolution) * (j * sin(radians(theta)) + y_shift))
+    x, y, z = section.pos_from_coord(i=1, j=2)
+    assert x == approx(20)
+    assert y == approx(-10)
     assert z == 0
+    
+    
+# @given(
+#     j=integers(0, 39),  # image coordinates on i-intercept to simplify trig math (e.g. (0, j))
+#     pixel_resolution=floats(min_value=.0001, max_value=1000, allow_nan=False, allow_infinity=False),
+#     x_shift=sensible_floats, y_shift=sensible_floats,  # planar shifts
+#     theta=sensible_floats,  # planar rotations
+# )
+# def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift,
+#                                                                             theta):
+#     section = Section(
+#         image=ImageData(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution,
+#                         x_shift=x_shift, y_shift=y_shift, theta=theta),
+#     )
+#     x, y, z = section.pos_from_coord(i=0, j=j)
+#     assert x == approx((pixel_resolution) * (j * cos(radians(theta)) + x_shift))
+#     assert y == approx((pixel_resolution) * (j * sin(radians(theta)) + y_shift))
+#     assert z == 0
 
 
 @given(i=st.integers(), j=st.integers())
@@ -63,22 +77,6 @@ def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
     else:
         assert section.pos_from_coord(i=i, j=j)
 
-
-@given(width=st.integers(2, 1000), height=st.integers(2, 1000))
-def test_section_origin_set_sets_shift_to_half_half_and_shift_matrix_to_half_width_height(width, height):
-    section = Section(image=ImageData(channels=np.random.random((3, height, width)), pixel_resolution_um=120))
-    assert section.image.y_shift == 0 and section.image.x_shift == 0
-    section2 = section.set_image_origin_to_center()
-    res = section2.image.pixel_resolution_um
-    height, width = section2.image.height, section2.image.width
-    assert section2.image.y_shift == -0.5 and section2.image.x_shift == -0.5
-    expected_shift_matrix = np.array([
-        [res, 0, 0, -res * height / 2],
-        [0, res, 0, -res * width / 2],
-        [0, 0, 1, 0],
-        [0, 0, 0, 1],
-    ])
-    assert np.all(np.isclose(section2.image.shift_matrix, expected_shift_matrix))
 
 
 def test_resample_section_gets_new_section_with_resampled_image():
