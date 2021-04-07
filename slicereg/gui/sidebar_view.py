@@ -1,7 +1,7 @@
 from functools import partial
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
-    QHBoxLayout, QLabel, QSlider
+    QHBoxLayout, QInputDialog, QLineEdit
 from PySide2.QtCore import Qt
 
 from slicereg.gui.base import BaseQtView
@@ -18,6 +18,10 @@ class SidebarView(BaseQtView):
         self.widget.setLayout(layout)
 
         # Section Buttons
+        load_atlas_button = QPushButton("Load Atlas Tiff")
+        layout.addWidget(load_atlas_button)
+        load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
+
         load_image_button = QPushButton("Load Section")
         layout.addWidget(load_image_button)
         load_image_button.clicked.connect(self.show_load_image_dialog)
@@ -75,6 +79,17 @@ class SidebarView(BaseQtView):
             return
         self.load_section(filename=filename)
 
+    def show_load_atlas_dialog(self):
+        filename, filetype = QFileDialog.getOpenFileName(
+            parent=self.qt_widget,
+            caption="Load Atlas File from Tiff Stack",
+            dir=".",
+            filter="TIFF (*.tif)"
+        )
+        if not filename:
+            return
+        self.load_atlas_from_file(filename=filename)
+
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
             return
@@ -95,4 +110,7 @@ class SidebarView(BaseQtView):
         
     def load_atlas(self, resolution: int):
         raise NotImplementedError("Connect to LoadAtlasCommand before using.")
+
+    def load_atlas_from_file(self, filename: str):
+        raise NotImplementedError("Connect to LoadAtlasFromFileCommand before using.")
 
