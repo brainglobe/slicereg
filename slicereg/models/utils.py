@@ -3,7 +3,7 @@ from numba import njit, prange
 
 
 @njit(parallel=True, fastmath=True)
-def _fancy_index_3d_numba(volume, inds, default: int = 0):
+def _fancy_index_3d_numba(volume: np.ndarray, inds: np.ndarray, default: int = 0) -> np.ndarray:
     ii, jj, kk = volume.shape
     vals = np.empty(inds.shape[0], dtype=volume.dtype)
     for ind in prange(inds.shape[0]):
@@ -12,5 +12,5 @@ def _fancy_index_3d_numba(volume, inds, default: int = 0):
     return vals
 
 
-def _fancy_index_3d_numpy(volume, inds):
+def _fancy_index_3d_numpy(volume: np.ndarray, inds: np.ndarray) -> np.ndarray:
     return volume.take(np.ravel_multi_index(inds, volume.shape, mode='clip'), mode='clip')
