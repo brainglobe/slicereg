@@ -57,14 +57,42 @@ cases = [
             [1, 0, 0],
         ]
     },
+    {
+        "atlas_res": 10,
+        "section_res": 1,
+        "pos": {"x": 1, "y": 1, "z": 1},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "section_res": 1,
+        "pos": {"x": 15, "y": -15, "z": 15},
+        "expected": [
+            [1, 1, 1],
+            [1, 1, 1],
+            [1, 1, 1],
+        ]
+    },
+    {
+        "atlas_res": 10,
+        "section_res": 1,
+        "pos": {"x": 8, "y": -9, "z": 15},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 1],
+            [0, 0, 1],
+        ]
+    },
 ]
 
 @pytest.mark.parametrize("case", cases)
 def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
     volume[1, 1, 1] = 1
-    # volume[1, 2, 1] = 2
-    # volume[2, 1, 1] = 3
     atlas = Atlas(
         volume=volume,
         resolution_um=case['atlas_res'],
