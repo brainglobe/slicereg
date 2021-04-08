@@ -20,19 +20,21 @@ np.set_printoptions(precision=5, suppress=True)
 @given(
     i=integers(0, 2), j=integers(0, 3),
     i_shift=real_floats(-2, 2), j_shift=real_floats(-2, 2),
+    theta=real_floats(-500, 500),
     x=real_floats(), y=real_floats(), z=real_floats(),
     res=real_floats(.001, 1000)
 )
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, x, y, z, res):
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, theta, x, y, z, res):
     section = Section(
-        image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift),
+        image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift, theta=theta),
         pixel_resolution_um=res,
         plane_3d=AtlasTransform(x=x, y=y, z=z),
     )
+    t = radians(theta)
     xyz = section.map_ij_to_xyz(i=i, j=j)  # observed 3D positions
     expected = np.array([
-        [((j + (j_shift * section.image.width)) * res) + x],
-        [((-i - (i_shift * section.image.height)) * res) + y],
+        [( j + (j_shift * section.image.width))  * cos(t) * res + x],
+        [(-i - (i_shift * section.image.height)) * sin(t) * res + y],
         [z],
         [1],
     ])
