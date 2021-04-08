@@ -33,7 +33,7 @@ class Section:
         return replace(self, plane_3d=replace(self.plane_3d, **dims))
 
     @property
-    def scale_matrix(self) -> np.ndarray:
+    def _scale_matrix(self) -> np.ndarray:
         scale = self.pixel_resolution_um
         matrix = np.diag([scale, scale, 1., 1.])
         return matrix
@@ -47,11 +47,10 @@ class Section:
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ])
-        return self.plane_3d.affine_transform @ self.scale_matrix @ ij_to_xyz_matrix @ self.image.affine_transform
+        return self.plane_3d.affine_transform @ self._scale_matrix @ ij_to_xyz_matrix @ self.image.affine_transform
 
     def map_ij_to_xyz(self, i: int, j: int) -> Tuple[float, float, float]:
         return self.affine_transform @ ij_homog(i=i, j=j)
-
 
     def set_image_origin_to_center(self) -> Section:
         return replace(self, image=self.image.shift_origin_to_center())
