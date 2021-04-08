@@ -51,7 +51,8 @@ class Section:
 
     def map_ij_to_xyz(self, i: int, j: int) -> Tuple[float, float, float]:
         xyzw = self.affine_transform @ ij_homog(i=i, j=j)
-        return tuple(xyzw[:3, 0])
+        x, y, z = xyzw[:3, 0]
+        return x, y, z
 
     def set_image_origin_to_center(self) -> Section:
         return replace(self, image=self.image.shift_origin_to_center())

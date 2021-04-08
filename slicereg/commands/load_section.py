@@ -21,7 +21,7 @@ class LoadImageCommand(BaseCommand):
 
     def __call__(self, filename: str) -> None:  # type: ignore
 
-        log = lambda msg: print(
+        log = lambda msg, section: print(
             msg, section,
             section.affine_transform,
             section.image.affine_transform,
@@ -29,11 +29,11 @@ class LoadImageCommand(BaseCommand):
             sep="\n", end="\n\n"
         )
         section = self._reader.read(filename=filename)
-        log("Loaded")
+        log("Loaded", section)
         section = section.set_image_origin_to_center()
-        log("Origin Set to Center")
+        log("Origin Set to Center", section)
         section = section.resample(resolution_um=10)
-        log("Resampled")
+        log("Resampled", section)
 
         self._repo.save_section(section=section)
         self.section_loaded.emit(image=section.image.channels[0], transform=section.affine_transform)

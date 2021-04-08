@@ -30,7 +30,7 @@ def test_section_registration_to_an_atlas_gets_an_image_with_same_image_paramete
 #     {
 #         "atlas_res": 1,
 #         "section_res": 1,
-#         "pos": {"x": -1, "y": -1, "z": 0},
+#         "pos": {"x": 0, "y": 0, "z": 0},
 #         "expected": [
 #             [0, 0, 0],
 #             [0, 1, 0],
