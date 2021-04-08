@@ -40,7 +40,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, 
         [z],
         [1],
     ])
-    npt.assert_almost_equal(xyz, expected, decimal=4)
+    npt.assert_almost_equal(xyz, expected)
 
 
 np.set_printoptions(precision=5, suppress=True)
