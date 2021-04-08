@@ -8,23 +8,26 @@ from slicereg.models.section import Section, Image
 def register(section: Section, atlas: Atlas) -> Image:
     width, height = section.image.width, section.image.height
     inds = section.image.inds_homog.astype(float)
-    transform = np.linalg.inv(atlas.affine_transform) @ section.affine_transform
-    brightness_3d = _register(inds, volume=atlas.volume, transform=transform)
+    atlas_inds = (np.linalg.inv(atlas.affine_transform) @ section.affine_transform) @ inds
+    atlas_inds = atlas_inds[:3, :]  # grab just ijk coords
+    atlas_inds = atlas_inds.astype(np.int32)  # round to nearest integer, for indexing
+    brightness_3d = _fancy_index_3d_numba(volume=atlas.volume, inds=atlas_inds.T)
     atlas_slice = Image(channels=brightness_3d.reshape(1, height, width))
     return atlas_slice
 
 
 @njit(parallel=True, fastmath=True)
-def _register(inds, volume, transform):
-    atlas_coords = transform @ inds
-    atlas_coords = atlas_coords[:3, :].T.astype(np.int32)
-
+def _fancy_index_3d_numba(volume, inds):
     ii, jj, kk = volume.shape
-    vals = np.empty(atlas_coords.shape[0], dtype=volume.dtype)
-    for ind in prange(atlas_coords.shape[0]):
-        i, j, k = atlas_coords[ind]
-        if 0 <= i < ii and 0 <= j < jj and 0 <= k < kk:
-            vals[ind] = volume[i, j, k]
-        else:
-            vals[ind] = 0 #np.nan
+    vals = np.empty(inds.shape[0], dtype=volume.dtype)
+    for ind in prange(inds.shape[0]):
+        i, j, k = inds[ind]
+        vals[ind] = volume[i, j, k] if 0 <= i < ii and 0 <= j < jj and 0 <= k < kk else 0  # np.nan
+    return vals
+
+
+def _fancy_index_3d_numpy(volume, inds):
+    inds = inds.astype(int)  # round to nearest integer, for indexing
+    inds2 = np.ravel_multi_index(inds, volume.shape, mode='clip')
+    vals = volume.take(inds2, mode='clip')
     return vals
