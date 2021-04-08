@@ -8,14 +8,14 @@ import numpy as np
 from scipy import ndimage
 
 from slicereg.models.image import Image, ij_homog
-from slicereg.models.transforms import AtlasTransform
+from slicereg.models.transforms import Transform3D
 
 
 @dataclass(frozen=True)
 class Section:
     image: Image
     pixel_resolution_um: float
-    plane_3d: AtlasTransform = field(default_factory=AtlasTransform)
+    plane_3d: Transform3D = field(default_factory=Transform3D)
     thickness_um: float = 16.
     id: UUID = field(default_factory=uuid4)
 

@@ -20,7 +20,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=Image(channels=np.random.random((2, 3, 4)), pixel_resolution_um=20.))
+        Section(image=Image(channels=np.random.random((2, 3, 4))), pixel_resolution_um=20.)
     ]
     return repo
 

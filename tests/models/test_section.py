@@ -10,7 +10,7 @@ from pytest import approx
 
 from slicereg.models.image import Image
 from slicereg.models.section import Section
-from slicereg.models.transforms import AtlasTransform
+from slicereg.models.transforms import Transform3D
 
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)
 np.set_printoptions(precision=5, suppress=True)
@@ -27,7 +27,7 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, 
     section = Section(
         image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift, theta=theta),
         pixel_resolution_um=res,
-        plane_3d=AtlasTransform(x=x, y=y, z=z),
+        plane_3d=Transform3D(x=x, y=y, z=z),
     )
     t = -radians(theta)  # image is left-handed, so flip rotation
     xyz = section.map_ij_to_xyz(i=i, j=j)  # observed 3D positions

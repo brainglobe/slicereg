@@ -2,7 +2,7 @@ import numpy as np
 from hypothesis import given
 from hypothesis.strategies import floats
 
-from slicereg.models.transforms import AtlasTransform
+from slicereg.models.transforms import Transform3D
 
 sensible_floats = floats(allow_infinity=False, allow_nan=False)
 
@@ -15,7 +15,7 @@ def test_3d_translation_gives_correct_affine_transform(x, y, z):
         [0, 0, 1, z],
         [0, 0, 0, 1],
     ]
-    observed = AtlasTransform(x=x, y=y, z=z).affine_transform
+    observed = Transform3D(x=x, y=y, z=z).affine_transform
     assert np.all(np.isclose(observed, expected))
 
 
@@ -27,5 +27,5 @@ def test_3d_x_rotation_gives_correct_affine_transform(rot_lateral):
         [0, np.sin(np.radians(rot_lateral)), np.cos(np.radians(rot_lateral)), 0],
         [0, 0, 0, 1],
     ]
-    observed = AtlasTransform(rot_lateral=rot_lateral).affine_transform
+    observed = Transform3D(rot_lateral=rot_lateral).affine_transform
     assert np.all(np.isclose(observed, expected))

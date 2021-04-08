@@ -12,7 +12,7 @@ from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.models.section import Section
-from slicereg.models.transforms import AtlasTransform
+from slicereg.models.transforms import Transform3D
 
 @scenario("section_affine_registration.feature", "Set Section's 3D Coordinates")
 def test_impl():
@@ -24,8 +24,9 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
         Section(
-            image=Image(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.),
-            plane_3d=AtlasTransform(x=5, y=2, z=20),
+            image=Image(channels=np.random.random((2, 3, 4))),
+            pixel_resolution_um=12.,
+            plane_3d=Transform3D(x=5, y=2, z=20),
         )
     ]
     return repo

@@ -16,11 +16,10 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
         Section(
-            image=Image(
-                channels=np.arange(12).reshape(2, 3, 2),
-                pixel_resolution_um=12
-            ),
-        )]
+            image=Image(channels=np.arange(12).reshape(2, 3, 2)),
+            pixel_resolution_um=12,
+        )
+    ]
     return repo
 
 @pytest.fixture
