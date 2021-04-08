@@ -10,7 +10,7 @@ from slicereg.repos.atlas_repo import BaseAtlasRepo
 from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import ImageData
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 from slicereg.models.transforms import AtlasTransform
 
@@ -24,8 +24,8 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
         Section(
-            image=ImageData(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.),
-            plane_3d=AtlasTransform(right=5, superior=2, anterior=20),
+            image=Image(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.),
+            plane_3d=AtlasTransform(x=5, y=2, z=20),
         )
     ]
     return repo
@@ -51,7 +51,7 @@ def step_impl(repo: BaseSectionRepo):
 
 @when("I give new translation and/or rotation values")
 def step_impl(command: UpdateSectionTransformCommand):
-    command(right=2, superior=5, anterior=10, rot_lateral=0, rot_axial=0, rot_median=0)
+    command(x=2, y=5, z=10, rot_lateral=0, rot_axial=0, rot_median=0)
 
 
 @then("the image is updated with a new 3D transform with indicated paramters set to the requested value")

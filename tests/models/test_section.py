@@ -1,86 +1,95 @@
+from functools import partial
+
 import numpy as np
+import numpy.testing as npt
 import pytest
 from hypothesis import strategies as st, given
 from hypothesis.strategies import integers, floats
 from numpy import arange, sin, cos, radians
 from pytest import approx
 
-from slicereg.models.image import ImageData
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 from slicereg.models.transforms import AtlasTransform
 
-sensible_floats = floats(allow_nan=False, allow_infinity=False)
+real_floats = partial(floats, allow_nan=False, allow_infinity=False)
+
+np.set_printoptions(precision=5, suppress=True)
 
 
 @given(
-    i=integers(0, 2), j=integers(0, 3),  # Image coordinates
-    right=sensible_floats, superior=sensible_floats, anterior=sensible_floats,
-    pixel_resolution=floats(min_value=1e-12, allow_nan=False, allow_infinity=False),
+    i=integers(0, 2), j=integers(0, 3),
+    i_shift=real_floats(-2, 2), j_shift=real_floats(-2, 2),
+    x=real_floats(), y=real_floats(), z=real_floats(),
+    res=real_floats(.001, 1000)
 )
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, right, superior, anterior, pixel_resolution):
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, x, y, z, res):
     section = Section(
-        image=ImageData(
-            channels=arange(24).reshape(2, 3, 4),
-            pixel_resolution_um=pixel_resolution,
-        ),
-        plane_3d=AtlasTransform(right=right, superior=superior, anterior=anterior),
+        image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift),
+        pixel_resolution_um=res,
+        plane_3d=AtlasTransform(x=x, y=y, z=z),
     )
-    x, y, z = section.pos_from_coord(i=i, j=j)  # observed 3D positions
-    assert x == approx((j * pixel_resolution) + right)
-    assert y == approx((-i * pixel_resolution) + superior)
-    assert z == approx(anterior)
+    xyz = section.map_ij_to_xyz(i=i, j=j)  # observed 3D positions
+    expected = np.array([
+        [((j + (j_shift * section.image.width)) * res) + x],
+        [((-i - (i_shift * section.image.height)) * res) + y],
+        [z],
+        [1],
+    ])
+    npt.assert_almost_equal(xyz, expected)
 
-
-def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations():
-    section = Section(
-        image=ImageData(
-            channels=arange(2400).reshape(2, 30, 40), 
-            pixel_resolution_um=10,
-            x_shift=0., y_shift=0, theta=0
-        ),
-    )
-    x, y, z = section.pos_from_coord(i=1, j=2)
-    assert x == approx(20)
-    assert y == approx(-10)
-    assert z == 0
-    
-    
-# @given(
-#     j=integers(0, 39),  # image coordinates on i-intercept to simplify trig math (e.g. (0, j))
-#     pixel_resolution=floats(min_value=.0001, max_value=1000, allow_nan=False, allow_infinity=False),
-#     x_shift=sensible_floats, y_shift=sensible_floats,  # planar shifts
-#     theta=sensible_floats,  # planar rotations
-# )
-# def test_can_get_correct_3d_position_with_image_shifts_and_planar_rotations(j, pixel_resolution, x_shift, y_shift,
-#                                                                             theta):
+#
+# @given(width=integers(1, 1000), height=integers(1, 1000), channels=integers(1, 6),
+#        r=floats(1, 1000, allow_nan=False, allow_infinity=False))
+# def test_image_scale_matrix_converts_pixel_resolution_to_um_space(width, height, channels, r):
+#     image = Image(channels=np.random.random(size=(channels, height, width)), pixel_resolution_um=r)
+#     expected = np.array([
+#         [r, 0, 0, 0],
+#         [0, r, 0, 0],
+#         [0, 0, 1, 0],
+#         [0, 0, 0, 1],
+#     ])
+#     assert np.all(np.isclose(image.scale_matrix, expected))
+#
+# @given(i=st.integers(), j=st.integers())
+# def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
 #     section = Section(
-#         image=ImageData(channels=arange(2400).reshape(2, 30, 40), pixel_resolution_um=pixel_resolution,
-#                         x_shift=x_shift, y_shift=y_shift, theta=theta),
+#         image=Image(
+#             channels=arange(180).reshape(2, 3, 30),
+#             pixel_resolution_um=1
+#         ),
 #     )
-#     x, y, z = section.pos_from_coord(i=0, j=j)
-#     assert x == approx((pixel_resolution) * (j * cos(radians(theta)) + x_shift))
-#     assert y == approx((pixel_resolution) * (j * sin(radians(theta)) + y_shift))
-#     assert z == 0
-
-
-@given(i=st.integers(), j=st.integers())
-def test_nonexistent_image_coords_raise_error_and_doesnt_if_exists(i, j):
-    section = Section(
-        image=ImageData(
-            channels=arange(180).reshape(2, 3, 30),
-            pixel_resolution_um=1
-        ),
-    )
-    if i < 0 or i >= section.image.height or j < 0 or j >= section.image.width:
-        with pytest.raises(ValueError):
-            section.pos_from_coord(i=i, j=j)
-    else:
-        assert section.pos_from_coord(i=i, j=j)
-
-
-
-def test_resample_section_gets_new_section_with_resampled_image():
-    section = Section(image=ImageData(channels=np.random.random((3, 4, 4)), pixel_resolution_um=12))
-    section2 = section.resample(resolution_um=24)
-    assert isinstance(section2, Section)
-    assert section2.image.pixel_resolution_um == 24
+#     if i < 0 or i >= section.image.height or j < 0 or j >= section.image.width:
+#         with pytest.raises(ValueError):
+#             section.pos_from_coord(i=i, j=j)
+#     else:
+#         assert section.pos_from_coord(i=i, j=j)
+#
+#
+#
+# def test_resample_section_gets_new_section_with_resampled_image():
+#     section = Section(image=Image(channels=np.random.random((3, 4, 4)), pixel_resolution_um=12))
+#     section2 = section.resample(resolution_um=24)
+#     assert isinstance(section2, Section)
+#     assert section2.image.pixel_resolution_um == 24
+#
+#
+#
+# @given(to_resolution=sensible_floats(0.5, 200))
+# def test_downsampling_image_produces_correct_resolution_and_data_shape(to_resolution):
+#     from_resolution = 12
+#     image = Image(channels=np.arange(24).reshape(1, 6, 4), pixel_resolution_um=from_resolution)
+#     image2 = image.resample(resolution_um=to_resolution)
+#     assert image2.pixel_resolution_um == to_resolution
+#     assert image2.num_channels == image.num_channels
+#
+#     scale_ratio = from_resolution / to_resolution
+#     assert approx(image.width * scale_ratio == image2.width, abs=1)
+#     assert approx(image.height * scale_ratio == image2.height, abs=1)
+#
+#
+# @given(to_resolution=floats(allow_infinity=False, allow_nan=False, max_value=0))
+# def test_downsampling_beyond_dimensions_produces_valueerror(to_resolution):
+#     image = Image(channels=np.arange(24).reshape(1, 4, 6), pixel_resolution_um=12)
+#     with pytest.raises(ValueError, match=r".* positive.*"):
+#         image.resample(resolution_um=to_resolution)

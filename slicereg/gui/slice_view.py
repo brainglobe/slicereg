@@ -83,7 +83,7 @@ class SliceView(BaseQtView):
     def _on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 4.):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self.move_section(right=scaled_dx, anterior=scaled_dy)
+        self.move_section(x=scaled_dx, z=scaled_dy)
         self.get_coord_data(i=x2, j=y2)  # todo: replace with mouse highlighting
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 1.):
@@ -93,9 +93,9 @@ class SliceView(BaseQtView):
         self.move_section(rot_lateral=scaled_dx, rot_median=scaled_dy)
 
     def _on_mousewheel_move(self, increment: int):
-        self.move_section(superior=10 * increment)
+        self.move_section(y=10 * increment)
 
-    def move_section(self, right=0., superior=0., anterior=0., rot_lateral=0., rot_axial=0., rot_median=0.) -> None:
+    def move_section(self, x=0., y=0., z=0., rot_lateral=0., rot_axial=0., rot_median=0.) -> None:
         raise NotImplementedError("Wire up to MoveSectionCommand to use this.")
 
     def get_coord_data(self, i: int, j: int):

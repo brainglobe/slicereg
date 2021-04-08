@@ -10,7 +10,7 @@ from slicereg.repos.atlas_repo import BaseAtlasRepo
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import ImageData
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 
 
@@ -23,7 +23,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=ImageData(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.))
+        Section(image=Image(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.))
     ]
     return repo
 
@@ -48,7 +48,7 @@ def step_impl(repo: BaseSectionRepo):
 
 @when("I ask for the section to be translated and rotated")
 def step_impl(command: MoveSectionCommand):
-    command(right=2, superior=5, anterior=10, rot_lateral=0, rot_axial=0, rot_median=0)
+    command(x=2, y=5, z=10, rot_lateral=0, rot_axial=0, rot_median=0)
 
 
 @then("the image is updated with a new 3D transform")

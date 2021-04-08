@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from slicereg.models.section import Section
-from slicereg.models.image import ImageData
+from slicereg.models.image import Image
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 
@@ -14,7 +14,7 @@ def repo():
 @pytest.fixture
 def section1():
     return Section(
-        image=ImageData(
+        image=Image(
             channels=np.arange(12).reshape(2, 3, 2),
             pixel_resolution_um=12,
         )
@@ -24,7 +24,7 @@ def section1():
 @pytest.fixture
 def section2():
     return Section(
-        image=ImageData(
+        image=Image(
             channels=np.arange(12).reshape(2, 3, 2),
             pixel_resolution_um=12,
         ),
@@ -54,6 +54,6 @@ def test_repo_overwrites_existing_section(repo, section1: Section):
     repo.save_section(section=section1)
     assert len(repo.sections) == 1
 
-    section_moved = section1.translate(right=3)
+    section_moved = section1.translate(x=3)
     repo.save_section(section=section_moved)
     assert len(repo.sections) == 1

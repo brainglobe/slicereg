@@ -15,7 +15,7 @@ class UpdateSectionTransformCommand(BaseCommand):
 
     def __call__(self, **dims):  # type: ignore
         for dim in dims:
-            if dim not in ['right', 'superior', 'anterior', 'rot_lateral', 'rot_axial', 'rot_median']:
+            if dim not in ['x', 'y', 'z', 'rot_lateral', 'rot_axial', 'rot_median']:
                 raise TypeError(f'Unknown dimension "{dim}"')
 
         sections = self._section_repo.sections

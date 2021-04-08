@@ -7,7 +7,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.utils import Signal
-from slicereg.models.image import ImageData
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 
 
@@ -20,7 +20,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=ImageData(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.))
+        Section(image=Image(channels=np.random.random((2, 3, 4)), pixel_resolution_um=12.))
     ]
     return repo
 

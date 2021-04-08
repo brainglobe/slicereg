@@ -9,16 +9,16 @@ from numpy import ndarray
 
 @dataclass(frozen=True)
 class AtlasTransform:
-    right: float = 0.
-    superior: float = 0.
-    anterior: float = 0.
+    x: float = 0.
+    y: float = 0.
+    z: float = 0.
     rot_lateral: float = 0.
     rot_axial: float = 0.
     rot_median: float = 0.
 
-    def translate(self, right: float = 0., superior: float = 0., anterior: float = 0.) -> AtlasTransform:
-        return replace(self, right=self.right + right, superior=self.superior + superior,
-                       anterior=self.anterior + anterior)
+    def translate(self, x: float = 0., y: float = 0., z: float = 0.) -> AtlasTransform:
+        return replace(self, x=self.x + x, y=self.y + y,
+                       z=self.z + z)
 
     def rotate(self, rot_lateral: float = 0., rot_axial: float = 0., rot_median: float = 0.) -> AtlasTransform:
         return replace(self, rot_lateral=self.rot_lateral + rot_lateral, rot_axial=self.rot_axial + rot_axial,
@@ -26,7 +26,7 @@ class AtlasTransform:
 
     @property
     def position(self) -> Tuple[float, float, float]:
-        return self.right, self.superior, self.anterior
+        return self.x, self.y, self.z
 
     @property
     def rotation(self) -> Tuple[float, float, float]:
@@ -35,9 +35,9 @@ class AtlasTransform:
     @property
     def affine_transform(self) -> ndarray:
         translate = np.array([
-            [1, 0, 0, self.right],
-            [0, 1, 0, self.superior],
-            [0, 0, 1, self.anterior],
+            [1, 0, 0, self.x],
+            [0, 1, 0, self.y],
+            [0, 0, 1, self.z],
             [0, 0, 0, 1],
         ])
 

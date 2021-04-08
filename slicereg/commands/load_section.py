@@ -3,14 +3,14 @@ from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
 from slicereg.commands.utils import Signal
-from slicereg.models.image import ImageData
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 
 
 class BaseSectionReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str) -> ImageData: ...
+    def read(self, filename: str) -> Image: ...
 
 
 @dataclass

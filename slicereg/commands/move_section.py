@@ -13,10 +13,10 @@ class MoveSectionCommand(BaseCommand):
     _atlas_repo: BaseAtlasRepo
     section_moved: Signal = Signal()
 
-    def __call__(self, right=0., superior=0., anterior=0., rot_lateral=0., rot_axial=0., rot_median=0.):  # type: ignore
+    def __call__(self, x=0., y=0., z=0., rot_lateral=0., rot_axial=0., rot_median=0.):  # type: ignore
         section = \
             self._section_repo.sections[0] \
-            .translate(right=right, superior=superior, anterior=anterior) \
+            .translate(x=x, y=y, z=z) \
             .rotate(rot_lateral=rot_lateral, rot_axial=rot_axial, rot_median=rot_median)
 
         atlas = self._atlas_repo.get_atlas()

@@ -4,7 +4,7 @@ import numpy as np
 from numba import njit, prange
 
 from slicereg.models.atlas import Atlas
-from slicereg.models.section import Section, ImageData
+from slicereg.models.section import Section, Image
 
 
 def register(section: Section, atlas: Atlas) -> Section:
@@ -13,7 +13,7 @@ def register(section: Section, atlas: Atlas) -> Section:
     transform = np.linalg.inv(atlas.affine_transform) @ section.affine_transform
     brightness_3d = _register(inds, volume=atlas.volume, transform=transform)
     registered_slice = section.with_new_image(
-        ImageData(
+        Image(
             channels=brightness_3d.reshape(1, height, width), 
             pixel_resolution_um=section.image.pixel_resolution_um,
         )

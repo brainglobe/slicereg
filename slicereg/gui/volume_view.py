@@ -75,12 +75,12 @@ class VolumeView(BaseQtView):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self.move_section(anterior=30),
-            'S': lambda: self.move_section(anterior=-30),
-            'A': lambda: self.move_section(right=-30),
-            'D': lambda: self.move_section(right=30),
-            'Q': lambda: self.move_section(superior=-30),
-            'E': lambda: self.move_section(superior=30),
+            'W': lambda: self.move_section(z=30),
+            'S': lambda: self.move_section(z=-30),
+            'A': lambda: self.move_section(x=-30),
+            'D': lambda: self.move_section(x=30),
+            'Q': lambda: self.move_section(y=-30),
+            'E': lambda: self.move_section(y=30),
             'I': lambda: self.move_section(rot_median=3),
             'K': lambda: self.move_section(rot_median=-3),
             'J': lambda: self.move_section(rot_lateral=-3),
@@ -95,5 +95,5 @@ class VolumeView(BaseQtView):
     def select_channel(self, channel: int):
         raise NotImplementedError("Connect to a SelectChannelCommand before using")
 
-    def move_section(self, right=0, superior=0, anterior=0., rot_lateral=0., rot_axial=0., rot_median=0.):
+    def move_section(self, x=0, y=0, z=0., rot_lateral=0., rot_axial=0., rot_median=0.):
         raise NotImplementedError("Connect to MoveSectionCommand before using.")
