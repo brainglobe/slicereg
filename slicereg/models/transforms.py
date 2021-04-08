@@ -17,20 +17,10 @@ class Transform3D:
     rz: float = 0.
 
     def translate(self, x: float = 0., y: float = 0., z: float = 0.) -> Transform3D:
-        return replace(self, x=self.x + x, y=self.y + y,
-                       z=self.z + z)
+        return replace(self, x=self.x + x, y=self.y + y, z=self.z + z)
 
     def rotate(self, rx: float = 0., ry: float = 0., rz: float = 0.) -> Transform3D:
-        return replace(self, rx=self.rx + rx, ry=self.ry + ry,
-                       rz=self.rz + rz)
-
-    @property
-    def position(self) -> Tuple[float, float, float]:
-        return self.x, self.y, self.z
-
-    @property
-    def rotation(self) -> Tuple[float, float, float]:
-        return self.rx, self.ry, self.rz
+        return replace(self, rx=self.rx + rx, ry=self.ry + ry, rz=self.rz + rz)
 
     @property
     def affine_transform(self) -> ndarray:
