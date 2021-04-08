@@ -7,18 +7,13 @@ from slicereg.models.atlas import Atlas
 from slicereg.models.section import Section, Image
 
 
-def register(section: Section, atlas: Atlas) -> Section:
+def register(section: Section, atlas: Atlas) -> Image:
     width, height = section.image.width, section.image.height
     inds = inds_homog(height=height, width=width)
     transform = np.linalg.inv(atlas.affine_transform) @ section.affine_transform
     brightness_3d = _register(inds, volume=atlas.volume, transform=transform)
-    registered_slice = section.with_new_image(
-        Image(
-            channels=brightness_3d.reshape(1, height, width), 
-            pixel_resolution_um=section.image.pixel_resolution_um,
-        )
-    )
-    return registered_slice
+    atlas_slice = Image(channels=brightness_3d.reshape(1, height, width))
+    return atlas_slice
 
 
 

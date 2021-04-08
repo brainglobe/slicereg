@@ -52,7 +52,7 @@ def step_impl(repo: BaseSectionRepo):
 
 @when("I give new translation and/or rotation values")
 def step_impl(command: UpdateSectionTransformCommand):
-    command(x=2, y=5, z=10, rot_lateral=0, rot_axial=0, rot_median=0)
+    command(x=2, y=5, z=10, rx=0, ry=0, rz=0)
 
 
 @then("the image is updated with a new 3D transform with indicated paramters set to the requested value")

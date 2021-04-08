@@ -36,7 +36,7 @@ class SidebarView(BaseQtView):
         self.resample_widget.connect(lambda val: self.set_section_image_resolution(val))
 
         self.dim_widgets = []
-        for dim in ['x', 'y', 'z', 'rot_lateral', 'rot_axial', 'rot_median']:
+        for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
             widget = LabelledSliderWidget(min=-10000 if not dim.startswith('rot_') else -180, max=10000 if not dim.startswith('rot_') else 180, label=dim)
             layout.addLayout(widget.layout)
             fun = lambda d, value: self.transform_section(**{d: value})

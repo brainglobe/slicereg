@@ -90,12 +90,12 @@ class SliceView(BaseQtView):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
 
-        self.move_section(rot_lateral=scaled_dx, rot_median=scaled_dy)
+        self.move_section(rx=scaled_dx, rz=scaled_dy)
 
     def _on_mousewheel_move(self, increment: int):
         self.move_section(y=10 * increment)
 
-    def move_section(self, x=0., y=0., z=0., rot_lateral=0., rot_axial=0., rot_median=0.) -> None:
+    def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
         raise NotImplementedError("Wire up to MoveSectionCommand to use this.")
 
     def get_coord_data(self, i: int, j: int):

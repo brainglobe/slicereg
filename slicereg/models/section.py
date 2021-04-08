@@ -22,12 +22,12 @@ class Section:
     def translate(self, x: float = 0., y: float = 0., z: float = 0.) -> Section:
         return replace(self, plane_3d=self.plane_3d.translate(x=x, y=y, z=z))
 
-    def rotate(self, rot_lateral: float = 0., rot_axial: float = 0., rot_median: float =0.) -> Section:
-        return replace(self, plane_3d=self.plane_3d.rotate(rot_lateral=rot_lateral, rot_axial=rot_axial, rot_median=rot_median))
+    def rotate(self, rx: float = 0., ry: float = 0., rz: float =0.) -> Section:
+        return replace(self, plane_3d=self.plane_3d.rotate(rx=rx, ry=ry, rz=rz))
 
     def set_plane_3d(self, **dims) -> Section:
         for dim in dims:
-            if dim not in ['x', 'y', 'z', 'rot_lateral', 'rot_axial', 'rot_median']:
+            if dim not in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
                 raise TypeError(f'Unknown dimension "{dim}"')
 
         return replace(self, plane_3d=replace(self.plane_3d, **dims))
@@ -50,7 +50,8 @@ class Section:
         return self.plane_3d.affine_transform @ self._scale_matrix @ ij_to_xyz_matrix @ self.image.affine_transform
 
     def map_ij_to_xyz(self, i: int, j: int) -> Tuple[float, float, float]:
-        return self.affine_transform @ ij_homog(i=i, j=j)
+        xyzw = self.affine_transform @ ij_homog(i=i, j=j)
+        return tuple(xyzw[:3, 0])
 
     def set_image_origin_to_center(self) -> Section:
         return replace(self, image=self.image.shift_origin_to_center())
@@ -62,6 +63,3 @@ class Section:
         zoom_level = self.pixel_resolution_um / resolution_um
         zoomed_channels = ndimage.zoom(self.image.channels, zoom=(1, zoom_level, zoom_level))
         return replace(self, image=replace(self.image, channels=zoomed_channels), pixel_resolution_um=resolution_um)
-
-    def with_new_image(self, image: Image) -> Section:
-        return replace(self, image=image, id=uuid4())

@@ -15,7 +15,7 @@ class UpdateSectionTransformCommand(BaseCommand):
 
     def __call__(self, **dims):  # type: ignore
         for dim in dims:
-            if dim not in ['x', 'y', 'z', 'rot_lateral', 'rot_axial', 'rot_median']:
+            if dim not in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
                 raise TypeError(f'Unknown dimension "{dim}"')
 
         sections = self._section_repo.sections
@@ -27,6 +27,6 @@ class UpdateSectionTransformCommand(BaseCommand):
         section = sections[0]
                 
         new_section = section.set_plane_3d(**dims)
-        atlas_section = register(section=new_section, atlas=atlas)
+        atlas_slice = register(section=new_section, atlas=atlas)
         self._section_repo.save_section(new_section)
-        self.section_moved.emit(transform=new_section.affine_transform, atlas_slice_image=atlas_section.image.channels[0])
+        self.section_moved.emit(transform=new_section.affine_transform, atlas_slice_image=atlas_slice.channels[0])

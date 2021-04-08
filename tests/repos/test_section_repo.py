@@ -14,20 +14,16 @@ def repo():
 @pytest.fixture
 def section1():
     return Section(
-        image=Image(
-            channels=np.arange(12).reshape(2, 3, 2),
-            pixel_resolution_um=12,
-        )
+        image=Image(channels=np.arange(12).reshape(2, 3, 2)),
+        pixel_resolution_um=12,
     )
 
 
 @pytest.fixture
 def section2():
     return Section(
-        image=Image(
-            channels=np.arange(12).reshape(2, 3, 2),
-            pixel_resolution_um=12,
-        ),
+        image=Image(channels=np.arange(12).reshape(2, 3, 2)),
+        pixel_resolution_um=12,
     )
 
 

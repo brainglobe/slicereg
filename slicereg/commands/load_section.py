@@ -10,7 +10,7 @@ from slicereg.models.section import Section
 class BaseSectionReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str) -> Image: ...
+    def read(self, filename: str) -> Section: ...
 
 
 @dataclass
@@ -28,8 +28,7 @@ class LoadImageCommand(BaseCommand):
             (section.image.height, section.image.width),
             sep="\n", end="\n\n"
         )
-        slice_image = self._reader.read(filename=filename)
-        section = Section(image=slice_image)
+        section = self._reader.read(filename=filename)
         log("Loaded")
         section = section.set_image_origin_to_center()
         log("Origin Set to Center")

@@ -17,7 +17,7 @@ class ResampleSectionCommand(BaseCommand):
         self._repo.save_section(section=section)
 
         self.section_resampled.emit(
-            resolution_um=section.image.pixel_resolution_um,
+            resolution_um=section.pixel_resolution_um,
             section_image=section.image.channels[0],  # todo: get current channel
             transform=section.affine_transform,
         )

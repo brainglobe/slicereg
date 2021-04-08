@@ -34,7 +34,7 @@ def command(repo):
 def step_impl(repo: BaseSectionRepo):
     assert len(repo.sections) == 1
     section = repo.sections[0]
-    assert section.image.pixel_resolution_um == 20
+    assert section.pixel_resolution_um == 20
 
 
 @when("I set the resolution to 50um")

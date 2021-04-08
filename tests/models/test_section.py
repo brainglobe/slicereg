@@ -36,13 +36,12 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, 
     j2 = (j + (j_shift * section.image.width))
     i2 = (-i - (i_shift * section.image.height))
 
-    expected = np.array([
-        [(j2 * cos(t) + i2 * sin(t)) * res + x],
-        [(i2 * cos(t) - j2 * sin(t)) * res + y],
-        [z],
-        [1],
-    ])
-    npt.assert_almost_equal(xyz, expected)
+    expected = (
+        (j2 * cos(t) + i2 * sin(t)) * res + x,
+        (i2 * cos(t) - j2 * sin(t)) * res + y,
+        z,
+    )
+    assert approx(xyz == expected)
 
 
 @given(from_resolution=real_floats(10, 50), to_resolution=real_floats(10, 50))
