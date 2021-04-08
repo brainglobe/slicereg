@@ -13,7 +13,4 @@ def _fancy_index_3d_numba(volume, inds, default: int = 0):
 
 
 def _fancy_index_3d_numpy(volume, inds):
-    inds = inds.astype(int)  # round to nearest integer, for indexing
-    inds2 = np.ravel_multi_index(inds, volume.shape, mode='clip')
-    vals = volume.take(inds2, mode='clip')
-    return vals
+    return volume.take(np.ravel_multi_index(inds, volume.shape, mode='clip'), mode='clip')
