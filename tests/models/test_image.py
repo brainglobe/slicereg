@@ -43,6 +43,22 @@ def test_image_height(shape, height):
     assert image.height == height
 
 
+@given(height=integers(1, 20), width=integers(1, 20))
+def test_inds_homog_has_correct_shape(height, width):
+    image = Image(channels=np.random.random(size=(3, height, width)))
+    assert image.inds_homog.shape == (4, height * width)
+
+
+def test_inds_homog_example():
+    image = Image(channels=np.random.random(size=(3, 2, 3)))
+    expected = np.array([
+        [0, 0, 0, 1, 1, 1],
+        [0, 1, 2, 0, 1, 2],
+        [0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1],
+    ])
+    npt.assert_equal(image.inds_homog, expected)
+
 
 @given(theta=sensible_floats(-1000, 1000))
 def test_rotation_matrix_corresponds_to_theta_in_degrees(theta):

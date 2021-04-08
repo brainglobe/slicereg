@@ -1,9 +1,8 @@
-from functools import lru_cache
-
 import numpy as np
 from numba import njit, prange
 
 from slicereg.models.atlas import Atlas
+from slicereg.models.image import inds_homog
 from slicereg.models.section import Section, Image
 
 
@@ -14,13 +13,6 @@ def register(section: Section, atlas: Atlas) -> Image:
     brightness_3d = _register(inds, volume=atlas.volume, transform=transform)
     atlas_slice = Image(channels=brightness_3d.reshape(1, height, width))
     return atlas_slice
-
-
-
-
-@lru_cache()
-def inds_homog(height, width):
-    return np.mgrid[:height, :width, :1, 1:2].reshape(-1, width*height).astype(float)
 
 
 @njit(parallel=True, fastmath=True)
@@ -35,5 +27,5 @@ def _register(inds, volume, transform):
         if 0 <= i < ii and 0 <= j < jj and 0 <= k < kk:
             vals[ind] = volume[i, j, k]
         else:
-            vals[ind] = 0
+            vals[ind] = np.nan
     return vals

@@ -17,7 +17,7 @@ class Atlas:
             [0, 0, 1, -d / 2],
             [0, 0, 0, 1],
         ])
-        return self.scale_matrix @ translate_matrix
+        return self.scale_matrix # @ translate_matrix
 
     @property
     def scale_matrix(self) -> np.ndarray:

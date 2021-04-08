@@ -1,12 +1,9 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
+from functools import cached_property
 
 import numpy as np
-
-
-def ij_homog(i: int, j: int) -> np.ndarray:
-    return np.array([i, j, 0, 1]).reshape(4, 1)
 
 
 @dataclass(frozen=True)
@@ -31,6 +28,11 @@ class Image:
     @property
     def aspect_ratio(self) -> float:
         return self.width / self.height
+
+    @cached_property
+    def inds_homog(self) -> np.ndarray:
+        """All the i,j indices in the image as a 4 x (width x height) homogonous vertex array"""
+        return inds_homog(height=self.height, width=self.width)
 
     @property
     def shift_matrix(self) -> np.ndarray:
@@ -64,3 +66,10 @@ class Image:
     def shift_origin_to_center(self) -> Image:
         return replace(self, j_shift=-0.5, i_shift=-0.5)
 
+
+def inds_homog(height: int, width: int) -> np.ndarray:
+    return np.mgrid[:height, :width, :1, 1:2].reshape(-1, width * height)
+
+
+def ij_homog(i: int, j: int) -> np.ndarray:
+    return np.array([[i, j, 0, 1]]).T
