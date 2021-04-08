@@ -1,8 +1,8 @@
 import numpy as np
-from numba import njit, prange
 
 from slicereg.models.atlas import Atlas
 from slicereg.models.section import Section, Image
+from slicereg.models.utils import _fancy_index_3d_numba
 
 
 def register(section: Section, atlas: Atlas) -> Image:
@@ -14,20 +14,3 @@ def register(section: Section, atlas: Atlas) -> Image:
     brightness_3d = _fancy_index_3d_numba(volume=atlas.volume, inds=atlas_inds.T)
     atlas_slice = Image(channels=brightness_3d.reshape(1, height, width))
     return atlas_slice
-
-
-@njit(parallel=True, fastmath=True)
-def _fancy_index_3d_numba(volume, inds):
-    ii, jj, kk = volume.shape
-    vals = np.empty(inds.shape[0], dtype=volume.dtype)
-    for ind in prange(inds.shape[0]):
-        i, j, k = inds[ind]
-        vals[ind] = volume[i, j, k] if 0 <= i < ii and 0 <= j < jj and 0 <= k < kk else 0  # np.nan
-    return vals
-
-
-def _fancy_index_3d_numpy(volume, inds):
-    inds = inds.astype(int)  # round to nearest integer, for indexing
-    inds2 = np.ravel_multi_index(inds, volume.shape, mode='clip')
-    vals = volume.take(inds2, mode='clip')
-    return vals
