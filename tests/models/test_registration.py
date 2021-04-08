@@ -30,11 +30,31 @@ cases = [
     {
         "atlas_res": 1,
         "section_res": 1,
-        "pos": {"x": 0, "y": 2, "z": 1},
+        "pos": {"x": 0, "y": 0, "z": 1},
         "expected": [
             [0, 0, 0],
             [0, 1, 0],
             [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 1,
+        "section_res": 1,
+        "pos": {"x": 0, "y": -1, "z": 1},
+        "expected": [
+            [0, 1, 0],
+            [0, 0, 0],
+            [0, 0, 0],
+        ]
+    },
+    {
+        "atlas_res": 1,
+        "section_res": 1,
+        "pos": {"x": 1, "y": 1, "z": 1},
+        "expected": [
+            [0, 0, 0],
+            [0, 0, 0],
+            [1, 0, 0],
         ]
     },
 ]
@@ -43,8 +63,8 @@ cases = [
 def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
     volume[1, 1, 1] = 1
-    volume[1, 2, 1] = 2
-    volume[2, 1, 1] = 3
+    # volume[1, 2, 1] = 2
+    # volume[2, 1, 1] = 3
     atlas = Atlas(
         volume=volume,
         resolution_um=case['atlas_res'],

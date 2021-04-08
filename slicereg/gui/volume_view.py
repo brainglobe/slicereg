@@ -42,7 +42,7 @@ class VolumeView(BaseQtView):
         self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
         self._atlas_volume.transform = MatrixTransform(transform.T)
         self._viewbox.camera.center = (0, 0, 0)
-        self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
+        # self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
         self._canvas.update()
 
     def on_section_loaded(self, image: ndarray, transform: ndarray):
