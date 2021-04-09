@@ -35,14 +35,10 @@ class VolumeView(BaseQtView):
         return self._canvas.native
 
     def on_atlas_update(self, volume: ndarray, transform: ndarray):
-        # volume = np.flip(volume, axis=0)
-        # volume = np.flip(volume, axis=2)
         volume = volume.swapaxes(0, 2)
-
         self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
-        self._atlas_volume.transform = MatrixTransform(transform.T)
-        self._viewbox.camera.center = (0, 0, 0)
-        # self._viewbox.camera.scale_factor = transform[0, 0] * volume.shape[0]
+        self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
+        self._viewbox.camera.scale_factor = np.mean(volume.shape)
         self._canvas.update()
 
     def on_section_loaded(self, image: ndarray, transform: ndarray):

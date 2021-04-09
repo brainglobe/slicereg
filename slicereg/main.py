@@ -48,7 +48,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
             load_atlas(resolution=25)
 
     if config.FEATURE_VIEW_SECTION:
-        load_section = LoadImageCommand(_repo=section_repo, _reader=OmeTiffReader())
+        load_section = LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _reader=OmeTiffReader())
         sidebar_view.load_section = load_section  # type: ignore
         load_section.section_loaded.connect(slice_view.on_section_loaded)
         load_section.section_loaded.connect(volume_view.on_section_loaded)

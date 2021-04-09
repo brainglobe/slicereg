@@ -98,7 +98,7 @@ class SidebarView(BaseQtView):
         resolution = int("".join(filter(str.isdigit, resolution_label)))
         self.load_atlas(resolution=resolution)
 
-    # Comand Routing
+    # Command Routing
     def load_section(self, filename: str):
         raise NotImplementedError("Connect to a LoadImageCommand before using.")
 

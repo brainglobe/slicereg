@@ -6,8 +6,10 @@ from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
 from slicereg.commands.utils import Signal
+from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.models.section import Section
+from slicereg.repos.atlas_repo import BaseAtlasRepo
 
 
 @pytest.fixture
@@ -16,6 +18,11 @@ def repo():
     repo.sections = []
     return repo
 
+@pytest.fixture
+def atlas_repo():
+    repo = Mock(BaseAtlasRepo)
+    repo.get_atlas.return_value = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=10)
+    return repo
 
 @pytest.fixture
 def image_data():
@@ -30,8 +37,8 @@ def reader(image_data):
 
 
 @pytest.fixture
-def command(repo, reader):
-    return LoadImageCommand(_repo=repo, section_loaded=Mock(Signal), _reader=reader)
+def command(repo, atlas_repo, reader):
+    return LoadImageCommand(_repo=repo, _atlas_repo=atlas_repo, section_loaded=Mock(Signal), _reader=reader)
 
 
 @scenario("load_slice.feature", "Single Slice Import")

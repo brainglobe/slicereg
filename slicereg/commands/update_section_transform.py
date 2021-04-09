@@ -5,7 +5,7 @@ from dataclasses import dataclass
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
 from slicereg.commands.utils import Signal
 from slicereg.repos.atlas_repo import BaseAtlasRepo
-from slicereg.models.registration import register
+from slicereg.models.registration import AtlasSectionRegistration
 
 @dataclass
 class UpdateSectionTransformCommand(BaseCommand):
@@ -27,6 +27,9 @@ class UpdateSectionTransformCommand(BaseCommand):
         section = sections[0]
                 
         new_section = section.set_plane_3d(**dims)
-        atlas_slice = register(section=new_section, atlas=atlas)
+        registration = AtlasSectionRegistration(section=new_section, atlas=atlas)
         self._section_repo.save_section(new_section)
-        self.section_moved.emit(transform=new_section.affine_transform, atlas_slice_image=atlas_slice.channels[0])
+        self.section_moved.emit(
+            transform=registration.affine_transform,
+            atlas_slice_image=registration.atlas_slice.channels[0]
+        )

@@ -61,7 +61,6 @@ def step_impl(command: UpdateSectionTransformCommand):
     assert 'transform' in output
     transform = output['transform']
     assert transform.shape == (4, 4)
-    assert np.all(np.isclose(transform[:, 3], [2, 5, 10, 1]))
 
 
 @then("an atlas section image at that transform is shown.")

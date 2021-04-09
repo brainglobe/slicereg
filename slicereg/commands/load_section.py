@@ -2,6 +2,8 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo, BaseCommand
+from slicereg.models.registration import AtlasSectionRegistration
+from slicereg.repos.atlas_repo import BaseAtlasRepo
 from slicereg.commands.utils import Signal
 from slicereg.models.image import Image
 from slicereg.models.section import Section
@@ -16,24 +18,19 @@ class BaseSectionReader(ABC):
 @dataclass
 class LoadImageCommand(BaseCommand):
     _repo: BaseSectionRepo
+    _atlas_repo: BaseAtlasRepo
     _reader: BaseSectionReader
     section_loaded: Signal = field(default_factory=Signal)
 
     def __call__(self, filename: str) -> None:  # type: ignore
 
-        log = lambda msg, section: print(
-            msg, section,
-            section.affine_transform,
-            section.image.affine_transform,
-            (section.image.height, section.image.width),
-            sep="\n", end="\n\n"
-        )
         section = self._reader.read(filename=filename)
-        log("Loaded", section)
         section = section.set_image_origin_to_center()
-        log("Origin Set to Center", section)
         section = section.resample(resolution_um=10)
-        log("Resampled", section)
+
+        atlas = self._atlas_repo.get_atlas()
+        registration = AtlasSectionRegistration(section=section, atlas=atlas)
+        registration_transform = registration.affine_transform
 
         self._repo.save_section(section=section)
-        self.section_loaded.emit(image=section.image.channels[0], transform=section.affine_transform)
+        self.section_loaded.emit(image=section.image.channels[0], transform=registration_transform)
