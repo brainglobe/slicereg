@@ -29,6 +29,9 @@ class LoadImageCommand(BaseCommand):
         section = section.resample(resolution_um=10)
 
         atlas = self._atlas_repo.get_atlas()
+        if not atlas:
+            return
+
         registration = AtlasSectionRegistration(section=section, atlas=atlas)
         registration_transform = registration.affine_transform
 

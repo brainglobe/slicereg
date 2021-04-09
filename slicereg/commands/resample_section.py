@@ -19,6 +19,9 @@ class ResampleSectionCommand(BaseCommand):
             .resample(resolution_um=resolution_um)
 
         atlas = self._atlas_repo.get_atlas()
+        if not atlas:
+            return
+
         registration = AtlasSectionRegistration(section=section, atlas=atlas)
         self._repo.save_section(section=section)
 
