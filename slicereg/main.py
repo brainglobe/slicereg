@@ -77,7 +77,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         slice_view.get_coord_data = request_coord_data  # type: ignore
         request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
-        resample_section = ResampleSectionCommand(_repo=section_repo)
+        resample_section = ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo)
         sidebar_view.set_section_image_resolution = resample_section  # type: ignore
         resample_section.section_resampled.connect(slice_view.on_section_resampled)
         resample_section.section_resampled.connect(volume_view.on_section_resampled)

@@ -7,8 +7,10 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.utils import Signal
+from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.models.section import Section
+from slicereg.repos.atlas_repo import BaseAtlasRepo
 
 
 @scenario("resample.feature", "Section Resample")
@@ -26,8 +28,14 @@ def repo():
 
 
 @pytest.fixture
-def command(repo):
-    return ResampleSectionCommand(_repo=repo, section_resampled=Mock(Signal))
+def atlas_repo():
+    repo = Mock(BaseAtlasRepo)
+    repo.get_atlas.return_value = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=10)
+    return repo
+
+@pytest.fixture
+def command(repo, atlas_repo):
+    return ResampleSectionCommand(_repo=repo, _atlas_repo=atlas_repo, section_resampled=Mock(Signal))
 
 
 @given("I have a 20um-resolution section loaded")

@@ -57,7 +57,7 @@ class VolumeView(BaseQtView):
         self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()
 
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray):
+    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray):
         self._section_image.set_data(section_image.T)
         self._section_image.transform = MatrixTransform(transform.T)
         self._canvas.update()

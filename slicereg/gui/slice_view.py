@@ -101,5 +101,6 @@ class SliceView(BaseQtView):
     def get_coord_data(self, i: int, j: int):
         raise NotImplementedError("Wire up to GetPixelRegistrationDataCommand to use this.")
 
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray):
+    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray):
         self.update_slice_image(image=section_image)
+        self.update_ref_slice_image(image=atlas_image)
