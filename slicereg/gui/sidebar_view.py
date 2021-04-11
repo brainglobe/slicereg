@@ -1,4 +1,5 @@
 from functools import partial
+from typing import List
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout, QInputDialog, QLineEdit
@@ -22,6 +23,10 @@ class SidebarView(BaseQtView):
         # load_atlas_button = QPushButton("Load Atlas Tiff")
         # layout.addWidget(load_atlas_button)
         # load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
+
+        list_atlas_button = QPushButton("List Brainglobe Atlases")
+        layout.addWidget(list_atlas_button)
+        list_atlas_button.clicked.connect(lambda: self.list_brainglobe_atlases())
 
         load_image_button = QPushButton("Load Section")
         layout.addWidget(load_image_button)
@@ -97,6 +102,9 @@ class SidebarView(BaseQtView):
             return
         self.load_atlas_from_file(filename=filename)
 
+    def show_brainglobe_atlases(self, atlas_names: List[str]):
+        print(atlas_names)
+
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
             return
@@ -106,6 +114,9 @@ class SidebarView(BaseQtView):
         self.load_atlas(bgatlas_name=f"allen_mouse_{resolution}um")
 
     # Command Routing
+    def list_brainglobe_atlases(self):
+        raise NotImplementedError("Connect to a ListBrainglobeAtlasesCommand before using.")
+
     def load_section(self, filename: str):
         raise NotImplementedError("Connect to a LoadImageCommand before using.")
 

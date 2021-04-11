@@ -1,6 +1,7 @@
 from PySide2.QtWidgets import QApplication
 
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
+from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand
 from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand
@@ -43,6 +44,10 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     load_atlas = LoadAtlasCommand(_repo=atlas_repo)
     sidebar_view.load_atlas = load_atlas  # type: ignore
     load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
+
+    list_atlases = ListBgAtlasesCommand(_repo=atlas_repo)
+    sidebar_view.list_brainglobe_atlases = list_atlases  # type: ignore
+    list_atlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
 
     # Start off with the first command
     if load_atlas_on_launch:
