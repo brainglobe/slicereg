@@ -92,14 +92,6 @@ class SidebarView(BaseQtView):
     def show_brainglobe_atlases(self, atlas_names: List[str]):
         self.list_atlas_dropdown.addItems(atlas_names)
 
-    def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
-        if not is_checked:  # Don't do anything for the button being unselected.
-            return
-
-        resolution_label = button.text()
-        resolution = int("".join(filter(str.isdigit, resolution_label)))
-        self.load_atlas(bgatlas_name=f"allen_mouse_{resolution}um")
-
     # Command Routing
     def list_brainglobe_atlases(self):
         raise NotImplementedError("Connect to a ListBrainglobeAtlasesCommand before using.")
