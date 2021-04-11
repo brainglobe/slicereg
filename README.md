@@ -5,7 +5,7 @@
 [![Gitpod ready-to-code](https://img.shields.io/badge/Gitpod-ready--to--code-blue?logo=gitpod)](https://gitpod.io/#https://github.com/brainglobe/slicereg)
 
 # slicereg
-A 2D-3D histological brain slice registration application for mouse brains.
+A 2D-3D histological brain slice registration application for mouse, rat, and zebrafish brains.
 
 ## Features
 
