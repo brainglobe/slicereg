@@ -12,3 +12,8 @@ Feature: Allen Mouse Brain Atlas
     Given the 25um atlas is currently loaded
     When I ask for a 100um atlas
     Then a 3D volume of the 100um allen reference atlas appears.
+
+  Scenario: List Available Brainglobe Atlases
+    Given I am connected to the internet
+    When I check brainglobe
+    Then I see a list of bg-atlasapi's available atlases.
