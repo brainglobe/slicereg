@@ -3,6 +3,7 @@ from functools import partial
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout, QInputDialog, QLineEdit
 from PySide2.QtCore import Qt
+from numpy import ndarray
 
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.slider import LabelledSliderWidget
@@ -55,7 +56,6 @@ class SidebarView(BaseQtView):
         atlas_buttons.setExclusive(True)
         atlas_buttons.buttonToggled.connect(self.atlas_button_toggled)
         
-
         for resolution in [100, 25, 10]:
             atlas_button = QPushButton(f"{resolution}um")
             atlas_button.setCheckable(True)
@@ -71,6 +71,9 @@ class SidebarView(BaseQtView):
     @property
     def qt_widget(self) -> QWidget:
         return self.widget
+
+    def on_section_loaded(self, image: ndarray, transform: ndarray, resolution_um: int) -> None:
+        self.resolution_widget.set_value(resolution_um)
 
     def show_load_image_dialog(self):
         filename, filetype = QFileDialog.getOpenFileName(

@@ -41,7 +41,7 @@ class SliceView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_section_loaded(self, image: ndarray, transform: ndarray) -> None:
+    def on_section_loaded(self, image: ndarray, transform: ndarray, resolution_um: int) -> None:
         self.update_slice_image(image=image)
 
     def on_channel_select(self, image: ndarray, channel: int) -> None:

@@ -52,6 +52,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     sidebar_view.load_section = load_section  # type: ignore
     load_section.section_loaded.connect(slice_view.on_section_loaded)
     load_section.section_loaded.connect(volume_view.on_section_loaded)
+    load_section.section_loaded.connect(sidebar_view.on_section_loaded)
 
     select_channel = SelectChannelCommand(_repo=section_repo)
     volume_view.select_channel = select_channel  # type: ignore

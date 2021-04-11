@@ -37,8 +37,8 @@ class Section:
 
     @property
     def _resolution_matrix(self) -> np.ndarray:
-        scale = self.pixel_resolution_um
-        matrix = np.diag([scale, scale, 1., 1.])
+        res = self.pixel_resolution_um
+        matrix = np.diag([res, res, 1., 1.])
         return matrix
 
     @property

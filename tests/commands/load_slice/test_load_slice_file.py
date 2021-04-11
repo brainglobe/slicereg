@@ -18,11 +18,13 @@ def repo():
     repo.sections = []
     return repo
 
+
 @pytest.fixture
 def atlas_repo():
     repo = Mock(BaseAtlasRepo)
     repo.get_atlas.return_value = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=10)
     return repo
+
 
 @pytest.fixture
 def image_data():
@@ -73,3 +75,9 @@ def check_the_transform_isnt_zero(command: LoadImageCommand):
     output = command.section_loaded.emit.call_args[1]
     assert output['transform'][0, -1] != 0
     assert output['transform'][1, -1] != 0
+
+
+@then("The displayed resolution is set to the image's resolution")
+def check_resolution_is_sent(command: LoadImageCommand):
+    output = command.section_loaded.emit.call_args[1]
+    assert output['resolution_um'] == 10
