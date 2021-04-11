@@ -27,12 +27,12 @@ def test_outlined():
 
 @given("the 25um atlas is currently loaded")
 def check_atlas_exists(command):
-    assert command._repo.load_atlas(resolution=25).resolution_um == 25
+    assert command._repo.load_atlas(name="allen_mouse_25um").resolution_um == 25
 
 
 @when("I ask for a 100um atlas")
 def load_atlas(command):
-    command(resolution=100)
+    command(bgatlas_name="allen_mouse_100um")
 
 
 @then("a 3D volume of the 100um allen reference atlas appears.")
@@ -40,4 +40,4 @@ def check_3d_atlas_data_shown(command):
     view_model = command.atlas_updated.emit.call_args[1]
     assert view_model['volume'].ndim == 3
     assert view_model['transform'].shape == (4, 4)
-    command._repo.load_atlas.assert_called_with(resolution=100)
+    command._repo.load_atlas.assert_called_with(name="allen_mouse_100um")

@@ -12,7 +12,7 @@ class LoadAtlasCommand(BaseCommand):
     _repo: BaseAtlasRepo
     atlas_updated: Signal = field(default_factory=Signal)
 
-    def __call__(self, resolution: int):  # type: ignore
-        atlas = self._repo.load_atlas(resolution=resolution)
+    def __call__(self, bgatlas_name: str):  # type: ignore
+        atlas = self._repo.load_atlas(name=bgatlas_name)
         self._repo.set_atlas(atlas=atlas)
         self.atlas_updated.emit(volume=atlas.volume, transform=atlas.affine_transform)

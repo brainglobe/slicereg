@@ -46,7 +46,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
     # Start off with the first command
     if load_atlas_on_launch:
-        load_atlas(resolution=25)
+        load_atlas(bgatlas_name="allen_mouse_25um")
 
     load_section = LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _reader=OmeTiffReader())
     sidebar_view.load_section = load_section  # type: ignore

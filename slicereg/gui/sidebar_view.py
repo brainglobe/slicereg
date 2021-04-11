@@ -103,7 +103,7 @@ class SidebarView(BaseQtView):
 
         resolution_label = button.text()
         resolution = int("".join(filter(str.isdigit, resolution_label)))
-        self.load_atlas(resolution=resolution)
+        self.load_atlas(bgatlas_name=f"allen_mouse_{resolution}um")
 
     # Command Routing
     def load_section(self, filename: str):
@@ -115,7 +115,7 @@ class SidebarView(BaseQtView):
     def resample_section(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
-    def load_atlas(self, resolution: int):
+    def load_atlas(self, bgatlas_name: str):
         raise NotImplementedError("Connect to LoadAtlasCommand before using.")
 
     def load_atlas_from_file(self, filename: str):
