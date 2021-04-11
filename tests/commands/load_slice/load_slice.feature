@@ -8,3 +8,4 @@ Feature: Slice Import
     When I load the file
     Then I should see the slice image onscreen in 3D
     And The slice is centered on the image
+    And The displayed resolution is set to the image's resolution

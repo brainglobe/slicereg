@@ -32,10 +32,13 @@ class Section:
 
         return replace(self, plane_3d=replace(self.plane_3d, **dims))
 
+    def set_pixel_resolution(self, resolution_um: int):
+        return replace(self, pixel_resolution_um=resolution_um)
+
     @property
-    def _scale_matrix(self) -> np.ndarray:
-        scale = self.pixel_resolution_um
-        matrix = np.diag([scale, scale, 1., 1.])
+    def _resolution_matrix(self) -> np.ndarray:
+        res = self.pixel_resolution_um
+        matrix = np.diag([res, res, 1., 1.])
         return matrix
 
     @property
@@ -47,7 +50,7 @@ class Section:
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ])
-        return self.plane_3d.affine_transform @ self._scale_matrix @ ij_to_xyz_matrix @ self.image.affine_transform
+        return self.plane_3d.affine_transform @ self._resolution_matrix @ ij_to_xyz_matrix @ self.image.affine_transform
 
     def map_ij_to_xyz(self, i: int, j: int) -> Tuple[float, float, float]:
         xyzw = self.affine_transform @ ij_homog(i=i, j=j)

@@ -3,6 +3,7 @@ from functools import partial
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
     QHBoxLayout, QInputDialog, QLineEdit
 from PySide2.QtCore import Qt
+from numpy import ndarray
 
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.slider import LabelledSliderWidget
@@ -31,9 +32,13 @@ class SidebarView(BaseQtView):
         load_image_button2.clicked.connect(lambda: self.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff"))
 
         # Scale Slider (Set Section Resolution)
-        self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Scale")
+        self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Resample")
         layout.addLayout(self.resample_widget.layout)
-        self.resample_widget.connect(lambda val: self.set_section_image_resolution(val))
+        self.resample_widget.connect(lambda val: self.resample_section(val))
+
+        self.resolution_widget = LabelledSliderWidget(min=1, max=100, label="Resolution")
+        layout.addLayout(self.resolution_widget.layout)
+        self.resolution_widget.connect(lambda val: self.transform_section(res=val))
 
         self.dim_widgets = []
         for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
@@ -51,7 +56,6 @@ class SidebarView(BaseQtView):
         atlas_buttons.setExclusive(True)
         atlas_buttons.buttonToggled.connect(self.atlas_button_toggled)
         
-
         for resolution in [100, 25, 10]:
             atlas_button = QPushButton(f"{resolution}um")
             atlas_button.setCheckable(True)
@@ -67,6 +71,9 @@ class SidebarView(BaseQtView):
     @property
     def qt_widget(self) -> QWidget:
         return self.widget
+
+    def on_section_loaded(self, image: ndarray, transform: ndarray, resolution_um: int) -> None:
+        self.resolution_widget.set_value(resolution_um)
 
     def show_load_image_dialog(self):
         filename, filetype = QFileDialog.getOpenFileName(
@@ -105,7 +112,7 @@ class SidebarView(BaseQtView):
     def transform_section(self, **kwargs):
         raise NotImplementedError("Connect to UpdateSectionTransformCommand before using.")
     
-    def set_section_image_resolution(self, resolution_um: float):
+    def resample_section(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
     def load_atlas(self, resolution: int):

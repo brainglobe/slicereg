@@ -52,6 +52,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     sidebar_view.load_section = load_section  # type: ignore
     load_section.section_loaded.connect(slice_view.on_section_loaded)
     load_section.section_loaded.connect(volume_view.on_section_loaded)
+    load_section.section_loaded.connect(sidebar_view.on_section_loaded)
 
     select_channel = SelectChannelCommand(_repo=section_repo)
     volume_view.select_channel = select_channel  # type: ignore
@@ -75,7 +76,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
     resample_section = ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo)
-    sidebar_view.set_section_image_resolution = resample_section  # type: ignore
+    sidebar_view.resample_section = resample_section  # type: ignore
     resample_section.section_resampled.connect(slice_view.on_section_resampled)
     resample_section.section_resampled.connect(volume_view.on_section_resampled)
 

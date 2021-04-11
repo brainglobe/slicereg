@@ -23,6 +23,9 @@ class LabelledSliderWidget:
     def _on_slider_valuechange(self, value: int):
         self.value_label.setText(str(value))
 
+    def set_value(self, value: int):
+        self.slider.setValue(value)
+
     @property
     def connect(self):
         return self.slider.valueChanged.connect

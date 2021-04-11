@@ -36,4 +36,5 @@ class LoadImageCommand(BaseCommand):
         registration_transform = registration.affine_transform
 
         self._repo.save_section(section=section)
-        self.section_loaded.emit(image=section.image.channels[0], transform=registration_transform)
+        self.section_loaded.emit(image=section.image.channels[0], transform=registration_transform,
+                                 resolution_um=section.pixel_resolution_um)
