@@ -61,3 +61,10 @@ def test_downsampling_beyond_dimensions_produces_valueerror(to_resolution):
     section = Section(image=Image(channels=np.arange(24).reshape(1, 4, 6)), pixel_resolution_um=12)
     with pytest.raises(ValueError, match=r".* positive.*"):
         section.resample(resolution_um=to_resolution)
+
+
+@given(from_resolution=integers(1, 200), to_resolution=integers(1, 200))
+def test_can_set_pixel_resolution_on_section(from_resolution, to_resolution):
+    section = Section(image=Image(channels=np.arange(24).reshape(1, 4, 6)), pixel_resolution_um=from_resolution)
+    section2 = section.set_pixel_resolution(resolution_um=to_resolution)
+    assert section2.pixel_resolution_um == to_resolution

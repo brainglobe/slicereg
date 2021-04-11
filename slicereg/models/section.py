@@ -32,6 +32,9 @@ class Section:
 
         return replace(self, plane_3d=replace(self.plane_3d, **dims))
 
+    def set_pixel_resolution(self, resolution_um: int):
+        return replace(self, pixel_resolution_um=resolution_um)
+
     @property
     def _resolution_matrix(self) -> np.ndarray:
         scale = self.pixel_resolution_um

@@ -31,9 +31,13 @@ class SidebarView(BaseQtView):
         load_image_button2.clicked.connect(lambda: self.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff"))
 
         # Scale Slider (Set Section Resolution)
-        self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Scale")
+        self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Resample")
         layout.addLayout(self.resample_widget.layout)
-        self.resample_widget.connect(lambda val: self.set_section_image_resolution(val))
+        self.resample_widget.connect(lambda val: self.resample_section(val))
+
+        self.resolution_widget = LabelledSliderWidget(min=1, max=100, label="Resolution")
+        layout.addLayout(self.resolution_widget.layout)
+        self.resolution_widget.connect(lambda val: self.transform_section(res=val))
 
         self.dim_widgets = []
         for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
@@ -105,7 +109,7 @@ class SidebarView(BaseQtView):
     def transform_section(self, **kwargs):
         raise NotImplementedError("Connect to UpdateSectionTransformCommand before using.")
     
-    def set_section_image_resolution(self, resolution_um: float):
+    def resample_section(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
         
     def load_atlas(self, resolution: int):
