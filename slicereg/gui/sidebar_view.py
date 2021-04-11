@@ -19,9 +19,9 @@ class SidebarView(BaseQtView):
         self.widget.setLayout(layout)
 
         # Section Buttons
-        load_atlas_button = QPushButton("Load Atlas Tiff")
-        layout.addWidget(load_atlas_button)
-        load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
+        # load_atlas_button = QPushButton("Load Atlas Tiff")
+        # layout.addWidget(load_atlas_button)
+        # load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
 
         load_image_button = QPushButton("Load Section")
         layout.addWidget(load_image_button)
