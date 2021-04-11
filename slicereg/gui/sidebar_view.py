@@ -2,7 +2,7 @@ from functools import partial
 from typing import List
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QVBoxLayout, QPushButton, QFileDialog, QButtonGroup, \
-    QHBoxLayout, QInputDialog, QLineEdit
+    QHBoxLayout, QInputDialog, QLineEdit, QComboBox
 from PySide2.QtCore import Qt
 from numpy import ndarray
 
@@ -24,9 +24,12 @@ class SidebarView(BaseQtView):
         # layout.addWidget(load_atlas_button)
         # load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
 
-        list_atlas_button = QPushButton("List Brainglobe Atlases")
+        list_atlas_button = QPushButton("Update Brainglobe Atlases")
         layout.addWidget(list_atlas_button)
         list_atlas_button.clicked.connect(lambda: self.list_brainglobe_atlases())
+
+        self.list_atlas_dropdown = QComboBox()
+        layout.addWidget(self.list_atlas_dropdown)
 
         load_image_button = QPushButton("Load Section")
         layout.addWidget(load_image_button)
@@ -103,7 +106,7 @@ class SidebarView(BaseQtView):
         self.load_atlas_from_file(filename=filename)
 
     def show_brainglobe_atlases(self, atlas_names: List[str]):
-        print(atlas_names)
+        self.list_atlas_dropdown.addItems(atlas_names)
 
     def atlas_button_toggled(self, button: QPushButton, is_checked: bool):
         if not is_checked:  # Don't do anything for the button being unselected.
