@@ -31,6 +31,10 @@ class SidebarView(BaseQtView):
         self.list_atlas_dropdown = QComboBox()
         layout.addWidget(self.list_atlas_dropdown)
 
+        load_atlas_button = QPushButton("Load Atlas")
+        layout.addWidget(load_atlas_button)
+        load_atlas_button.clicked.connect(self._load_atlas)
+
         load_image_button = QPushButton("Load Section")
         layout.addWidget(load_image_button)
         load_image_button.clicked.connect(self.show_load_image_dialog)
@@ -55,26 +59,6 @@ class SidebarView(BaseQtView):
             fun = lambda d, value: self.transform_section(**{d: value})
             widget.connect(partial(fun, dim))
             self.dim_widgets.append((widget, fun))
-
-        # Atlas BUttons
-        button_hbox = QHBoxLayout()
-        layout.addLayout(button_hbox)
-
-        atlas_buttons = QButtonGroup(self.widget)
-        atlas_buttons.setExclusive(True)
-        atlas_buttons.buttonToggled.connect(self.atlas_button_toggled)
-        
-        for resolution in [100, 25, 10]:
-            atlas_button = QPushButton(f"{resolution}um")
-            atlas_button.setCheckable(True)
-            button_hbox.addWidget(atlas_button)
-            atlas_buttons.addButton(atlas_button)
-
-            # The 10um atlas takes way too long to download at the moment.
-            # It needs some kind of progress bar or async download feature to be useful.
-            # The disabled button here shows it as an option for the future, but keeps it from being used.
-            if resolution == 10:
-                atlas_button.setDisabled(True)
 
     @property
     def qt_widget(self) -> QWidget:
@@ -128,7 +112,12 @@ class SidebarView(BaseQtView):
     
     def resample_section(self, resolution_um: float):
         raise NotImplementedError("Connect to ResampleSectionCommand before using.")
-        
+
+    def _load_atlas(self):
+        selected_atlas = self.list_atlas_dropdown.currentText()
+        print(f"Loading Atlas: {selected_atlas}")
+        self.load_atlas(bgatlas_name=selected_atlas)
+
     def load_atlas(self, bgatlas_name: str):
         raise NotImplementedError("Connect to LoadAtlasCommand before using.")
 
