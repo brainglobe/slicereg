@@ -2,9 +2,10 @@ import re
 from abc import ABC, abstractmethod
 from contextlib import redirect_stdout
 from io import StringIO
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 
 from bg_atlasapi import BrainGlobeAtlas
+from bg_atlasapi import utils as bg_utils
 from bg_atlasapi.list_atlases import get_downloaded_atlases
 
 from slicereg.models.atlas import Atlas
@@ -43,6 +44,12 @@ class BrainglobeAtlasRepo(BaseAtlasRepo):
             volume=new_reference,
             resolution_um=bgatlas.resolution[0],
         )
+
+    def list_available_atlases(self) -> List[str]:
+        """Returns a list of keys"""
+        download_url = BrainGlobeAtlas._remote_url_base.format("last_versions.conf")
+        atlas_versions = dict(dict(bg_utils.conf_from_url(download_url))['atlases'])
+        return list(atlas_versions.keys())
 
     def get_downloaded_resolutions(self) -> Tuple[int, ...]:
         pattern = re.compile("allen_mouse_(\d{2,})um")  # look for the name "allen_mouse_XXXum"
