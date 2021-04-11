@@ -1,7 +1,6 @@
 from unittest.mock import Mock
 
 import pytest
-from numpy import random
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
@@ -30,8 +29,8 @@ def step_impl():
 def step_impl(command: ListBgAtlasesCommand):
     command()
 
+
 @then("I see a list of bg-atlasapi's available atlases.")
 def step_impl(command: ListBgAtlasesCommand):
     view_model = command.atlas_list_updated.emit.call_args[1]
     assert view_model['atlas_names'] == ['awesome_atlas', 'super_atlas']
-
