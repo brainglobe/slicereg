@@ -26,10 +26,13 @@ class UpdateSectionTransformCommand(BaseCommand):
         if not atlas:
             raise RuntimeError('Atlas is not loaded yet')
         section = sections[0]
-                
-        new_section = section.set_plane_3d(**dims)
-        registration = AtlasSectionRegistration(section=new_section, atlas=atlas)
-        self._section_repo.save_section(new_section)
+
+        if res is not None:
+            section = section.set_pixel_resolution(resolution_um=res)
+
+        section = section.set_plane_3d(**dims)
+        registration = AtlasSectionRegistration(section=section, atlas=atlas)
+        self._section_repo.save_section(section)
         self.section_moved.emit(
             transform=registration.affine_transform,
             atlas_slice_image=registration.atlas_slice.channels[0]
