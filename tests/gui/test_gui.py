@@ -29,5 +29,5 @@ def test_sidebar_view_launches_without_errors(qtbot):
 
 
 def test_main_assembles_without_errors(qtbot):
-    window = launch_gui(create_qapp=False, load_atlas_on_launch=False)
+    window = launch_gui(create_qapp=False)
     qtbot.addWidget(window.qt_widget)
