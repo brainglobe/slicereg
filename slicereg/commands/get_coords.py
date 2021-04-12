@@ -3,8 +3,9 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import NamedTuple
 
-from slicereg.commands.base import BaseCommand, BaseSectionRepo
+from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
+
 
 class ImageCoord(NamedTuple):
     i: int
@@ -16,11 +17,11 @@ class AtlasCoord(NamedTuple):
     z: float
 
 @dataclass
-class GetPixelRegistrationDataCommand(BaseCommand):
+class GetPixelRegistrationDataCommand:
     _repo: BaseSectionRepo
     coord_data_requested: Signal = Signal()
 
-    def __call__(self, i: int, j: int):  # type: ignore
+    def __call__(self, i: int, j: int):
         sections = self._repo.sections
         if not sections:
             return

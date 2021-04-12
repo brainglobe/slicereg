@@ -5,7 +5,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseSectionRepo, BaseCommand
+from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
 
 
@@ -16,11 +16,11 @@ class BaseSelectChannelPresenter(ABC):
 
 
 @dataclass
-class SelectChannelCommand(BaseCommand):
+class SelectChannelCommand:
     _repo: BaseSectionRepo
     channel_changed: Signal = Signal()
 
-    def __call__(self, channel: int):  # type: ignore
+    def __call__(self, channel: int):
         section = self._repo.sections[0]
         # if section is None:
         #     self._presenter.show_error("No section loaded yet.")

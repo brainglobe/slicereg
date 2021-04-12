@@ -1,12 +1,11 @@
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
-from slicereg.commands.base import BaseSectionRepo, BaseCommand
-from slicereg.models.registration import AtlasSectionRegistration
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
-from slicereg.models.image import Image
+from slicereg.models.registration import AtlasSectionRegistration
 from slicereg.models.section import Section
+from slicereg.repos.atlas_repo import BaseAtlasRepo
 
 
 class BaseSectionReader(ABC):
@@ -16,13 +15,13 @@ class BaseSectionReader(ABC):
 
 
 @dataclass
-class LoadImageCommand(BaseCommand):
+class LoadImageCommand:
     _repo: BaseSectionRepo
     _atlas_repo: BaseAtlasRepo
     _reader: BaseSectionReader
     section_loaded: Signal = field(default_factory=Signal)
 
-    def __call__(self, filename: str) -> None:  # type: ignore
+    def __call__(self, filename: str) -> None:
 
         section = self._reader.read(filename=filename)
         section = section.set_image_origin_to_center()

@@ -3,18 +3,19 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Optional
 
-from slicereg.commands.base import BaseSectionRepo, BaseCommand
+from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
-from slicereg.repos.atlas_repo import BaseAtlasRepo
 from slicereg.models.registration import AtlasSectionRegistration
+from slicereg.repos.atlas_repo import BaseAtlasRepo
+
 
 @dataclass
-class UpdateSectionTransformCommand(BaseCommand):
+class UpdateSectionTransformCommand:
     _section_repo: BaseSectionRepo
     _atlas_repo: BaseAtlasRepo
     section_moved: Signal = Signal()
 
-    def __call__(self, res: Optional[int] = None, **dims):  # type: ignore
+    def __call__(self, res: Optional[int] = None, **dims):
         for dim in dims:
             if dim not in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
                 raise TypeError(f'Unknown dimension "{dim}"')

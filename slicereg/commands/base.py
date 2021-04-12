@@ -13,8 +13,3 @@ class BaseSectionRepo(ABC):
     @abstractmethod
     def save_section(self, section: Section) -> None: ...
 
-
-class BaseCommand(ABC):
-
-    @abstractmethod
-    def __call__(self, *args, **kwargs) -> None: ...
