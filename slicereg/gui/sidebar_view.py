@@ -1,7 +1,7 @@
 from functools import partial
 from typing import List
 
-from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox
+from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 from numpy import ndarray
 
 from slicereg.gui.base import BaseQtView
@@ -19,11 +19,21 @@ class SidebarView(BaseQtView):
         layout = QVBoxLayout()
         self.widget.setLayout(layout)
 
-        # Section Buttons
-        load_atlas_button = QPushButton("Load Atlas Tiff")
-        layout.addWidget(load_atlas_button)
+        # Load atlas button + resolution textbox
+        load_atlas_layout = QHBoxLayout()
+
+        load_atlas_layout.addWidget(QLabel(text='Res (μm):'))
+
+        self.resolution_textbox = QLineEdit()
+        load_atlas_layout.addWidget(self.resolution_textbox)
+
+        load_atlas_button = QPushButton("Load Atlas File")
+        load_atlas_layout.addWidget(load_atlas_button)
         load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
 
+        layout.addLayout(load_atlas_layout)
+
+        # Section Buttons
         list_atlas_button = QPushButton("Update Brainglobe Atlases")
         layout.addWidget(list_atlas_button)
         list_atlas_button.clicked.connect(lambda: self.commands.list_bgatlases())
@@ -87,7 +97,8 @@ class SidebarView(BaseQtView):
         )
         if not filename:
             return
-        self.commands.load_atlas_from_file(filename=filename)
+        resolution_um = int(self.resolution_textbox.text())
+        self.commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
 
     def show_brainglobe_atlases(self, atlas_names: List[str]):
         self.list_atlas_dropdown.addItems(atlas_names)
