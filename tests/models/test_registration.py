@@ -2,10 +2,10 @@ import numpy as np
 import numpy.testing as npt
 import pytest
 
+from slicereg.models.atlas import Atlas
 from slicereg.models.registration import AtlasSectionRegistration
 from slicereg.models.section import Section, Image
 from slicereg.models.transforms import Transform3D
-from slicereg.models.atlas import Atlas
 
 
 def test_section_registration_to_an_atlas_gets_an_image_with_same_image_parameters():
@@ -29,7 +29,6 @@ def test_section_registration_to_an_atlas_gets_an_image_with_same_image_paramete
     atlas_slice = registration.atlas_slice
     assert type(atlas_slice) is Image
     assert atlas_slice.width == 5 and atlas_slice.height == 4
-
 
 
 cases = [
@@ -99,7 +98,6 @@ cases = [
 def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
     volume[1, 1, 1] = 1
-    p = case['pos']
     registration = AtlasSectionRegistration(
         section=Section(
             image=Image(channels=np.ones((1, 3, 3))),
