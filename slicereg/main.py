@@ -70,10 +70,6 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     commands.update_section.section_moved.connect(slice_view.on_section_moved)
     commands.resample_section.section_resampled.connect(slice_view.on_section_resampled)
 
-
-
-
-
     # Start the Event Loop!
     if create_qapp:
         app.exec_()
