@@ -8,7 +8,7 @@ from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
 from slicereg.io.ome_tiff import OmeTiffReader
-from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 np.set_printoptions(suppress=True, precision=2)
@@ -17,7 +17,7 @@ np.set_printoptions(suppress=True, precision=2)
 def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     # Initialize the State
     commands = CommandProvider.from_repos(
-        atlas_repo=BrainglobeAtlasRepo(),
+        atlas_repo=AtlasRepo(),
         section_repo=InMemorySectionRepo(),
         tiff_reader=OmeTiffReader(),
     )
@@ -45,6 +45,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
     # Volume View
     commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
+    commands.load_atlas_from_file.atlas_updated.connect(volume_view.on_atlas_update)
     commands.load_section.section_loaded.connect(volume_view.on_section_loaded)
     commands.select_channel.channel_changed.connect(volume_view.on_channel_select)
     commands.move_section.section_moved.connect(volume_view.on_section_moved)

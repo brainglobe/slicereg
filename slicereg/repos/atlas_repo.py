@@ -4,6 +4,7 @@ from contextlib import redirect_stdout
 from io import StringIO
 from typing import Tuple, Optional, List
 
+import imio
 from bg_atlasapi import BrainGlobeAtlas
 from bg_atlasapi import utils as bg_utils
 from bg_atlasapi.list_atlases import get_downloaded_atlases
@@ -17,6 +18,9 @@ class BaseAtlasRepo(ABC):
     def load_atlas(self, name: str) -> Atlas: ...
 
     @abstractmethod
+    def load_atlas_from_file(self, filename: str) -> Atlas: ...
+
+    @abstractmethod
     def get_atlas(self) -> Optional[Atlas]: ...
 
     @abstractmethod
@@ -26,7 +30,7 @@ class BaseAtlasRepo(ABC):
     def list_available_atlases(self) -> List[str]: ...
 
 
-class BrainglobeAtlasRepo(BaseAtlasRepo):
+class AtlasRepo(BaseAtlasRepo):
 
     def __init__(self):
         self._atlas: Optional[Atlas] = None
@@ -40,6 +44,16 @@ class BrainglobeAtlasRepo(BaseAtlasRepo):
         return Atlas(
             volume=new_reference,
             resolution_um=bgatlas.resolution[0],
+        )
+
+    def load_atlas_from_file(self, filename: str) -> Atlas:
+        # TODO: can support scaling, parallel loading, map to coordinate space (anterior, left, superior, etc.)
+        volume = imio.load_any(filename)
+
+        # TODO: resolution
+        return Atlas(
+            volume=volume,
+            resolution_um=60,
         )
 
     def list_available_atlases(self) -> List[str]:

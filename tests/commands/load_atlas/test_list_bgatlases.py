@@ -5,11 +5,11 @@ from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
 from slicereg.commands.utils import Signal
-from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 
 @pytest.fixture
 def repo():
-    repo = Mock(BrainglobeAtlasRepo)
+    repo = Mock(AtlasRepo)
     repo.list_available_atlases.return_value = ['awesome_atlas', 'super_atlas']
     return repo
 
@@ -25,7 +25,7 @@ def test_outlined():
 
 
 @given("I am connected to the internet")
-def step_impl(repo: BrainglobeAtlasRepo):
+def step_impl(repo: AtlasRepo):
     assert repo.list_available_atlases()
 
 

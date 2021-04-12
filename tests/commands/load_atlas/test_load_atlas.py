@@ -7,12 +7,12 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.commands.load_atlas import LoadAtlasCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @pytest.fixture
 def command():
-    repo = Mock(BrainglobeAtlasRepo)
+    repo = Mock(AtlasRepo)
     repo.list_available_atlases.return_value = ['allen_mouse_25um']
     repo.load_atlas.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=25)
     return LoadAtlasCommand(_repo=repo, atlas_updated=Mock(Signal))
@@ -42,5 +42,5 @@ def check_3d_atlas_data_shown(command):
 
 
 @then("it is set as the current atlas for the session.")
-def check_atlas_set_in_repo(command: BrainglobeAtlasRepo):
+def check_atlas_set_in_repo(command):
     assert command._repo.set_atlas.call_count == 1

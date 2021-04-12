@@ -20,9 +20,9 @@ class SidebarView(BaseQtView):
         self.widget.setLayout(layout)
 
         # Section Buttons
-        # load_atlas_button = QPushButton("Load Atlas Tiff")
-        # layout.addWidget(load_atlas_button)
-        # load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
+        load_atlas_button = QPushButton("Load Atlas Tiff")
+        layout.addWidget(load_atlas_button)
+        load_atlas_button.clicked.connect(self.show_load_atlas_dialog)
 
         list_atlas_button = QPushButton("Update Brainglobe Atlases")
         layout.addWidget(list_atlas_button)
@@ -78,16 +78,16 @@ class SidebarView(BaseQtView):
             return
         self.commands.load_section(filename=filename)
 
-    # def show_load_atlas_dialog(self):
-    #     filename, filetype = QFileDialog.getOpenFileName(
-    #         parent=self.qt_widget,
-    #         caption="Load Atlas File from Tiff Stack",
-    #         dir=".",
-    #         filter="TIFF (*.tif)"
-    #     )
-    #     if not filename:
-    #         return
-        # self.load_atlas_from_file(filename=filename)
+    def show_load_atlas_dialog(self):
+        filename, filetype = QFileDialog.getOpenFileName(
+            parent=self.qt_widget,
+            caption="Load Atlas from File",
+            dir=".",
+            filter="Image Files (*.tif *.tiff *.nii)"
+        )
+        if not filename:
+            return
+        self.commands.load_atlas_from_file(filename=filename)
 
     def show_brainglobe_atlases(self, atlas_names: List[str]):
         self.list_atlas_dropdown.addItems(atlas_names)
