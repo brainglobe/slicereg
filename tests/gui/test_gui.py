@@ -1,5 +1,7 @@
-from time import sleep
+from unittest.mock import Mock
 
+from slicereg.gui.commands import CommandProvider
+from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
@@ -12,12 +14,17 @@ def test_gui_launches_without_errors(qtbot):
 
 
 def test_volume_view_launches_without_errors(qtbot):
-    view = VolumeView()
+    view = VolumeView(commands=Mock(CommandProvider))
     qtbot.addWidget(view.qt_widget)
 
 
 def test_slice_view_launches_without_errors(qtbot):
-    view = SliceView()
+    view = SliceView(commands=Mock(CommandProvider))
+    qtbot.addWidget(view.qt_widget)
+
+
+def test_sidebar_view_launches_without_errors(qtbot):
+    view = SidebarView(commands=Mock(CommandProvider))
     qtbot.addWidget(view.qt_widget)
 
 

@@ -26,8 +26,8 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     if create_qapp:
         app = QApplication([])
 
-    volume_view = VolumeView()
-    slice_view = SliceView()
+    volume_view = VolumeView(commands=commands)
+    slice_view = SliceView(commands=commands)
     sidebar_view = SidebarView(commands=commands)
     window = MainWindow(
         title=config.WINDOW_TITLE,
@@ -44,9 +44,6 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     commands.load_section.section_loaded.connect(sidebar_view.on_section_loaded)
 
     # Volume View
-    volume_view.select_channel = commands.select_channel  # type: ignore
-    volume_view.move_section = commands.move_section  # type: ignore
-
     commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
     commands.load_section.section_loaded.connect(volume_view.on_section_loaded)
     commands.select_channel.channel_changed.connect(volume_view.on_channel_select)
@@ -55,9 +52,6 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     commands.resample_section.section_resampled.connect(volume_view.on_section_resampled)
 
     # Slice View
-    slice_view.move_section = commands.move_section  # type: ignore
-    slice_view.get_coord_data = commands.get_coord  # type: ignore
-
     commands.load_section.section_loaded.connect(slice_view.on_section_loaded)
     commands.select_channel.channel_changed.connect(slice_view.on_channel_select)
     commands.move_section.section_moved.connect(slice_view.on_section_moved)

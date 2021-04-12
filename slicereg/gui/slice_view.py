@@ -6,11 +6,14 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from slicereg.gui.base import BaseQtView
+from slicereg.gui.commands import CommandProvider
 
 
 class SliceView(BaseQtView):
 
-    def __init__(self):
+    def __init__(self, commands: CommandProvider):
+
+        self.commands = commands
 
         self._canvas = SceneCanvas()
 
@@ -83,23 +86,17 @@ class SliceView(BaseQtView):
     def _on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 4.):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self.move_section(x=scaled_dx, z=scaled_dy)
-        self.get_coord_data(i=x2, j=y2)  # todo: replace with mouse highlighting
+        self.commands.move_section(x=scaled_dx, z=scaled_dy)
+        self.commands.get_coord(i=x2, j=y2)  # todo: replace with mouse highlighting
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 1.):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
 
-        self.move_section(rx=scaled_dx, rz=scaled_dy)
+        self.commands.move_section(rx=scaled_dx, rz=scaled_dy)
 
     def _on_mousewheel_move(self, increment: int):
-        self.move_section(y=10 * increment)
-
-    def move_section(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> None:
-        raise NotImplementedError("Wire up to MoveSectionCommand to use this.")
-
-    def get_coord_data(self, i: int, j: int):
-        raise NotImplementedError("Wire up to GetPixelRegistrationDataCommand to use this.")
+        self.commands.move_section(y=10 * increment)
 
     def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray):
         self.update_slice_image(image=section_image)
