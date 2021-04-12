@@ -7,11 +7,15 @@ from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
 from slicereg.commands.utils import Signal
 from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
 
-
 @pytest.fixture
-def command():
+def repo():
     repo = Mock(BrainglobeAtlasRepo)
     repo.list_available_atlases.return_value = ['awesome_atlas', 'super_atlas']
+    return repo
+
+
+@pytest.fixture
+def command(repo):
     return ListBgAtlasesCommand(_repo=repo, atlas_list_updated=Mock(Signal))
 
 
