@@ -28,7 +28,7 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
 
     volume_view = VolumeView()
     slice_view = SliceView()
-    sidebar_view = SidebarView()
+    sidebar_view = SidebarView(commands=commands)
     window = MainWindow(
         title=config.WINDOW_TITLE,
         volume_widget=volume_view.qt_widget,
@@ -40,12 +40,6 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     commands.get_coord.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
     # Sidebar View
-    sidebar_view.load_atlas = commands.load_atlas  # type: ignore
-    sidebar_view.list_brainglobe_atlases = commands.list_bgatlases  # type: ignore
-    sidebar_view.load_section = commands.load_section  # type: ignore
-    sidebar_view.transform_section = commands.update_section  # type: ignore
-    sidebar_view.resample_section = commands.resample_section  # type: ignore
-
     commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
     commands.load_section.section_loaded.connect(sidebar_view.on_section_loaded)
 
