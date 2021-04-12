@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from PySide2.QtWidgets import QApplication
 
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
@@ -22,10 +24,32 @@ import numpy as np
 np.set_printoptions(suppress=True, precision=2)
 
 
+@dataclass(frozen=True)
+class CommandProvider:
+    load_atlas: LoadAtlasCommand
+    list_bgatlases: ListBgAtlasesCommand
+    load_section: LoadImageCommand
+    select_channel: SelectChannelCommand
+    move_section: MoveSectionCommand
+    update_section: UpdateSectionTransformCommand
+    get_coord: GetPixelRegistrationDataCommand
+    resample_section: ResampleSectionCommand
+
+
 def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     # Initialize the State
     section_repo = InMemorySectionRepo()
     atlas_repo = BrainglobeAtlasRepo()
+    commands = CommandProvider(
+        load_atlas=LoadAtlasCommand(_repo=atlas_repo),
+        list_bgatlases=ListBgAtlasesCommand(_repo=atlas_repo),
+        load_section=LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _reader=OmeTiffReader()),
+        select_channel=SelectChannelCommand(_repo=section_repo),
+        move_section=MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
+        update_section=UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
+        get_coord=GetPixelRegistrationDataCommand(_repo=section_repo),
+        resample_section=ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo),
+    )
 
     # Wire up the GUI
     if create_qapp:
@@ -41,45 +65,36 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         side_controls=sidebar_view.qt_widget,
     )
 
-    load_atlas = LoadAtlasCommand(_repo=atlas_repo)
-    sidebar_view.load_atlas = load_atlas  # type: ignore
-    load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
+    sidebar_view.load_atlas = commands.load_atlas  # type: ignore
+    commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
 
-    list_atlases = ListBgAtlasesCommand(_repo=atlas_repo)
-    sidebar_view.list_brainglobe_atlases = list_atlases  # type: ignore
-    list_atlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
+    sidebar_view.list_brainglobe_atlases = commands.list_bgatlases  # type: ignore
+    commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
 
-    load_section = LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _reader=OmeTiffReader())
-    sidebar_view.load_section = load_section  # type: ignore
-    load_section.section_loaded.connect(slice_view.on_section_loaded)
-    load_section.section_loaded.connect(volume_view.on_section_loaded)
-    load_section.section_loaded.connect(sidebar_view.on_section_loaded)
+    sidebar_view.load_section = commands.load_section  # type: ignore
+    commands.load_section.section_loaded.connect(slice_view.on_section_loaded)
+    commands.load_section.section_loaded.connect(volume_view.on_section_loaded)
+    commands.load_section.section_loaded.connect(sidebar_view.on_section_loaded)
 
-    select_channel = SelectChannelCommand(_repo=section_repo)
-    volume_view.select_channel = select_channel  # type: ignore
-    select_channel.channel_changed.connect(volume_view.on_channel_select)
-    select_channel.channel_changed.connect(slice_view.on_channel_select)
+    volume_view.select_channel = commands.select_channel  # type: ignore
+    commands.select_channel.channel_changed.connect(volume_view.on_channel_select)
+    commands.select_channel.channel_changed.connect(slice_view.on_channel_select)
 
-    move_section = MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo)
-    transform_section = UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo)
+    volume_view.move_section = commands.move_section  # type: ignore
+    slice_view.move_section = commands.move_section  # type: ignore
+    sidebar_view.transform_section = commands.update_section  # type: ignore
 
-    volume_view.move_section = move_section  # type: ignore
-    slice_view.move_section = move_section  # type: ignore
-    sidebar_view.transform_section = transform_section  # type: ignore
+    commands.move_section.section_moved.connect(volume_view.on_section_moved)
+    commands.move_section.section_moved.connect(slice_view.on_section_moved)
+    commands.update_section.section_moved.connect(volume_view.on_section_moved)
+    commands.update_section.section_moved.connect(slice_view.on_section_moved)
 
-    move_section.section_moved.connect(volume_view.on_section_moved)
-    move_section.section_moved.connect(slice_view.on_section_moved)
-    transform_section.section_moved.connect(volume_view.on_section_moved)
-    transform_section.section_moved.connect(slice_view.on_section_moved)
+    slice_view.get_coord_data = commands.get_coord  # type: ignore
+    commands.get_coord.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
-    request_coord_data = GetPixelRegistrationDataCommand(_repo=section_repo)
-    slice_view.get_coord_data = request_coord_data  # type: ignore
-    request_coord_data.coord_data_requested.connect(window.on_image_coordinate_highlighted)
-
-    resample_section = ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo)
-    sidebar_view.resample_section = resample_section  # type: ignore
-    resample_section.section_resampled.connect(slice_view.on_section_resampled)
-    resample_section.section_resampled.connect(volume_view.on_section_resampled)
+    sidebar_view.resample_section = commands.resample_section  # type: ignore
+    commands.resample_section.section_resampled.connect(slice_view.on_section_resampled)
+    commands.resample_section.section_resampled.connect(volume_view.on_section_resampled)
 
     # Start the Event Loop!
     if create_qapp:
