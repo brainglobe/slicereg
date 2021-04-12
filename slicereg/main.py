@@ -1,54 +1,25 @@
-from dataclasses import dataclass
-
+import numpy as np
 from PySide2.QtWidgets import QApplication
 
-from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
-from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
-from slicereg.commands.load_atlas import LoadAtlasCommand
-from slicereg.commands.load_section import LoadImageCommand
-from slicereg.commands.move_section import MoveSectionCommand
-from slicereg.commands.select_channel import SelectChannelCommand
-from slicereg.commands.resample_section import ResampleSectionCommand
-from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg import config
+from slicereg.gui.commands import CommandProvider
+from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
-from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.window import MainWindow
 from slicereg.io.ome_tiff import OmeTiffReader
 from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
-import numpy as np
-
 np.set_printoptions(suppress=True, precision=2)
-
-
-@dataclass(frozen=True)
-class CommandProvider:
-    load_atlas: LoadAtlasCommand
-    list_bgatlases: ListBgAtlasesCommand
-    load_section: LoadImageCommand
-    select_channel: SelectChannelCommand
-    move_section: MoveSectionCommand
-    update_section: UpdateSectionTransformCommand
-    get_coord: GetPixelRegistrationDataCommand
-    resample_section: ResampleSectionCommand
 
 
 def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
     # Initialize the State
-    section_repo = InMemorySectionRepo()
-    atlas_repo = BrainglobeAtlasRepo()
-    commands = CommandProvider(
-        load_atlas=LoadAtlasCommand(_repo=atlas_repo),
-        list_bgatlases=ListBgAtlasesCommand(_repo=atlas_repo),
-        load_section=LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _reader=OmeTiffReader()),
-        select_channel=SelectChannelCommand(_repo=section_repo),
-        move_section=MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
-        update_section=UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
-        get_coord=GetPixelRegistrationDataCommand(_repo=section_repo),
-        resample_section=ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo),
+    commands = CommandProvider.from_repos(
+        atlas_repo=BrainglobeAtlasRepo(),
+        section_repo=InMemorySectionRepo(),
+        tiff_reader=OmeTiffReader(),
     )
 
     # Wire up the GUI
