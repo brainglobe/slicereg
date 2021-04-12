@@ -36,36 +36,43 @@ def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
         side_controls=sidebar_view.qt_widget,
     )
 
-    sidebar_view.load_atlas = commands.load_atlas  # type: ignore
-    commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
-
-    sidebar_view.list_brainglobe_atlases = commands.list_bgatlases  # type: ignore
-    commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
-
-    sidebar_view.load_section = commands.load_section  # type: ignore
-    commands.load_section.section_loaded.connect(slice_view.on_section_loaded)
-    commands.load_section.section_loaded.connect(volume_view.on_section_loaded)
-    commands.load_section.section_loaded.connect(sidebar_view.on_section_loaded)
-
-    volume_view.select_channel = commands.select_channel  # type: ignore
-    commands.select_channel.channel_changed.connect(volume_view.on_channel_select)
-    commands.select_channel.channel_changed.connect(slice_view.on_channel_select)
-
-    volume_view.move_section = commands.move_section  # type: ignore
-    slice_view.move_section = commands.move_section  # type: ignore
-    sidebar_view.transform_section = commands.update_section  # type: ignore
-
-    commands.move_section.section_moved.connect(volume_view.on_section_moved)
-    commands.move_section.section_moved.connect(slice_view.on_section_moved)
-    commands.update_section.section_moved.connect(volume_view.on_section_moved)
-    commands.update_section.section_moved.connect(slice_view.on_section_moved)
-
-    slice_view.get_coord_data = commands.get_coord  # type: ignore
+    # Window View
     commands.get_coord.coord_data_requested.connect(window.on_image_coordinate_highlighted)
 
+    # Sidebar View
+    sidebar_view.load_atlas = commands.load_atlas  # type: ignore
+    sidebar_view.list_brainglobe_atlases = commands.list_bgatlases  # type: ignore
+    sidebar_view.load_section = commands.load_section  # type: ignore
+    sidebar_view.transform_section = commands.update_section  # type: ignore
     sidebar_view.resample_section = commands.resample_section  # type: ignore
-    commands.resample_section.section_resampled.connect(slice_view.on_section_resampled)
+
+    commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
+    commands.load_section.section_loaded.connect(sidebar_view.on_section_loaded)
+
+    # Volume View
+    volume_view.select_channel = commands.select_channel  # type: ignore
+    volume_view.move_section = commands.move_section  # type: ignore
+
+    commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
+    commands.load_section.section_loaded.connect(volume_view.on_section_loaded)
+    commands.select_channel.channel_changed.connect(volume_view.on_channel_select)
+    commands.move_section.section_moved.connect(volume_view.on_section_moved)
+    commands.update_section.section_moved.connect(volume_view.on_section_moved)
     commands.resample_section.section_resampled.connect(volume_view.on_section_resampled)
+
+    # Slice View
+    slice_view.move_section = commands.move_section  # type: ignore
+    slice_view.get_coord_data = commands.get_coord  # type: ignore
+
+    commands.load_section.section_loaded.connect(slice_view.on_section_loaded)
+    commands.select_channel.channel_changed.connect(slice_view.on_channel_select)
+    commands.move_section.section_moved.connect(slice_view.on_section_moved)
+    commands.update_section.section_moved.connect(slice_view.on_section_moved)
+    commands.resample_section.section_resampled.connect(slice_view.on_section_resampled)
+
+
+
+
 
     # Start the Event Loop!
     if create_qapp:
