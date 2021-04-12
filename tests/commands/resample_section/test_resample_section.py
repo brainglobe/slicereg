@@ -10,7 +10,7 @@ from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.models.section import Section
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @scenario("resample.feature", "Section Resample")
@@ -29,7 +29,7 @@ def repo():
 
 @pytest.fixture
 def atlas_repo():
-    repo = Mock(BaseAtlasRepo)
+    repo = Mock(AtlasRepo)
     repo.get_atlas.return_value = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=10)
     return repo
 
@@ -56,4 +56,3 @@ def step_impl(command: ResampleSectionCommand):
     assert output['resolution_um'] == 50
     assert 'section_image' in output
     assert output['transform'].shape == (4, 4)
-

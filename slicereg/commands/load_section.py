@@ -1,23 +1,16 @@
-from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
+from slicereg.io.base import BaseSectionReader
 from slicereg.models.registration import AtlasSectionRegistration
-from slicereg.models.section import Section
-from slicereg.repos.atlas_repo import BaseAtlasRepo
-
-
-class BaseSectionReader(ABC):
-
-    @abstractmethod
-    def read(self, filename: str) -> Section: ...
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
 class LoadImageCommand:
     _repo: BaseSectionRepo
-    _atlas_repo: BaseAtlasRepo
+    _atlas_repo: AtlasRepo
     _reader: BaseSectionReader
     section_loaded: Signal = field(default_factory=Signal)
 

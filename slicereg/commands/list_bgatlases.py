@@ -3,14 +3,15 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from slicereg.commands.utils import Signal
-from slicereg.repos.atlas_repo import BrainglobeAtlasRepo
+from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
 class ListBgAtlasesCommand:
-    _repo: BrainglobeAtlasRepo
+    _reader: BrainglobeAtlasReader
     atlas_list_updated: Signal = field(default_factory=Signal)
 
     def __call__(self):
-        atlas_names = self._repo.list_available_atlases()
+        atlas_names = self._reader.list_available()
         self.atlas_list_updated.emit(atlas_names=atlas_names)
