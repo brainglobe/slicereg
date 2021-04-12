@@ -21,8 +21,8 @@ def test_outlined():
 
 
 @given("I am connected to the internet")
-def step_impl():
-    pass
+def step_impl(repo: BrainglobeAtlasRepo):
+    assert repo.list_available_atlases()
 
 
 @when("I check brainglobe")
