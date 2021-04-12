@@ -4,12 +4,13 @@ import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand, BaseSectionReader
+from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand
+from slicereg.io.base import BaseSectionReader
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.models.section import Section
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @pytest.fixture
@@ -21,7 +22,7 @@ def repo():
 
 @pytest.fixture
 def atlas_repo():
-    repo = Mock(BaseAtlasRepo)
+    repo = Mock(AtlasRepo)
     repo.get_atlas.return_value = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=10)
     return repo
 

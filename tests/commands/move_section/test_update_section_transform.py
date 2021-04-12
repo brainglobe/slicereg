@@ -6,7 +6,7 @@ from pytest_bdd import scenario, given, when, then
 from numpy import random
 
 from slicereg.commands.base import BaseSectionRepo
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
@@ -33,7 +33,7 @@ def repo():
 
 @pytest.fixture
 def atlas_repo():
-    repo = Mock(BaseAtlasRepo)
+    repo = Mock(AtlasRepo)
     repo.get_atlas.return_value = Atlas(
         volume=random.normal(size=(10, 10, 10)),
         resolution_um=25,

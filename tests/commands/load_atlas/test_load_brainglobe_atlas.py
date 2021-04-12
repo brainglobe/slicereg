@@ -4,8 +4,9 @@ import pytest
 from numpy import random
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.load_atlas import LoadAtlasCommand
+from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand
 from slicereg.commands.utils import Signal
+from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.models.atlas import Atlas
 from slicereg.repos.atlas_repo import AtlasRepo
 
@@ -13,9 +14,10 @@ from slicereg.repos.atlas_repo import AtlasRepo
 @pytest.fixture
 def command():
     repo = Mock(AtlasRepo)
-    repo.list_available_atlases.return_value = ['allen_mouse_25um']
-    repo.load_atlas.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=25)
-    return LoadAtlasCommand(_repo=repo, atlas_updated=Mock(Signal))
+    reader = Mock(BrainglobeAtlasReader)
+    reader.list_available.return_value = ['allen_mouse_25um']
+    reader.read.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=25)
+    return LoadBrainglobeAtlasCommand(_repo=repo, _reader=reader, atlas_updated=Mock(Signal))
 
 
 @scenario("load_atlas.feature", "Load Atlas")

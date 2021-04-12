@@ -7,19 +7,17 @@ from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
-from slicereg.io.ome_tiff import OmeTiffReader
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 np.set_printoptions(suppress=True, precision=2)
 
 
-def launch_gui(create_qapp: bool = True, load_atlas_on_launch: bool = True):
+def launch_gui(create_qapp: bool = True):
     # Initialize the State
     commands = CommandProvider.from_repos(
         atlas_repo=AtlasRepo(),
         section_repo=InMemorySectionRepo(),
-        tiff_reader=OmeTiffReader(),
     )
 
     # Wire up the GUI

@@ -3,13 +3,13 @@ from dataclasses import dataclass, field
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
 from slicereg.models.registration import AtlasSectionRegistration
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
 class ResampleSectionCommand:
     _repo: BaseSectionRepo
-    _atlas_repo: BaseAtlasRepo
+    _atlas_repo: AtlasRepo
     section_resampled: Signal = field(default_factory=Signal)
 
     def __call__(self, resolution_um: float) -> None:

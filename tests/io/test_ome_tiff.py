@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 from pytest import approx
 
-from slicereg.io.ome_tiff import OmeTiffReader
+from slicereg.io.tifffile import OmeTiffSectionReader
 
 cases = [
     ("data/RA_10X_scans/MeA/S1_09032020.ome.tiff", (2, 2816, 4198), 2.77)

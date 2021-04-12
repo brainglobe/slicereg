@@ -5,13 +5,13 @@ from dataclasses import dataclass
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
 from slicereg.models.registration import AtlasSectionRegistration
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
 class MoveSectionCommand:
     _section_repo: BaseSectionRepo
-    _atlas_repo: BaseAtlasRepo
+    _atlas_repo: AtlasRepo
     section_moved: Signal = Signal()
 
     def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.):

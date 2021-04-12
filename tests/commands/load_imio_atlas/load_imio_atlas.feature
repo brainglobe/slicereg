@@ -1,10 +1,10 @@
 
-Feature: Load Atlas From File
-  Load Atlas from file for 3D registration
+Feature: Load Atlas From File Using imio
+  Load Atlas from file for 3D registration using the imio library
 
-  Scenario: Load Atlas From NII File
+  Scenario: Load Atlas From File Using imio
     Given A file containing an atlas
-    When I load the atlas NII file
+    When I load the mock.tiff atlas with 10um resolution
     Then a 3D volume of the atlas appears onscreen
     And it is set as the current atlas for the session
 
