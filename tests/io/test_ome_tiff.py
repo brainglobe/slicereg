@@ -9,7 +9,7 @@ cases = [
 ]
 @pytest.mark.parametrize("filename,shape,pixel_size_um", cases)
 def test_tiff_reader_gets_sliceimages_from_example_files(filename, shape, pixel_size_um):
-    section = OmeTiffReader().read(filename=filename)
+    section = OmeTiffSectionReader().read(filename=filename)
 
     assert section.image.num_channels == shape[0]
     assert section.image.height == shape[1]

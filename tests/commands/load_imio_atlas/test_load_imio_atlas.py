@@ -35,11 +35,11 @@ def load_atlas(command):
 
 
 @then("a 3D volume of the atlas appears onscreen")
-def check_3d_atlas_data_shown(command, filename):
+def check_3d_atlas_data_shown(command):
     output = command.atlas_updated.emit.call_args[1]
     assert output['volume'].ndim == 3
     assert output['transform'].shape == (4, 4)
-    command._repo.load_atlas_from_file.assert_called_with(filename=filename)
+    command._reader.read.assert_called_with(path='mock.tiff', resolution_um=10)
 
 
 @then("it is set as the current atlas for the session")

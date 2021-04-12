@@ -3,15 +3,17 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 
 from slicereg.commands.utils import Signal
-from slicereg.repos.atlas_repo import BaseAtlasRepo
+from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
-class LoadAtlasCommand:
-    _repo: BaseAtlasRepo
+class LoadBrainglobeAtlasCommand:
+    _repo: AtlasRepo
+    _reader: BrainglobeAtlasReader
     atlas_updated: Signal = field(default_factory=Signal)
 
     def __call__(self, bgatlas_name: str):
-        atlas = self._repo.load_atlas(name=bgatlas_name)
+        atlas = self._reader.read(path=bgatlas_name)
         self._repo.set_atlas(atlas=atlas)
         self.atlas_updated.emit(volume=atlas.volume, transform=atlas.affine_transform)

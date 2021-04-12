@@ -31,7 +31,7 @@ class CommandProvider:
     resample_section: ResampleSectionCommand
 
     @classmethod
-    def from_repos(cls, atlas_repo: AtlasRepo, section_repo: InMemorySectionRepo, tiff_reader: OmeTiffReader) -> CommandProvider:
+    def from_repos(cls, atlas_repo: AtlasRepo, section_repo: InMemorySectionRepo) -> CommandProvider:
         return cls(
             load_atlas=LoadBrainglobeAtlasCommand(_repo=atlas_repo, _reader=BrainglobeAtlasReader()),
             load_atlas_from_file=LoadImioAtlasCommand(_repo=atlas_repo, _reader=ImioAtlasReader()),

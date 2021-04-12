@@ -29,7 +29,7 @@ def load_first_atlas(command):
 
 
 @when("I ask for a 100um atlas")
-def load_atlas(command):
+def load_second_atlas(command):
     command(bgatlas_name="allen_mouse_100um")
 
 

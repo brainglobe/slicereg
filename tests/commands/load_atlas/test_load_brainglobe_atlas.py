@@ -27,7 +27,8 @@ def test_outlined():
 
 @given("the 25um atlas is already on my computer")
 def check_atlas_exists(command):
-    assert 'allen_mouse_25um' in command._repo.list_available_atlases()
+    # Already set.
+    pass
 
 
 @when("I ask for a 25um atlas")
@@ -40,7 +41,7 @@ def check_3d_atlas_data_shown(command):
     output = command.atlas_updated.emit.call_args[1]
     assert output['volume'].ndim == 3
     assert output['transform'].shape == (4, 4)
-    command._repo.load_atlas.assert_called_with(name="allen_mouse_25um")
+    command._reader.read.assert_called_with(path="allen_mouse_25um")
 
 
 @then("it is set as the current atlas for the session.")
