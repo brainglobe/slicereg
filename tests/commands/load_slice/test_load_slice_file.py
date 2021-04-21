@@ -59,6 +59,11 @@ def no_sections_loaded(repo):
     assert not repo.sections
 
 
+@given("An atlas has been loaded")
+def atlas_is_loaded(atlas_repo: AtlasRepo):
+    assert atlas_repo.get_atlas() is not None
+
+
 @when("I load the file")
 def load_file(command, filename):
     command(filename=filename)
@@ -69,6 +74,13 @@ def check_for_loaded_3d_section(command: LoadImageCommand):
     output = command.section_loaded.emit.call_args[1]
     assert output['image'].ndim == 2
     assert output['transform'].shape == (4, 4)
+
+
+@then("I should see the atlas image onscreen in slice view")
+def check_atlas_image_displayed(command: LoadImageCommand):
+    output = command.section_loaded.emit.call_args[1]
+    assert 'atlas_image' in output
+    assert output['atlas_image'].ndim == 2
 
 
 @then("The slice is centered on the image")
