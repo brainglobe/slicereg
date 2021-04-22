@@ -39,7 +39,7 @@ def launch_gui(create_qapp: bool = True):
 
     # Sidebar View
     commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
-    commands.load_section.section_loaded.connect(sidebar_view.on_section_loaded)
+
 
     # Volume View
     commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)

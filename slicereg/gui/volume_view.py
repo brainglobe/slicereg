@@ -43,7 +43,7 @@ class VolumeView(BaseQtView):
         self._viewbox.camera.scale_factor = np.mean(volume.shape)
         self._canvas.update()
 
-    def on_section_loaded(self, image: ndarray, transform: ndarray, resolution_um: int):
+    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int):
         self._section_image.set_data(image.T)
         self._section_image.clim = np.min(image), np.max(image)
         if transform is not None:

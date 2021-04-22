@@ -74,9 +74,6 @@ class SidebarView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self.widget
 
-    def on_section_loaded(self, image: ndarray, transform: ndarray, resolution_um: int) -> None:
-        self.resolution_widget.set_value(resolution_um)
-
     def show_load_image_dialog(self):
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.qt_widget,

@@ -44,8 +44,9 @@ class SliceView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_section_loaded(self, image: ndarray, transform: ndarray, resolution_um: int) -> None:
+    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
         self.update_slice_image(image=image)
+        self.update_ref_slice_image(image=atlas_image)
 
     def on_channel_select(self, image: ndarray, channel: int) -> None:
         self.update_slice_image(image=image)
@@ -62,7 +63,7 @@ class SliceView(BaseQtView):
 
     def update_ref_slice_image(self, image: ndarray):
         self._reference_slice.set_data(image)
-        self._reference_slice.clim = (np.min(image), np.max(image))  if np.max(image) - np.min(image) > 0 else (0, 1)
+        self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
         self._canvas.update()
 
     def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:
@@ -82,7 +83,6 @@ class SliceView(BaseQtView):
         elif event.type == 'mouse_wheel':
             self._on_mousewheel_move(increment=int(event.delta[1]))
 
-
     def _on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 4.):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
@@ -98,6 +98,7 @@ class SliceView(BaseQtView):
     def _on_mousewheel_move(self, increment: int):
         self.commands.move_section(y=10 * increment)
 
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray):
+    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray,
+                             atlas_image: ndarray):
         self.update_slice_image(image=section_image)
         self.update_ref_slice_image(image=atlas_image)
