@@ -25,10 +25,6 @@ class Image:
     def width(self) -> int:
         return self.channels.shape[2]
 
-    @property
-    def aspect_ratio(self) -> float:
-        return self.width / self.height
-
     @cached_property
     def inds_homog(self) -> np.ndarray:
         """All the i,j indices in the image as a 4 x (width x height) homogonous vertex array"""

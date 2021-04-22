@@ -99,12 +99,6 @@ def test_homogonous_coords_are_ij_ordered_and_a_column(i, j):
     npt.assert_equal(coords, expected)
 
 
-@given(width=integers(1, 1000), height=integers(1, 1000))
-def test_image_aspect_ratio_calculation(width, height):
-    image = Image(channels=np.random.random((2, height, width)))
-    assert approx(image.aspect_ratio == width / height)
-
-
 @given(i_shift=sensible_floats(-20, 20), j_shift=sensible_floats(-20, 20), theta=sensible_floats(-10000, 10000))
 def test_planes_affine_transform_with_rotation_is_correct_for_all_resolutions(i_shift, j_shift, theta):
     image = Image(channels=np.random.random((2, 10, 10)), i_shift=i_shift, j_shift=j_shift, theta=theta)
