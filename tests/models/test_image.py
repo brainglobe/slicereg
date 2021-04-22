@@ -3,9 +3,8 @@ from functools import partial
 import numpy as np
 import numpy.testing as npt
 import pytest
-from pytest import approx
 from hypothesis import given
-from hypothesis.strategies import integers, floats, booleans
+from hypothesis.strategies import integers, floats
 
 from slicereg.models.image import Image
 from slicereg.models.registration import ij_homog

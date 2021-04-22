@@ -1,16 +1,13 @@
 from functools import partial
 
 import numpy as np
-import numpy.testing as npt
 import pytest
 from hypothesis import given
 from hypothesis.strategies import integers, floats
-from numpy import arange, sin, cos, radians
 from pytest import approx
 
 from slicereg.models.image import Image
 from slicereg.models.section import Section
-from slicereg.models.transforms import Transform3D
 
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)
 
