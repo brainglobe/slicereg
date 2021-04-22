@@ -10,13 +10,13 @@ from pytest import approx
 
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
-from slicereg.models.registration import AtlasSectionRegistration
+from slicereg.models.registration import Registration
 from slicereg.models.section import Section
 from slicereg.models.transforms import Transform3D
 
 
 def test_section_registration_to_an_atlas_gets_an_image_with_same_image_parameters():
-    registration = AtlasSectionRegistration(
+    registration = Registration(
         section=Section(
             image=Image(
                 channels=np.random.random((3, 4, 5)),
@@ -50,7 +50,7 @@ np.set_printoptions(precision=5, suppress=True)
     res=real_floats(1e-4, 1000)
 )
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, theta, x, y, z, res):
-    registration = AtlasSectionRegistration(
+    registration = Registration(
         section=Section(
             image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift, theta=theta),
             pixel_resolution_um=res,
@@ -144,7 +144,7 @@ cases = [
 def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
     volume[1, 1, 1] = 1
-    registration = AtlasSectionRegistration(
+    registration = Registration(
         section=Section(
             image=Image(channels=np.ones((1, 3, 3))),
             pixel_resolution_um=case["section_res"],

@@ -5,7 +5,7 @@ from typing import Optional
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
-from slicereg.models.registration import AtlasSectionRegistration
+from slicereg.models.registration import Registration
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
@@ -32,7 +32,7 @@ class UpdateSectionTransformCommand:
             section = section.set_pixel_resolution(resolution_um=res)
 
         section = section.set_plane_3d(**dims)
-        registration = AtlasSectionRegistration(section=section, atlas=atlas)
+        registration = Registration(section=section, atlas=atlas)
         self._section_repo.save_section(section)
         self.section_moved.emit(
             transform=registration.affine_transform,

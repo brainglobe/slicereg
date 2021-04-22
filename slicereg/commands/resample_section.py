@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
-from slicereg.models.registration import AtlasSectionRegistration
+from slicereg.models.registration import Registration
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
@@ -21,7 +21,7 @@ class ResampleSectionCommand:
         if not atlas:
             return
 
-        registration = AtlasSectionRegistration(section=section, atlas=atlas)
+        registration = Registration(section=section, atlas=atlas)
         self._repo.save_section(section=section)
 
         self.section_resampled.emit(

@@ -8,7 +8,7 @@ from slicereg.models.section import Section, Image
 from slicereg.models.utils import _fancy_index_3d_numba
 
 @dataclass(frozen=True)
-class AtlasSectionRegistration:
+class Registration:
     section: Section
     atlas: Atlas
 

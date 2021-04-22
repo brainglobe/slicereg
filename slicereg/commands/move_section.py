@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
-from slicereg.models.registration import AtlasSectionRegistration
+from slicereg.models.registration import Registration
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
@@ -21,7 +21,7 @@ class MoveSectionCommand:
             .rotate(rx=rx, ry=ry, rz=rz)
 
         atlas = self._atlas_repo.get_atlas()
-        registration = AtlasSectionRegistration(section=section, atlas=atlas)
+        registration = Registration(section=section, atlas=atlas)
 
         self._section_repo.save_section(section)
         self.section_moved.emit(transform=registration.affine_transform, atlas_slice_image=registration.atlas_slice.channels[0])
