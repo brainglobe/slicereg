@@ -13,35 +13,6 @@ from slicereg.models.section import Section
 from slicereg.models.transforms import Transform3D
 
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)
-np.set_printoptions(precision=5, suppress=True)
-
-
-@given(
-    i=integers(0, 1e5), j=integers(0, 1e5),
-    i_shift=real_floats(-2, 2), j_shift=real_floats(-2, 2),
-    theta=real_floats(-500, 500),
-    x=real_floats(-1e5, 1e5), y=real_floats(-1e5, 1e5), z=real_floats(-1e5, 1e5),
-    res=real_floats(1e-4, 1000)
-)
-def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, theta, x, y, z, res):
-    section = Section(
-        image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift, theta=theta),
-        pixel_resolution_um=res,
-        plane_3d=Transform3D(x=x, y=y, z=z),
-    )
-    t = -radians(theta)  # image is left-handed, so flip rotation
-    xyz = section.map_ij_to_xyz(i=i, j=j)  # observed 3D positions
-
-    # do shift first, to make final 2d rotation calculation easier https://academo.org/demos/rotation-about-point/
-    j2 = (j + (j_shift * section.image.width))
-    i2 = (-i - (i_shift * section.image.height))
-
-    expected = (
-        (j2 * cos(t) + i2 * sin(t)) * res + x,
-        (i2 * cos(t) - j2 * sin(t)) * res + y,
-        z,
-    )
-    assert approx(xyz == expected)
 
 
 @given(from_resolution=real_floats(10, 50), to_resolution=real_floats(10, 50))

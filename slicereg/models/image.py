@@ -67,5 +67,3 @@ def inds_homog(height: int, width: int) -> np.ndarray:
     return np.mgrid[:height, :width, :1, 1:2].reshape(-1, width * height)
 
 
-def ij_homog(i: int, j: int) -> np.ndarray:
-    return np.array([[i, j, 0, 1]]).T

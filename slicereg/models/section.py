@@ -1,13 +1,12 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field, replace
-from typing import Tuple, cast
 from uuid import UUID, uuid4
 
 import numpy as np
 from scipy import ndimage
 
-from slicereg.models.image import Image, ij_homog
+from slicereg.models.image import Image
 from slicereg.models.transforms import Transform3D
 
 
@@ -42,20 +41,18 @@ class Section:
         return matrix
 
     @property
-    def affine_transform(self) -> np.ndarray:
+    def ij_to_xyz_matrix(self) -> np.ndarray:
         # need -90 degree rotation (ignore left-handed nature of Z coords, since don't exist)
-        ij_to_xyz_matrix = np.array([
+        return np.array([
             [0, 1, 0, 0],
             [-1, 0, 0, 0],
             [0, 0, 1, 0],
             [0, 0, 0, 1]
         ])
-        return self.plane_3d.affine_transform @ self._resolution_matrix @ ij_to_xyz_matrix @ self.image.affine_transform
 
-    def map_ij_to_xyz(self, i: int, j: int) -> Tuple[float, float, float]:
-        xyzw = self.affine_transform @ ij_homog(i=i, j=j)
-        x, y, z = xyzw[:3, 0]
-        return x, y, z
+    @property
+    def affine_transform(self) -> np.ndarray:
+        return self.plane_3d.affine_transform @ self._resolution_matrix @ self.ij_to_xyz_matrix @ self.image.affine_transform
 
     def set_image_origin_to_center(self) -> Section:
         return replace(self, image=self.image.shift_origin_to_center())

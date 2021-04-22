@@ -40,6 +40,6 @@ class CommandProvider:
             select_channel=SelectChannelCommand(_repo=section_repo),
             move_section=MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
             update_section=UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
-            get_coord=GetPixelRegistrationDataCommand(_repo=section_repo),
+            get_coord=GetPixelRegistrationDataCommand(_repo=section_repo, _atlas_repo=atlas_repo),
             resample_section=ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo),
         )

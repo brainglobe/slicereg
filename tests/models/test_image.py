@@ -7,7 +7,8 @@ from pytest import approx
 from hypothesis import given
 from hypothesis.strategies import integers, floats, booleans
 
-from slicereg.models.image import Image, ij_homog
+from slicereg.models.image import Image
+from slicereg.models.registration import ij_homog
 
 sensible_floats = partial(floats, allow_nan=False, allow_infinity=False)
 

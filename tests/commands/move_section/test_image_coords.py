@@ -9,6 +9,7 @@ from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.image import Image
 from slicereg.models.section import Section
+from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @scenario("section_affine_registration.feature", "Check Pixel Coordinate in Atlas Space")
@@ -27,7 +28,7 @@ def repo():
 
 @pytest.fixture
 def command(repo):
-    return GetPixelRegistrationDataCommand(_repo=repo, coord_data_requested=Mock(Signal))
+    return GetPixelRegistrationDataCommand(_repo=repo, _atlas_repo=Mock(AtlasRepo), coord_data_requested=Mock(Signal))
 
 
 @given("I have loaded a section")
