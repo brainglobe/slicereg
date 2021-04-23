@@ -4,7 +4,6 @@ from dataclasses import dataclass, field
 
 from slicereg.commands.utils import Signal
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
-from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
