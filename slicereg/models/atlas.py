@@ -22,8 +22,10 @@ class Atlas(FrozenUpdater):
     @property
     def center(self) -> Tuple[float, float, float]:
         """Returns center coordinates, in shared physical (CCF) space."""
-        x, y, z = tuple(dim * self.resolution_um / 2 for dim in self.volume.shape)
-        return x, y, z
+        d0, d1, d2 = self.volume.shape
+        x, y, z = (ijk_to_xyz_matrix @ np.array([[d0, d1, d2, 1]]).T)[:3, 0]
+        cx, cy, cz = tuple(dim * self.resolution_um / 2 for dim in (x, y, z))
+        return cx, cy, cz
 
 
 ijk_to_xyz_matrix = np.array([

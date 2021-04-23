@@ -4,6 +4,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
 from slicereg.io.tifffile import OmeTiffImageReader
 from slicereg.models.image_transform import ImageTransformer
+from slicereg.models.physical_transform import PhysicalTransformer
 from slicereg.models.registration import Registration
 from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
@@ -17,14 +18,18 @@ class LoadImageCommand:
     section_loaded: Signal = field(default_factory=Signal)
 
     def __call__(self, filename: str) -> None:
-
-        image = self._reader.read(filename=filename)
-        image = image.resample(resolution_um=10)
-        section = Section(image=image, image_transform=ImageTransformer(i_shift=-0.5, j_shift=-0.5))
-
         atlas = self._atlas_repo.get_atlas()
         if not atlas:
             return
+
+        cx, cy, cz = atlas.center
+        image = self._reader.read(filename=filename)
+        image = image.resample(resolution_um=10)
+        section = Section(
+            image=image,
+            image_transform=ImageTransformer(i_shift=-0.5, j_shift=-0.5),
+            physical_transform=PhysicalTransformer(x=cx, y=cy, z=cz)
+        )
 
         registration = Registration(section=section, atlas=atlas)
 
