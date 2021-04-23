@@ -10,7 +10,7 @@ from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.models.section import Section
 from slicereg.models.transforms import Transform3D
 
@@ -24,7 +24,7 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
         Section(
-            image=Image(channels=np.random.random((2, 3, 4))),
+            image=ImageTransformer(channels=np.random.random((2, 3, 4))),
             pixel_resolution_um=12.,
             plane_3d=Transform3D(x=5, y=2, z=20),
         )

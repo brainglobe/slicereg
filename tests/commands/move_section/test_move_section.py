@@ -10,7 +10,7 @@ from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.models.section import Section
 
 
@@ -23,7 +23,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=Image(channels=np.random.random((2, 3, 4))), pixel_resolution_um=12.)
+        Section(image=ImageTransformer(channels=np.random.random((2, 3, 4))), pixel_resolution_um=12.)
     ]
     return repo
 

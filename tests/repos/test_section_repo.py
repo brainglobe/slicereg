@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from slicereg.models.section import Section
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 
@@ -14,7 +14,7 @@ def repo():
 @pytest.fixture
 def section1():
     return Section(
-        image=Image(channels=np.arange(12).reshape(2, 3, 2)),
+        image=ImageTransformer(channels=np.arange(12).reshape(2, 3, 2)),
         pixel_resolution_um=12,
     )
 
@@ -22,7 +22,7 @@ def section1():
 @pytest.fixture
 def section2():
     return Section(
-        image=Image(channels=np.arange(12).reshape(2, 3, 2)),
+        image=ImageTransformer(channels=np.arange(12).reshape(2, 3, 2)),
         pixel_resolution_um=12,
     )
 

@@ -6,7 +6,7 @@ from hypothesis import given
 from hypothesis.strategies import integers, floats
 from pytest import approx
 
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.models.section import Section
 
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)
@@ -14,7 +14,7 @@ real_floats = partial(floats, allow_nan=False, allow_infinity=False)
 
 @given(from_resolution=real_floats(10, 50), to_resolution=real_floats(10, 50))
 def test_downsampling_image_produces_correct_resolution_and_data_shape(from_resolution, to_resolution):
-    section = Section(image=Image(channels=np.arange(24).reshape(1, 6, 4)), pixel_resolution_um=from_resolution)
+    section = Section(image=ImageTransformer(channels=np.arange(24).reshape(1, 6, 4)), pixel_resolution_um=from_resolution)
     section2 = section.resample(resolution_um=to_resolution)
     assert section2.pixel_resolution_um == to_resolution
     assert section2.image.num_channels == section.image.num_channels
@@ -26,13 +26,13 @@ def test_downsampling_image_produces_correct_resolution_and_data_shape(from_reso
 
 @given(to_resolution=integers(-10, 0))
 def test_downsampling_beyond_dimensions_produces_valueerror(to_resolution):
-    section = Section(image=Image(channels=np.arange(24).reshape(1, 4, 6)), pixel_resolution_um=12)
+    section = Section(image=ImageTransformer(channels=np.arange(24).reshape(1, 4, 6)), pixel_resolution_um=12)
     with pytest.raises(ValueError, match=r".* positive.*"):
         section.resample(resolution_um=to_resolution)
 
 
 @given(from_resolution=integers(1, 200), to_resolution=integers(1, 200))
 def test_can_set_pixel_resolution_on_section(from_resolution, to_resolution):
-    section = Section(image=Image(channels=np.arange(24).reshape(1, 4, 6)), pixel_resolution_um=from_resolution)
+    section = Section(image=ImageTransformer(channels=np.arange(24).reshape(1, 4, 6)), pixel_resolution_um=from_resolution)
     section2 = section.set_pixel_resolution(resolution_um=to_resolution)
     assert section2.pixel_resolution_um == to_resolution

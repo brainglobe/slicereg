@@ -5,7 +5,7 @@ from numpy import uint16
 
 from slicereg.io.base import BaseSectionReader
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.models.section import Section
 
 
@@ -30,4 +30,4 @@ class OmeTiffSectionReader(BaseSectionReader):
         assert res_x == res_y, \
             "Pixels are not square"
 
-        return Section(image=Image(channels=image), pixel_resolution_um=float(res_x))
+        return Section(image=ImageTransformer(channels=image), pixel_resolution_um=float(res_x))

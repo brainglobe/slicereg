@@ -6,13 +6,13 @@ from uuid import UUID, uuid4
 import numpy as np
 from scipy import ndimage
 
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.models.transforms import Transform3D
 
 
 @dataclass(frozen=True)
 class Section:
-    image: Image
+    image: ImageTransformer
     pixel_resolution_um: float
     plane_3d: Transform3D = field(default_factory=Transform3D)
     thickness_um: float = 16.

@@ -9,7 +9,7 @@ from numpy import arange, sin, cos, radians
 from pytest import approx
 
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
+from slicereg.models.image import ImageTransformer
 from slicereg.models.registration import Registration
 from slicereg.models.section import Section
 from slicereg.models.transforms import Transform3D
@@ -18,7 +18,7 @@ from slicereg.models.transforms import Transform3D
 def test_section_registration_to_an_atlas_gets_an_image_with_same_image_parameters():
     registration = Registration(
         section=Section(
-            image=Image(
+            image=ImageTransformer(
                 channels=np.random.random((3, 4, 5)),
                 i_shift=3,
                 j_shift=5,
@@ -34,7 +34,7 @@ def test_section_registration_to_an_atlas_gets_an_image_with_same_image_paramete
     )
 
     atlas_slice = registration.atlas_slice
-    assert type(atlas_slice) is Image
+    assert type(atlas_slice) is ImageTransformer
     assert atlas_slice.width == 5 and atlas_slice.height == 4
 
 
@@ -52,7 +52,7 @@ np.set_printoptions(precision=5, suppress=True)
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, theta, x, y, z, res):
     registration = Registration(
         section=Section(
-            image=Image(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift, theta=theta),
+            image=ImageTransformer(channels=arange(24).reshape(2, 3, 4), i_shift=i_shift, j_shift=j_shift, theta=theta),
             pixel_resolution_um=res,
             plane_3d=Transform3D(x=x, y=y, z=z),
         ),
@@ -146,7 +146,7 @@ def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume[1, 1, 1] = 1
     registration = Registration(
         section=Section(
-            image=Image(channels=np.ones((1, 3, 3))),
+            image=ImageTransformer(channels=np.ones((1, 3, 3))),
             pixel_resolution_um=case["section_res"],
             plane_3d=Transform3D(**case["pos"]),
         ),
