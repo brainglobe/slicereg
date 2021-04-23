@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Tuple
 
 import numpy as np
 
@@ -17,6 +18,11 @@ class Atlas(FrozenUpdater):
     @property
     def scale_matrix(self) -> np.ndarray:
         return np.diag((self.resolution_um, self.resolution_um, self.resolution_um, 1))
+
+    @property
+    def center(self) -> Tuple[float, float, float]:
+        x, y, z = tuple(dim * self.resolution_um / 2 for dim in self.volume.shape)
+        return x, y, z
 
 
 ijk_to_xyz_matrix = np.array([

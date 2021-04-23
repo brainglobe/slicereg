@@ -37,7 +37,6 @@ def test_section_registration_to_an_atlas_gets_an_image_with_same_image_paramete
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)
 np.set_printoptions(precision=5, suppress=True)
 
-
 cases = [
     {
         "atlas_res": 1,
@@ -108,7 +107,7 @@ def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume[1, 1, 1] = 1
     registration = Registration(
         section=Section(
-            image=Image(channels=np.ones((1, 3, 3)), resolution_um=case["section_res"]),
+            image=Image(channels=np.empty((1, 3, 3)), resolution_um=case["section_res"]),
             physical_transform=PhysicalTransformer(**case["pos"]),
         ),
         atlas=Atlas(
