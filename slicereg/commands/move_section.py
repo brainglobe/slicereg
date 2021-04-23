@@ -15,13 +15,15 @@ class MoveSectionCommand:
     section_moved: Signal = Signal()
 
     def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.):
-        section = \
-            self._section_repo.sections[0] \
-            .translate(x=x, y=y, z=z) \
-            .rotate(rx=rx, ry=ry, rz=rz)
+        section = self._section_repo.sections[0]
+        physical = section.physical_transform.translate(x=x, y=y, z=z).rotate(rx=rx, ry=ry, rz=rz)
+        section = section.update(physical_transform=physical)
 
         atlas = self._atlas_repo.get_atlas()
         registration = Registration(section=section, atlas=atlas)
 
         self._section_repo.save_section(section)
-        self.section_moved.emit(transform=registration.affine_transform, atlas_slice_image=registration.slice_atlas.channels[0])
+        self.section_moved.emit(
+            transform=registration.affine_transform,
+            atlas_slice_image=registration.slice_atlas().channels[0]
+        )

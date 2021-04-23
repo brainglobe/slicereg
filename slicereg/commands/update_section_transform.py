@@ -29,12 +29,13 @@ class UpdateSectionTransformCommand:
         section = sections[0]
 
         if res is not None:
-            section = section.set_pixel_resolution(resolution_um=res)
+            section = section.update(image__resolution_um=res)
 
-        section = section.set_plane_3d(**dims)
+        physical = section.physical_transform.update(**dims)
+        section = section.update(physical_transform=physical)
         registration = Registration(section=section, atlas=atlas)
         self._section_repo.save_section(section)
         self.section_moved.emit(
             transform=registration.affine_transform,
-            atlas_slice_image=registration.slice_atlas.channels[0]
+            atlas_slice_image=registration.slice_atlas().channels[0]
         )

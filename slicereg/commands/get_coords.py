@@ -26,9 +26,8 @@ class GetPixelRegistrationDataCommand:
 
     def __call__(self, i: int, j: int):
         sections = self._repo.sections
-        atlas = self._atlas_repo.get_atlas()
-        if not sections or not atlas:
+        if not sections:
             return
-        registration = Registration(section=sections[0], atlas=atlas)
-        x, y, z = registration.map_ij_to_xyz(i=i, j=j)
+        section = sections[0]
+        x, y, z = section.map_ij_to_xyz(i=i, j=j)
         self.coord_data_requested.emit(image_coords=ImageCoord(i=i, j=j), atlas_coords=AtlasCoord(x=x, y=y, z=z))
