@@ -6,13 +6,14 @@ from uuid import UUID, uuid4
 
 import numpy as np
 
+from slicereg.models.base import FrozenUpdater
 from slicereg.models.image import Image
 from slicereg.models.image_transform import ImageTransformer, ij_to_xyz_matrix
 from slicereg.models.physical_transform import PhysicalTransformer
 
 
 @dataclass(frozen=True)
-class Section:
+class Section(FrozenUpdater):
     image: Image
     image_transform: ImageTransformer = field(default_factory=ImageTransformer)
     physical_transform: PhysicalTransformer = field(default_factory=PhysicalTransformer)

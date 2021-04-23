@@ -30,7 +30,7 @@ def test_section_registration_to_an_atlas_gets_an_image_with_same_image_paramete
     )
 
     atlas_slice = registration.slice_atlas()
-    assert type(atlas_slice) is ImageTransformer
+    assert type(atlas_slice) is Image
     assert atlas_slice.width == 5 and atlas_slice.height == 4
 
 

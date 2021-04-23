@@ -4,12 +4,13 @@ from typing import Tuple
 import numpy as np
 
 from slicereg.models.atlas import Atlas
+from slicereg.models.base import FrozenUpdater
 from slicereg.models.section import Section
 from slicereg.models.image import Image
 from slicereg.models.utils import _fancy_index_3d_numba
 
 @dataclass(frozen=True)
-class Registration:
+class Registration(FrozenUpdater):
     section: Section
     atlas: Atlas
 

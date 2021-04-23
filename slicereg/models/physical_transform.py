@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, replace
-from typing import Tuple
 
 import numpy as np
 from numpy import ndarray
 
+from slicereg.models.base import FrozenUpdater
+
 
 @dataclass(frozen=True)
-class PhysicalTransformer:
+class PhysicalTransformer(FrozenUpdater):
     x: float = 0.
     y: float = 0.
     z: float = 0.

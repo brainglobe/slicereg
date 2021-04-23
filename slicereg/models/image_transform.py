@@ -4,9 +4,11 @@ from dataclasses import dataclass, replace
 
 import numpy as np
 
+from slicereg.models.base import FrozenUpdater
+
 
 @dataclass(frozen=True)
-class ImageTransformer:
+class ImageTransformer(FrozenUpdater):
     i_shift: float = 0.
     j_shift: float = 0.
     theta: float = 0.

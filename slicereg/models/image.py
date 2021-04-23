@@ -6,8 +6,11 @@ from functools import cached_property
 import numpy as np
 from scipy import ndimage
 
+from slicereg.models.base import FrozenUpdater
+
+
 @dataclass(frozen=True)
-class Image:
+class Image(FrozenUpdater):
     channels: np.ndarray = field(repr=False)
     resolution_um: float = 1.
     thickness_um: float = 16.
