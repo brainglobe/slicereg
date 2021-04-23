@@ -26,6 +26,6 @@ class ResampleSectionCommand:
         self.section_resampled.emit(
             resolution_um=section.image.resolution_um,
             section_image=section.image.channels[0],  # todo: get current channel
-            transform=registration.affine_transform,
+            transform=registration.image_to_volume_transform,
             atlas_image=registration.slice_atlas().channels[0],
         )

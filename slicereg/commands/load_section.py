@@ -31,7 +31,7 @@ class LoadImageCommand:
         self._repo.save_section(section=section)
         self.section_loaded.emit(
             image=section.image.channels[0],
-            transform=registration.affine_transform,
+            transform=registration.image_to_volume_transform,
             resolution_um=image.resolution_um,
             atlas_image=registration.slice_atlas().channels[0]
         )

@@ -16,4 +16,4 @@ class LoadImioAtlasCommand:
     def __call__(self, filename: str, resolution_um: int):
         atlas = self._reader.read(path=filename, resolution_um=resolution_um)
         self._repo.set_atlas(atlas=atlas)
-        self.atlas_updated.emit(volume=atlas.volume, transform=atlas.affine_transform)
+        self.atlas_updated.emit(volume=atlas.volume, transform=atlas.shared_space_transform)

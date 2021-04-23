@@ -15,16 +15,16 @@ class Registration(FrozenUpdater):
     atlas: Atlas
 
     @property
-    def affine_transform(self) -> np.ndarray:
+    def image_to_volume_transform(self) -> np.ndarray:
         """The 4x4 transform for the section image to be in atlas volume coordinates."""
-        return np.linalg.inv(self.atlas.affine_transform) @ self.section.affine_transform
+        return np.linalg.inv(self.atlas.shared_space_transform) @ self.section.shared_space_transform
 
     def slice_atlas(self) -> Image:
         """The Image that results from a slice through the Atlas with Section's transforms and dimensions."""
         si = self.section.image
         width, height = si.width, si.height
         inds = si.inds_homog.astype(float)
-        atlas_inds = self.affine_transform @ inds
+        atlas_inds = self.image_to_volume_transform @ inds
         atlas_inds = atlas_inds[:3, :]  # grab just ijk coords
         atlas_inds = atlas_inds.astype(np.int32)  # round to nearest integer, for indexing
         brightness_3d = _fancy_index_3d_numba(volume=self.atlas.volume, inds=atlas_inds.T)

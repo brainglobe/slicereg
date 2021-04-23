@@ -16,4 +16,4 @@ class LoadBrainglobeAtlasCommand:
     def __call__(self, bgatlas_name: str):
         atlas = self._reader.read(path=bgatlas_name)
         self._repo.set_atlas(atlas=atlas)
-        self.atlas_updated.emit(volume=atlas.volume, transform=atlas.affine_transform)
+        self.atlas_updated.emit(volume=atlas.volume, transform=atlas.shared_space_transform)

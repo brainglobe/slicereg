@@ -24,6 +24,6 @@ class MoveSectionCommand:
 
         self._section_repo.save_section(section)
         self.section_moved.emit(
-            transform=registration.affine_transform,
+            transform=registration.image_to_volume_transform,
             atlas_slice_image=registration.slice_atlas().channels[0]
         )
