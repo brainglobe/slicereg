@@ -108,14 +108,13 @@ def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume[1, 1, 1] = 1
     registration = Registration(
         section=Section(
-            image=ImageTransformer(channels=np.ones((1, 3, 3))),
-            pixel_resolution_um=case["section_res"],
-            plane_3d=PhysicalTransformer(**case["pos"]),
+            image=Image(channels=np.ones((1, 3, 3)), resolution_um=case["section_res"]),
+            physical_transform=PhysicalTransformer(**case["pos"]),
         ),
         atlas=Atlas(
             volume=volume,
             resolution_um=case['atlas_res'],
         )
     )
-    atlas_slice = registration.slice_atlas
+    atlas_slice = registration.slice_atlas()
     npt.assert_almost_equal(atlas_slice.channels[0], case['expected'])
