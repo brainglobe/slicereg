@@ -1,12 +1,15 @@
 from functools import partial
 
 import numpy as np
+import numpy.testing as npt
 from hypothesis import given
 from hypothesis.strategies import integers, floats
-from numpy import testing as npt
+from numpy import sin, cos, radians
+from pytest import approx
 
 from slicereg.models.image import Image
 from slicereg.models.image_transform import ImageTransformer
+from slicereg.models.physical_transform import PhysicalTransformer
 from slicereg.models.section import Section
 from tests.models.test_image import sensible_floats
 
@@ -31,3 +34,31 @@ def test_shift_matrix_is_ij_ordered_and_in_pixel_coordinate_space(width, height,
     expected_image_transform = section.image_transform.rot_matrix @ expected_shift_matrix
     npt.assert_almost_equal(section._image_transform_matrix, expected_image_transform)
 
+
+@given(
+    i=integers(0, 1e5), j=integers(0, 1e5),
+    i_shift=real_floats(-2, 2), j_shift=real_floats(-2, 2),
+    theta=real_floats(-500, 500),
+    x=real_floats(-1e5, 1e5), y=real_floats(-1e5, 1e5), z=real_floats(-1e5, 1e5),
+    res=real_floats(1e-4, 1000)
+)
+def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, theta, x, y, z, res):
+    section = Section(
+        image=Image(channels=np.empty((2, 3, 4)), resolution_um=res),
+        image_transform=ImageTransformer(i_shift=i_shift, j_shift=j_shift, theta=theta),
+        physical_transform=PhysicalTransformer(x=x, y=y, z=z),
+    )
+
+    t = -radians(theta)  # image is left-handed, so flip rotation
+    xyz = section.map_ij_to_xyz(i=i, j=j)  # observed 3D positions
+
+    # do shift first, to make final 2d rotation calculation easier https://academo.org/demos/rotation-about-point/
+    j2 = (j + (j_shift * section.image.width))
+    i2 = (-i - (i_shift * section.image.height))
+
+    expected = (
+        (j2 * cos(t) + i2 * sin(t)) * res + x,
+        (i2 * cos(t) - j2 * sin(t)) * res + y,
+        z,
+    )
+    assert approx(xyz == expected)

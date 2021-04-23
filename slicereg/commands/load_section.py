@@ -31,5 +31,5 @@ class LoadImageCommand:
             image=section.image.channels[0],
             transform=registration.affine_transform,
             resolution_um=section.pixel_resolution_um,
-            atlas_image=registration.atlas_slice.channels[0]
+            atlas_image=registration.slice_atlas.channels[0]
         )

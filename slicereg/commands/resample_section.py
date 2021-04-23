@@ -28,5 +28,5 @@ class ResampleSectionCommand:
             resolution_um=section.pixel_resolution_um,
             section_image=section.image.channels[0],  # todo: get current channel
             transform=registration.affine_transform,
-            atlas_image=registration.atlas_slice.channels[0],
+            atlas_image=registration.slice_atlas.channels[0],
         )

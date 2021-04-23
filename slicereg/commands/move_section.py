@@ -24,4 +24,4 @@ class MoveSectionCommand:
         registration = Registration(section=section, atlas=atlas)
 
         self._section_repo.save_section(section)
-        self.section_moved.emit(transform=registration.affine_transform, atlas_slice_image=registration.atlas_slice.channels[0])
+        self.section_moved.emit(transform=registration.affine_transform, atlas_slice_image=registration.slice_atlas.channels[0])
