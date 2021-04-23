@@ -38,3 +38,11 @@ class ImageTransformer:
 
     def shift_origin_to_center(self) -> ImageTransformer:
         return replace(self, j_shift=-0.5, i_shift=-0.5)
+
+
+ij_to_xyz_matrix = np.array([
+    [0, 1, 0, 0],
+    [-1, 0, 0, 0],
+    [0, 0, 1, 0],
+    [0, 0, 0, 1]
+])

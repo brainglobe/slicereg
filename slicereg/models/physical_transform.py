@@ -8,7 +8,7 @@ from numpy import ndarray
 
 
 @dataclass(frozen=True)
-class Transform3D:
+class PhysicalTransformer:
     x: float = 0.
     y: float = 0.
     z: float = 0.
@@ -16,10 +16,10 @@ class Transform3D:
     ry: float = 0.
     rz: float = 0.
 
-    def translate(self, x: float = 0., y: float = 0., z: float = 0.) -> Transform3D:
+    def translate(self, x: float = 0., y: float = 0., z: float = 0.) -> PhysicalTransformer:
         return replace(self, x=self.x + x, y=self.y + y, z=self.z + z)
 
-    def rotate(self, rx: float = 0., ry: float = 0., rz: float = 0.) -> Transform3D:
+    def rotate(self, rx: float = 0., ry: float = 0., rz: float = 0.) -> PhysicalTransformer:
         return replace(self, rx=self.rx + rx, ry=self.ry + ry, rz=self.rz + rz)
 
     @property
