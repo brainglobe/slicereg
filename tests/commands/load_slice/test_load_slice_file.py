@@ -4,11 +4,11 @@ import numpy as np
 import pytest
 from pytest_bdd import scenario, given, when, then
 
+from slicereg.commands.base import BaseImageReader
 from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
-from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
@@ -27,14 +27,9 @@ def atlas_repo():
 
 
 @pytest.fixture
-def image_data():
-    return np.arange(12).reshape((2, 3, 2))
-
-
-@pytest.fixture
-def reader(image_data):
-    reader = Mock(BaseSectionReader)
-    reader.read.return_value = Section(image=Image(channels=image_data, resolution_um=10))
+def reader():
+    reader = Mock(BaseImageReader)
+    reader.read.return_value = Image(channels=np.empty((2, 3, 2)), resolution_um=10)
     return reader
 
 
