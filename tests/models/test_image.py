@@ -2,6 +2,8 @@ from functools import partial
 
 import numpy as np
 import numpy.testing as npt
+import pytest
+from pytest import approx
 from hypothesis import given
 from hypothesis.strategies import integers, floats
 
@@ -49,3 +51,31 @@ def test_full_shift_matrix_is_height_and_width_of_image(width, height):
     npt.assert_equal(image.full_shift_matrix, expected)
 
 
+@given(r=sensible_floats(0.1, 1000))
+def test_resolution_matrix_matches_resolution(r):
+    image = Image(channels=np.empty((2, 11, 13)), resolution_um=r)
+    expected = np.array([
+        [r, 0, 0, 0],
+        [0, r, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1],
+    ])
+    npt.assert_almost_equal(image.resolution_matrix, expected)
+
+@given(from_resolution=sensible_floats(10, 50), to_resolution=sensible_floats(10, 50))
+def test_downsampling_image_produces_correct_resolution_and_data_shape(from_resolution, to_resolution):
+    image = Image(channels=np.arange(24).reshape(1, 6, 4), resolution_um=from_resolution)
+    image2 = image.resample(resolution_um=to_resolution)
+    assert image2.resolution_um == to_resolution
+    assert image2.num_channels == image.num_channels  # don't want to lose original channels
+
+    scale_ratio = from_resolution / to_resolution
+    assert approx(image.width * scale_ratio == image2.width, abs=1)
+    assert approx(image.height * scale_ratio == image2.height, abs=1)
+
+
+@given(to_resolution=integers(-10, 0))
+def test_downsampling_beyond_dimensions_produces_valueerror(to_resolution):
+    image = Image(channels=np.arange(24).reshape(1, 4, 6), resolution_um=12)
+    with pytest.raises(ValueError, match=r".* positive.*"):
+        image.resample(resolution_um=to_resolution)
