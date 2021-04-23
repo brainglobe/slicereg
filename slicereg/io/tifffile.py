@@ -5,8 +5,7 @@ from numpy import uint16
 
 from slicereg.io.base import BaseSectionReader
 from slicereg.models.atlas import Atlas
-from slicereg.models.transform_image import ImageTransformer
-from slicereg.models.section import Section
+from slicereg.models.image import Image
 
 
 class TifffileAtlasReader:
@@ -18,7 +17,7 @@ class TifffileAtlasReader:
 
 class OmeTiffSectionReader(BaseSectionReader):
 
-    def read(self, filename: str) -> Section:
+    def read(self, filename: str) -> Image:
         f = tifffile.TiffFile(filename)
         image = f.asarray()
         assert image.ndim == 3
@@ -30,4 +29,4 @@ class OmeTiffSectionReader(BaseSectionReader):
         assert res_x == res_y, \
             "Pixels are not square"
 
-        return Section(image=ImageTransformer(channels=image), pixel_resolution_um=float(res_x))
+        return Image(channels=image, resolution_um=float(res_x))
