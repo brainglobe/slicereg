@@ -10,6 +10,7 @@ from scipy import ndimage
 class Image:
     channels: np.ndarray = field(repr=False)
     resolution_um: float = 1.
+    thickness_um: float = 16.
 
     @property
     def num_channels(self) -> int:

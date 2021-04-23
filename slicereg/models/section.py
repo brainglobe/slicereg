@@ -15,7 +15,6 @@ class Section:
     image: Image
     image_transform: ImageTransformer = field(default_factory=ImageTransformer)
     physical_transform: PhysicalTransformer = field(default_factory=PhysicalTransformer)
-    thickness_um: float = 16.
     id: UUID = field(default_factory=uuid4)
 
     @property
