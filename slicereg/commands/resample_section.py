@@ -13,9 +13,8 @@ class ResampleSectionCommand:
     section_resampled: Signal = field(default_factory=Signal)
 
     def __call__(self, resolution_um: float) -> None:
-        section = \
-            self._repo.sections[0] \
-            .resample(resolution_um=resolution_um)
+        section = self._repo.sections[0]
+        section = section.update(image=section.image.resample(resolution_um=resolution_um))
 
         atlas = self._atlas_repo.get_atlas()
         if not atlas:
@@ -25,8 +24,8 @@ class ResampleSectionCommand:
         self._repo.save_section(section=section)
 
         self.section_resampled.emit(
-            resolution_um=section.pixel_resolution_um,
+            resolution_um=section.image.resolution_um,
             section_image=section.image.channels[0],  # todo: get current channel
             transform=registration.affine_transform,
-            atlas_image=registration.slice_atlas.channels[0],
+            atlas_image=registration.slice_atlas().channels[0],
         )
