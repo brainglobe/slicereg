@@ -5,7 +5,7 @@ from numpy import uint16
 
 from slicereg.io.base import BaseSectionReader
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import ImageTransformer
+from slicereg.models.transform_image import ImageTransformer
 from slicereg.models.section import Section
 
 

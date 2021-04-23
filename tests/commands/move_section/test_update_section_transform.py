@@ -10,7 +10,7 @@ from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import ImageTransformer
+from slicereg.models.transform_image import ImageTransformer
 from slicereg.models.section import Section
 from slicereg.models.transforms import Transform3D
 

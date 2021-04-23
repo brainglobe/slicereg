@@ -9,7 +9,7 @@ from numpy import arange, sin, cos, radians
 from pytest import approx
 
 from slicereg.models.atlas import Atlas
-from slicereg.models.image import ImageTransformer
+from slicereg.models.transform_image import ImageTransformer
 from slicereg.models.registration import Registration
 from slicereg.models.section import Section
 from slicereg.models.transforms import Transform3D

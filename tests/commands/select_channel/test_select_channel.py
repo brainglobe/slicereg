@@ -8,7 +8,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.section import Section
-from slicereg.models.image import ImageTransformer
+from slicereg.models.transform_image import ImageTransformer
 
 
 @pytest.fixture

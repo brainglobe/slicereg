@@ -7,7 +7,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.utils import Signal
-from slicereg.models.image import ImageTransformer
+from slicereg.models.transform_image import ImageTransformer
 from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 

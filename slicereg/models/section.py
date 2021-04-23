@@ -6,14 +6,16 @@ from uuid import UUID, uuid4
 import numpy as np
 from scipy import ndimage
 
-from slicereg.models.image import ImageTransformer
+from slicereg.models.image import Image
+from slicereg.models.image_transform import ImageTransformer
 from slicereg.models.transforms import Transform3D
 
 
 @dataclass(frozen=True)
 class Section:
-    image: ImageTransformer
+    image: Image
     pixel_resolution_um: float
+    image_transform: ImageTransformer = field(default_factory=ImageTransformer)
     plane_3d: Transform3D = field(default_factory=Transform3D)
     thickness_um: float = 16.
     id: UUID = field(default_factory=uuid4)
@@ -33,6 +35,10 @@ class Section:
 
     def set_pixel_resolution(self, resolution_um: int):
         return replace(self, pixel_resolution_um=resolution_um)
+
+    @property
+    def _image_transform_matrix(self) -> np.ndarray:
+        return self.image_transform.rot_matrix @ (self.image.full_shift_matrix * self.image_transform.shift_matrix)
 
     @property
     def _resolution_matrix(self) -> np.ndarray:

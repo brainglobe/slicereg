@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 
 from slicereg.models.section import Section
-from slicereg.models.image import ImageTransformer
+from slicereg.models.transform_image import ImageTransformer
 from slicereg.repos.section_repo import InMemorySectionRepo
 
 

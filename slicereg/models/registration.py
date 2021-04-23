@@ -4,7 +4,8 @@ from typing import Tuple
 import numpy as np
 
 from slicereg.models.atlas import Atlas
-from slicereg.models.section import Section, ImageTransformer
+from slicereg.models.section import Section
+from slicereg.models.transform_image import ImageTransformer
 from slicereg.models.utils import _fancy_index_3d_numba
 
 @dataclass(frozen=True)
