@@ -36,7 +36,7 @@ def test_shift_matrix_is_ij_ordered_and_in_pixel_coordinate_space(width, height,
 
 
 @given(
-    i=integers(0, 1e5), j=integers(0, 1e5),
+    i=integers(0, 10000), j=integers(0, 10000),
     i_shift=real_floats(-2, 2), j_shift=real_floats(-2, 2),
     theta=real_floats(-500, 500),
     x=real_floats(-1e5, 1e5), y=real_floats(-1e5, 1e5), z=real_floats(-1e5, 1e5),
