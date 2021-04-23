@@ -2,17 +2,18 @@ from unittest.mock import Mock
 
 import numpy as np
 import pytest
-from pytest_bdd import scenario, given, when, then
 from numpy import random
+from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.base import BaseSectionRepo
-from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.transform_image import ImageTransformer
+from slicereg.models.image import Image
+from slicereg.models.physical_transform import PhysicalTransformer
 from slicereg.models.section import Section
-from slicereg.models.transforms import Transform3D
+from slicereg.repos.atlas_repo import AtlasRepo
+
 
 @scenario("section_affine_registration.feature", "Set Section's 3D Coordinates")
 def test_impl():
@@ -24,9 +25,8 @@ def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
         Section(
-            image=ImageTransformer(channels=np.random.random((2, 3, 4))),
-            pixel_resolution_um=12.,
-            plane_3d=Transform3D(x=5, y=2, z=20),
+            image=Image(channels=np.empty((2, 3, 4)), resolution_um=12.),
+            physical_transform=PhysicalTransformer(x=5, y=2, z=20),
         )
     ]
     return repo

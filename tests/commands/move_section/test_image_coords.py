@@ -7,7 +7,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.utils import Signal
-from slicereg.models.transform_image import ImageTransformer
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 
@@ -21,7 +21,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=ImageTransformer(channels=np.random.random((2, 3, 4))), pixel_resolution_um=12.)
+        Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12.))
     ]
     return repo
 

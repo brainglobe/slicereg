@@ -8,7 +8,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.utils import Signal
 from slicereg.models.atlas import Atlas
-from slicereg.models.transform_image import ImageTransformer
+from slicereg.models.image import Image
 from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 
@@ -22,7 +22,7 @@ def test_impl():
 def repo():
     repo = Mock(BaseSectionRepo)
     repo.sections = [
-        Section(image=ImageTransformer(channels=np.random.random((2, 3, 4))), pixel_resolution_um=20.)
+        Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=20.))
     ]
     return repo
 
@@ -30,7 +30,7 @@ def repo():
 @pytest.fixture
 def atlas_repo():
     repo = Mock(AtlasRepo)
-    repo.get_atlas.return_value = Atlas(volume=np.random.random((5, 5, 5)), resolution_um=10)
+    repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
     return repo
 
 @pytest.fixture
@@ -42,7 +42,7 @@ def command(repo, atlas_repo):
 def step_impl(repo: BaseSectionRepo):
     assert len(repo.sections) == 1
     section = repo.sections[0]
-    assert section.pixel_resolution_um == 20
+    assert section.image.resolution_um == 20
 
 
 @when("I set the resolution to 50um")

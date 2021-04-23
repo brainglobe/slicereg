@@ -3,7 +3,6 @@ import tifffile as tif
 import xmltodict
 from numpy import uint16
 
-from slicereg.io.base import BaseSectionReader
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 
@@ -15,7 +14,7 @@ class TifffileAtlasReader:
         return Atlas(volume=tif.imread(path), resolution_um=resolution_um)
 
 
-class OmeTiffSectionReader(BaseSectionReader):
+class OmeTiffImageReader:
 
     def read(self, filename: str) -> Image:
         f = tifffile.TiffFile(filename)
