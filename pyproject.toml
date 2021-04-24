@@ -37,7 +37,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-bg-slicereg = "slicereg.main:launch_gui"
+bg-slicereg = "slicereg.gui.main:launch_gui"
 
 [tool.coverage.run]
 relative_files = true

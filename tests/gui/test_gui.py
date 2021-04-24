@@ -5,7 +5,7 @@ from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.slice_view import SliceView
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
-from slicereg.main import launch_gui
+from slicereg.gui.main import launch_gui
 
 
 def test_gui_launches_without_errors(qtbot):
