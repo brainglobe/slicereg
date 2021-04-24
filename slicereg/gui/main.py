@@ -1,7 +1,7 @@
 import numpy as np
 from PySide2.QtWidgets import QApplication
 
-from slicereg import config
+from slicereg.gui import config
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.slice_view import SliceView
