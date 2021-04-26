@@ -40,6 +40,9 @@ class SliceView(BaseQtView):
         self._canvas.events.mouse_release.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_wheel.connect(self._vispy_mouse_event)
 
+        self._slice_clim_min = 0.
+        self._slice_clim_max = 1.
+
     @property
     def qt_widget(self) -> QWidget:
         return self._canvas.native
@@ -56,7 +59,8 @@ class SliceView(BaseQtView):
 
     def update_slice_image(self, image: ndarray):
         self._slice.set_data(image)
-        self._slice.clim = np.min(image), np.max(image)
+        self._slice.clim = (np.percentile(image, self._slice_clim_min * 100),
+                            np.percentile(image, self._slice_clim_max * 100))
         self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
         self._viewbox.camera.scale_factor = image.shape[1]
         self._canvas.update()
