@@ -70,6 +70,19 @@ class SidebarView(BaseQtView):
             widget.connect(partial(fun, dim))
             self.dim_widgets.append((widget, fun))
 
+        coronal_button = QPushButton("Coronal")
+        coronal_button.clicked.connect(lambda: self.commands.update_section(rx=0, ry=0, rz=-90))
+        sagittal_button = QPushButton("Sagittal")
+        sagittal_button.clicked.connect(lambda: self.commands.update_section(rx=90, ry=0, rz=-90))
+        axial_button = QPushButton("Axial")
+        axial_button.clicked.connect(lambda: self.commands.update_section(rx=0, ry=90, rz=-90))
+
+        buttons_layout = QHBoxLayout()
+        buttons_layout.addWidget(coronal_button)
+        buttons_layout.addWidget(sagittal_button)
+        buttons_layout.addWidget(axial_button)
+        layout.addLayout(buttons_layout)
+
     @property
     def qt_widget(self) -> QWidget:
         return self.widget
