@@ -3,6 +3,7 @@ from typing import Optional
 import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy import ndarray
+
 from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter

@@ -2,7 +2,6 @@ from functools import partial
 from typing import List
 
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
-from numpy import ndarray
 
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
@@ -13,7 +12,7 @@ from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
 class SidebarView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider):
+    def __init__(self, commands: CommandProvider, view_section: ViewSection):
 
         self.commands = commands
         self.widget = QWidget()
@@ -84,6 +83,10 @@ class SidebarView(BaseQtView):
         buttons_layout.addWidget(sagittal_button)
         buttons_layout.addWidget(axial_button)
         layout.addLayout(buttons_layout)
+
+        slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
+        slice_clim_slider.valuesChanged.connect(lambda values: view_section.update_clim(min=values[0], max=values[1]))
+        layout.addWidget(slice_clim_slider)
 
     @property
     def qt_widget(self) -> QWidget:
