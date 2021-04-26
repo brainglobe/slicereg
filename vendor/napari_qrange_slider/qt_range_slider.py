@@ -1,46 +1,14 @@
-"""
-BSD 3-Clause License
-
-Copyright (c) 2018, Napari
-All rights reserved.
-
-Redistribution and use in source and binary forms, with or without
-modification, are permitted provided that the following conditions are met:
-
-* Redistributions of source code must retain the above copyright notice, this
-  list of conditions and the following disclaimer.
-
-* Redistributions in binary form must reproduce the above copyright notice,
-  this list of conditions and the following disclaimer in the documentation
-  and/or other materials provided with the distribution.
-
-* Neither the name of the copyright holder nor the names of its
-  contributors may be used to endorse or promote products derived from
-  this software without specific prior written permission.
-
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
-DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE
-FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
-SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
-CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
-OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-"""
+# Written by Talley Lambert
+# https://github.com/napari/napari/blob/102a7e8f845893c874d2b86f9371d41130100b89/napari/_qt/widgets/qt_range_slider.py
 
 """
-Written by Talley Lambert
-https://github.com/napari/napari/blob/102a7e8f845893c874d2b86f9371d41130100b89/napari/_qt/widgets/qt_range_slider.py
-
 Range slider, extended QWidget slider for napari.
 """
-from qtpy.QtCore import Property, Qt, Signal
-from qtpy.QtGui import QColor, QPainter
-from qtpy.QtWidgets import QWidget
+from PySide2.QtCore import Property, Qt, Signal
+from PySide2.QtGui import QColor, QPainter
+from PySide2.QtWidgets import QWidget
 
-from ...utils.validators import validate_n_seq
+from .validators import validate_n_seq
 
 validate_2_tuple = validate_n_seq(2)
 
@@ -82,7 +50,7 @@ class QRangeSlider(QWidget):
             Whether the slider is collapsible, defaults to True.
         collapsed : bool
             Whether the slider begins collapsed, defaults to False.
-        parent : qtpy.QtWidgets.QWidget
+        parent : PySide2.QtWidgets.QWidget
             Parent widget.
         """
         super().__init__(parent)
@@ -379,7 +347,7 @@ class QHRangeSlider(QRangeSlider):
         Whether the slider is collapsible, defaults to True.
     collapsed : bool
         Whether the slider begins collapsed, defaults to False.
-    parent : qtpy.QtWidgets.QWidget
+    parent : PySide2.QtWidgets.QWidget
         Parent widget.
     """
 
@@ -388,7 +356,7 @@ class QHRangeSlider(QRangeSlider):
 
         Parameters
         ----------
-        event : qtpy.QEvent
+        event : PySide2.QEvent
             Event from the Qt context.
 
         Returns
@@ -403,7 +371,7 @@ class QHRangeSlider(QRangeSlider):
 
         Parameters
         ----------
-        event : qtpy.QEvent
+        event : PySide2.QEvent
             Event from the Qt context.
         """
         painter, w, h = QPainter(self), self.width(), self.height()
@@ -474,7 +442,7 @@ class QVRangeSlider(QRangeSlider):
         Whether the slider is collapsible, defaults to True.
     collapsed : bool
         Whether the slider begins collapsed, defaults to False.
-    parent : qtpy.QtWidgets.QWidget
+    parent : PySide2.QtWidgets.QWidget
         Parent widget.
     """
 
@@ -483,7 +451,7 @@ class QVRangeSlider(QRangeSlider):
 
         Parameters
         ----------
-        event : qtpy.QEvent
+        event : PySide2.QEvent
             Event from the Qt context.
 
         Returns
@@ -498,7 +466,7 @@ class QVRangeSlider(QRangeSlider):
 
         Parameters
         ----------
-        event : qtpy.QEvent
+        event : PySide2.QEvent
             Event from the Qt context.
         """
         painter, w, h = QPainter(self), self.width(), self.height()
