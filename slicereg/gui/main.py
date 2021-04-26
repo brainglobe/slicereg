@@ -21,16 +21,17 @@ def launch_gui(create_qapp: bool = True):
         section_repo=InMemorySectionRepo(),
     )
 
-    view_section = ViewSection()
-
+    slice_view_section = ViewSection()
+    volume_view_section = ViewSection()
 
     # Wire up the GUI
     if create_qapp:
         app = QApplication([])
 
-    volume_view = VolumeView(commands=commands)
-    slice_view = SliceView(commands=commands, view_section=view_section)
-    sidebar_view = SidebarView(commands=commands, view_section=view_section)
+    volume_view = VolumeView(commands=commands, view_section=volume_view_section)
+    slice_view = SliceView(commands=commands, view_section=slice_view_section)
+    sidebar_view = SidebarView(
+        commands=commands, slice_view_section=slice_view_section, volume_view_section=volume_view_section)
     window = MainWindow(
         title=config.WINDOW_TITLE,
         volume_widget=volume_view.qt_widget,

@@ -29,7 +29,7 @@ Next features are focused on manual registration in the GUI:
     - [ ] Import QuPath files onto loaded slices for 3D visualization.
   - More control over visualization
     - [ ] View manipulation tools (channel selector, atlas transparency controls, qupath show/hide, etc)
-    - [ ] CLim controls
+    - [x] CLim controls
    
 
   
