@@ -1,5 +1,9 @@
+import os
+import platform
+
 import numpy as np
 from PySide2.QtWidgets import QApplication
+from packaging import version
 
 from slicereg.gui import config
 from slicereg.gui.commands import CommandProvider
@@ -14,7 +18,22 @@ from slicereg.repos.section_repo import InMemorySectionRepo
 np.set_printoptions(suppress=True, precision=2)
 
 
+def is_mac_big_sur() -> bool:
+    """
+    platform.system(): 'Darwin'
+    platform.release(): '20.3.0'
+    platform.mac_ver(): ('10.16', ('', '', ''), 'arm64') or ('10.16', ('', '', ''), 'x86_64')
+    """
+    return platform.system() == 'Darwin' and version.parse(platform.mac_ver()[0]) >= version.parse('10.16')
+
+
 def launch_gui(create_qapp: bool = True):
+
+    # Set special os environ if mac Big Sur is being used
+    # https://stackoverflow.com/questions/64818879/is-there-any-solution-regarding-to-pyqt-library-doesnt-work-in-mac-os-big-sur
+    if is_mac_big_sur():
+        os.environ['QT_MAC_WANTS_LAYER'] = '1'
+
     # Initialize the State
     commands = CommandProvider.from_repos(
         atlas_repo=AtlasRepo(),
@@ -44,7 +63,6 @@ def launch_gui(create_qapp: bool = True):
 
     # Sidebar View
     commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
-
 
     # Volume View
     commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)

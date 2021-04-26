@@ -11,12 +11,13 @@ tifffile = "^2020.12.8"
 xmltodict = "^0.12.0"
 numpy = "^1.19.4"
 bg-atlasapi = "^1.0.0"
-PySide2 = "~5.14"  # Pyside 5.15 is not working properly with CI
+PySide2 = "^5.15.2"  # Pyside 5.15 is not working properly with CI
 PyOpenGL = "^3.1.5"
 PyOpenGL-accelerate = "^3.1.5"
 vispy = "^0.6.0"
 numba = "^0.53.0"
 imio = "^0.0.5"
+packaging = "^20.9"
 
 [tool.poetry.dev-dependencies]
 dvc = { extras = ["gdrive"], version = "^2.0" }
