@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy import ndarray
@@ -7,13 +9,16 @@ from vispy.visuals.filters import ColorFilter
 
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
+from slicereg.gui.view_section import ViewSection
 
 
 class SliceView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider):
-
+    def __init__(self, commands: CommandProvider, view_section: ViewSection):
         self.commands = commands
+
+        self.view_section = view_section
+        self.view_section.clim_updated.connect(self.update_slice_image)
 
         self._canvas = SceneCanvas()
 
@@ -40,8 +45,7 @@ class SliceView(BaseQtView):
         self._canvas.events.mouse_release.connect(self._vispy_mouse_event)
         self._canvas.events.mouse_wheel.connect(self._vispy_mouse_event)
 
-        self._slice_clim_min = 0.
-        self._slice_clim_max = 1.
+        self._slice_image: Optional[ndarray] = None
 
     @property
     def qt_widget(self) -> QWidget:
@@ -57,13 +61,17 @@ class SliceView(BaseQtView):
     def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
         self.update_ref_slice_image(image=atlas_slice_image)
 
-    def update_slice_image(self, image: ndarray):
-        self._slice.set_data(image)
-        self._slice.clim = (np.percentile(image, self._slice_clim_min * 100),
-                            np.percentile(image, self._slice_clim_max * 100))
-        self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
-        self._viewbox.camera.scale_factor = image.shape[1]
-        self._canvas.update()
+    def update_slice_image(self, image: Optional[ndarray] = None):
+        if image is not None:
+            self._slice.set_data(image)
+            self._slice_image = image
+
+        if self._slice_image is not None:
+            self._slice.clim = (np.percentile(self._slice_image, self.view_section.clim[0] * 100),
+                                np.percentile(self._slice_image, self.view_section.clim[1] * 100))
+            self._viewbox.camera.center = self._slice_image.shape[1] / 2, self._slice_image.shape[0] / 2, 0.
+            self._viewbox.camera.scale_factor = self._slice_image.shape[1]
+            self._canvas.update()
 
     def update_ref_slice_image(self, image: ndarray):
         self._reference_slice.set_data(image)

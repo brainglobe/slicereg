@@ -7,6 +7,8 @@ from numpy import ndarray
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.slider import LabelledSliderWidget
+from slicereg.gui.view_section import ViewSection
+from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
 
 class SidebarView(BaseQtView):
