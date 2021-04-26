@@ -5,6 +5,7 @@ from slicereg.gui import config
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.sidebar_view import SidebarView
 from slicereg.gui.slice_view import SliceView
+from slicereg.gui.view_section import ViewSection
 from slicereg.gui.volume_view import VolumeView
 from slicereg.gui.window import MainWindow
 from slicereg.repos.atlas_repo import AtlasRepo
@@ -20,13 +21,17 @@ def launch_gui(create_qapp: bool = True):
         section_repo=InMemorySectionRepo(),
     )
 
+    slice_view_section = ViewSection()
+    volume_view_section = ViewSection()
+
     # Wire up the GUI
     if create_qapp:
         app = QApplication([])
 
-    volume_view = VolumeView(commands=commands)
-    slice_view = SliceView(commands=commands)
-    sidebar_view = SidebarView(commands=commands)
+    volume_view = VolumeView(commands=commands, view_section=volume_view_section)
+    slice_view = SliceView(commands=commands, view_section=slice_view_section)
+    sidebar_view = SidebarView(
+        commands=commands, slice_view_section=slice_view_section, volume_view_section=volume_view_section)
     window = MainWindow(
         title=config.WINDOW_TITLE,
         volume_widget=volume_view.qt_widget,

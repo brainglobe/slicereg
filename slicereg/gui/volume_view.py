@@ -1,3 +1,5 @@
+from typing import Optional
+
 import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy import array, ndarray
@@ -8,13 +10,18 @@ from vispy.visuals.transforms import MatrixTransform
 
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
+from slicereg.gui.view_section import ViewSection
 
 
 class VolumeView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider):
+    def __init__(self, commands: CommandProvider, view_section: ViewSection):
 
         self.commands = commands
+
+        self.view_section = view_section
+        self.view_section.clim_updated.connect(self.update_slice_image)
+
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
@@ -28,8 +35,21 @@ class VolumeView(BaseQtView):
         self._section_image = Image(parent=self._viewbox.scene, cmap='grays')
         self._section_image.attach(filters.ColorFilter((0., .5, 1., 1.)))
         self._section_image.set_gl_state('additive', depth_test=False)
+        self._section_image_data: Optional[ndarray] = None
 
         self._canvas.events.key_press.connect(self._handle_vispy_key_press_events)
+
+    def update_slice_image(self, image: Optional[ndarray] = None, transform: Optional[ndarray] = None):
+        if image is not None:
+            self._section_image.set_data(image.T)
+            self._section_image_data = image.T
+
+        if self._section_image_data is not None:
+            self._section_image.clim = (np.percentile(self._section_image_data, self.view_section.clim[0] * 100),
+                                        np.percentile(self._section_image_data, self.view_section.clim[1] * 100))
+            if transform is not None:
+                self._section_image.transform = MatrixTransform(transform.T)
+            self._canvas.update()
 
     # View Code
     @property
@@ -43,12 +63,8 @@ class VolumeView(BaseQtView):
         self._viewbox.camera.scale_factor = np.mean(volume.shape)
         self._canvas.update()
 
-    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int):
-        self._section_image.set_data(image.T)
-        self._section_image.clim = np.min(image), np.max(image)
-        if transform is not None:
-            self._section_image.transform = MatrixTransform(transform.T)
-        self._canvas.update()
+    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: Optional[ndarray], resolution_um: int):
+        self.update_slice_image(image=image, transform=transform)
 
     def on_channel_select(self, image: ndarray, channel: int):
         self._section_image.set_data(image.T)
