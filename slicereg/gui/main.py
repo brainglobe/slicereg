@@ -76,7 +76,7 @@ def launch_gui(create_qapp: bool = True):
 
     # Slice View
     commands.load_section.section_loaded.connect(slice_viewmodel.on_section_loaded)
-    commands.select_channel.channel_changed.connect(slice_view.on_channel_select)
+    commands.select_channel.channel_changed.connect(slice_viewmodel.on_channel_select)
     commands.move_section.section_moved.connect(slice_view.on_section_moved)
     commands.update_section.section_moved.connect(slice_view.on_section_moved)
     commands.resample_section.section_resampled.connect(slice_view.on_section_resampled)

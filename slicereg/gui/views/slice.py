@@ -55,9 +55,6 @@ class SliceView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_channel_select(self, image: ndarray, channel: int) -> None:
-        self.update_slice_image(image=image)
-
     def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
         self.update_ref_slice_image(image=atlas_slice_image)
 
@@ -161,3 +158,6 @@ class SliceViewModel:
 
     def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
         self._model.update(section_image=image, atlas_image=atlas_image)
+
+    def on_channel_select(self, image: ndarray, channel: int) -> None:
+        self._model.update(section_image=image)
