@@ -55,9 +55,6 @@ class SliceView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
-        self.update_ref_slice_image(image=atlas_slice_image)
-
     def update(self):
         if (image := self.model.section_image) is not None:
             self._slice.set_data(image)
@@ -71,23 +68,6 @@ class SliceView(BaseQtView):
             self._reference_slice.set_data(image)
             self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
 
-        self._canvas.update()
-
-    def update_slice_image(self, image: Optional[ndarray] = None):
-        if image is not None:
-            self._slice.set_data(image)
-            self._slice_image = image
-
-        if self._slice_image is not None:
-            self._slice.clim = (np.percentile(self._slice_image, self.model.clim[0] * 100),
-                                np.percentile(self._slice_image, self.model.clim[1] * 100))
-            self._viewbox.camera.center = self._slice_image.shape[1] / 2, self._slice_image.shape[0] / 2, 0.
-            self._viewbox.camera.scale_factor = self._slice_image.shape[1]
-            self._canvas.update()
-
-    def update_ref_slice_image(self, image: ndarray):
-        self._reference_slice.set_data(image)
-        self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
         self._canvas.update()
 
     def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:
@@ -122,11 +102,6 @@ class SliceView(BaseQtView):
     def _on_mousewheel_move(self, increment: int):
         self.commands.move_section(y=10 * increment)
 
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray,
-                             atlas_image: ndarray):
-        self.update_slice_image(image=section_image)
-        self.update_ref_slice_image(image=atlas_image)
-
 
 @dataclass
 class SliceViewModel:
@@ -149,11 +124,11 @@ class SliceViewModel:
         self._model.update(clim_2d=val)
 
     @property
-    def section_image(self) -> ndarray:
+    def section_image(self) -> Optional[ndarray]:
         return self._model.section_image
 
     @property
-    def atlas_image(self) -> ndarray:
+    def atlas_image(self) -> Optional[ndarray]:
         return self._model.atlas_image
 
     def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
@@ -161,3 +136,9 @@ class SliceViewModel:
 
     def on_channel_select(self, image: ndarray, channel: int) -> None:
         self._model.update(section_image=image)
+
+    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray) -> None:
+        self._model.update(section_image=section_image, atlas_image=atlas_image)
+
+    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
+        self._model.update(atlas_image=atlas_slice_image)
