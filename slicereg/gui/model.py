@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Tuple, Optional
+from typing import Tuple, Optional, List
 
 from numpy import ndarray
 
@@ -16,6 +16,7 @@ class AppModel:
     atlas_volume: Optional[ndarray] = None
     highlighted_image_coords: Optional[Tuple[int, int]] = None
     highlighted_physical_coords: Optional[Tuple[float, float, float]] = None
+    bgatlas_names: List[str] = field(default_factory=list)
     updated: Signal = field(default_factory=Signal)
 
     def update(self, **attrs):
@@ -40,8 +41,11 @@ class AppModel:
     def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
         self.update(atlas_image=atlas_slice_image)
 
-    def on_atlas_update(self, volume: ndarray, transform: ndarray):
+    def on_atlas_update(self, volume: ndarray, transform: ndarray) -> None:
         self.update(atlas_volume=volume)
 
-    def on_image_coordinate_highlighted(self, image_coords, atlas_coords):
+    def on_bgatlas_list_update(self, atlas_names: List[str]) -> None:
+        self.update(bgatlas_names=atlas_names)
+
+    def on_image_coordinate_highlighted(self, image_coords, atlas_coords) -> None:
         self.update(highlighted_image_coords=image_coords, highlighted_physical_coords=atlas_coords)

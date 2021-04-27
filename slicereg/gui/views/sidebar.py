@@ -21,6 +21,9 @@ class SidebarView(BaseQtView):
         self.commands = commands
         self.widget = QWidget()
 
+        self.model = model
+        self.model.updated.connect(self.update)
+
         layout = QVBoxLayout()
         self.widget.setLayout(layout)
 
@@ -102,6 +105,9 @@ class SidebarView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self.widget
 
+    def update(self) -> None:
+        self.list_atlas_dropdown.addItems(self.model.bgatlas_names)
+
     def show_load_image_dialog(self):
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.qt_widget,
@@ -124,9 +130,6 @@ class SidebarView(BaseQtView):
             return
         resolution_um = int(self.resolution_textbox.text())
         self.commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
-
-    def show_brainglobe_atlases(self, atlas_names: List[str]):
-        self.list_atlas_dropdown.addItems(atlas_names)
 
     def _load_atlas(self):
         selected_atlas = self.list_atlas_dropdown.currentText()
@@ -161,3 +164,7 @@ class SidebarViewModel:
     @clim_3d.setter
     def clim_3d(self, val):
         self._model.update(clim_3d=val)
+
+    @property
+    def bgatlas_names(self) -> List[str]:
+        return self._model.bgatlas_names

@@ -40,8 +40,6 @@ def launch_gui(create_qapp: bool = True):
         section_repo=InMemorySectionRepo(),
     )
 
-
-
     # Wire up the GUI
     if create_qapp:
         app = QApplication([])
@@ -55,6 +53,7 @@ def launch_gui(create_qapp: bool = True):
     commands.move_section.section_moved.connect(model.on_section_moved)
     commands.update_section.section_moved.connect(model.on_section_moved)
     commands.get_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
+    commands.list_bgatlases.atlas_list_updated.connect(model.on_bgatlas_list_update)
 
     volume_view = VolumeView(commands=commands, model=VolumeViewModel(_model=model))
     slice_view = SliceView(commands=commands, model=SliceViewModel(_model=model))
@@ -66,9 +65,6 @@ def launch_gui(create_qapp: bool = True):
         slice_widget=slice_view.qt_widget,
         side_controls=sidebar_view.qt_widget,
     )
-
-    # Sidebar View
-    commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
 
 
     # Start the Event Loop!
