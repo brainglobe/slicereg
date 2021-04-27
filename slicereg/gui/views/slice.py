@@ -11,9 +11,9 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from slicereg.commands.utils import Signal
-from slicereg.gui.views.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
+from slicereg.gui.views.base import BaseQtView
 
 
 class SliceView(BaseQtView):
@@ -130,15 +130,3 @@ class SliceViewModel:
     @property
     def atlas_image(self) -> Optional[ndarray]:
         return self._model.atlas_image
-
-    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
-        self._model.update(section_image=image, atlas_image=atlas_image)
-
-    def on_channel_select(self, image: ndarray, channel: int) -> None:
-        self._model.update(section_image=image)
-
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray) -> None:
-        self._model.update(section_image=section_image, atlas_image=atlas_image)
-
-    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
-        self._model.update(atlas_image=atlas_slice_image)
