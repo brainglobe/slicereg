@@ -1,18 +1,22 @@
+from __future__ import annotations
+
+from dataclasses import field, dataclass
 from functools import partial
-from typing import List
+from typing import List, Tuple
 
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 
+from slicereg.commands.utils import Signal
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
+from slicereg.gui.model import AppModel
 from slicereg.gui.slider import LabelledSliderWidget
-from slicereg.gui.view_section import ViewSection
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
 
 class SidebarView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider, slice_view_section: ViewSection, volume_view_section: ViewSection):
+    def __init__(self, commands: CommandProvider, model: SidebarViewModel):
 
         self.commands = commands
         self.widget = QWidget()
@@ -52,7 +56,8 @@ class SidebarView(BaseQtView):
 
         load_image_button2 = QPushButton("Quick Load Section")
         layout.addWidget(load_image_button2)
-        load_image_button2.clicked.connect(lambda: self.commands.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff"))
+        load_image_button2.clicked.connect(
+            lambda: self.commands.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff"))
 
         # Scale Slider (Set Section Resolution)
         self.resample_widget = LabelledSliderWidget(min=15, max=200, label="Resample")
@@ -65,7 +70,8 @@ class SidebarView(BaseQtView):
 
         self.dim_widgets = []
         for dim in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
-            widget = LabelledSliderWidget(min=-10000 if not dim.startswith('r') else -180, max=10000 if not dim.startswith('r') else 180, label=dim)
+            widget = LabelledSliderWidget(min=-10000 if not dim.startswith('r') else -180,
+                                          max=10000 if not dim.startswith('r') else 180, label=dim)
             layout.addLayout(widget.layout)
             fun = lambda d, value: self.commands.update_section(**{d: value})
             widget.connect(partial(fun, dim))
@@ -85,11 +91,11 @@ class SidebarView(BaseQtView):
         layout.addLayout(buttons_layout)
 
         slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
-        slice_clim_slider.valuesChanged.connect(lambda values: slice_view_section.update_clim(min=values[0], max=values[1]))
+        slice_clim_slider.valuesChanged.connect(lambda values: setattr(model, 'clim_2d', values))
         layout.addWidget(slice_clim_slider)
 
         volume_slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
-        volume_slice_clim_slider.valuesChanged.connect(lambda values: volume_view_section.update_clim(min=values[0], max=values[1]))
+        volume_slice_clim_slider.valuesChanged.connect(lambda values: setattr(model, 'clim_3d', values))
         layout.addWidget(volume_slice_clim_slider)
 
     @property
@@ -126,3 +132,32 @@ class SidebarView(BaseQtView):
         selected_atlas = self.list_atlas_dropdown.currentText()
         print(f"Loading Atlas: {selected_atlas}")
         self.commands.load_atlas(bgatlas_name=selected_atlas)
+
+
+@dataclass
+class SidebarViewModel:
+    _model: AppModel = field(repr=False)
+    updated: Signal = field(default_factory=Signal, repr=False)
+
+    def __post_init__(self):
+        self._model.updated.connect(self.update)
+        self.update()
+
+    def update(self):
+        self.updated.emit()
+
+    @property
+    def clim_2d(self) -> Tuple[float, float]:
+        return self._model.clim_2d
+
+    @clim_2d.setter
+    def clim_2d(self, val):
+        self._model.update(clim_2d=val)
+
+    @property
+    def clim_3d(self) -> Tuple[float, float]:
+        return self._model.clim_3d
+
+    @clim_3d.setter
+    def clim_3d(self, val):
+        self._model.update(clim_3d=val)

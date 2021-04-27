@@ -1,10 +1,10 @@
 from unittest.mock import Mock
 
-from slicereg.gui.view_section import ViewSection
+from slicereg.gui.model import AppModel
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.sidebar_view import SidebarView
-from slicereg.gui.slice_view import SliceView
-from slicereg.gui.volume_view import VolumeView
+from slicereg.gui.sidebar_view import SidebarView, SidebarViewModel
+from slicereg.gui.slice_view import SliceView, SliceViewModel
+from slicereg.gui.volume_view import VolumeView, VolumeViewModel
 from slicereg.gui.window import MainWindow
 from slicereg.gui.main import launch_gui
 
@@ -17,7 +17,7 @@ def test_gui_launches_without_errors(qtbot):
 def test_volume_view_launches_without_errors(qtbot):
     view = VolumeView(
         commands=Mock(CommandProvider),
-        view_section=ViewSection(),
+        model=VolumeViewModel(_model=AppModel()),
 
     )
     qtbot.addWidget(view.qt_widget)
@@ -26,7 +26,7 @@ def test_volume_view_launches_without_errors(qtbot):
 def test_slice_view_launches_without_errors(qtbot):
     view = SliceView(
         commands=Mock(CommandProvider),
-        view_section=ViewSection(),
+        model=SliceViewModel(_model=AppModel()),
     )
     qtbot.addWidget(view.qt_widget)
 
@@ -34,8 +34,7 @@ def test_slice_view_launches_without_errors(qtbot):
 def test_sidebar_view_launches_without_errors(qtbot):
     view = SidebarView(
         commands=Mock(CommandProvider),
-        slice_view_section=ViewSection(),
-        volume_view_section=ViewSection(),
+        model=SidebarViewModel(_model=AppModel())
     )
     qtbot.addWidget(view.qt_widget)
 

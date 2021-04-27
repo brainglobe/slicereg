@@ -1,25 +1,28 @@
-from typing import Optional
+from __future__ import annotations
+
+from dataclasses import field, dataclass
+from typing import Optional, Tuple
 
 import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy import ndarray
-
 from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
+from slicereg.commands.utils import Signal
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.view_section import ViewSection
+from slicereg.gui.model import AppModel
 
 
 class SliceView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider, view_section: ViewSection):
+    def __init__(self, commands: CommandProvider, model: SliceViewModel):
         self.commands = commands
 
-        self.view_section = view_section
-        self.view_section.clim_updated.connect(self.update_slice_image)
+        self.model = model
+        self.model.updated.connect(self.update_slice_image)
 
         self._canvas = SceneCanvas()
 
@@ -68,8 +71,8 @@ class SliceView(BaseQtView):
             self._slice_image = image
 
         if self._slice_image is not None:
-            self._slice.clim = (np.percentile(self._slice_image, self.view_section.clim[0] * 100),
-                                np.percentile(self._slice_image, self.view_section.clim[1] * 100))
+            self._slice.clim = (np.percentile(self._slice_image, self.model.clim[0] * 100),
+                                np.percentile(self._slice_image, self.model.clim[1] * 100))
             self._viewbox.camera.center = self._slice_image.shape[1] / 2, self._slice_image.shape[0] / 2, 0.
             self._viewbox.camera.scale_factor = self._slice_image.shape[1]
             self._canvas.update()
@@ -115,3 +118,24 @@ class SliceView(BaseQtView):
                              atlas_image: ndarray):
         self.update_slice_image(image=section_image)
         self.update_ref_slice_image(image=atlas_image)
+
+
+@dataclass
+class SliceViewModel:
+    _model: AppModel = field(repr=False)
+    updated: Signal = field(default_factory=Signal, repr=False)
+
+    def __post_init__(self):
+        self._model.updated.connect(self.update)
+        self.update()
+
+    def update(self):
+        self.updated.emit()
+
+    @property
+    def clim(self) -> Tuple[float, float]:
+        return self._model.clim_2d
+
+    @clim.setter
+    def clim(self, val):
+        self._model.update(clim_2d=val)

@@ -1,4 +1,7 @@
-from typing import Optional
+from __future__ import annotations
+
+from dataclasses import field, dataclass
+from typing import Optional, Tuple
 
 import numpy as np
 from PySide2.QtWidgets import QWidget
@@ -8,19 +11,21 @@ from vispy.scene import SceneCanvas, ViewBox, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
+from slicereg.commands.utils import Signal
+from slicereg.gui.model import AppModel
+
 from slicereg.gui.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.view_section import ViewSection
 
 
 class VolumeView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider, view_section: ViewSection):
+    def __init__(self, commands: CommandProvider, model: VolumeViewModel):
 
         self.commands = commands
 
-        self.view_section = view_section
-        self.view_section.clim_updated.connect(self.update_slice_image)
+        self.model = model
+        self.model.updated.connect(self.update_slice_image)
 
         self._canvas = SceneCanvas()
 
@@ -45,8 +50,8 @@ class VolumeView(BaseQtView):
             self._section_image_data = image.T
 
         if self._section_image_data is not None:
-            self._section_image.clim = (np.percentile(self._section_image_data, self.view_section.clim[0] * 100),
-                                        np.percentile(self._section_image_data, self.view_section.clim[1] * 100))
+            self._section_image.clim = (np.percentile(self._section_image_data, self.model.clim[0] * 100),
+                                        np.percentile(self._section_image_data, self.model.clim[1] * 100))
             if transform is not None:
                 self._section_image.transform = MatrixTransform(transform.T)
             self._canvas.update()
@@ -105,3 +110,24 @@ class VolumeView(BaseQtView):
         }
         if command := key_commands.get(event.key.name):
             command()
+
+
+@dataclass
+class VolumeViewModel:
+    _model: AppModel = field(repr=False)
+    updated: Signal = field(default_factory=Signal, repr=False)
+
+    def __post_init__(self):
+        self._model.updated.connect(self.update)
+        self.update()
+
+    def update(self):
+        self.updated.emit()
+
+    @property
+    def clim(self) -> Tuple[float, float]:
+        return self._model.clim_3d
+
+    @clim.setter
+    def clim(self, val):
+        self._model.update(clim_3d=val)
