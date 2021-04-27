@@ -1,1 +1,0 @@
-WINDOW_TITLE = "bg-slicereg"

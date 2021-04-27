@@ -8,6 +8,7 @@ from slicereg.commands.utils import Signal
 
 @dataclass
 class AppModel:
+    window_title: str = "bg-slicereg"
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
     section_image: Optional[ndarray] = None

@@ -5,7 +5,6 @@ import numpy as np
 from PySide2.QtWidgets import QApplication
 from packaging import version
 
-from slicereg.gui import config
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
 from slicereg.gui.views.sidebar import SidebarView, SidebarViewModel
@@ -60,7 +59,6 @@ def launch_gui(create_qapp: bool = True):
     sidebar_view = SidebarView(commands=commands, model=SidebarViewModel(_model=model))
     window = MainWindow(
         model=MainWindowViewModel(_model=model),
-        title=config.WINDOW_TITLE,
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
         side_controls=sidebar_view.qt_widget,
