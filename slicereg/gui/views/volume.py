@@ -14,7 +14,7 @@ from vispy.visuals.transforms import MatrixTransform
 from slicereg.commands.utils import Signal
 from slicereg.gui.model import AppModel
 
-from slicereg.gui.base import BaseQtView
+from slicereg.gui.views.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
 
 

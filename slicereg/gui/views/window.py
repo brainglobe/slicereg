@@ -3,7 +3,7 @@ from typing import Optional
 from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel
 from vispy.app import Timer
 
-from slicereg.gui.base import BaseQtView
+from slicereg.gui.views.base import BaseQtView
 
 
 class MainWindow(BaseQtView):

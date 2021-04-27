@@ -7,10 +7,10 @@ from typing import List, Tuple
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 
 from slicereg.commands.utils import Signal
-from slicereg.gui.base import BaseQtView
+from slicereg.gui.views.base import BaseQtView
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
-from slicereg.gui.slider import LabelledSliderWidget
+from slicereg.gui.views.slider import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
 
@@ -106,7 +106,7 @@ class SidebarView(BaseQtView):
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.qt_widget,
             caption="Load Image",
-            dir="../data/RA_10X_scans/MEA",
+            dir="../../../data/RA_10X_scans/MeA",
             filter="OME-TIFF (*.ome.tiff)"
         )
         if not filename:
@@ -117,7 +117,7 @@ class SidebarView(BaseQtView):
         filename, filetype = QFileDialog.getOpenFileName(
             parent=self.qt_widget,
             caption="Load Atlas from File",
-            dir=".",
+            dir="..",
             filter="Image Files (*.tif *.tiff *.nii)"
         )
         if not filename:

@@ -8,10 +8,10 @@ from packaging import version
 from slicereg.gui import config
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
-from slicereg.gui.sidebar_view import SidebarView, SidebarViewModel
-from slicereg.gui.slice_view import SliceView, SliceViewModel
-from slicereg.gui.volume_view import VolumeView, VolumeViewModel
-from slicereg.gui.window import MainWindow
+from slicereg.gui.views.sidebar import SidebarView, SidebarViewModel
+from slicereg.gui.views.slice import SliceView, SliceViewModel
+from slicereg.gui.views.volume import VolumeView, VolumeViewModel
+from slicereg.gui.views.window import MainWindow
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
