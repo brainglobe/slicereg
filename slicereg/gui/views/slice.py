@@ -22,7 +22,7 @@ class SliceView(BaseQtView):
         self.commands = commands
 
         self.model = model
-        self.model.updated.connect(self.update_slice_image)
+        self.model.updated.connect(self.update)
 
         self._canvas = SceneCanvas()
 
@@ -64,6 +64,21 @@ class SliceView(BaseQtView):
 
     def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
         self.update_ref_slice_image(image=atlas_slice_image)
+
+    def update(self):
+        if (image := self.model.section_image) is not None:
+            self._slice.set_data(image)
+            self._slice_image = image
+            self._slice.clim = (np.percentile(image, self.model.clim[0] * 100),
+                                np.percentile(image, self.model.clim[1] * 100))
+            self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
+            self._viewbox.camera.scale_factor = image.shape[1]
+
+        if (image := self.model.atlas_image) is not None:
+            self._reference_slice.set_data(image)
+            self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
+
+        self._canvas.update()
 
     def update_slice_image(self, image: Optional[ndarray] = None):
         if image is not None:
@@ -139,3 +154,14 @@ class SliceViewModel:
     @clim.setter
     def clim(self, val):
         self._model.update(clim_2d=val)
+
+    @property
+    def section_image(self) -> ndarray:
+        return self._model.section_image
+
+    @property
+    def atlas_image(self) -> ndarray:
+        return self._model.atlas_image
+
+    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
+        self._model.update(section_image=image, atlas_image=atlas_image)

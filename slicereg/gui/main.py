@@ -48,7 +48,8 @@ def launch_gui(create_qapp: bool = True):
 
     model = AppModel()
     volume_view = VolumeView(commands=commands, model=VolumeViewModel(_model=model))
-    slice_view = SliceView(commands=commands, model=SliceViewModel(_model=model))
+    slice_viewmodel = SliceViewModel(_model=model)
+    slice_view = SliceView(commands=commands, model=slice_viewmodel)
     sidebar_view = SidebarView(
         commands=commands, model=SidebarViewModel(_model=model))
     window = MainWindow(
@@ -74,7 +75,7 @@ def launch_gui(create_qapp: bool = True):
     commands.resample_section.section_resampled.connect(volume_view.on_section_resampled)
 
     # Slice View
-    commands.load_section.section_loaded.connect(slice_view.on_section_loaded)
+    commands.load_section.section_loaded.connect(slice_viewmodel.on_section_loaded)
     commands.select_channel.channel_changed.connect(slice_view.on_channel_select)
     commands.move_section.section_moved.connect(slice_view.on_section_moved)
     commands.update_section.section_moved.connect(slice_view.on_section_moved)

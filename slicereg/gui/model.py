@@ -1,5 +1,7 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Tuple, Optional
+
+from numpy import ndarray
 
 from slicereg.commands.utils import Signal
 
@@ -8,6 +10,8 @@ from slicereg.commands.utils import Signal
 class AppModel:
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
+    section_image: Optional[ndarray] = None
+    atlas_image: Optional[ndarray] = None
     updated: Signal = field(default_factory=Signal)
 
     def update(self, **attrs):
