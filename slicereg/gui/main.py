@@ -11,7 +11,7 @@ from slicereg.gui.model import AppModel
 from slicereg.gui.views.sidebar import SidebarView, SidebarViewModel
 from slicereg.gui.views.slice import SliceView, SliceViewModel
 from slicereg.gui.views.volume import VolumeView, VolumeViewModel
-from slicereg.gui.views.window import MainWindow
+from slicereg.gui.views.window import MainWindow, MainWindowViewModel
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
@@ -47,39 +47,29 @@ def launch_gui(create_qapp: bool = True):
         app = QApplication([])
 
     model = AppModel()
+    commands.load_atlas.atlas_updated.connect(model.on_atlas_update)
+    commands.load_atlas_from_file.atlas_updated.connect(model.on_atlas_update)
+    commands.load_section.section_loaded.connect(model.on_section_loaded)
+    commands.select_channel.channel_changed.connect(model.on_channel_select)
+    commands.resample_section.section_resampled.connect(model.on_section_resampled)
+    commands.move_section.section_moved.connect(model.on_section_moved)
+    commands.update_section.section_moved.connect(model.on_section_moved)
+    commands.get_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
+
     volume_view = VolumeView(commands=commands, model=VolumeViewModel(_model=model))
-    slice_viewmodel = SliceViewModel(_model=model)
-    slice_view = SliceView(commands=commands, model=slice_viewmodel)
-    sidebar_view = SidebarView(
-        commands=commands, model=SidebarViewModel(_model=model))
+    slice_view = SliceView(commands=commands, model=SliceViewModel(_model=model))
+    sidebar_view = SidebarView(commands=commands, model=SidebarViewModel(_model=model))
     window = MainWindow(
+        model=MainWindowViewModel(_model=model),
         title=config.WINDOW_TITLE,
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
         side_controls=sidebar_view.qt_widget,
     )
 
-    # Window View
-    commands.get_coord.coord_data_requested.connect(window.on_image_coordinate_highlighted)
-
     # Sidebar View
     commands.list_bgatlases.atlas_list_updated.connect(sidebar_view.show_brainglobe_atlases)
 
-    # Volume View
-    commands.load_atlas.atlas_updated.connect(volume_view.on_atlas_update)
-    commands.load_atlas_from_file.atlas_updated.connect(volume_view.on_atlas_update)
-    commands.load_section.section_loaded.connect(volume_view.on_section_loaded)
-    commands.select_channel.channel_changed.connect(volume_view.on_channel_select)
-    commands.move_section.section_moved.connect(volume_view.on_section_moved)
-    commands.update_section.section_moved.connect(volume_view.on_section_moved)
-    commands.resample_section.section_resampled.connect(volume_view.on_section_resampled)
-
-    # Slice View
-    commands.load_section.section_loaded.connect(model.on_section_loaded)
-    commands.select_channel.channel_changed.connect(model.on_channel_select)
-    commands.move_section.section_moved.connect(model.on_section_moved)
-    commands.update_section.section_moved.connect(model.on_section_moved)
-    commands.resample_section.section_resampled.connect(model.on_section_resampled)
 
     # Start the Event Loop!
     if create_qapp:

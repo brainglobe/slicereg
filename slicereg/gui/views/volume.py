@@ -25,7 +25,7 @@ class VolumeView(BaseQtView):
         self.commands = commands
 
         self.model = model
-        self.model.updated.connect(self.update_slice_image)
+        self.model.updated.connect(self.update)
 
         self._canvas = SceneCanvas()
 
@@ -40,52 +40,29 @@ class VolumeView(BaseQtView):
         self._section_image = Image(parent=self._viewbox.scene, cmap='grays')
         self._section_image.attach(filters.ColorFilter((0., .5, 1., 1.)))
         self._section_image.set_gl_state('additive', depth_test=False)
-        self._section_image_data: Optional[ndarray] = None
 
         self._canvas.events.key_press.connect(self._handle_vispy_key_press_events)
 
-    def update_slice_image(self, image: Optional[ndarray] = None, transform: Optional[ndarray] = None):
-        if image is not None:
-            self._section_image.set_data(image.T)
-            self._section_image_data = image.T
-
-        if self._section_image_data is not None:
-            self._section_image.clim = (np.percentile(self._section_image_data, self.model.clim[0] * 100),
-                                        np.percentile(self._section_image_data, self.model.clim[1] * 100))
-            if transform is not None:
-                self._section_image.transform = MatrixTransform(transform.T)
-            self._canvas.update()
-
-    # View Code
     @property
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def on_atlas_update(self, volume: ndarray, transform: ndarray):
-        volume = volume.swapaxes(0, 2)
-        self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
-        self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
-        self._viewbox.camera.scale_factor = np.mean(volume.shape)
+    def update(self) -> None:
+        if (volume := self.model.atlas_volume) is not None:
+            volume = volume.swapaxes(0, 2)
+            self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
+            self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
+            self._viewbox.camera.scale_factor = np.mean(volume.shape)
+
+        if (image := self.model.section_image) is not None:
+            self._section_image.set_data(image.T)
+            self._section_image.clim = (np.percentile(image, self.model.clim[0] * 100),
+                                        np.percentile(image, self.model.clim[1] * 100))
+            if (transform := self.model.section_transform) is not None:
+                self._section_image.transform = MatrixTransform(transform.T)
+
         self._canvas.update()
 
-    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: Optional[ndarray], resolution_um: int):
-        self.update_slice_image(image=image, transform=transform)
-
-    def on_channel_select(self, image: ndarray, channel: int):
-        self._section_image.set_data(image.T)
-        self._section_image.clim = np.min(image), np.max(image)
-        self._canvas.update()
-
-    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray):
-        self._section_image.transform = MatrixTransform(transform.T)
-        self._canvas.update()
-
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray):
-        self._section_image.set_data(section_image.T)
-        self._section_image.transform = MatrixTransform(transform.T)
-        self._canvas.update()
-
-    # Controller Code
     def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:
         """Router: Calls AppCommands functions based on the event that's given."""
 
@@ -131,3 +108,15 @@ class VolumeViewModel:
     @clim.setter
     def clim(self, val):
         self._model.update(clim_3d=val)
+
+    @property
+    def atlas_volume(self) -> Optional[ndarray]:
+        return self._model.atlas_volume
+
+    @property
+    def section_image(self) -> Optional[ndarray]:
+        return self._model.section_image
+
+    @property
+    def section_transform(self) -> Optional[ndarray]:
+        return self._model.section_transform

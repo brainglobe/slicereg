@@ -11,7 +11,11 @@ class AppModel:
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
     section_image: Optional[ndarray] = None
+    section_transform: Optional[ndarray] = None
     atlas_image: Optional[ndarray] = None
+    atlas_volume: Optional[ndarray] = None
+    highlighted_image_coords: Optional[Tuple[int, int]] = None
+    highlighted_physical_coords: Optional[Tuple[float, float, float]] = None
     updated: Signal = field(default_factory=Signal)
 
     def update(self, **attrs):
@@ -29,8 +33,15 @@ class AppModel:
     def on_channel_select(self, image: ndarray, channel: int) -> None:
         self.update(section_image=image)
 
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray, atlas_image: ndarray) -> None:
+    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray,
+                             atlas_image: ndarray) -> None:
         self.update(section_image=section_image, atlas_image=atlas_image)
 
     def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
         self.update(atlas_image=atlas_slice_image)
+
+    def on_atlas_update(self, volume: ndarray, transform: ndarray):
+        self.update(atlas_volume=volume)
+
+    def on_image_coordinate_highlighted(self, image_coords, atlas_coords):
+        self.update(highlighted_image_coords=image_coords, highlighted_physical_coords=atlas_coords)
