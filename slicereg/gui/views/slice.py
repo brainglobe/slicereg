@@ -88,12 +88,11 @@ class SliceView(BaseQtView):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
         self.commands.move_section(x=scaled_dx, z=scaled_dy)
-        self.commands.get_coord(i=x2, j=y2)  # todo: replace with mouse highlighting
+        self.commands.get_coord(i=x2, j=y2)
 
     def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 1.):
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-
         self.commands.move_section(rx=scaled_dx, rz=scaled_dy)
 
     def _on_mousewheel_move(self, increment: int):
