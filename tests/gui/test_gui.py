@@ -15,19 +15,12 @@ def test_gui_launches_without_errors(qtbot):
 
 
 def test_volume_view_launches_without_errors(qtbot):
-    view = VolumeView(
-        commands=Mock(CommandProvider),
-        model=VolumeViewModel(_model=AppModel()),
-
-    )
+    view = VolumeView(model=VolumeViewModel(_model=AppModel(), _commands=Mock(CommandProvider)))
     qtbot.addWidget(view.qt_widget)
 
 
 def test_slice_view_launches_without_errors(qtbot):
-    view = SliceView(
-        commands=Mock(CommandProvider),
-        model=SliceViewModel(_model=AppModel()),
-    )
+    view = SliceView(model=SliceViewModel(_model=AppModel(), _commands=Mock(CommandProvider)))
     qtbot.addWidget(view.qt_widget)
 
 

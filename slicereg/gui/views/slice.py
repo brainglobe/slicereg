@@ -18,8 +18,7 @@ from slicereg.gui.views.base import BaseQtView
 
 class SliceView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider, model: SliceViewModel):
-        self.commands = commands
+    def __init__(self, model: SliceViewModel):
 
         self.model = model
         self.model.updated.connect(self.update)
@@ -77,31 +76,18 @@ class SliceView(BaseQtView):
             x1, y1 = event.last_event.pos
             x2, y2 = event.pos
             if event.button == 1:  # Left Mouse Button
-                self._on_left_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
+                self.model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
             elif event.button == 2:  # Right Mouse Button
-                self._on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
+                self.model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
 
         elif event.type == 'mouse_wheel':
-            self._on_mousewheel_move(increment=int(event.delta[1]))
-
-    def _on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 4.):
-        scaled_dx = (x2 - x1) * scale
-        scaled_dy = (y2 - y1) * scale
-        self.commands.move_section(x=scaled_dx, z=scaled_dy)
-        self.commands.get_coord(i=x2, j=y2)
-
-    def _on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int, scale: float = 1.):
-        scaled_dx = (x2 - x1) * scale
-        scaled_dy = (y2 - y1) * scale
-        self.commands.move_section(rx=scaled_dx, rz=scaled_dy)
-
-    def _on_mousewheel_move(self, increment: int):
-        self.commands.move_section(y=10 * increment)
+            self.model.on_mousewheel_move(increment=int(event.delta[1]))
 
 
 @dataclass
 class SliceViewModel:
     _model: AppModel = field(repr=False)
+    _commands: CommandProvider = field(repr=False)
     updated: Signal = field(default_factory=Signal, repr=False)
 
     def __post_init__(self):
@@ -126,3 +112,20 @@ class SliceViewModel:
     @property
     def atlas_image(self) -> Optional[ndarray]:
         return self._model.atlas_image
+
+    def on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
+        scale = 4.
+        scaled_dx = (x2 - x1) * scale
+        scaled_dy = (y2 - y1) * scale
+        self._commands.move_section(x=scaled_dx, z=scaled_dy)
+        self._commands.get_coord(i=x2, j=y2)
+
+    def on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
+        scale = 1.
+        scaled_dx = (x2 - x1) * scale
+        scaled_dy = (y2 - y1) * scale
+        self._commands.move_section(rx=scaled_dx, rz=scaled_dy)
+
+    def on_mousewheel_move(self, increment: int):
+        scale = 10
+        self._commands.move_section(y=scale * increment)

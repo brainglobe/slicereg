@@ -55,7 +55,7 @@ def launch_gui(create_qapp: bool = True):
     commands.list_bgatlases.atlas_list_updated.connect(model.on_bgatlas_list_update)
 
     volume_view = VolumeView(model=VolumeViewModel(_model=model, _commands=commands))
-    slice_view = SliceView(commands=commands, model=SliceViewModel(_model=model))
+    slice_view = SliceView(model=SliceViewModel(_model=model, _commands=commands))
     sidebar_view = SidebarView(commands=commands, model=SidebarViewModel(_model=model))
     window = MainWindow(
         model=MainWindowViewModel(_model=model),
