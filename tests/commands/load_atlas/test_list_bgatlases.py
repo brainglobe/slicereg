@@ -1,5 +1,8 @@
+from unittest import mock
+from unittest.mock import patch
+
 import pytest
-from pytest_bdd import scenario, when, then
+from pytest_bdd import scenario, when, then, given
 
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
@@ -25,10 +28,12 @@ def test_outlined():
 
 @when("I refresh the brainglobe atlas list")
 def step_impl(view: SidebarViewModel):
-    view.click_update_bgatlas_list_button()
+    fake_atlases = [('allen_rhinoceros_1000um', '1.0'), ('mpi_zebrafinch_1um', '1.2')]
+    with mock.patch("slicereg.io.bg_atlasapi.bg_utils.conf_from_url", return_value={'atlases': fake_atlases}):
+        view.click_update_bgatlas_list_button()
 
 
 @then("I see a list of bg-atlasapi's available atlases.")
 def step_impl(view: SidebarViewModel):
-    assert 'allen_mouse_25um' in view.bgatlas_names
-    assert 'mpin_zfish_1um' in view.bgatlas_names
+    expected_atlases = ['allen_rhinoceros_1000um', 'mpi_zebrafinch_1um']
+    assert view.bgatlas_names == expected_atlases
