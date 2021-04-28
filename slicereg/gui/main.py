@@ -54,7 +54,7 @@ def launch_gui(create_qapp: bool = True):
     commands.get_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
     commands.list_bgatlases.atlas_list_updated.connect(model.on_bgatlas_list_update)
 
-    volume_view = VolumeView(commands=commands, model=VolumeViewModel(_model=model))
+    volume_view = VolumeView(model=VolumeViewModel(_model=model, _commands=commands))
     slice_view = SliceView(commands=commands, model=SliceViewModel(_model=model))
     sidebar_view = SidebarView(commands=commands, model=SidebarViewModel(_model=model))
     window = MainWindow(

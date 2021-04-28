@@ -20,9 +20,7 @@ from slicereg.gui.commands import CommandProvider
 
 class VolumeView(BaseQtView):
 
-    def __init__(self, commands: CommandProvider, model: VolumeViewModel):
-
-        self.commands = commands
+    def __init__(self, model: VolumeViewModel):
 
         self.model = model
         self.model.updated.connect(self.update)
@@ -65,33 +63,13 @@ class VolumeView(BaseQtView):
 
     def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:
         """Router: Calls AppCommands functions based on the event that's given."""
-
-        key_commands = {
-            '1': lambda: self.commands.select_channel(1),
-            '2': lambda: self.commands.select_channel(2),
-            '3': lambda: self.commands.select_channel(3),
-            '4': lambda: self.commands.select_channel(4),
-            'W': lambda: self.commands.move_section(z=30),
-            'S': lambda: self.commands.move_section(z=-30),
-            'A': lambda: self.commands.move_section(x=-30),
-            'D': lambda: self.commands.move_section(x=30),
-            'Q': lambda: self.commands.move_section(y=-30),
-            'E': lambda: self.commands.move_section(y=30),
-            'I': lambda: self.commands.move_section(rz=3),
-            'K': lambda: self.commands.move_section(rz=-3),
-            'J': lambda: self.commands.move_section(rx=-3),
-            'L': lambda: self.commands.move_section(rx=3),
-            'U': lambda: self.commands.move_section(ry=-3),
-            'O': lambda: self.commands.move_section(ry=3),
-            'Escape': use_app().quit,
-        }
-        if command := key_commands.get(event.key.name):
-            command()
+        self.model.on_key_press(event.key.name)
 
 
 @dataclass
 class VolumeViewModel:
     _model: AppModel = field(repr=False)
+    _commands: CommandProvider = field(repr=False)
     updated: Signal = field(default_factory=Signal, repr=False)
 
     def __post_init__(self):
@@ -120,3 +98,26 @@ class VolumeViewModel:
     @property
     def section_transform(self) -> Optional[ndarray]:
         return self._model.section_transform
+
+    def on_key_press(self, key: str):
+        key_commands = {
+            '1': lambda: self._commands.select_channel(1),
+            '2': lambda: self._commands.select_channel(2),
+            '3': lambda: self._commands.select_channel(3),
+            '4': lambda: self._commands.select_channel(4),
+            'W': lambda: self._commands.move_section(z=30),
+            'S': lambda: self._commands.move_section(z=-30),
+            'A': lambda: self._commands.move_section(x=-30),
+            'D': lambda: self._commands.move_section(x=30),
+            'Q': lambda: self._commands.move_section(y=-30),
+            'E': lambda: self._commands.move_section(y=30),
+            'I': lambda: self._commands.move_section(rz=3),
+            'K': lambda: self._commands.move_section(rz=-3),
+            'J': lambda: self._commands.move_section(rx=-3),
+            'L': lambda: self._commands.move_section(rx=3),
+            'U': lambda: self._commands.move_section(ry=-3),
+            'O': lambda: self._commands.move_section(ry=3),
+            'Escape': use_app().quit,
+        }
+        if command := key_commands.get(key):
+            command()
