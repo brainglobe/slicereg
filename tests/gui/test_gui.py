@@ -25,10 +25,7 @@ def test_slice_view_launches_without_errors(qtbot):
 
 
 def test_sidebar_view_launches_without_errors(qtbot):
-    view = SidebarView(
-        commands=Mock(CommandProvider),
-        model=SidebarViewModel(_model=AppModel())
-    )
+    view = SidebarView(model=SidebarViewModel(_model=AppModel(), _commands=Mock(CommandProvider)))
     qtbot.addWidget(view.qt_widget)
 
 
