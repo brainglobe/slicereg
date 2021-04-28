@@ -1,23 +1,21 @@
-from unittest.mock import Mock
-
 import pytest
-from pytest_bdd import scenario, given, when, then
+from pytest_bdd import scenario, when, then
 
-from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
-from slicereg.commands.utils import Signal
-from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
+from slicereg.gui.commands import CommandProvider
+from slicereg.gui.model import AppModel
+from slicereg.gui.views.sidebar import SidebarViewModel
 from slicereg.repos.atlas_repo import AtlasRepo
-
-@pytest.fixture
-def reader():
-    reader = Mock(BrainglobeAtlasReader)
-    reader.list_available.return_value = ['awesome_atlas', 'super_atlas']
-    return reader
+from slicereg.repos.section_repo import InMemorySectionRepo
 
 
 @pytest.fixture
-def command(reader):
-    return ListBgAtlasesCommand(_reader=reader, atlas_list_updated=Mock(Signal))
+def view():
+    view = SidebarViewModel(
+        _model=AppModel(),
+        _commands=CommandProvider.from_repos(atlas_repo=AtlasRepo(), section_repo=InMemorySectionRepo())
+    )
+    view._commands.list_bgatlases.atlas_list_updated.connect(view._model.on_bgatlas_list_update)
+    return view
 
 
 @scenario("load_atlas.feature", "List Available Brainglobe Atlases")
@@ -25,17 +23,12 @@ def test_outlined():
     ...
 
 
-@given("I am connected to the internet")
-def step_impl(reader: BrainglobeAtlasReader):
-    assert reader.list_available()
-
-
-@when("I check brainglobe")
-def step_impl(command: ListBgAtlasesCommand):
-    command()
+@when("I refresh the brainglobe atlas list")
+def step_impl(view: SidebarViewModel):
+    view.click_update_bgatlas_list_button()
 
 
 @then("I see a list of bg-atlasapi's available atlases.")
-def step_impl(command: ListBgAtlasesCommand):
-    view_model = command.atlas_list_updated.emit.call_args[1]
-    assert view_model['atlas_names'] == ['awesome_atlas', 'super_atlas']
+def step_impl(view: SidebarViewModel):
+    assert 'allen_mouse_25um' in view.bgatlas_names
+    assert 'mpin_zfish_1um' in view.bgatlas_names
