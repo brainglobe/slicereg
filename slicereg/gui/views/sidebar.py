@@ -33,6 +33,7 @@ class SidebarView(BaseQtView):
 
         self.resolution_textbox = QLineEdit()
         load_atlas_layout.addWidget(self.resolution_textbox)
+        self.resolution_textbox.textEdited.connect(lambda text: self.model.update_resolution_textbox(text=text))
 
         load_atlas_button = QPushButton("Load Atlas File")
         load_atlas_layout.addWidget(load_atlas_button)
@@ -148,8 +149,7 @@ class SidebarView(BaseQtView):
         )
         if not filename:
             return
-        resolution_um = int(self.resolution_textbox.text())
-        self.model.submit_atlas_file_info(filename=filename, resolution_um=resolution_um)
+        self.model.submit_load_atlas_from_file(filename=filename)
 
 
 @dataclass
@@ -161,6 +161,7 @@ class SidebarViewModel:
     sagittal_button_label: str = "Sagittal"
     axial_button_label: str = "Axial"
     selected_bgatlas: Optional[str] = None
+    loadatlas_resolution: Optional[int] = None
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
@@ -208,8 +209,10 @@ class SidebarViewModel:
     def click_update_bgatlas_list_button(self):
         self._commands.list_bgatlases()
 
-    def submit_atlas_file_info(self, filename: str, resolution_um: int):
-        self._commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
+    def submit_load_atlas_from_file(self, filename: str):
+        if self.loadatlas_resolution is None:
+            return
+        self._commands.load_atlas_from_file(filename=filename, resolution_um=self.loadatlas_resolution)
 
     def click_load_bgatlas_button(self):
         print(f"Loading Atlas: {self.selected_bgatlas}")
@@ -238,3 +241,6 @@ class SidebarViewModel:
 
     def change_rotz_slider(self, value: int):
         self._commands.update_section(rz=value)
+
+    def update_resolution_textbox(self, text: str):
+        self.loadatlas_resolution = int(text)
