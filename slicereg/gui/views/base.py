@@ -17,10 +17,9 @@ class BaseQtWidget(ABC):
 
 class BaseViewModel(ABC):
 
-    def __init__(self, _model: AppModel, _commands: CommandProvider):
+    def __init__(self, _model: AppModel):
         self._model = _model
         self._model.updated.connect(self.update)
-        self._commands = _commands
         self.updated = Signal()
 
     def update(self):

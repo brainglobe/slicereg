@@ -43,7 +43,7 @@ def launch_gui(create_qapp: bool = True):
     if create_qapp:
         app = QApplication([])
 
-    model = AppModel()
+    model = AppModel(_commands=commands)
     commands.load_atlas.atlas_updated.connect(model.on_atlas_update)
     commands.load_atlas_from_file.atlas_updated.connect(model.on_atlas_update)
     commands.load_section.section_loaded.connect(model.on_section_loaded)
@@ -54,19 +54,19 @@ def launch_gui(create_qapp: bool = True):
     commands.get_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
     commands.list_bgatlases.atlas_list_updated.connect(model.on_bgatlas_list_update)
 
-    slice_viewmodel = SliceViewModel(_model=model, _commands=commands)
+    slice_viewmodel = SliceViewModel(_model=model)
     slice_view = SliceView()
     slice_view.register(slice_viewmodel)
 
-    volume_viewmodel = VolumeViewModel(_model=model, _commands=commands)
+    volume_viewmodel = VolumeViewModel(_model=model)
     volume_view = VolumeView()
     volume_view.register(volume_viewmodel)
 
-    sidebar_viewmodel = SidebarViewModel(_model=model, _commands=commands)
+    sidebar_viewmodel = SidebarViewModel(_model=model)
     sidebar_view = SidebarView()
     sidebar_view.register(sidebar_viewmodel)
 
-    window_viewmodel = MainWindowViewModel(_model=model, _commands=commands)
+    window_viewmodel = MainWindowViewModel(_model=model)
     window = MainWindow(
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,

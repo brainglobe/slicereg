@@ -89,23 +89,24 @@ class VolumeViewModel(BaseViewModel):
         return self._model.section_transform
 
     def on_key_press(self, key: str):
+        model = self._model
         key_commands = {
-            '1': lambda: self._commands.select_channel(1),
-            '2': lambda: self._commands.select_channel(2),
-            '3': lambda: self._commands.select_channel(3),
-            '4': lambda: self._commands.select_channel(4),
-            'W': lambda: self._commands.move_section(z=30),
-            'S': lambda: self._commands.move_section(z=-30),
-            'A': lambda: self._commands.move_section(x=-30),
-            'D': lambda: self._commands.move_section(x=30),
-            'Q': lambda: self._commands.move_section(y=-30),
-            'E': lambda: self._commands.move_section(y=30),
-            'I': lambda: self._commands.move_section(rz=3),
-            'K': lambda: self._commands.move_section(rz=-3),
-            'J': lambda: self._commands.move_section(rx=-3),
-            'L': lambda: self._commands.move_section(rx=3),
-            'U': lambda: self._commands.move_section(ry=-3),
-            'O': lambda: self._commands.move_section(ry=3),
+            '1': lambda: model.select_channel(1),
+            '2': lambda: model.select_channel(2),
+            '3': lambda: model.select_channel(3),
+            '4': lambda: model.select_channel(4),
+            'W': lambda: model.move_section(z=30),
+            'S': lambda: model.move_section(z=-30),
+            'A': lambda: model.move_section(x=-30),
+            'D': lambda: model.move_section(x=30),
+            'Q': lambda: model.move_section(y=-30),
+            'E': lambda: model.move_section(y=30),
+            'I': lambda: model.move_section(rz=3),
+            'K': lambda: model.move_section(rz=-3),
+            'J': lambda: model.move_section(rx=-3),
+            'L': lambda: model.move_section(rx=3),
+            'U': lambda: model.move_section(ry=-3),
+            'O': lambda: model.move_section(ry=3),
             'Escape': use_app().quit,
         }
         if command := key_commands.get(key):

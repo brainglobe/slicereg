@@ -106,15 +106,15 @@ class SliceViewModel(BaseViewModel):
         scale = 4.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._commands.move_section(x=scaled_dx, z=scaled_dy)
-        self._commands.get_coord(i=x2, j=y2)
+        self._model.move_section(x=scaled_dx, z=scaled_dy)
+        self._model.get_coord(i=x2, j=y2)
 
     def on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         scale = 1.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._commands.move_section(rx=scaled_dx, rz=scaled_dy)
+        self._model.move_section(rx=scaled_dx, rz=scaled_dy)
 
     def on_mousewheel_move(self, increment: int):
         scale = 10
-        self._commands.move_section(y=scale * increment)
+        self._model.move_section(y=scale * increment)

@@ -1,8 +1,7 @@
 from unittest import mock
-from unittest.mock import patch
 
 import pytest
-from pytest_bdd import scenario, when, then, given
+from pytest_bdd import scenario, when, then
 
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
@@ -13,11 +12,10 @@ from slicereg.repos.section_repo import InMemorySectionRepo
 
 @pytest.fixture
 def view():
-    view = SidebarViewModel(
-        _model=AppModel(),
-        _commands=CommandProvider.from_repos(atlas_repo=AtlasRepo(), section_repo=InMemorySectionRepo())
-    )
-    view._commands.list_bgatlases.atlas_list_updated.connect(view._model.on_bgatlas_list_update)
+    commands = CommandProvider.from_repos(atlas_repo=AtlasRepo(), section_repo=InMemorySectionRepo())
+    model = AppModel(_commands=commands)
+    commands.list_bgatlases.atlas_list_updated.connect(model.on_bgatlas_list_update)
+    view = SidebarViewModel(_model=model)
     return view
 
 

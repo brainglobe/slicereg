@@ -171,13 +171,13 @@ class SidebarViewModel(BaseViewModel):
         return self._model.bgatlas_names
 
     def click_coronal_button(self):
-        self._commands.update_section(rx=0, ry=0, rz=-90)
+        self._model.update_section(rx=0, ry=0, rz=-90)
 
     def click_sagittal_button(self):
-        self._commands.update_section(rx=90, ry=0, rz=-90)
+        self._model.update_section(rx=90, ry=0, rz=-90)
 
     def click_axial_button(self):
-        self._commands.update_section(rx=0, ry=90, rz=-90)
+        self._model.update_section(rx=0, ry=90, rz=-90)
 
     def move_clim_slice_slider(self, values: Tuple[int, int]):
         self._model.update(clim_2d=values)
@@ -186,49 +186,49 @@ class SidebarViewModel(BaseViewModel):
         self._model.update(clim_3d=values)
 
     def click_quick_load_section_button(self):
-        self._commands.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")
+        self._model.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")
 
     def slide_resample_slider(self, val: int):
-        self._commands.resample_section(val)
+        self._model.resample_section(val)
 
     def slide_resolution_slider(self, val: int):
-        self._commands.update_section(res=val)
+        self._model.update_section(res=val)
 
     def click_update_bgatlas_list_button(self):
-        self._commands.list_bgatlases()
+        self._model.list_bgatlases()
 
     def submit_load_atlas_from_file(self, filename: str):
         if self.loadatlas_resolution is None:
             return
-        self._commands.load_atlas_from_file(filename=filename, resolution_um=self.loadatlas_resolution)
+        self._model.load_atlas_from_file(filename=filename, resolution_um=self.loadatlas_resolution)
 
     def click_load_bgatlas_button(self):
         print(f"Loading Atlas: {self.selected_bgatlas}")
-        self._commands.load_atlas(bgatlas_name=self.selected_bgatlas)
+        self._model.load_bgatlas(name=self.selected_bgatlas)
 
     def change_bgatlas_selection_dropdown(self, text: str):
         self.selected_bgatlas = text
 
     def submit_load_section_from_file(self, filename: str):
-        self._commands.load_section(filename=filename)
+        self._model.load_section(filename=filename)
 
     def change_x_slider(self, value: int):
-        self._commands.update_section(x=value)
+        self._model.update_section(x=value)
 
     def change_y_slider(self, value: int):
-        self._commands.update_section(y=value)
+        self._model.update_section(y=value)
 
     def change_z_slider(self, value: int):
-        self._commands.update_section(z=value)
+        self._model.update_section(z=value)
 
     def change_rotx_slider(self, value: int):
-        self._commands.update_section(rx=value)
+        self._model.update_section(rx=value)
 
     def change_roty_slider(self, value: int):
-        self._commands.update_section(ry=value)
+        self._model.update_section(ry=value)
 
     def change_rotz_slider(self, value: int):
-        self._commands.update_section(rz=value)
+        self._model.update_section(rz=value)
 
     def update_resolution_textbox(self, text: str):
         self.loadatlas_resolution = int(text)
