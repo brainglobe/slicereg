@@ -33,9 +33,9 @@ class BaseView(ABC):
         self.model: Optional[BaseViewModel] = None
         self.updated = Signal()
 
-    def update(self, model: BaseViewModel) -> None:
+    def update(self) -> None:
         self.updated.emit(model=self)
 
-    def register_viewmodel(self, model: BaseViewModel) -> None:
+    def register(self, model: BaseViewModel) -> None:
         self.model = model
         self.model.updated.connect(self.update)

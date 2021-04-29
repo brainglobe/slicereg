@@ -14,17 +14,15 @@ from vispy.visuals.transforms import MatrixTransform
 from slicereg.commands.utils import Signal
 from slicereg.gui.model import AppModel
 
-from slicereg.gui.views.base import BaseQtWidget
+from slicereg.gui.views.base import BaseQtWidget, BaseViewModel, BaseView
 from slicereg.gui.commands import CommandProvider
 
 
-class VolumeView(BaseQtWidget):
+class VolumeView(BaseQtWidget, BaseView):
 
-    def __init__(self, model: VolumeViewModel):
+    def __init__(self):
 
-        self.model = model
-        self.model.updated.connect(self.update)
-
+        self.model: Optional[VolumeViewModel] = None
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
@@ -46,38 +44,29 @@ class VolumeView(BaseQtWidget):
         return self._canvas.native
 
     def update(self) -> None:
-        if (volume := self.model.atlas_volume) is not None:
-            volume = volume.swapaxes(0, 2)
-            self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
-            self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
-            self._viewbox.camera.scale_factor = np.mean(volume.shape)
+        if self.model is not None:
+            if (volume := self.model.atlas_volume) is not None:
+                volume = volume.swapaxes(0, 2)
+                self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
+                self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
+                self._viewbox.camera.scale_factor = np.mean(volume.shape)
 
-        if (image := self.model.section_image) is not None:
-            self._section_image.set_data(image.T)
-            self._section_image.clim = (np.percentile(image, self.model.clim[0] * 100),
-                                        np.percentile(image, self.model.clim[1] * 100))
-            if (transform := self.model.section_transform) is not None:
-                self._section_image.transform = MatrixTransform(transform.T)
+            if (image := self.model.section_image) is not None:
+                self._section_image.set_data(image.T)
+                self._section_image.clim = (np.percentile(image, self.model.clim[0] * 100),
+                                            np.percentile(image, self.model.clim[1] * 100))
+                if (transform := self.model.section_transform) is not None:
+                    self._section_image.transform = MatrixTransform(transform.T)
 
-        self._canvas.update()
+            self._canvas.update()
 
     def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:
         """Router: Calls AppCommands functions based on the event that's given."""
-        self.model.on_key_press(event.key.name)
+        if self.model is not None:
+            self.model.on_key_press(event.key.name)
 
 
-@dataclass
-class VolumeViewModel:
-    _model: AppModel = field(repr=False)
-    _commands: CommandProvider = field(repr=False)
-    updated: Signal = field(default_factory=Signal, repr=False)
-
-    def __post_init__(self):
-        self._model.updated.connect(self.update)
-        self.update()
-
-    def update(self):
-        self.updated.emit()
+class VolumeViewModel(BaseViewModel):
 
     @property
     def clim(self) -> Tuple[float, float]:
