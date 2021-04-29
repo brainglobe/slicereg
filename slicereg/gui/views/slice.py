@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from dataclasses import field, dataclass
 from typing import Optional, Tuple
 
@@ -16,12 +17,20 @@ from slicereg.gui.model import AppModel
 from slicereg.gui.views.base import BaseQtView
 
 
-class SliceView(BaseQtView):
+class BaseSliceView(ABC):
 
-    def __init__(self, model: SliceViewModel):
+    @abstractmethod
+    def update(self, model: SliceViewModel) -> None:  ...
 
-        self.model = model
-        self.model.updated.connect(self.update)
+    @abstractmethod
+    def register_viewmodel(self, model: SliceViewModel) -> None: ...
+
+
+class SliceView(BaseQtView, BaseSliceView):
+
+    def __init__(self):
+
+        self.model: Optional[SliceViewModel] = None
 
         self._canvas = SceneCanvas()
 
@@ -52,36 +61,43 @@ class SliceView(BaseQtView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def update(self):
-        if (image := self.model.section_image) is not None:
+    def register_viewmodel(self, model: SliceViewModel) -> None:
+        self.model = model
+        self.model.updated.connect(self.update)
+
+    def update(self, model: SliceViewModel):
+        if (image := model.section_image) is not None:
             self._slice.set_data(image)
-            self._slice.clim = (np.percentile(image, self.model.clim[0] * 100),
-                                np.percentile(image, self.model.clim[1] * 100))
+            self._slice.clim = (np.percentile(image, model.clim[0] * 100), np.percentile(image, model.clim[1] * 100))
             self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
             self._viewbox.camera.scale_factor = image.shape[1]
 
-        if (image := self.model.atlas_image) is not None:
+        if (image := model.atlas_image) is not None:
             self._reference_slice.set_data(image)
             self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
 
         self._canvas.update()
 
     def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:
-        if event.type == 'mouse_press':
-            event.handled = True
+        if self.model:
+            if event.type == 'mouse_press':
+                event.handled = True
 
-        elif event.type == 'mouse_move':
-            if event.press_event is None:
-                return
-            x1, y1 = event.last_event.pos
-            x2, y2 = event.pos
-            if event.button == 1:  # Left Mouse Button
-                self.model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
-            elif event.button == 2:  # Right Mouse Button
-                self.model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
+            elif event.type == 'mouse_move':
+                if event.press_event is None:
+                    return
+                x1, y1 = event.last_event.pos
+                x2, y2 = event.pos
+                if event.button == 1:  # Left Mouse Button
+                    self.model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
+                elif event.button == 2:  # Right Mouse Button
+                    self.model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
 
-        elif event.type == 'mouse_wheel':
-            self.model.on_mousewheel_move(increment=int(event.delta[1]))
+            elif event.type == 'mouse_wheel':
+                self.model.on_mousewheel_move(increment=int(event.delta[1]))
+
+
+
 
 
 @dataclass
@@ -94,8 +110,11 @@ class SliceViewModel:
         self._model.updated.connect(self.update)
         self.update()
 
+    def register_view(self, view: BaseSliceView):
+        view.register_viewmodel(model=self)
+
     def update(self):
-        self.updated.emit()
+        self.updated.emit(model=self)
 
     @property
     def clim(self) -> Tuple[float, float]:

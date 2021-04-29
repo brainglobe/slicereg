@@ -1,12 +1,12 @@
 from unittest.mock import Mock
 
-from slicereg.gui.model import AppModel
 from slicereg.gui.commands import CommandProvider
+from slicereg.gui.main import launch_gui
+from slicereg.gui.model import AppModel
 from slicereg.gui.views.sidebar import SidebarView, SidebarViewModel
-from slicereg.gui.views.slice import SliceView, SliceViewModel
+from slicereg.gui.views.slice import SliceView
 from slicereg.gui.views.volume import VolumeView, VolumeViewModel
 from slicereg.gui.views.window import MainWindow, MainWindowViewModel
-from slicereg.gui.main import launch_gui
 
 
 def test_gui_launches_without_errors(qtbot):
@@ -20,8 +20,7 @@ def test_volume_view_launches_without_errors(qtbot):
 
 
 def test_slice_view_launches_without_errors(qtbot):
-    view = SliceView(model=SliceViewModel(_model=AppModel(), _commands=Mock(CommandProvider)))
-    qtbot.addWidget(view.qt_widget)
+    qtbot.addWidget(SliceView())
 
 
 def test_sidebar_view_launches_without_errors(qtbot):
