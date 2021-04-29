@@ -103,11 +103,11 @@ class SidebarView(BaseQtWidget, BaseView):
     def on_registration(self):
         self.resolution_textbox.textEdited.connect(lambda text: self.model.update_resolution_textbox(text=text))
         self.load_atlas_from_file_button.clicked.connect(self.show_load_atlas_dialog)
-        self.update_bgatlas_button.clicked.connect(lambda: self.model.click_update_bgatlas_list_button())
+        self.update_bgatlas_button.clicked.connect(self.model.click_update_bgatlas_list_button)
         self.list_atlas_dropdown.currentTextChanged.connect(lambda text: self.model.change_bgatlas_selection_dropdown(text=text))
-        self.load_atlas_button.clicked.connect(lambda: self.model.click_load_bgatlas_button())
+        self.load_atlas_button.clicked.connect(self.model.click_load_bgatlas_button)
         self.load_image_putton.clicked.connect(self.show_load_image_dialog)
-        self.quick_load_section_button.clicked.connect(lambda: self.model.click_quick_load_section_button())
+        self.quick_load_section_button.clicked.connect(self.model.click_quick_load_section_button)
         self.resample_widget.connect(lambda val: self.model.slide_resample_slider(val=val))
         self.resolution_widget.connect(lambda val: self.model.slide_resolution_slider(val=val))
         self.x_slider.connect(lambda val: self.model.change_x_slider(value=val))
@@ -116,9 +116,9 @@ class SidebarView(BaseQtWidget, BaseView):
         self.rotx_slider.connect(lambda val: self.model.change_rotx_slider(value=val))
         self.roty_slider.connect(lambda val: self.model.change_roty_slider(value=val))
         self.rotz_slider.connect(lambda val: self.model.change_rotz_slider(value=val))
-        self.coronal_button.clicked.connect(lambda: self.model.click_coronal_button())
-        self.sagittal_button.clicked.connect(lambda: self.model.click_sagittal_button())
-        self.axial_button.clicked.connect(lambda: self.model.click_axial_button())
+        self.coronal_button.clicked.connect(self.model.click_coronal_button)
+        self.sagittal_button.clicked.connect(self.model.click_sagittal_button)
+        self.axial_button.clicked.connect(self.model.click_axial_button)
         self.slice_clim_slider.valuesChanged.connect(lambda values: self.model.move_clim_slice_slider(values))
         self.volume_slice_clim_slider.valuesChanged.connect(lambda values: self.model.move_clim_volume_slider(values))
 
@@ -127,7 +127,8 @@ class SidebarView(BaseQtWidget, BaseView):
         return self.widget
 
     def update(self) -> None:
-        if self.model is not None and not self.model.bgatlas_names:
+        if self.model is not None:
+            self.list_atlas_dropdown.clear()
             self.list_atlas_dropdown.addItems(self.model.bgatlas_names)
 
     def show_load_image_dialog(self):
@@ -153,20 +154,9 @@ class SidebarView(BaseQtWidget, BaseView):
         self.model.submit_load_atlas_from_file(filename=filename)
 
 
-@dataclass
 class SidebarViewModel(BaseViewModel):
-    _model: AppModel = field(repr=False)
-    _commands: CommandProvider = field(repr=False)
-    updated: Signal = field(default_factory=Signal, repr=False)
     selected_bgatlas: Optional[str] = None
     loadatlas_resolution: Optional[int] = None
-
-    def __post_init__(self):
-        self._model.updated.connect(self.update)
-        self.update()
-
-    def update(self):
-        self.updated.emit()
 
     @property
     def clim_2d(self) -> Tuple[float, float]:

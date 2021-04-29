@@ -24,6 +24,7 @@ class BaseViewModel(ABC):
         self.updated = Signal()
 
     def update(self):
+        print(self.__class__.__name__, "updated.")
         self.updated.emit()
 
 
@@ -31,10 +32,10 @@ class BaseView(ABC):
 
     def __init__(self):
         self.model: Optional[BaseViewModel] = None
-        self.updated = Signal()
 
+    @abstractmethod
     def update(self) -> None:
-        self.updated.emit(model=self)
+        ...
 
     def on_registration(self):
         """Overwriteable method that's called after the viewmodel is registered."""
