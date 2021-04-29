@@ -63,12 +63,13 @@ def launch_gui(create_qapp: bool = True):
     volume_view.register(volume_viewmodel)
 
     sidebar_view = SidebarView(model=SidebarViewModel(_model=model, _commands=commands))
+    window_viewmodel = MainWindowViewModel(_model=model, _commands=commands)
     window = MainWindow(
-        model=MainWindowViewModel(_model=model),
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
         side_controls=sidebar_view.qt_widget,
     )
+    window.register(window_viewmodel)
 
 
     # Start the Event Loop!

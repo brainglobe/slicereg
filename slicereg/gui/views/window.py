@@ -1,26 +1,22 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
 from typing import Optional, Tuple
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel
 
-from slicereg.commands.utils import Signal
-from slicereg.gui.model import AppModel
-from slicereg.gui.views.base import BaseQtWidget
+from slicereg.gui.views.base import BaseQtWidget, BaseView, BaseViewModel
 
 
-class MainWindow(BaseQtWidget):
+class MainWindow(BaseQtWidget, BaseView):
 
     def __init__(
             self,
-            model: MainWindowViewModel,
             volume_widget: Optional[QWidget] = None,
             slice_widget: Optional[QWidget] = None,
             side_controls: Optional[QWidget] = None,
     ):
-        self.model = model
-        self.model.updated.connect(self.update)
+        BaseView.__init__(self)
+        self.model: Optional[MainWindowViewModel] = None
 
         self.win = QMainWindow()
 
@@ -51,16 +47,14 @@ class MainWindow(BaseQtWidget):
         return self.win
 
     def update(self) -> None:
-        self.win.setWindowTitle(self.model.title)
+        if self.model is not None:
+            self.win.setWindowTitle(self.model.title)
 
-        if (ij := self.model.highlighted_image_coords) and (xyz := self.model.highlighted_physical_coords):
-            self.image_coord_label.setText(f"(i={ij[0]}, j={ij[1]})   (x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})")
+            if (ij := self.model.highlighted_image_coords) and (xyz := self.model.highlighted_physical_coords):
+                self.image_coord_label.setText(f"(i={ij[0]}, j={ij[1]})   (x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})")
 
 
-@dataclass
-class MainWindowViewModel:
-    _model: AppModel = field(repr=False)
-    updated: Signal = field(default_factory=Signal, repr=False)
+class MainWindowViewModel(BaseViewModel):
 
     @property
     def title(self) -> str:
