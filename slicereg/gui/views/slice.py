@@ -51,18 +51,15 @@ class SliceView(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def register_viewmodel(self, model: SliceViewModel) -> None:
-        self.model = model
-        self.model.updated.connect(self.update)
-
-    def update(self, model: SliceViewModel):
-        if (image := model.section_image) is not None:
+    def update(self):
+        if (image := self.model.section_image) is not None:
             self._slice.set_data(image)
-            self._slice.clim = (np.percentile(image, model.clim[0] * 100), np.percentile(image, model.clim[1] * 100))
+            self._slice.clim = (np.percentile(image, self.model.clim[0] * 100),
+                                np.percentile(image, self.model.clim[1] * 100))
             self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
             self._viewbox.camera.scale_factor = image.shape[1]
 
-        if (image := model.atlas_image) is not None:
+        if (image := self.model.atlas_image) is not None:
             self._reference_slice.set_data(image)
             self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
 
@@ -87,24 +84,7 @@ class SliceView(BaseQtWidget, BaseView):
                 self.model.on_mousewheel_move(increment=int(event.delta[1]))
 
 
-
-
-
-@dataclass
 class SliceViewModel(BaseViewModel):
-    _model: AppModel = field(repr=False)
-    _commands: CommandProvider = field(repr=False)
-    updated: Signal = field(default_factory=Signal, repr=False)
-
-    def __post_init__(self):
-        self._model.updated.connect(self.update)
-        self.update()
-
-    def register_view(self, view: BaseView):
-        view.register_viewmodel(model=self)
-
-    def update(self):
-        self.updated.emit(model=self)
 
     @property
     def clim(self) -> Tuple[float, float]:
