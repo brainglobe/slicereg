@@ -36,6 +36,11 @@ class BaseView(ABC):
     def update(self) -> None:
         self.updated.emit(model=self)
 
+    def on_registration(self):
+        """Overwriteable method that's called after the viewmodel is registered."""
+        pass
+
     def register(self, model: BaseViewModel) -> None:
         self.model = model
         self.model.updated.connect(self.update)
+        self.on_registration()

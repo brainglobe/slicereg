@@ -62,7 +62,10 @@ def launch_gui(create_qapp: bool = True):
     volume_view = VolumeView()
     volume_view.register(volume_viewmodel)
 
-    sidebar_view = SidebarView(model=SidebarViewModel(_model=model, _commands=commands))
+    sidebar_viewmodel = SidebarViewModel(_model=model, _commands=commands)
+    sidebar_view = SidebarView()
+    sidebar_view.register(sidebar_viewmodel)
+
     window_viewmodel = MainWindowViewModel(_model=model, _commands=commands)
     window = MainWindow(
         volume_widget=volume_view.qt_widget,
