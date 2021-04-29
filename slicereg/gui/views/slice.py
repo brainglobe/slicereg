@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from abc import ABC, abstractmethod
 from dataclasses import field, dataclass
 from typing import Optional, Tuple
 
@@ -14,19 +13,10 @@ from vispy.visuals.filters import ColorFilter
 from slicereg.commands.utils import Signal
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
-from slicereg.gui.views.base import BaseQtView
+from slicereg.gui.views.base import BaseQtWidget, BaseView, BaseViewModel
 
 
-class BaseSliceView(ABC):
-
-    @abstractmethod
-    def update(self, model: SliceViewModel) -> None:  ...
-
-    @abstractmethod
-    def register_viewmodel(self, model: SliceViewModel) -> None: ...
-
-
-class SliceView(BaseQtView, BaseSliceView):
+class SliceView(BaseQtWidget, BaseView):
 
     def __init__(self):
 
@@ -101,7 +91,7 @@ class SliceView(BaseQtView, BaseSliceView):
 
 
 @dataclass
-class SliceViewModel:
+class SliceViewModel(BaseViewModel):
     _model: AppModel = field(repr=False)
     _commands: CommandProvider = field(repr=False)
     updated: Signal = field(default_factory=Signal, repr=False)
@@ -110,7 +100,7 @@ class SliceViewModel:
         self._model.updated.connect(self.update)
         self.update()
 
-    def register_view(self, view: BaseSliceView):
+    def register_view(self, view: BaseView):
         view.register_viewmodel(model=self)
 
     def update(self):

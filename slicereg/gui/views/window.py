@@ -7,10 +7,10 @@ from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel
 
 from slicereg.commands.utils import Signal
 from slicereg.gui.model import AppModel
-from slicereg.gui.views.base import BaseQtView
+from slicereg.gui.views.base import BaseQtWidget
 
 
-class MainWindow(BaseQtView):
+class MainWindow(BaseQtWidget):
 
     def __init__(
             self,

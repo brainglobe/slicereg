@@ -7,14 +7,14 @@ from typing import List, Tuple, Optional
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 
 from slicereg.commands.utils import Signal
-from slicereg.gui.views.base import BaseQtView
+from slicereg.gui.views.base import BaseQtWidget
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.model import AppModel
 from slicereg.gui.views.slider import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
 
-class SidebarView(BaseQtView):
+class SidebarView(BaseQtWidget):
 
     def __init__(self, model: SidebarViewModel):
 

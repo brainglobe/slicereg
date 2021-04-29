@@ -14,11 +14,11 @@ from vispy.visuals.transforms import MatrixTransform
 from slicereg.commands.utils import Signal
 from slicereg.gui.model import AppModel
 
-from slicereg.gui.views.base import BaseQtView
+from slicereg.gui.views.base import BaseQtWidget
 from slicereg.gui.commands import CommandProvider
 
 
-class VolumeView(BaseQtView):
+class VolumeView(BaseQtWidget):
 
     def __init__(self, model: VolumeViewModel):
 
