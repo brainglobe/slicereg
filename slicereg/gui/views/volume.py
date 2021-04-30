@@ -74,7 +74,8 @@ class VolumeViewModel(BaseViewModel):
 
     @clim.setter
     def clim(self, val):
-        self._model.update(clim_3d=val)
+        min, max = val
+        self._model.update(clim_3d=(min, max))
 
     @property
     def atlas_volume(self) -> Optional[ndarray]:

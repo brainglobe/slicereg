@@ -1,26 +1,30 @@
 from dataclasses import dataclass, field
-from typing import Tuple, Optional, List
 
+import numpy as np
 from numpy import ndarray
 
 from slicereg.commands.utils import Signal
 from slicereg.gui.commands import CommandProvider
 
+import typing as t
 
-@dataclass
-class AppModel:
+from traitlets import HasTraits, Int, Tuple, Float, Unicode, List
+from traittypes import Array
+
+@dataclass()
+class AppModel(HasTraits):
     _commands: CommandProvider
-    window_title: str = "bg-slicereg"
-    clim_2d: Tuple[float, float] = (0., 1.)
-    clim_3d: Tuple[float, float] = (0., 1.)
-    section_image: Optional[ndarray] = None
-    section_transform: Optional[ndarray] = None
-    atlas_image: Optional[ndarray] = None
-    atlas_volume: Optional[ndarray] = None
-    highlighted_image_coords: Optional[Tuple[int, int]] = None
-    highlighted_physical_coords: Optional[Tuple[float, float, float]] = None
-    bgatlas_names: List[str] = field(default_factory=list)
     updated: Signal = field(default_factory=Signal)
+    window_title = Unicode("bg-slicereg")
+    clim_2d = Tuple(Float(0.), Float(1.))
+    clim_3d = Tuple(Float(0.), Float(1.))
+    section_image = Array(np.array([[0]], dtype=np.uint16))
+    section_transform = Array(np.eye(4))
+    atlas_image = Array(np.array([[0]], dtype=np.uint16))
+    atlas_volume = Array(np.array([[[0]]], dtype=np.uint16))
+    highlighted_image_coords = Tuple(Int(0), Int(0))
+    highlighted_physical_coords = Tuple(Float(0.), Float(0.), Float(0.))
+    bgatlas_names = List(Unicode())
 
     def update(self, **attrs):
         print(attrs)
@@ -78,7 +82,7 @@ class AppModel:
     def list_bgatlases(self):
         self._commands.list_bgatlases()
 
-    def on_bgatlas_list_update(self, atlas_names: List[str]) -> None:
+    def on_bgatlas_list_update(self, atlas_names: t.List[str]) -> None:
         self.update(bgatlas_names=atlas_names)
 
     # Get Physical Coordinate from Image Coordinate
@@ -86,4 +90,5 @@ class AppModel:
         self._commands.get_coord(i=i, j=j)
 
     def on_image_coordinate_highlighted(self, image_coords, atlas_coords) -> None:
-        self.update(highlighted_image_coords=image_coords, highlighted_physical_coords=atlas_coords)
+        i, j = image_coords
+        self.update(highlighted_image_coords=(i, j), highlighted_physical_coords=atlas_coords)
