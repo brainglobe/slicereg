@@ -8,7 +8,7 @@ from slicereg.gui.commands import CommandProvider
 
 import typing as t
 
-from traitlets import HasTraits, Int, Tuple, Float, Unicode, List
+from traitlets import HasTraits, Int, Tuple, Float, Unicode, List, observe, All
 from traittypes import Array
 
 @dataclass()
@@ -27,12 +27,16 @@ class AppModel(HasTraits):
     bgatlas_names = List(Unicode())
 
     def update(self, **attrs):
-        print(attrs)
-        for attr, value in attrs.items():
-            if hasattr(self, attr):
-                setattr(self, attr, value)
-            else:
-                raise TypeError(f"Cannot set {attr}, {self.__class__.__name__} has no {attr} attribute.")
+        with self.hold_trait_notifications():
+            print(attrs)
+            for attr, value in attrs.items():
+                if hasattr(self, attr):
+                    setattr(self, attr, value)
+                else:
+                    raise TypeError(f"Cannot set {attr}, {self.__class__.__name__} has no {attr} attribute.")
+
+    @observe(All)
+    def on_any_change(self, change):
         self.updated.emit()
 
     # Load Section
