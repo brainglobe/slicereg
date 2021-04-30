@@ -16,14 +16,14 @@ class AppModel(HasTraits):
     _commands: CommandProvider
     updated: Signal = field(default_factory=Signal)
     window_title = Unicode("bg-slicereg")
-    clim_2d = Tuple(Float(0.), Float(1.))
-    clim_3d = Tuple(Float(0.), Float(1.))
+    clim_2d = Tuple((0., 1.))
+    clim_3d = Tuple((0., 1.))
     section_image = Array(np.array([[0]], dtype=np.uint16))
     section_transform = Array(np.eye(4))
     atlas_image = Array(np.array([[0]], dtype=np.uint16))
     atlas_volume = Array(np.array([[[0]]], dtype=np.uint16))
-    highlighted_image_coords = Tuple(Int(0), Int(0))
-    highlighted_physical_coords = Tuple(Float(0.), Float(0.), Float(0.))
+    highlighted_image_coords = Tuple((0, 0))
+    highlighted_physical_coords = Tuple((0, 0, 0))
     bgatlas_names = List(Unicode())
 
     def update(self, **attrs):
