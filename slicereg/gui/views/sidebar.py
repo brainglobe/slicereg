@@ -100,7 +100,7 @@ class SidebarView(BaseQtWidget, BaseView):
         self.volume_slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
         layout.addWidget(self.volume_slice_clim_slider)
 
-    def on_registration(self):
+    def on_registration(self, model=None):
         self.resolution_textbox.textEdited.connect(self.model.update_resolution_textbox)
         self.load_atlas_from_file_button.clicked.connect(self.show_load_atlas_dialog)
         self.update_bgatlas_button.clicked.connect(self.model.click_update_bgatlas_list_button)

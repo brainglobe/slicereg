@@ -36,11 +36,11 @@ class BaseView(ABC):
     def update(self, **kwargs) -> None:
         ...
 
-    def on_registration(self):
+    def on_registration(self, model=None):
         """Overwriteable method that's called after the viewmodel is registered."""
         pass
 
     def register(self, model: BaseViewModel) -> None:
         self.model = model
         self.model.updated.connect(self.update)
-        self.on_registration()
+        self.on_registration(model=model)

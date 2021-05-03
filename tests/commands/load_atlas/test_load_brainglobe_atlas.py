@@ -32,32 +32,16 @@ def model(atlas_volume):
     return model
 
 
-@pytest.fixture
-def sidebar_view(model):
-    return SidebarViewModel(_model=model)
-
-
-@pytest.fixture
-def volume_view(model):
-    return VolumeViewModel(_model=model)
-
-
 @scenario("load_atlas.feature", "Load Atlas")
 def test_outlined():
     ...
 
 
 @when("I load the 25um allen mouse atlas")
-def load_atlas(sidebar_view):
-    sidebar_view.change_bgatlas_selection_dropdown(text="allen_mouse_25um")
-    sidebar_view.click_load_bgatlas_button()
+def load_atlas(model):
+    model.load_bgatlas('allen_mouse_25um')
 
 
-@then("a 3D volume of the 25um allen reference atlas appears onscreen.")
-def check_3d_atlas_data_shown(volume_view, atlas_volume):
-    npt.assert_almost_equal(volume_view.atlas_volume, atlas_volume)
-
-
-@then("it is set as the current atlas for the session.")
-def check_atlas_set_in_repo(sidebar_view):
-    assert sidebar_view.selected_bgatlas == "allen_mouse_25um"
+@then("a 3D volume of the 25um allen reference atlas is loaded.")
+def check_3d_atlas_data_shown(model, atlas_volume):
+    npt.assert_almost_equal(model.atlas_volume, atlas_volume)

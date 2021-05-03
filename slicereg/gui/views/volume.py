@@ -20,7 +20,6 @@ class VolumeView(BaseQtWidget, BaseView):
 
     def __init__(self):
         super().__init__()
-        self.model: Optional[VolumeViewModel] = None
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
@@ -35,7 +34,9 @@ class VolumeView(BaseQtWidget, BaseView):
         self._section_image.attach(filters.ColorFilter((0., .5, 1., 1.)))
         self._section_image.set_gl_state('additive', depth_test=False)
 
-        self._canvas.events.key_press.connect(self._handle_vispy_key_press_events)
+    def on_registration(self, model=None):
+        if model is not None:
+            self._canvas.events.key_press.connect(lambda event: model.on_key_press(event.key.name))
 
     @property
     def qt_widget(self) -> QWidget:
@@ -52,22 +53,14 @@ class VolumeView(BaseQtWidget, BaseView):
 
         if (image := kwargs.get('_section_image')) is not None:
             self._section_image.set_data(image.T)
-            self._section_image.clim = (np.percentile(image, self.model.clim[0] * 100),
-                                        np.percentile(image, self.model.clim[1] * 100))
 
         if (transform := kwargs.get('section_transform')) is not None:
             self._section_image.transform = MatrixTransform(transform.T)
 
         if (clim := kwargs.get('clim')) is not None:
-            self._section_image.clim = (np.percentile(image, clim[0] * 100),
-                                        np.percentile(image, clim[1] * 100))
+            self._section_image.clim = clim
 
         self._canvas.update()
-
-    def _handle_vispy_key_press_events(self, event: KeyEvent) -> None:
-        """Router: Calls AppCommands functions based on the event that's given."""
-        if self.model is not None:
-            self.model.on_key_press(event.key.name)
 
 
 @dataclass(unsafe_hash=True)
@@ -80,28 +73,11 @@ class VolumeViewModel:
 
     def update(self, **kwargs):
         print(self.__class__.__name__, f"updated {kwargs}")
+        if (image := kwargs.get('_section_image')) is not None:
+            kwargs['clim'] = np.percentile(image, [self._model.clim_3d[0] * 100, self._model.clim_3d[1] * 100])
+        if (clim := kwargs.get('clim_3d')) is not None:
+            kwargs['clim'] = np.percentile(image, [clim[0] * 100, clim[1] * 100])
         self.updated.emit(**kwargs)
-
-    @property
-    def clim(self) -> Tuple[float, float]:
-        return self._model.clim_3d
-
-    @clim.setter
-    def clim(self, val):
-        min, max = val
-        self._model.clim_3d = (min, max)
-
-    @property
-    def atlas_volume(self) -> Optional[ndarray]:
-        return self._model.atlas_volume
-
-    @property
-    def section_image(self) -> Optional[ndarray]:
-        return self._model._section_image
-
-    @property
-    def section_transform(self) -> Optional[ndarray]:
-        return self._model.section_transform
 
     def on_key_press(self, key: str):
         model = self._model
