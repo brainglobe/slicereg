@@ -13,7 +13,7 @@ from vispy.visuals.transforms import MatrixTransform
 
 from slicereg.commands.utils import Signal
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.views.base import BaseQtWidget, BaseViewModel, BaseView
+from slicereg.gui.views.base import BaseQtWidget, BaseView
 
 
 class VolumeView(BaseQtWidget, BaseView):

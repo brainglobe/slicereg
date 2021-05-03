@@ -15,22 +15,7 @@ class BaseQtWidget(ABC):
     def qt_widget(self) -> QWidget: ...
 
 
-class BaseViewModel(ABC):
-
-    def __init__(self, _model: AppModel):
-        self._model = _model
-        self._model.updated.connect(self.update)
-        self.updated = Signal()
-
-    def update(self, **kwargs):
-        print(self.__class__.__name__, "updated.")
-        self.updated.emit(**kwargs)
-
-
 class BaseView(ABC):
-
-    def __init__(self):
-        self.model: Optional[BaseViewModel] = None
 
     @abstractmethod
     def update(self, **kwargs) -> None:
@@ -40,7 +25,6 @@ class BaseView(ABC):
         """Overwriteable method that's called after the viewmodel is registered."""
         pass
 
-    def register(self, model: BaseViewModel) -> None:
-        self.model = model
-        self.model.updated.connect(self.update)
+    def register(self, model) -> None:
+        model.updated.connect(self.update)
         self.on_registration(model=model)

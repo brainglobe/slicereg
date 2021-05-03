@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 from dataclasses import field, dataclass
-from functools import partial
 from typing import List, Tuple, Optional
 
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 
 from slicereg.commands.utils import Signal
-from slicereg.gui.views.base import BaseQtWidget, BaseViewModel, BaseView
-from slicereg.gui.commands import CommandProvider
 from slicereg.gui.app_model import AppModel
+from slicereg.gui.views.base import BaseQtWidget, BaseView
 from slicereg.gui.views.slider import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
@@ -18,7 +16,6 @@ class SidebarView(BaseQtWidget, BaseView):
 
     def __init__(self):
         BaseView.__init__(self)
-        self.model: Optional[SidebarViewModel] = None
 
         self.widget = QWidget()
 
@@ -100,27 +97,27 @@ class SidebarView(BaseQtWidget, BaseView):
         self.volume_slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
         layout.addWidget(self.volume_slice_clim_slider)
 
-    def on_registration(self, model=None):
-        self.resolution_textbox.textEdited.connect(self.model.update_resolution_textbox)
+    def on_registration(self, model):
+        self.resolution_textbox.textEdited.connect(model.update_resolution_textbox)
         self.load_atlas_from_file_button.clicked.connect(self.show_load_atlas_dialog)
-        self.update_bgatlas_button.clicked.connect(self.model.click_update_bgatlas_list_button)
-        self.list_atlas_dropdown.currentTextChanged.connect(self.model.change_bgatlas_selection_dropdown)
-        self.load_atlas_button.clicked.connect(self.model.click_load_bgatlas_button)
+        self.update_bgatlas_button.clicked.connect(model.click_update_bgatlas_list_button)
+        self.list_atlas_dropdown.currentTextChanged.connect(model.change_bgatlas_selection_dropdown)
+        self.load_atlas_button.clicked.connect(model.click_load_bgatlas_button)
         self.load_image_putton.clicked.connect(self.show_load_image_dialog)
-        self.quick_load_section_button.clicked.connect(self.model.click_quick_load_section_button)
-        self.resample_widget.connect(self.model.slide_resample_slider)
-        self.resolution_widget.connect(self.model.slide_resolution_slider)
-        self.x_slider.connect(self.model.change_x_slider)
-        self.y_slider.connect(self.model.change_y_slider)
-        self.z_slider.connect(self.model.change_z_slider)
-        self.rotx_slider.connect(self.model.change_rotx_slider)
-        self.roty_slider.connect(self.model.change_roty_slider)
-        self.rotz_slider.connect(self.model.change_rotz_slider)
-        self.coronal_button.clicked.connect(self.model.click_coronal_button)
-        self.sagittal_button.clicked.connect(self.model.click_sagittal_button)
-        self.axial_button.clicked.connect(self.model.click_axial_button)
-        self.slice_clim_slider.valuesChanged.connect(self.model.move_clim_slice_slider)
-        self.volume_slice_clim_slider.valuesChanged.connect(self.model.move_clim_volume_slider)
+        self.quick_load_section_button.clicked.connect(model.click_quick_load_section_button)
+        self.resample_widget.connect(model.slide_resample_slider)
+        self.resolution_widget.connect(model.slide_resolution_slider)
+        self.x_slider.connect(model.change_x_slider)
+        self.y_slider.connect(model.change_y_slider)
+        self.z_slider.connect(model.change_z_slider)
+        self.rotx_slider.connect(model.change_rotx_slider)
+        self.roty_slider.connect(model.change_roty_slider)
+        self.rotz_slider.connect(model.change_rotz_slider)
+        self.coronal_button.clicked.connect(model.click_coronal_button)
+        self.sagittal_button.clicked.connect(model.click_sagittal_button)
+        self.axial_button.clicked.connect(model.click_axial_button)
+        self.slice_clim_slider.valuesChanged.connect(model.move_clim_slice_slider)
+        self.volume_slice_clim_slider.valuesChanged.connect(model.move_clim_volume_slider)
 
     @property
     def qt_widget(self) -> QWidget:

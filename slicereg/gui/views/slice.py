@@ -11,9 +11,8 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from slicereg.commands.utils import Signal
-from slicereg.gui.commands import CommandProvider
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.views.base import BaseQtWidget, BaseView, BaseViewModel
+from slicereg.gui.views.base import BaseQtWidget, BaseView
 
 
 class SliceView(BaseQtWidget, BaseView):

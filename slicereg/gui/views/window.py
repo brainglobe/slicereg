@@ -1,10 +1,13 @@
 from __future__ import annotations
 
+from dataclasses import field, dataclass
 from typing import Optional, Tuple
 
 from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel
 
-from slicereg.gui.views.base import BaseQtWidget, BaseView, BaseViewModel
+from slicereg.commands.utils import Signal
+from slicereg.gui.app_model import AppModel
+from slicereg.gui.views.base import BaseQtWidget, BaseView
 
 
 class MainWindow(BaseQtWidget, BaseView):
@@ -54,7 +57,17 @@ class MainWindow(BaseQtWidget, BaseView):
                 self.image_coord_label.setText(f"(i={ij[0]}, j={ij[1]})   (x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})")
 
 
-class MainWindowViewModel(BaseViewModel):
+@dataclass(unsafe_hash=True)
+class MainWindowViewModel:
+    _model: AppModel = field(hash=False)
+    updated: Signal = field(default_factory=Signal)
+
+    def __post_init__(self):
+        self._model.updated.connect(self.update)
+
+    def update(self, **kwargs):
+        print(self.__class__.__name__, f"updated {kwargs}")
+        self.updated.emit(**kwargs)
 
     @property
     def title(self) -> str:
