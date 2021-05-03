@@ -4,8 +4,7 @@ Feature: Allen Mouse Brain Atlas
 
   Scenario: Load Atlas
     When I load the 25um allen mouse atlas
-    Then a 3D volume of the 25um allen reference atlas appears onscreen.
-    And it is set as the current atlas for the session.
+    Then a 3D volume of the 25um allen reference atlas is loaded.
 
   Scenario: Replace Atlas
     Given the 25um atlas is currently loaded
