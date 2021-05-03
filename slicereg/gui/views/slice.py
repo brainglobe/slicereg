@@ -51,7 +51,7 @@ class SliceView(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def update(self):
+    def update(self, **kwargs):
         if (image := self.model.section_image) is not None:
             self._slice.set_data(image)
             self._slice.clim = (np.percentile(image, self.model.clim[0] * 100),
@@ -84,7 +84,17 @@ class SliceView(BaseQtWidget, BaseView):
                 self.model.on_mousewheel_move(increment=int(event.delta[1]))
 
 
-class SliceViewModel(BaseViewModel):
+@dataclass(unsafe_hash=True)
+class SliceViewModel:
+    _model: AppModel = field(hash=False)
+    updated: Signal = field(default_factory=Signal)
+
+    def __post_init__(self):
+        self._model.updated.connect(self.update)
+
+    def update(self, **kwargs):
+        print(self.__class__.__name__, f"updated {kwargs}")
+        self.updated.emit(**kwargs)
 
     @property
     def clim(self) -> Tuple[float, float]:

@@ -22,9 +22,9 @@ class BaseViewModel(ABC):
         self._model.updated.connect(self.update)
         self.updated = Signal()
 
-    def update(self):
+    def update(self, **kwargs):
         print(self.__class__.__name__, "updated.")
-        self.updated.emit()
+        self.updated.emit(**kwargs)
 
 
 class BaseView(ABC):
@@ -33,7 +33,7 @@ class BaseView(ABC):
         self.model: Optional[BaseViewModel] = None
 
     @abstractmethod
-    def update(self) -> None:
+    def update(self, **kwargs) -> None:
         ...
 
     def on_registration(self):

@@ -126,7 +126,7 @@ class SidebarView(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self.widget
 
-    def update(self) -> None:
+    def update(self, **kwargs) -> None:
         if self.model is not None:
             self.list_atlas_dropdown.clear()
             self.list_atlas_dropdown.addItems(self.model.bgatlas_names)
@@ -154,9 +154,19 @@ class SidebarView(BaseQtWidget, BaseView):
         self.model.submit_load_atlas_from_file(filename=filename)
 
 
-class SidebarViewModel(BaseViewModel):
+@dataclass(unsafe_hash=True)
+class SidebarViewModel:
+    _model: AppModel = field(hash=False)
     selected_bgatlas: Optional[str] = None
     loadatlas_resolution: Optional[int] = None
+    updated: Signal = field(default_factory=Signal)
+
+    def __post_init__(self):
+        self._model.updated.connect(self.update)
+
+    def update(self, **kwargs):
+        print(self.__class__.__name__, f"updated {kwargs}")
+        self.updated.emit(**kwargs)
 
     @property
     def clim_2d(self) -> Tuple[float, float]:

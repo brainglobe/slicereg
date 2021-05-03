@@ -46,7 +46,7 @@ class MainWindow(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self.win
 
-    def update(self) -> None:
+    def update(self, **kwargs) -> None:
         if self.model is not None:
             self.win.setWindowTitle(self.model.title)
 
