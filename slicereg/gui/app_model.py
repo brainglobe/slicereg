@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Tuple, List
+from typing import Tuple, List, Optional
 
 import numpy as np
 from numpy import ndarray
@@ -18,7 +18,7 @@ class AppModel:
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
     _section_image: ndarray = np.array([[0]], dtype=np.uint16)
-    section_transform: ndarray = np.eye(4)
+    _section_transform: ndarray = np.eye(4)
     _atlas_image: ndarray = np.array([[0]], dtype=np.uint16)
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
     highlighted_image_coords: Tuple[int, int] = (0, 0)
@@ -29,6 +29,25 @@ class AppModel:
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
             self.updated.emit(**{key: value})
+
+    def _update_images(self,
+                       atlas_image: Optional[ndarray] = None,
+                       section_image: Optional[ndarray] = None,
+                       section_transform: Optional[ndarray] = None):
+        updates = {}
+        if atlas_image is not None:
+            self._atlas_image = atlas_image
+            updates['atlas_image'] = atlas_image
+
+        if section_image is not None:
+            self._section_image = section_image
+            updates['section_image'] = section_image
+
+        if section_transform is not None:
+            self._section_transform = section_transform
+            updates['section_transform'] = section_transform
+
+        self.updated.emit(**updates)
 
     @property
     def clim_2d_values(self):
@@ -43,16 +62,14 @@ class AppModel:
         self._commands.load_section(filename=filename)
 
     def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
-        self._section_image = image
-        self._atlas_image = atlas_image
-        self.section_transform = transform
+        self._update_images(atlas_image=atlas_image, section_image=image, section_transform=transform)
 
     # Select Channel
     def select_channel(self, num: int):
         self._commands.select_channel(channel=num)
 
     def on_channel_select(self, image: ndarray, channel: int) -> None:
-        self._section_image = image
+        self._update_images(section_image=image)
 
     # Resample Section
     def resample_section(self, resolution_um: float):
@@ -60,9 +77,7 @@ class AppModel:
 
     def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray,
                              atlas_image: ndarray) -> None:
-        self._section_image = section_image
-        self._atlas_image = atlas_image
-        self.section_transform = transform
+        self._update_images(atlas_image=atlas_image, section_image=section_image, section_transform=transform)
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
@@ -72,8 +87,7 @@ class AppModel:
         self._commands.update_section(**kwargs)
 
     def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
-        self._atlas_image = atlas_slice_image
-        self.section_transform = transform
+        self._update_images(atlas_image=atlas_slice_image, section_transform=transform)
 
     # Load Atlases
     def load_bgatlas(self, name: str):

@@ -16,7 +16,7 @@ class SidebarViewModel:
         self._model.updated.connect(self.update)
 
     def update(self, **kwargs):
-        print(self.__class__.__name__, f"updated {kwargs}")
+        print(self.__class__.__name__, f"updated {kwargs.keys()}")
         self.updated.emit(**kwargs)
 
     @property

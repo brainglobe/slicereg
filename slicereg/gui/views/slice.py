@@ -6,6 +6,7 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
+from slicereg.gui.view_models.slice import SliceViewDTO
 from slicereg.gui.views.base import BaseQtWidget, BaseView
 
 
@@ -59,16 +60,18 @@ class SliceView(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def update(self, **kwargs):
-        if (image := kwargs.get('_section_image')) is not None:
-            self._slice.set_data(image)
+    def update(self, dto):
+        dto: SliceViewDTO
 
-        if (clim := kwargs.get('clim')) is not None:
-            self._slice.clim = clim
+        if (image := dto.section_image) is not None:
+            self._slice.set_data(image)
             self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
             self._viewbox.camera.scale_factor = image.shape[1]
 
-        if (image := kwargs.get('_atlas_image')) is not None:
+        if (clim := dto.clim) is not None:
+            self._slice.clim = clim
+
+        if (image := dto.atlas_image) is not None:
             self._reference_slice.set_data(image)
             self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
 

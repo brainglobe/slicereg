@@ -15,8 +15,8 @@ class VolumeViewModel:
         self._model.updated.connect(self.update)
 
     def update(self, **kwargs):
-        print(self.__class__.__name__, f"updated {kwargs}")
-        if kwargs.get('_section_image') is not None:
+        print(self.__class__.__name__, f"updated {kwargs.keys()}")
+        if kwargs.get('section_image') is not None:
             kwargs['clim'] = self._model.clim_3d_values
         if kwargs.get('clim_3d') is not None:
             kwargs['clim'] = self._model.clim_3d_values

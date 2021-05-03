@@ -7,6 +7,13 @@ from slicereg.commands.utils import Signal
 from slicereg.gui.app_model import AppModel
 
 
+@dataclass
+class SliceViewDTO:
+    section_image: Optional[ndarray] = None
+    atlas_image: Optional[ndarray] = None
+    clim: Optional[Tuple[int, int]] = None
+
+
 @dataclass(unsafe_hash=True)
 class SliceViewModel:
     _model: AppModel = field(hash=False)
@@ -16,28 +23,16 @@ class SliceViewModel:
         self._model.updated.connect(self.update)
 
     def update(self, **kwargs):
-        print(self.__class__.__name__, f"updated {kwargs}")
-        if kwargs.get('_section_image') is not None:
-            kwargs['clim'] = self._model.clim_2d_values
-        if kwargs.get('clim_2d') is not None:
-            kwargs['clim'] = self._model.clim_2d_values
-        self.updated.emit(**kwargs)
-
-    @property
-    def clim(self) -> Tuple[float, float]:
-        return self._model.clim_2d
-
-    @clim.setter
-    def clim(self, val):
-        self._model.clim_2d = val
-
-    @property
-    def section_image(self) -> Optional[ndarray]:
-        return self._model._section_image
-
-    @property
-    def atlas_image(self) -> Optional[ndarray]:
-        return self._model._atlas_image
+        print(self.__class__.__name__, f"updated {kwargs.keys()}")
+        updates = SliceViewDTO()
+        if 'atlas_image' in kwargs:
+            updates.atlas_image = kwargs['atlas_image']
+        if 'section_image' in kwargs:
+            updates.section_image = kwargs['section_image']
+            updates.clim = self._model.clim_2d_values
+        if 'clim_2d' in kwargs:
+            updates.clim = self._model.clim_2d_values
+        self.updated.emit(dto=updates)
 
     def on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         scale = 4.

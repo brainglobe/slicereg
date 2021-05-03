@@ -44,7 +44,7 @@ class VolumeView(BaseQtWidget, BaseView):
             self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
             self._viewbox.camera.scale_factor = np.mean(volume.shape)
 
-        if (image := kwargs.get('_section_image')) is not None:
+        if (image := kwargs.get('section_image')) is not None:
             self._section_image.set_data(image.T)
 
         if (transform := kwargs.get('section_transform')) is not None:
