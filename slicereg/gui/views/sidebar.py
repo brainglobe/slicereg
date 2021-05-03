@@ -180,10 +180,10 @@ class SidebarViewModel(BaseViewModel):
         self._model.update_section(rx=0, ry=90, rz=-90)
 
     def move_clim_slice_slider(self, values: Tuple[int, int]):
-        self._model.update(clim_2d=values)
+        self._model.clim_2d = values
 
     def move_clim_volume_slider(self, values: Tuple[int, int]):
-        self._model.update(clim_3d=values)
+        self._model.clim_3d = values
 
     def click_quick_load_section_button(self):
         self._model.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")

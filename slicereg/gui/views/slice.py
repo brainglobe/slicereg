@@ -92,15 +92,15 @@ class SliceViewModel(BaseViewModel):
 
     @clim.setter
     def clim(self, val):
-        self._model.update(clim_2d=val)
+        self._model.clim_2d = val
 
     @property
     def section_image(self) -> Optional[ndarray]:
-        return self._model.section_image
+        return self._model._section_image
 
     @property
     def atlas_image(self) -> Optional[ndarray]:
-        return self._model.atlas_image
+        return self._model._atlas_image
 
     def on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         scale = 4.

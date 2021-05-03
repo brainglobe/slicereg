@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from dataclasses import field, dataclass
 from typing import Optional, Tuple
 
 import numpy as np
@@ -11,11 +10,7 @@ from vispy.scene import SceneCanvas, ViewBox, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from slicereg.commands.utils import Signal
-from slicereg.gui.model import AppModel
-
 from slicereg.gui.views.base import BaseQtWidget, BaseViewModel, BaseView
-from slicereg.gui.commands import CommandProvider
 
 
 class VolumeView(BaseQtWidget, BaseView):
@@ -75,7 +70,7 @@ class VolumeViewModel(BaseViewModel):
     @clim.setter
     def clim(self, val):
         min, max = val
-        self._model.update(clim_3d=(min, max))
+        self._model.clim_3d = (min, max)
 
     @property
     def atlas_volume(self) -> Optional[ndarray]:
@@ -83,7 +78,7 @@ class VolumeViewModel(BaseViewModel):
 
     @property
     def section_image(self) -> Optional[ndarray]:
-        return self._model.section_image
+        return self._model._section_image
 
     @property
     def section_transform(self) -> Optional[ndarray]:
