@@ -7,10 +7,14 @@ from packaging import version
 
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.views.sidebar import SidebarView, SidebarViewModel
-from slicereg.gui.views.slice import SliceView, SliceViewModel
-from slicereg.gui.views.volume import VolumeView, VolumeViewModel
-from slicereg.gui.views.window import MainWindow, MainWindowViewModel
+from slicereg.gui.views.sidebar import SidebarView
+from slicereg.gui.view_models.sidebar import SidebarViewModel
+from slicereg.gui.views.slice import SliceView
+from slicereg.gui.view_models.slice import SliceViewModel
+from slicereg.gui.views.volume import VolumeView
+from slicereg.gui.view_models.volume import VolumeViewModel
+from slicereg.gui.views.main_window import MainWindow
+from slicereg.gui.view_models.main_window import MainWindowViewModel
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 

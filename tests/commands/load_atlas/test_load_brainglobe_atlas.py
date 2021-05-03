@@ -7,8 +7,8 @@ from pytest_bdd import scenario, when, then
 
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.views.sidebar import SidebarViewModel
-from slicereg.gui.views.volume import VolumeViewModel
+from slicereg.gui.view_models.sidebar import SidebarViewModel
+from slicereg.gui.view_models.volume import VolumeViewModel
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.models.atlas import Atlas
 from slicereg.repos.atlas_repo import AtlasRepo
