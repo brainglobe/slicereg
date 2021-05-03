@@ -9,3 +9,4 @@ htmlcov/
 .venv/
 .vscode
 requirements.txt
+venv/
