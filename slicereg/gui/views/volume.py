@@ -74,9 +74,9 @@ class VolumeViewModel:
     def update(self, **kwargs):
         print(self.__class__.__name__, f"updated {kwargs}")
         if (image := kwargs.get('_section_image')) is not None:
-            kwargs['clim'] = np.percentile(image, [self._model.clim_3d[0] * 100, self._model.clim_3d[1] * 100])
+            kwargs['clim'] = tuple(np.percentile(image, [self._model.clim_3d[0] * 100, self._model.clim_3d[1] * 100]))
         if (clim := kwargs.get('clim_3d')) is not None:
-            kwargs['clim'] = np.percentile(image, [clim[0] * 100, clim[1] * 100])
+            kwargs['clim'] = tuple(np.percentile(self._model._section_image, [clim[0] * 100, clim[1] * 100]))
         self.updated.emit(**kwargs)
 
     def on_key_press(self, key: str):
