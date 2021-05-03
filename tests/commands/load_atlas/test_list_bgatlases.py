@@ -4,7 +4,7 @@ import pytest
 from pytest_bdd import scenario, when, then
 
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.views.sidebar import SidebarViewModel
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo

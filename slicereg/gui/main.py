@@ -6,7 +6,7 @@ from PySide2.QtWidgets import QApplication
 from packaging import version
 
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.views.sidebar import SidebarView, SidebarViewModel
 from slicereg.gui.views.slice import SliceView, SliceViewModel
 from slicereg.gui.views.volume import VolumeView, VolumeViewModel

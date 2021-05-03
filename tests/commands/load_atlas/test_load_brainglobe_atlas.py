@@ -6,7 +6,7 @@ from numpy import random
 from pytest_bdd import scenario, when, then
 
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.views.sidebar import SidebarViewModel
 from slicereg.gui.views.volume import VolumeViewModel
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader

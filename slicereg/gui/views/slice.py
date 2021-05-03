@@ -12,7 +12,7 @@ from vispy.visuals.filters import ColorFilter
 
 from slicereg.commands.utils import Signal
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.views.base import BaseQtWidget, BaseView, BaseViewModel
 
 

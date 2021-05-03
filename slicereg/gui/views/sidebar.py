@@ -9,7 +9,7 @@ from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QC
 from slicereg.commands.utils import Signal
 from slicereg.gui.views.base import BaseQtWidget, BaseViewModel, BaseView
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.views.slider import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
