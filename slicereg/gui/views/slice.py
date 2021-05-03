@@ -18,9 +18,6 @@ from slicereg.gui.views.base import BaseQtWidget, BaseView
 class SliceView(BaseQtWidget, BaseView):
 
     def __init__(self):
-
-        self.model: Optional[SliceViewModel] = None
-
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
@@ -41,31 +38,8 @@ class SliceView(BaseQtWidget, BaseView):
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
 
-        self._canvas.events.mouse_press.connect(self._vispy_mouse_event)
-        self._canvas.events.mouse_move.connect(self._vispy_mouse_event)
-        self._canvas.events.mouse_release.connect(self._vispy_mouse_event)
-        self._canvas.events.mouse_wheel.connect(self._vispy_mouse_event)
-
-    @property
-    def qt_widget(self) -> QWidget:
-        return self._canvas.native
-
-    def update(self, **kwargs):
-        if (image := self.model.section_image) is not None:
-            self._slice.set_data(image)
-            self._slice.clim = (np.percentile(image, self.model.clim[0] * 100),
-                                np.percentile(image, self.model.clim[1] * 100))
-            self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
-            self._viewbox.camera.scale_factor = image.shape[1]
-
-        if (image := self.model.atlas_image) is not None:
-            self._reference_slice.set_data(image)
-            self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
-
-        self._canvas.update()
-
-    def _vispy_mouse_event(self, event: SceneMouseEvent) -> None:
-        if self.model:
+    def on_registration(self, model):
+        def _vispy_mouse_event(event: SceneMouseEvent) -> None:
             if event.type == 'mouse_press':
                 event.handled = True
 
@@ -75,12 +49,36 @@ class SliceView(BaseQtWidget, BaseView):
                 x1, y1 = event.last_event.pos
                 x2, y2 = event.pos
                 if event.button == 1:  # Left Mouse Button
-                    self.model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
+                    model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
                 elif event.button == 2:  # Right Mouse Button
-                    self.model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
+                    model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
 
             elif event.type == 'mouse_wheel':
-                self.model.on_mousewheel_move(increment=int(event.delta[1]))
+                model.on_mousewheel_move(increment=int(event.delta[1]))
+
+        self._canvas.events.mouse_press.connect(_vispy_mouse_event)
+        self._canvas.events.mouse_move.connect(_vispy_mouse_event)
+        self._canvas.events.mouse_release.connect(_vispy_mouse_event)
+        self._canvas.events.mouse_wheel.connect(_vispy_mouse_event)
+
+    @property
+    def qt_widget(self) -> QWidget:
+        return self._canvas.native
+
+    def update(self, **kwargs):
+        if (image := kwargs.get('_section_image')) is not None:
+            self._slice.set_data(image)
+
+        if (clim := kwargs.get('clim')) is not None:
+            self._slice.clim = clim
+            self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
+            self._viewbox.camera.scale_factor = image.shape[1]
+
+        if (image := kwargs.get('_atlas_image')) is not None:
+            self._reference_slice.set_data(image)
+            self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
+
+        self._canvas.update()
 
 
 @dataclass(unsafe_hash=True)
@@ -93,6 +91,10 @@ class SliceViewModel:
 
     def update(self, **kwargs):
         print(self.__class__.__name__, f"updated {kwargs}")
+        if kwargs.get('_section_image') is not None:
+            kwargs['clim'] = self._model.clim_2d_values
+        if kwargs.get('clim_2d') is not None:
+            kwargs['clim'] = self._model.clim_2d_values
         self.updated.emit(**kwargs)
 
     @property

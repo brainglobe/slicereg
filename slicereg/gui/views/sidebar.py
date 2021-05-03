@@ -98,12 +98,34 @@ class SidebarView(BaseQtWidget, BaseView):
         layout.addWidget(self.volume_slice_clim_slider)
 
     def on_registration(self, model):
+        def show_load_image_dialog():
+            filename, filetype = QFileDialog.getOpenFileName(
+                parent=self.qt_widget,
+                caption="Load Image",
+                dir="../../../data/RA_10X_scans/MeA",
+                filter="OME-TIFF (*.ome.tiff)"
+            )
+            if not filename:
+                return
+            model.submit_load_section_from_file(filename=filename)
+
+        def show_load_atlas_dialog():
+            filename, filetype = QFileDialog.getOpenFileName(
+                parent=self.qt_widget,
+                caption="Load Atlas from File",
+                dir="..",
+                filter="Image Files (*.tif *.tiff *.nii)"
+            )
+            if not filename:
+                return
+            model.submit_load_atlas_from_file(filename=filename)
+
         self.resolution_textbox.textEdited.connect(model.update_resolution_textbox)
-        self.load_atlas_from_file_button.clicked.connect(self.show_load_atlas_dialog)
+        self.load_atlas_from_file_button.clicked.connect(show_load_atlas_dialog)
         self.update_bgatlas_button.clicked.connect(model.click_update_bgatlas_list_button)
         self.list_atlas_dropdown.currentTextChanged.connect(model.change_bgatlas_selection_dropdown)
         self.load_atlas_button.clicked.connect(model.click_load_bgatlas_button)
-        self.load_image_putton.clicked.connect(self.show_load_image_dialog)
+        self.load_image_putton.clicked.connect(show_load_image_dialog)
         self.quick_load_section_button.clicked.connect(model.click_quick_load_section_button)
         self.resample_widget.connect(model.slide_resample_slider)
         self.resolution_widget.connect(model.slide_resolution_slider)
@@ -124,31 +146,9 @@ class SidebarView(BaseQtWidget, BaseView):
         return self.widget
 
     def update(self, **kwargs) -> None:
-        if self.model is not None:
+        if (bgatlas_names := kwargs.get('bgatlas_names')) is not None:
             self.list_atlas_dropdown.clear()
-            self.list_atlas_dropdown.addItems(self.model.bgatlas_names)
-
-    def show_load_image_dialog(self):
-        filename, filetype = QFileDialog.getOpenFileName(
-            parent=self.qt_widget,
-            caption="Load Image",
-            dir="../../../data/RA_10X_scans/MeA",
-            filter="OME-TIFF (*.ome.tiff)"
-        )
-        if not filename:
-            return
-        self.model.submit_load_section_from_file(filename=filename)
-
-    def show_load_atlas_dialog(self):
-        filename, filetype = QFileDialog.getOpenFileName(
-            parent=self.qt_widget,
-            caption="Load Atlas from File",
-            dir="..",
-            filter="Image Files (*.tif *.tiff *.nii)"
-        )
-        if not filename:
-            return
-        self.model.submit_load_atlas_from_file(filename=filename)
+            self.list_atlas_dropdown.addItems(bgatlas_names)
 
 
 @dataclass(unsafe_hash=True)

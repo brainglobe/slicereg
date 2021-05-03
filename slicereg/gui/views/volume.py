@@ -34,9 +34,8 @@ class VolumeView(BaseQtWidget, BaseView):
         self._section_image.attach(filters.ColorFilter((0., .5, 1., 1.)))
         self._section_image.set_gl_state('additive', depth_test=False)
 
-    def on_registration(self, model=None):
-        if model is not None:
-            self._canvas.events.key_press.connect(lambda event: model.on_key_press(event.key.name))
+    def on_registration(self, model):
+        self._canvas.events.key_press.connect(lambda event: model.on_key_press(event.key.name))
 
     @property
     def qt_widget(self) -> QWidget:
@@ -73,10 +72,10 @@ class VolumeViewModel:
 
     def update(self, **kwargs):
         print(self.__class__.__name__, f"updated {kwargs}")
-        if (image := kwargs.get('_section_image')) is not None:
-            kwargs['clim'] = tuple(np.percentile(image, [self._model.clim_3d[0] * 100, self._model.clim_3d[1] * 100]))
-        if (clim := kwargs.get('clim_3d')) is not None:
-            kwargs['clim'] = tuple(np.percentile(self._model._section_image, [clim[0] * 100, clim[1] * 100]))
+        if kwargs.get('_section_image') is not None:
+            kwargs['clim'] = self._model.clim_3d_values
+        if kwargs.get('clim_3d') is not None:
+            kwargs['clim'] = self._model.clim_3d_values
         self.updated.emit(**kwargs)
 
     def on_key_press(self, key: str):

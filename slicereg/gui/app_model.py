@@ -30,6 +30,14 @@ class AppModel:
         if hasattr(self, 'updated'):
             self.updated.emit(**{key: value})
 
+    @property
+    def clim_2d_values(self):
+        return tuple(np.percentile(self._section_image, [self.clim_2d[0] * 100, self.clim_2d[1] * 100]))
+
+    @property
+    def clim_3d_values(self):
+        return tuple(np.percentile(self._section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100]))
+
     # Load Section
     def load_section(self, filename: str):
         self._commands.load_section(filename=filename)
