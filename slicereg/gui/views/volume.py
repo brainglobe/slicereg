@@ -36,19 +36,16 @@ class VolumeView(BaseQtWidget, BaseView):
         return self._canvas.native
 
     def update(self, **kwargs) -> None:
-        # if (volume := self.model.atlas_volume) is not None:
-        # if dto.atlas_volume is not None:
-        if (volume := kwargs.get('atlas_volume')) is not None:
-            volume = volume.swapaxes(0, 2)
-            self._atlas_volume.set_data(volume, clim=(np.min(volume), np.max(volume)))
-            self._viewbox.camera.center = tuple(dim / 2 for dim in volume.shape)
-            self._viewbox.camera.scale_factor = np.mean(volume.shape)
+        if kwargs.get('atlas_volume') is not None:
+            self._atlas_volume.set_data(kwargs['atlas_volume'], clim=kwargs['volume_clim'])
+            self._viewbox.camera.center = kwargs['camera_center']
+            self._viewbox.camera.scale_factor = kwargs['camera_distance']
 
         if (image := kwargs.get('section_image')) is not None:
-            self._section_image.set_data(image.T)
+            self._section_image.set_data(image)
 
         if (transform := kwargs.get('section_transform')) is not None:
-            self._section_image.transform = MatrixTransform(transform.T)
+            self._section_image.transform = MatrixTransform(transform)
 
         if (clim := kwargs.get('clim')) is not None:
             self._section_image.clim = clim
