@@ -11,7 +11,7 @@ from slicereg.models.image import Image
 from slicereg.models.image_transform import ImageTransformer
 from slicereg.models.physical_transform import PhysicalTransformer
 from slicereg.models.section import Section
-from tests.models.test_image import sensible_floats
+from tests.unit_tests.models.test_image import sensible_floats
 
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)
 
