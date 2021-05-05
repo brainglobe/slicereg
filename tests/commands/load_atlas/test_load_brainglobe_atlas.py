@@ -19,13 +19,16 @@ from slicereg.repos.section_repo import InMemorySectionRepo
 def atlas_volume():
     return random.normal(size=(4, 4, 4))
 
+@pytest.fixture
+def annotation_volume():
+    return random.normal(size=(4, 4, 4))
 
 @pytest.fixture
-def model(atlas_volume):
+def model(atlas_volume, annotation_volume):
     commands = CommandProvider.from_repos(atlas_repo=AtlasRepo(), section_repo=InMemorySectionRepo())
     reader = Mock(BrainglobeAtlasReader)
     reader.list_available.return_value = ['allen_mouse_25um']
-    reader.read.return_value = Atlas(volume=atlas_volume, resolution_um=25)
+    reader.read.return_value = Atlas(volume=atlas_volume, resolution_um=25, annotation_volume=annotation_volume)
     commands.load_atlas._reader = reader
     model = AppModel(_commands=commands)
     commands.load_atlas.atlas_updated.connect(model.on_atlas_update)
@@ -45,3 +48,7 @@ def load_atlas(model):
 @then("a 3D volume of the 25um allen reference atlas is loaded.")
 def check_3d_atlas_data_shown(model, atlas_volume):
     npt.assert_almost_equal(model.atlas_volume, atlas_volume)
+
+@then("a 3D annotation volume of the 25um allen reference atlas is loaded.")
+def check_3d_atlas_data_shown(model, annotation_volume):
+    npt.assert_almost_equal(model.annotation_volume, annotation_volume)
