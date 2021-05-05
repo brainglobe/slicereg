@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Tuple, Optional
 
+import numpy as np
 from numpy import ndarray
 
 from slicereg.commands.utils import Signal
@@ -25,19 +26,31 @@ class AtlasSectionViewModel:
     def update(self, **kwargs):
         print(self.__class__.__name__, f"updated {kwargs.keys()}")
         updates = AtlasSectionDTO()
-        if 'atlas_volume' in kwargs:
+        if 'atlas_volume' in kwargs or 'atlas_section_coords' in kwargs:
             updates.section_image = self.section_image
         if 'atlas_section_coords' in kwargs:
-            updates.coords = kwargs['atlas_section_coords']
+            updates.coords = tuple(np.delete(kwargs['atlas_section_coords'], self.axis))
         self.updated.emit(dto=updates)
 
     @property
     def section_image(self):
         if (volume := self._model.atlas_volume) is not None:
             section_slice_idx = self._model.atlas_section_coords[self.axis]
-            return volume.swapaxes(self.axis, 0)[section_slice_idx]
+            return np.rollaxis(volume, self.axis)[section_slice_idx]
         else:
             return None
 
     def on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
-        print(x1, y1, x2, y2)
+        visible_axes = np.delete(np.arange(3), self.axis)
+        coords = np.array(self._model.atlas_section_coords)
+        coords[visible_axes[0]] = y2
+        coords[visible_axes[1]] = x2
+        self._model.atlas_section_coords = tuple(coords)
+
+    @property
+    def axis_colors(self):
+        colors = [(1., 0., 0., 1.),
+                  (0., 1., 0., 1.),
+                  (0., 0., 1., 1.)]
+        visible_axes = np.delete(np.arange(3), self.axis)
+        return tuple(np.array(colors)[visible_axes])

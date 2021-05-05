@@ -21,7 +21,7 @@ class AppModel:
     _section_transform: ndarray = np.eye(4)
     _atlas_image: ndarray = np.array([[0]], dtype=np.uint16)
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
-    atlas_section_coords: Tuple[int, int, int] = (40, 40, 40)
+    atlas_section_coords: Tuple[int, int, int] = (0, 0, 0)
     highlighted_image_coords: Tuple[int, int] = (0, 0)
     highlighted_physical_coords: Tuple[int, int, int] = (0, 0, 0)
     bgatlas_names: List[str] = field(default_factory=list)
