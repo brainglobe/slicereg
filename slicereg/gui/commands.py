@@ -13,7 +13,7 @@ from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
-from slicereg.io.tifffile import OmeTiffImageReader
+from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import InMemorySectionRepo
 
@@ -36,7 +36,7 @@ class CommandProvider:
             load_atlas=LoadBrainglobeAtlasCommand(_repo=atlas_repo, _reader=BrainglobeAtlasReader()),
             load_atlas_from_file=LoadImioAtlasCommand(_repo=atlas_repo, _reader=ImioAtlasReader()),
             list_bgatlases=ListBgAtlasesCommand(_reader=BrainglobeAtlasReader()),
-            load_section=LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _reader=OmeTiffImageReader()),
+            load_section=LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _ome_reader=OmeTiffImageReader(), _tiff_reader=TiffImageReader()),
             select_channel=SelectChannelCommand(_repo=section_repo),
             move_section=MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
             update_section=UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),

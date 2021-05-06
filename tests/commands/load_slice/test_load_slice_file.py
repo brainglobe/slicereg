@@ -7,6 +7,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.commands.base import BaseImageReader
 from slicereg.commands.load_section import BaseSectionRepo, LoadImageCommand
 from slicereg.commands.utils import Signal
+from slicereg.io.tifffile import TiffImageReader
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.repos.atlas_repo import AtlasRepo
@@ -35,7 +36,7 @@ def reader():
 
 @pytest.fixture
 def command(repo, atlas_repo, reader):
-    return LoadImageCommand(_repo=repo, _atlas_repo=atlas_repo, section_loaded=Mock(Signal), _reader=reader)
+    return LoadImageCommand(_repo=repo, _atlas_repo=atlas_repo, section_loaded=Mock(Signal), _ome_reader=reader, _tiff_reader=Mock(TiffImageReader))
 
 
 @scenario("load_slice.feature", "Single Slice Import")
