@@ -1,8 +1,9 @@
 from dataclasses import dataclass, field
+from pathlib import Path
 
 from slicereg.commands.base import BaseSectionRepo
 from slicereg.commands.utils import Signal
-from slicereg.io.tifffile import OmeTiffImageReader
+from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
 from slicereg.models.image_transform import ImageTransformer
 from slicereg.models.physical_transform import PhysicalTransformer
 from slicereg.models.registration import Registration
@@ -14,16 +15,26 @@ from slicereg.repos.atlas_repo import AtlasRepo
 class LoadImageCommand:
     _repo: BaseSectionRepo
     _atlas_repo: AtlasRepo
-    _reader: OmeTiffImageReader
+    _ome_reader: OmeTiffImageReader
+    _tiff_reader: TiffImageReader
     section_loaded: Signal = field(default_factory=Signal)
 
     def __call__(self, filename: str) -> None:
+        filepath = Path(filename)
         atlas = self._atlas_repo.get_atlas()
         if not atlas:
             return
 
         cx, cy, cz = atlas.center
-        image = self._reader.read(filename=filename)
+
+        if '.ome' in filepath.suffixes:
+            image = self._ome_reader.read(filename=str(filepath))
+        elif filepath.suffix.lower() in ['.tiff', '.tif']:
+            image = self._tiff_reader.read(filename=str(filepath), resolution_um = 10)
+        else:
+            raise ValueError(f"{filepath.suffix} not supported")
+
+
         image = image.resample(resolution_um=10)
         section = Section(
             image=image,
