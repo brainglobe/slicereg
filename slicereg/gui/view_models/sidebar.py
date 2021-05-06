@@ -33,6 +33,7 @@ class SidebarViewModel:
 
     def update_section_resolution_textbox(self, resolution: str)->None:
         self._model.section_image_resolution = float(resolution)
+        print(resolution)
 
     def click_coronal_button(self):
         self._model.update_section(rx=0, ry=0, rz=-90)

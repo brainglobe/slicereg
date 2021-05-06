@@ -125,6 +125,7 @@ class SidebarView(BaseQtWidget, BaseView):
             model.submit_load_atlas_from_file(filename=filename)
 
         self.resolution_textbox.textEdited.connect(model.update_resolution_textbox)
+        self.section_resolution_textbox.textEdited.connect(model.update_section_resolution_textbox)
         self.load_atlas_from_file_button.clicked.connect(show_load_atlas_dialog)
         self.update_bgatlas_button.clicked.connect(model.click_update_bgatlas_list_button)
         self.list_atlas_dropdown.currentTextChanged.connect(model.change_bgatlas_selection_dropdown)
