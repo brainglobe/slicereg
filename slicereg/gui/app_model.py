@@ -18,6 +18,7 @@ class AppModel:
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
     _section_image: ndarray = np.array([[0]], dtype=np.uint16)
+    section_image_resolution: float = 10.
     _section_transform: ndarray = np.eye(4)
     _atlas_image: ndarray = np.array([[0]], dtype=np.uint16)
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
