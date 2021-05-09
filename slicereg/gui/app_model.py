@@ -54,7 +54,7 @@ class AppModel:
 
         if section_image_resolution is not None:
             self.section_image_resolution = section_image_resolution
-            updates['section_image_resolution'] = section_image_resolution
+            updates['section_image_resolution'] = section_image_resolution  # type: ignore
 
         self.updated.emit(**updates)
 
@@ -69,12 +69,13 @@ class AppModel:
     # Load Section
     def load_section(self, filename: str):
         result = self._commands.load_section(filename=filename)
-        self._update_images(
-            section_image=result.image,
-            section_transform=result.transform,
-            section_image_resolution=result.resolution_um,
-            atlas_image=result.atlas_image,
-        )
+        if result is not None:
+            self._update_images(
+                section_image=result.image,
+                section_transform=result.transform,
+                section_image_resolution=result.resolution_um,
+                atlas_image=result.atlas_image,
+            )
 
     # Select Channel
     def select_channel(self, num: int):
@@ -105,14 +106,15 @@ class AppModel:
     def load_bgatlas(self, name: str):
         result = self._commands.load_atlas(bgatlas_name=name)
         self.atlas_volume = result.volume
-        self.atlas_resolution = result.resolution
+        self.atlas_resolution = int(result.resolution)
         self.annotation_volume = result.annotation_volume
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         result = self._commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
         self.atlas_volume = result.volume
-        self.atlas_resolution = result.resolution
-        self.atlas_section_coords = tuple((np.array(self.atlas_volume.shape) * 0.5).astype(int).tolist())
+        self.atlas_resolution = int(result.resolution)
+        x, y, z = tuple((np.array(self.atlas_volume.shape) * 0.5).astype(int).tolist())
+        self.atlas_section_coords = x, y, z
 
     # List Brainglobe Atlases
     def list_bgatlases(self):

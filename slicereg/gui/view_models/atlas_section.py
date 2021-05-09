@@ -11,7 +11,7 @@ from slicereg.gui.app_model import AppModel
 @dataclass
 class AtlasSectionDTO:
     section_image: Optional[ndarray] = None
-    coords: Tuple[int, int] = None
+    coords: Optional[Tuple[int, int]] = None
 
 
 @dataclass(unsafe_hash=True)
@@ -45,7 +45,8 @@ class AtlasSectionViewModel:
         coords = np.array(self._model.atlas_section_coords)
         coords[visible_axes[0]] = int(np.clip(y2, 0, self._model.atlas_volume.shape[visible_axes[0]] - 1))
         coords[visible_axes[1]] = int(np.clip(x2, 0, self._model.atlas_volume.shape[visible_axes[1]] - 1))
-        self._model.atlas_section_coords = tuple(coords)
+        x, y, z = coords
+        self._model.atlas_section_coords = x, y, z
 
     @property
     def axis_colors(self):

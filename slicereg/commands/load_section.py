@@ -32,7 +32,7 @@ class LoadImageCommand:
         filepath = Path(filename)
         atlas = self._atlas_repo.get_atlas()
         if not atlas:
-            return
+            return None
 
         cx, cy, cz = atlas.center
 
