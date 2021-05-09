@@ -118,7 +118,7 @@ class SidebarView(BaseQtWidget, BaseView):
                 parent=self.qt_widget,
                 caption="Load Atlas from File",
                 dir="..",
-                filter="Image Files (*.tif *.tiff *.nii)"
+                filter="Image Files (*.tif *.tiff *.nii *.nii.gz)"
             )
             if not filename:
                 return
