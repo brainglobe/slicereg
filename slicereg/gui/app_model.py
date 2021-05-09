@@ -22,6 +22,7 @@ class AppModel:
     _section_transform: ndarray = np.eye(4)
     _atlas_image: ndarray = np.array([[0]], dtype=np.uint16)
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
+    atlas_section_coords: Tuple[int, int, int] = (0, 0, 0)
     highlighted_image_coords: Tuple[int, int] = (0, 0)
     highlighted_physical_coords: Tuple[int, int, int] = (0, 0, 0)
     bgatlas_names: List[str] = field(default_factory=list)
@@ -101,6 +102,7 @@ class AppModel:
     def on_atlas_update(self, volume: ndarray, annotation_volume: ndarray, transform: ndarray) -> None:
         self.atlas_volume = volume
         self.annotation_volume = annotation_volume
+        self.atlas_section_coords = tuple((np.array(self.atlas_volume.shape) * 0.5).astype(int).tolist())
 
     # List Brainglobe Atlases
     def list_bgatlases(self):
