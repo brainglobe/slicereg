@@ -18,7 +18,7 @@ class BaseQtWidget(ABC):
 class BaseView(ABC):
 
     @abstractmethod
-    def update(self, dto) -> None:
+    def update(self, **kwargs) -> None:
         ...
 
     def on_registration(self, model):

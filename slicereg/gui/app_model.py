@@ -18,6 +18,7 @@ class AppModel:
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
     _section_image: ndarray = np.array([[0]], dtype=np.uint16)
+    section_image_resolution: float = 10.
     _section_transform: ndarray = np.eye(4)
     _atlas_image: ndarray = np.array([[0]], dtype=np.uint16)
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
@@ -25,6 +26,7 @@ class AppModel:
     highlighted_image_coords: Tuple[int, int] = (0, 0)
     highlighted_physical_coords: Tuple[int, int, int] = (0, 0, 0)
     bgatlas_names: List[str] = field(default_factory=list)
+    annotation_volume: Optional[np.ndarray] = None
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
@@ -97,8 +99,9 @@ class AppModel:
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         self._commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
 
-    def on_atlas_update(self, volume: ndarray, transform: ndarray) -> None:
+    def on_atlas_update(self, volume: ndarray, annotation_volume: ndarray, transform: ndarray) -> None:
         self.atlas_volume = volume
+        self.annotation_volume = annotation_volume
 
     # List Brainglobe Atlases
     def list_bgatlases(self):

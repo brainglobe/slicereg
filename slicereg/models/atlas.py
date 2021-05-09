@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Tuple, Optional
 
 import numpy as np
 
@@ -10,6 +10,7 @@ from slicereg.models.base import FrozenUpdater
 class Atlas(FrozenUpdater):
     volume: np.ndarray = field(repr=False)
     resolution_um: float
+    annotation_volume: Optional[np.ndarray] = field(default=None, repr=False)
 
     @property
     def shared_space_transform(self) -> np.ndarray:

@@ -15,11 +15,15 @@ class BrainglobeAtlasReader:
         with redirect_stdout(StringIO()):  # blocks the BrainGlobeAtlas print to console
             bgatlas = BrainGlobeAtlas(atlas_name=path)
 
+        # Brainglobe atlases have a "reference volume" and an "annotation volume"
+        assert bgatlas.annotation.shape == bgatlas.reference.shape
         new_reference = bgatlas.space.map_stack_to("lip", bgatlas.reference)
+        new_annotation = bgatlas.space.map_stack_to("lip", bgatlas.annotation)
 
         return Atlas(
             volume=new_reference,
             resolution_um=bgatlas.resolution[0],
+            annotation_volume=new_annotation,
         )
 
     @staticmethod

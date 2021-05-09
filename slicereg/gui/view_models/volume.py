@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 
+import numpy as np
 from vispy.app import use_app
 
 from slicereg.commands.utils import Signal
@@ -16,10 +17,18 @@ class VolumeViewModel:
 
     def update(self, **kwargs):
         print(self.__class__.__name__, f"updated {kwargs.keys()}")
-        if kwargs.get('section_image') is not None:
+        if (image := kwargs.get('section_image')) is not None:
+            kwargs['section_image'] = image.T
             kwargs['clim'] = self._model.clim_3d_values
         if kwargs.get('clim_3d') is not None:
             kwargs['clim'] = self._model.clim_3d_values
+        if (transform := kwargs.get('section_transform')) is not None:
+            kwargs['section_transform'] = transform.T
+        if (volume := kwargs.get('atlas_volume')) is not None:
+            kwargs['camera_center'] = tuple(dim / 2 for dim in volume.shape)
+            kwargs['camera_distance'] = np.mean(volume.shape)
+            kwargs['volume_clim'] = (np.min(volume), np.max(volume))
+            kwargs['atlas_volume'] = volume.swapaxes(0, 2)
         self.updated.emit(**kwargs)
 
     def on_key_press(self, key: str):

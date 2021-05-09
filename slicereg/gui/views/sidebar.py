@@ -38,9 +38,18 @@ class SidebarView(BaseQtWidget, BaseView):
         self.load_atlas_button = QPushButton("Load Atlas")
         layout.addWidget(self.load_atlas_button)
 
+        # Load atlas controls
+        load_section_layout = QHBoxLayout()
+        load_section_layout.addWidget(QLabel(text='Res (μm):'))
+
+        self.section_resolution_textbox = QLineEdit()
+        load_section_layout.addWidget(self.section_resolution_textbox)
+
         # Load Section Buttons
-        self.load_image_putton = QPushButton("Load Section")
-        layout.addWidget(self.load_image_putton)
+        self.load_image_button = QPushButton("Load Section")
+        load_section_layout.addWidget(self.load_image_button)
+
+        layout.addLayout(load_section_layout)
 
         self.quick_load_section_button = QPushButton("Quick Load Section")
         layout.addWidget(self.quick_load_section_button)
@@ -98,7 +107,7 @@ class SidebarView(BaseQtWidget, BaseView):
                 parent=self.qt_widget,
                 caption="Load Image",
                 dir="../../../data/RA_10X_scans/MeA",
-                filter="OME-TIFF (*.ome.tiff)"
+                filter="OME-TIFF (*.ome.tiff) ;;TIFF (*.tif *.tiff)"
             )
             if not filename:
                 return
@@ -116,11 +125,12 @@ class SidebarView(BaseQtWidget, BaseView):
             model.submit_load_atlas_from_file(filename=filename)
 
         self.resolution_textbox.textEdited.connect(model.update_resolution_textbox)
+        self.section_resolution_textbox.textEdited.connect(model.update_section_resolution_textbox)
         self.load_atlas_from_file_button.clicked.connect(show_load_atlas_dialog)
         self.update_bgatlas_button.clicked.connect(model.click_update_bgatlas_list_button)
         self.list_atlas_dropdown.currentTextChanged.connect(model.change_bgatlas_selection_dropdown)
         self.load_atlas_button.clicked.connect(model.click_load_bgatlas_button)
-        self.load_image_putton.clicked.connect(show_load_image_dialog)
+        self.load_image_button.clicked.connect(show_load_image_dialog)
         self.quick_load_section_button.clicked.connect(model.click_quick_load_section_button)
         self.resample_widget.connect(model.slide_resample_slider)
         self.resolution_widget.connect(model.slide_resolution_slider)
