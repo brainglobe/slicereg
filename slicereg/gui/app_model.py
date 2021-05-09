@@ -94,13 +94,18 @@ class AppModel:
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
-        self._commands.move_section(**kwargs)
+        results = self._commands.move_section(**kwargs)
+        self._update_images(
+            atlas_image=results.atlas_slice_image,
+            section_transform=results.transform
+        )
 
     def update_section(self, **kwargs):
-        self._commands.update_section(**kwargs)
-
-    def on_section_moved(self, transform: ndarray, atlas_slice_image: ndarray) -> None:
-        self._update_images(atlas_image=atlas_slice_image, section_transform=transform)
+        results = self._commands.update_section(**kwargs)
+        self._update_images(
+            atlas_image=results.atlas_slice_image,
+            section_transform=results.transform
+        )
 
     # Load Atlases
     def load_bgatlas(self, name: str):

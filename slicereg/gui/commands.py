@@ -6,10 +6,9 @@ from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
 from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadImageCommand
-from slicereg.commands.move_section import MoveSectionCommand
+from slicereg.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
-from slicereg.commands.update_section_transform import UpdateSectionTransformCommand
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
