@@ -17,16 +17,17 @@ class AppModel:
     window_title: str = "bg-slicereg"
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
-    _section_image: ndarray = np.array([[0]], dtype=np.uint16)
-    section_image_resolution: float = 10.
-    _section_transform: ndarray = np.eye(4)
-    _atlas_image: ndarray = np.array([[0]], dtype=np.uint16)
+    section_image: Optional[ndarray] = None
+    section_image_resolution: Optional[float] = None
+    section_transform: Optional[ndarray] = None
+    atlas_image: Optional[ndarray] = None
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
     atlas_section_coords: Tuple[int, int, int] = (0, 0, 0)
     highlighted_image_coords: Tuple[int, int] = (0, 0)
     highlighted_physical_coords: Tuple[int, int, int] = (0, 0, 0)
     bgatlas_names: List[str] = field(default_factory=list)
     annotation_volume: Optional[np.ndarray] = None
+    atlas_resolution: Optional[int] = None
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
@@ -36,36 +37,44 @@ class AppModel:
     def _update_images(self,
                        atlas_image: Optional[ndarray] = None,
                        section_image: Optional[ndarray] = None,
-                       section_transform: Optional[ndarray] = None):
+                       section_transform: Optional[ndarray] = None,
+                       section_image_resolution: Optional[float] = None):
         updates = {}
         if atlas_image is not None:
-            self._atlas_image = atlas_image
+            self.atlas_image = atlas_image
             updates['atlas_image'] = atlas_image
 
         if section_image is not None:
-            self._section_image = section_image
+            self.section_image = section_image
             updates['section_image'] = section_image
 
         if section_transform is not None:
-            self._section_transform = section_transform
+            self.section_transform = section_transform
             updates['section_transform'] = section_transform
+
+        if section_image_resolution is not None:
+            self.section_image_resolution = section_image_resolution
+            updates['section_image_resolution'] = section_image_resolution
 
         self.updated.emit(**updates)
 
     @property
     def clim_2d_values(self):
-        return tuple(np.percentile(self._section_image, [self.clim_2d[0] * 100, self.clim_2d[1] * 100]))
+        return tuple(np.percentile(self.section_image, [self.clim_2d[0] * 100, self.clim_2d[1] * 100]))
 
     @property
     def clim_3d_values(self):
-        return tuple(np.percentile(self._section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100]))
+        return tuple(np.percentile(self.section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100]))
 
     # Load Section
     def load_section(self, filename: str):
-        self._commands.load_section(filename=filename)
-
-    def on_section_loaded(self, image: ndarray, atlas_image: ndarray, transform: ndarray, resolution_um: int) -> None:
-        self._update_images(atlas_image=atlas_image, section_image=image, section_transform=transform)
+        result = self._commands.load_section(filename=filename)
+        self._update_images(
+            section_image=result.image,
+            section_transform=result.transform,
+            section_image_resolution=result.resolution_um,
+            atlas_image=result.atlas_image,
+        )
 
     # Select Channel
     def select_channel(self, num: int):
@@ -94,22 +103,21 @@ class AppModel:
 
     # Load Atlases
     def load_bgatlas(self, name: str):
-        self._commands.load_atlas(bgatlas_name=name)
+        result = self._commands.load_atlas(bgatlas_name=name)
+        self.atlas_volume = result.volume
+        self.atlas_resolution = result.resolution
+        self.annotation_volume = result.annotation_volume
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
-        self._commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
-
-    def on_atlas_update(self, volume: ndarray, annotation_volume: ndarray, transform: ndarray) -> None:
-        self.atlas_volume = volume
-        self.annotation_volume = annotation_volume
+        result = self._commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
+        self.atlas_volume = result.volume
+        self.atlas_resolution = result.resolution
         self.atlas_section_coords = tuple((np.array(self.atlas_volume.shape) * 0.5).astype(int).tolist())
 
     # List Brainglobe Atlases
     def list_bgatlases(self):
-        self._commands.list_bgatlases()
-
-    def on_bgatlas_list_update(self, atlas_names: t.List[str]) -> None:
-        self.bgatlas_names = atlas_names
+        results = self._commands.list_bgatlases()
+        self.bgatlas_names = results.atlas_names
 
     # Get Physical Coordinate from Image Coordinate
     def get_coord(self, i: int, j: int):

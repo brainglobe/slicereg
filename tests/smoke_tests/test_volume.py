@@ -21,10 +21,9 @@ def test_key_press_w(view):
 
 
 def test_model_updated_clim():
-    MockCommandProvider = Mock(CommandProvider)
     MockSignal = Mock(Signal)
     image = np.linspace(0, 10, num=10)[:, np.newaxis]
-    model = AppModel(MockCommandProvider(), _section_image=image)
+    model = AppModel(_commands=Mock(CommandProvider), section_image=image)
 
     updated = MockSignal()
     view = VolumeViewModel(_model=model, updated=updated)

@@ -4,8 +4,7 @@ from dataclasses import dataclass
 
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
-from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand
-from slicereg.commands.load_atlas_from_file import LoadImioAtlasCommand
+from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
@@ -20,26 +19,46 @@ from slicereg.repos.section_repo import InMemorySectionRepo
 
 @dataclass(frozen=True)
 class CommandProvider:
-    load_atlas: LoadBrainglobeAtlasCommand
-    load_atlas_from_file: LoadImioAtlasCommand
-    list_bgatlases: ListBgAtlasesCommand
-    load_section: LoadImageCommand
-    select_channel: SelectChannelCommand
-    move_section: MoveSectionCommand
-    update_section: UpdateSectionTransformCommand
-    get_coord: GetPixelRegistrationDataCommand
-    resample_section: ResampleSectionCommand
+    _atlas_repo: AtlasRepo
+    _section_repo: InMemorySectionRepo
 
-    @classmethod
-    def from_repos(cls, atlas_repo: AtlasRepo, section_repo: InMemorySectionRepo) -> CommandProvider:
-        return cls(
-            load_atlas=LoadBrainglobeAtlasCommand(_repo=atlas_repo, _reader=BrainglobeAtlasReader()),
-            load_atlas_from_file=LoadImioAtlasCommand(_repo=atlas_repo, _reader=ImioAtlasReader()),
-            list_bgatlases=ListBgAtlasesCommand(_reader=BrainglobeAtlasReader()),
-            load_section=LoadImageCommand(_repo=section_repo, _atlas_repo=atlas_repo, _ome_reader=OmeTiffImageReader(), _tiff_reader=TiffImageReader()),
-            select_channel=SelectChannelCommand(_repo=section_repo),
-            move_section=MoveSectionCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
-            update_section=UpdateSectionTransformCommand(_section_repo=section_repo, _atlas_repo=atlas_repo),
-            get_coord=GetPixelRegistrationDataCommand(_repo=section_repo, _atlas_repo=atlas_repo),
-            resample_section=ResampleSectionCommand(_repo=section_repo, _atlas_repo=atlas_repo),
+    @property
+    def load_atlas(self) -> LoadBrainglobeAtlasCommand:
+        return LoadBrainglobeAtlasCommand(_repo=self._atlas_repo, _reader=BrainglobeAtlasReader())
+
+    @property
+    def load_section(self) -> LoadImageCommand:
+        return LoadImageCommand(
+            _repo=self._section_repo,
+            _atlas_repo=self._atlas_repo,
+            _ome_reader=OmeTiffImageReader(),
+            _tiff_reader=TiffImageReader()
         )
+
+    @property
+    def load_atlas_from_file(self) -> LoadAtlasFromFileCommand:
+        return LoadAtlasFromFileCommand(_repo=self._atlas_repo, _reader=ImioAtlasReader())
+
+    @property
+    def list_bgatlases(self) -> ListBgAtlasesCommand:
+        return ListBgAtlasesCommand(_reader=BrainglobeAtlasReader())
+
+    @property
+    def select_channel(self) -> SelectChannelCommand:
+        return SelectChannelCommand(_repo=self._section_repo)
+
+    @property
+    def move_section(self) -> MoveSectionCommand:
+        return MoveSectionCommand(_section_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+
+    @property
+    def update_section(self) -> UpdateSectionTransformCommand:
+        return UpdateSectionTransformCommand(_section_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+
+    @property
+    def get_coord(self) -> GetPixelRegistrationDataCommand:
+        return GetPixelRegistrationDataCommand(_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+
+    @property
+    def resample_section(self) -> ResampleSectionCommand:
+        return ResampleSectionCommand(_repo=self._section_repo, _atlas_repo=self._atlas_repo)

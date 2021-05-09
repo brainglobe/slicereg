@@ -1,19 +1,50 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
+from typing import Optional
 
-from slicereg.commands.utils import Signal
+from numpy import ndarray
+
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
+from slicereg.io.imio import ImioAtlasReader
 from slicereg.repos.atlas_repo import AtlasRepo
+
+
+@dataclass(frozen=True)
+class LoadAtlasResult:
+    volume: ndarray
+    transform: ndarray
+    resolution: float
+    annotation_volume: Optional[ndarray]
 
 
 @dataclass
 class LoadBrainglobeAtlasCommand:
     _repo: AtlasRepo
     _reader: BrainglobeAtlasReader
-    atlas_updated: Signal = field(default_factory=Signal)
 
-    def __call__(self, bgatlas_name: str):
+    def __call__(self, bgatlas_name: str) -> LoadAtlasResult:
         atlas = self._reader.read(path=bgatlas_name)
         self._repo.set_atlas(atlas=atlas)
-        self.atlas_updated.emit(volume=atlas.volume, annotation_volume=atlas.annotation_volume, transform=atlas.shared_space_transform)
+        return LoadAtlasResult(
+            volume=atlas.volume,
+            transform=atlas.shared_space_transform,
+            resolution=atlas.resolution_um,
+            annotation_volume=atlas.annotation_volume,
+        )
+
+
+@dataclass
+class LoadAtlasFromFileCommand:
+    _repo: AtlasRepo
+    _reader: ImioAtlasReader
+
+    def __call__(self, filename: str, resolution_um: int) -> LoadAtlasResult:
+        atlas = self._reader.read(path=filename, resolution_um=resolution_um)
+        self._repo.set_atlas(atlas=atlas)
+        return LoadAtlasResult(
+            volume=atlas.volume,
+            transform=atlas.shared_space_transform,
+            resolution=atlas.resolution_um,
+            annotation_volume=None,
+        )

@@ -39,25 +39,18 @@ def launch_gui(create_qapp: bool = True):
         os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
     # Initialize the State
-    commands = CommandProvider.from_repos(
-        atlas_repo=AtlasRepo(),
-        section_repo=InMemorySectionRepo(),
-    )
+    commands = CommandProvider(_atlas_repo=AtlasRepo(), _section_repo=InMemorySectionRepo())
 
     # Wire up the GUI
     if create_qapp:
         app = QApplication([])
 
     model = AppModel(_commands=commands)
-    commands.load_atlas.atlas_updated.connect(model.on_atlas_update)
-    commands.load_atlas_from_file.atlas_updated.connect(model.on_atlas_update)
-    commands.load_section.section_loaded.connect(model.on_section_loaded)
     commands.select_channel.channel_changed.connect(model.on_channel_select)
     commands.resample_section.section_resampled.connect(model.on_section_resampled)
     commands.move_section.section_moved.connect(model.on_section_moved)
     commands.update_section.section_moved.connect(model.on_section_moved)
     commands.get_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
-    commands.list_bgatlases.atlas_list_updated.connect(model.on_bgatlas_list_update)
 
     coronal_section_viewmodel = AtlasSectionViewModel(axis=0, _model=model)
     coronal_section_view = AtlasSectionView()

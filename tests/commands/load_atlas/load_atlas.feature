@@ -15,3 +15,7 @@ Feature: Allen Mouse Brain Atlas
   Scenario: List Available Brainglobe Atlases
     When I refresh the brainglobe atlas list
     Then I see a list of bg-atlasapi's available atlases.
+
+  Scenario: Load Atlas From File Using imio
+    When I load the mock.tiff atlas with 10um resolution
+    Then a 3D volume of the atlas appears onscreen

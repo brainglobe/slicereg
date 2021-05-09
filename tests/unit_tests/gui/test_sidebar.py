@@ -11,13 +11,9 @@ from slicereg.gui.view_models.sidebar import SidebarViewModel
 
 @pytest.fixture
 def view_model():
-    MockCommandProvider = Mock(CommandProvider)
-    MockSignal = Mock(Signal)
-
     image = np.linspace(0, 10, num=10)[:, np.newaxis]
-    model = AppModel(MockCommandProvider(), _section_image=image)
-    updated = MockSignal()
-    view = SidebarViewModel(_model=model, updated=updated)
+    model = AppModel(Mock(CommandProvider), section_image=image)
+    view = SidebarViewModel(_model=model, updated=Mock(Signal))
     return view
 
 def test_resolution_updated_with_section_text_change(view_model: SidebarViewModel):
