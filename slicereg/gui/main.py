@@ -63,13 +63,13 @@ def launch_gui(create_qapp: bool = True):
     coronal_section_view = AtlasSectionView()
     coronal_section_view.register(coronal_section_viewmodel)
 
-    sagittal_section_viewmodel = AtlasSectionViewModel(axis=1, _model=model)
-    sagittal_section_view = AtlasSectionView()
-    sagittal_section_view.register(sagittal_section_viewmodel)
-
-    axial_section_viewmodel = AtlasSectionViewModel(axis=2, _model=model)
+    axial_section_viewmodel = AtlasSectionViewModel(axis=1, _model=model)
     axial_section_view = AtlasSectionView()
     axial_section_view.register(axial_section_viewmodel)
+
+    sagittal_section_viewmodel = AtlasSectionViewModel(axis=2, _model=model)
+    sagittal_section_view = AtlasSectionView()
+    sagittal_section_view.register(sagittal_section_viewmodel)
 
     slice_viewmodel = SliceViewModel(_model=model)
     slice_view = SliceView()
@@ -86,8 +86,8 @@ def launch_gui(create_qapp: bool = True):
     window_viewmodel = MainWindowViewModel(_model=model)
     window = MainWindow(
         coronal_widget=coronal_section_view.qt_widget,
-        sagittal_widget=sagittal_section_view.qt_widget,
         axial_widget=axial_section_view.qt_widget,
+        sagittal_widget=sagittal_section_view.qt_widget,
         volume_widget=volume_view.qt_widget,
         slice_widget=slice_view.qt_widget,
         side_controls=sidebar_view.qt_widget,
