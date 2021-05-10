@@ -6,6 +6,9 @@ from numpy import random
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
+from slicereg.gui.view_models.sidebar import SidebarViewModel
+from slicereg.gui.view_models.slice import SliceViewModel
+from slicereg.gui.view_models.volume import VolumeViewModel
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader
@@ -36,7 +39,7 @@ def bg_atlases():
 
 @pytest.fixture
 def channels():
-    return np.empty((2, 3, 4))
+    return random.randint(0, 1000, size=(2, 3, 4))
 
 
 @pytest.fixture
@@ -64,3 +67,18 @@ def model(atlas_volume, second_volume, annotation_volume, channels, bg_atlases):
     )
     model = AppModel(_commands=commands)
     return model
+
+
+@pytest.fixture
+def sidebar(model: AppModel):
+    return SidebarViewModel(_model=model)
+
+
+@pytest.fixture
+def volume_view(model: AppModel):
+    return VolumeViewModel(_model=model)
+
+
+@pytest.fixture
+def slice_view(model: AppModel):
+    return SliceViewModel(_model=model)
