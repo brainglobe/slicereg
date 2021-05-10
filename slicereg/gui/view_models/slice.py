@@ -39,7 +39,9 @@ class SliceViewModel:
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
         self._model.move_section(x=scaled_dx, z=scaled_dy)
-        self._model.select_coord(i=x2, j=y2)
+
+    def on_mouse_move(self, x: int, y: int):
+        self._model.select_coord(i=x, j=y)
 
     def on_right_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         scale = 1.

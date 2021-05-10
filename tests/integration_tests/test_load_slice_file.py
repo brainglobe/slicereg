@@ -21,13 +21,15 @@ def no_sections_loaded(model: AppModel):
 
 
 @given("An atlas has been loaded")
-def atlas_is_loaded(model: AppModel):
+def atlas_is_loaded(sidebar, model):
+    sidebar.change_bgatlas_selection_dropdown("allen_mouse_25um")
+    sidebar.click_load_bgatlas_button()
     assert model.atlas_volume is not None
 
 
 @when("I load the file")
-def load_file(model: AppModel, filename: str):
-    model.load_section(filename=filename)
+def load_file(sidebar, filename: str):
+    sidebar.submit_load_section_from_file(filename=filename)
 
 
 @then("I should see the slice image onscreen in 3D")

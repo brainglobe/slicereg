@@ -10,8 +10,9 @@ def test_outlined():
 
 
 @when("I load the 25um allen mouse atlas")
-def load_atlas(model: AppModel):
-    model.load_bgatlas('allen_mouse_25um')
+def load_atlas(sidebar):
+    sidebar.change_bgatlas_selection_dropdown('allen_mouse_25um')
+    sidebar.click_load_bgatlas_button()
 
 
 @then("a 3D volume of the 25um allen reference atlas is loaded.")

@@ -7,8 +7,9 @@ def test_outlined():
 
 
 @when("I load the mock.tiff atlas with 10um resolution")
-def load_atlas(model):
-    model.load_atlas_from_file(filename='mock.tiff', resolution_um=10)
+def load_atlas(sidebar):
+    sidebar.update_resolution_textbox(text="10")
+    sidebar.submit_load_atlas_from_file(filename='mock.tiff')
 
 
 @then("a 3D volume of the atlas appears onscreen")

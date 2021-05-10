@@ -9,13 +9,13 @@ def test_impl():
 
 
 @given("I have loaded a section")
-def step_impl(model: AppModel):
-    model.load_section("myfile.ome.tiff")
+def step_impl(sidebar):
+    sidebar.submit_load_section_from_file("myfile.ome.tiff")
 
 
 @when("I indicate a section image coordinate")
-def step_impl(model: AppModel):
-    model.select_coord(i=1, j=2)
+def step_impl(slice_view):
+    slice_view.on_mouse_move(x=1, y=2)
 
 
 @then("the coordinate's 2D position and 3D position should appear")
