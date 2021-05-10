@@ -2,13 +2,13 @@ import numpy as np
 
 from slicereg.models.image import Image
 from slicereg.models.section import Section
-from slicereg.repos.section_repo import InMemorySectionRepo
+from slicereg.repos.section_repo import SectionRepo
 
 
 def test_repo_stores_multiple_sections():
     section1 = Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
     section2 = Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
-    repo = InMemorySectionRepo()
+    repo = SectionRepo()
     assert len(repo.sections) == 0
     repo.save_section(section=section1)
     assert len(repo.sections) == 1
@@ -18,7 +18,7 @@ def test_repo_stores_multiple_sections():
 
 def test_repo_overwrites_existing_section_even_if_properties_change():
     section = Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
-    repo = InMemorySectionRepo()
+    repo = SectionRepo()
     repo.save_section(section=section)
     assert len(repo.sections) == 1
     repo.save_section(section=section)

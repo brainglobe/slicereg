@@ -13,13 +13,13 @@ from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
 from slicereg.repos.atlas_repo import AtlasRepo
-from slicereg.repos.section_repo import InMemorySectionRepo
+from slicereg.repos.section_repo import SectionRepo
 
 
 @dataclass(frozen=True)
 class CommandProvider:
     _atlas_repo: AtlasRepo = field(default_factory=AtlasRepo)
-    _section_repo: InMemorySectionRepo = field(default_factory=InMemorySectionRepo)
+    _section_repo: SectionRepo = field(default_factory=SectionRepo)
     _bgatlas_reader: BrainglobeAtlasReader = field(default_factory=BrainglobeAtlasReader)
     _atlas_file_reader: ImioAtlasReader = field(default_factory=ImioAtlasReader)
     _section_tiff_reader: TiffImageReader = field(default_factory=TiffImageReader)

@@ -7,7 +7,7 @@ from slicereg.commands.base import BaseSectionRepo
 from slicereg.models.section import Section
 
 
-class InMemorySectionRepo(BaseSectionRepo):
+class SectionRepo(BaseSectionRepo):
 
     def __init__(self):
         self._sections: Dict[UUID, Section] = {}

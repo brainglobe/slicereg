@@ -7,8 +7,6 @@ from numpy import ndarray
 from slicereg.commands.utils import Signal
 from slicereg.gui.commands import CommandProvider
 
-import typing as t
-
 
 @dataclass
 class AppModel:
@@ -28,6 +26,8 @@ class AppModel:
     bgatlas_names: List[str] = field(default_factory=list)
     annotation_volume: Optional[np.ndarray] = None
     atlas_resolution: Optional[int] = None
+    num_channels: Optional[int] = None
+    current_channel: int = 1
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
@@ -38,7 +38,9 @@ class AppModel:
                        atlas_image: Optional[ndarray] = None,
                        section_image: Optional[ndarray] = None,
                        section_transform: Optional[ndarray] = None,
-                       section_image_resolution: Optional[float] = None):
+                       section_image_resolution: Optional[float] = None,
+                       num_channels: Optional[int] = None,
+                       ):
         updates = {}
         if atlas_image is not None:
             self.atlas_image = atlas_image
@@ -55,6 +57,11 @@ class AppModel:
         if section_image_resolution is not None:
             self.section_image_resolution = section_image_resolution
             updates['section_image_resolution'] = section_image_resolution  # type: ignore
+
+        if num_channels is not None:
+            self.num_channels = num_channels
+            self.current_channel = 1
+            updates['num_channels'] = num_channels
 
         self.updated.emit(**updates)
 
@@ -75,14 +82,14 @@ class AppModel:
                 section_transform=result.transform,
                 section_image_resolution=result.resolution_um,
                 atlas_image=result.atlas_image,
+                num_channels=result.num_channels,
             )
 
     # Select Channel
     def select_channel(self, num: int):
-        self._commands.select_channel(channel=num)
-
-    def on_channel_select(self, image: ndarray, channel: int) -> None:
-        self._update_images(section_image=image)
+        result = self._commands.select_channel(channel=num)
+        self.current_channel = result.current_channel
+        self._update_images(section_image=result.section_image)
 
     # Resample Section
     def resample_section(self, resolution_um: float):

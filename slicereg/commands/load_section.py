@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Tuple
 
 from numpy import ndarray
 
@@ -19,6 +19,7 @@ class LoadImageResult:
     transform: ndarray
     resolution_um: float
     atlas_image: ndarray
+    num_channels: int
 
 
 @dataclass
@@ -57,5 +58,6 @@ class LoadImageCommand:
             image=section.image.channels[0],
             transform=registration.image_to_volume_transform,
             resolution_um=image.resolution_um,
-            atlas_image=registration.slice_atlas().channels[0]
+            atlas_image=registration.slice_atlas().channels[0],
+            num_channels=image.num_channels,
         )

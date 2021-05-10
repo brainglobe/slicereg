@@ -4,5 +4,6 @@ Feature: Multichannel Image Data
 
   Scenario: Switch Channels
     Given I have loaded an image with 2 channels
+    And I am viewing channel 1
     When I ask for channel 2
     Then the onscreen section data changes to channel 2

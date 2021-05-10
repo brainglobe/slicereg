@@ -18,7 +18,7 @@ from slicereg.gui.view_models.volume import VolumeViewModel
 from slicereg.gui.views.main_window import MainWindow
 from slicereg.gui.view_models.main_window import MainWindowViewModel
 from slicereg.repos.atlas_repo import AtlasRepo
-from slicereg.repos.section_repo import InMemorySectionRepo
+from slicereg.repos.section_repo import SectionRepo
 
 np.set_printoptions(suppress=True, precision=2)
 
@@ -39,14 +39,13 @@ def launch_gui(create_qapp: bool = True):
         os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
     # Initialize the State
-    commands = CommandProvider(_atlas_repo=AtlasRepo(), _section_repo=InMemorySectionRepo())
+    commands = CommandProvider(_atlas_repo=AtlasRepo(), _section_repo=SectionRepo())
 
     # Wire up the GUI
     if create_qapp:
         app = QApplication([])
 
     model = AppModel(_commands=commands)
-    commands.select_channel.channel_changed.connect(model.on_channel_select)
     commands.resample_section.section_resampled.connect(model.on_section_resampled)
 
     coronal_section_viewmodel = AtlasSectionViewModel(axis=0, _model=model)
