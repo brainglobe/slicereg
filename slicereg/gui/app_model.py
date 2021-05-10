@@ -134,3 +134,18 @@ class AppModel:
         i, j = image_coords
         self.highlighted_image_coords = (i, j)
         self.highlighted_physical_coords = atlas_coords
+
+    def _section_image(self, axis):
+        if (volume := self.atlas_volume) is not None:
+            section_slice_idx = self.atlas_section_coords[axis]
+            return np.rollaxis(volume, axis)[section_slice_idx]
+        else:
+            return None
+
+    @property
+    def coronal_section_image(self):
+        if (volume := self.atlas_volume) is not None:
+            section_slice_idx = self.atlas_section_coords[0]
+            return volume[section_slice_idx]
+        else:
+            return None
