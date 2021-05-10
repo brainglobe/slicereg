@@ -1,16 +1,14 @@
 from unittest.mock import Mock
 
+import numpy.testing as npt
 import pytest
 from numpy import random
-import numpy.testing as npt
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.models.atlas import Atlas
-from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @pytest.fixture
@@ -25,14 +23,13 @@ def second_volume():
 
 @pytest.fixture
 def model(first_volume, second_volume):
-    commands = Mock(CommandProvider)
     reader = Mock(BrainglobeAtlasReader)
     reader.list_available.return_value = ['allen_mouse_25um']
     reader.read.side_effect = [
         Atlas(volume=first_volume, resolution_um=25),
         Atlas(volume=second_volume, resolution_um=100),
     ]
-    commands.load_atlas = LoadBrainglobeAtlasCommand(_reader=reader, _repo=AtlasRepo())
+    commands = CommandProvider(_bgatlas_reader=reader)
     model = AppModel(_commands=commands)
     model.load_bgatlas("first_atlas")
     return model

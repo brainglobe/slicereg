@@ -5,13 +5,11 @@ from pytest_bdd import scenario, when, then
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
-from slicereg.repos.atlas_repo import AtlasRepo
-from slicereg.repos.section_repo import InMemorySectionRepo
 
 
 @pytest.fixture
 def model():
-    return AppModel(_commands=CommandProvider(_atlas_repo=AtlasRepo(), _section_repo=InMemorySectionRepo()))
+    return AppModel(_commands=CommandProvider())
 
 
 @scenario("load_atlas.feature", "List Available Brainglobe Atlases")

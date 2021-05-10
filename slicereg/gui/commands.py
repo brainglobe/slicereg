@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
 from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
@@ -18,29 +18,33 @@ from slicereg.repos.section_repo import InMemorySectionRepo
 
 @dataclass(frozen=True)
 class CommandProvider:
-    _atlas_repo: AtlasRepo
-    _section_repo: InMemorySectionRepo
+    _atlas_repo: AtlasRepo = field(default_factory=AtlasRepo)
+    _section_repo: InMemorySectionRepo = field(default_factory=InMemorySectionRepo)
+    _bgatlas_reader: BrainglobeAtlasReader = field(default_factory=BrainglobeAtlasReader)
+    _atlas_file_reader: ImioAtlasReader = field(default_factory=ImioAtlasReader)
+    _section_tiff_reader: TiffImageReader = field(default_factory=TiffImageReader)
+    _section_ome_reader: OmeTiffImageReader = field(default_factory=OmeTiffImageReader)
 
     @property
     def load_atlas(self) -> LoadBrainglobeAtlasCommand:
-        return LoadBrainglobeAtlasCommand(_repo=self._atlas_repo, _reader=BrainglobeAtlasReader())
+        return LoadBrainglobeAtlasCommand(_repo=self._atlas_repo, _reader=self._bgatlas_reader)
 
     @property
     def load_section(self) -> LoadImageCommand:
         return LoadImageCommand(
             _repo=self._section_repo,
             _atlas_repo=self._atlas_repo,
-            _ome_reader=OmeTiffImageReader(),
-            _tiff_reader=TiffImageReader()
+            _ome_reader=self._section_ome_reader,
+            _tiff_reader=self._section_tiff_reader
         )
 
     @property
     def load_atlas_from_file(self) -> LoadAtlasFromFileCommand:
-        return LoadAtlasFromFileCommand(_repo=self._atlas_repo, _reader=ImioAtlasReader())
+        return LoadAtlasFromFileCommand(_repo=self._atlas_repo, _reader=self._atlas_file_reader)
 
     @property
     def list_bgatlases(self) -> ListBgAtlasesCommand:
-        return ListBgAtlasesCommand(_reader=BrainglobeAtlasReader())
+        return ListBgAtlasesCommand(_reader=self._bgatlas_reader)
 
     @property
     def select_channel(self) -> SelectChannelCommand:

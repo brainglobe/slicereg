@@ -5,13 +5,10 @@ import pytest
 from numpy import random
 from pytest_bdd import scenario, when, then
 
-from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.models.atlas import Atlas
-from slicereg.repos.atlas_repo import AtlasRepo
-from slicereg.repos.section_repo import InMemorySectionRepo
 
 
 @pytest.fixture
@@ -24,11 +21,10 @@ def annotation_volume():
 
 @pytest.fixture
 def model(atlas_volume, annotation_volume):
-    commands = Mock(CommandProvider)
     reader = Mock(BrainglobeAtlasReader)
     reader.list_available.return_value = ['allen_mouse_25um']
     reader.read.return_value = Atlas(volume=atlas_volume, resolution_um=25, annotation_volume=annotation_volume)
-    commands.load_atlas = LoadBrainglobeAtlasCommand(_reader = reader, _repo=AtlasRepo())
+    commands = CommandProvider(_bgatlas_reader=reader)
     model = AppModel(_commands=commands)
     return model
 
