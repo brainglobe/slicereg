@@ -23,8 +23,8 @@ class MainWindowViewModel:
 
     @property
     def highlighted_image_coords(self) -> Optional[Tuple[int, int]]:
-        return self._model.highlighted_image_coords
+        return self._model.selected_ij
 
     @property
     def highlighted_physical_coords(self) -> Optional[Tuple[float, float, float]]:
-        return self._model.highlighted_physical_coords
+        return self._model.selected_xyz

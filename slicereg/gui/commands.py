@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
+from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
 from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadImageCommand
@@ -59,8 +59,8 @@ class CommandProvider:
         return UpdateSectionTransformCommand(_section_repo=self._section_repo, _atlas_repo=self._atlas_repo)
 
     @property
-    def get_coord(self) -> GetPixelRegistrationDataCommand:
-        return GetPixelRegistrationDataCommand(_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+    def get_atlas_coord(self) -> MapImageCoordToAtlasCoordCommand:
+        return MapImageCoordToAtlasCoordCommand(_repo=self._section_repo, _atlas_repo=self._atlas_repo)
 
     @property
     def resample_section(self) -> ResampleSectionCommand:

@@ -48,7 +48,7 @@ def launch_gui(create_qapp: bool = True):
     model = AppModel(_commands=commands)
     commands.select_channel.channel_changed.connect(model.on_channel_select)
     commands.resample_section.section_resampled.connect(model.on_section_resampled)
-    commands.get_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
+    commands.get_atlas_coord.coord_data_requested.connect(model.on_image_coordinate_highlighted)
 
     coronal_section_viewmodel = AtlasSectionViewModel(axis=0, _model=model)
     coronal_section_view = AtlasSectionView()

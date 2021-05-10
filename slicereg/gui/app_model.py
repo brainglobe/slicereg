@@ -23,8 +23,8 @@ class AppModel:
     atlas_image: Optional[ndarray] = None
     atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
     atlas_section_coords: Tuple[int, int, int] = (0, 0, 0)
-    highlighted_image_coords: Tuple[int, int] = (0, 0)
-    highlighted_physical_coords: Tuple[int, int, int] = (0, 0, 0)
+    selected_ij: Tuple[int, int] = (0, 0)
+    selected_xyz: Tuple[float, float, float] = (0, 0, 0)
     bgatlas_names: List[str] = field(default_factory=list)
     annotation_volume: Optional[np.ndarray] = None
     atlas_resolution: Optional[int] = None
@@ -127,13 +127,10 @@ class AppModel:
         self.bgatlas_names = results.atlas_names
 
     # Get Physical Coordinate from Image Coordinate
-    def get_coord(self, i: int, j: int):
-        self._commands.get_coord(i=i, j=j)
-
-    def on_image_coordinate_highlighted(self, image_coords, atlas_coords) -> None:
-        i, j = image_coords
-        self.highlighted_image_coords = (i, j)
-        self.highlighted_physical_coords = atlas_coords
+    def select_coord(self, i: int, j: int):
+        results = self._commands.get_atlas_coord(i=i, j=j)
+        self.selected_ij = results.ij
+        self.selected_xyz = results.xyz
 
     def _section_image(self, axis):
         if (volume := self.atlas_volume) is not None:

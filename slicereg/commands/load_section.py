@@ -32,7 +32,7 @@ class LoadImageCommand:
         filepath = Path(filename)
         atlas = self._atlas_repo.get_atlas()
         if not atlas:
-            return None
+            raise RuntimeError('No atlas loaded')
 
         cx, cy, cz = atlas.center
 

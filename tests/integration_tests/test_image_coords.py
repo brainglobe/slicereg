@@ -5,8 +5,12 @@ import pytest
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.commands.base import BaseSectionRepo
-from slicereg.commands.get_coords import GetPixelRegistrationDataCommand
+from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.utils import Signal
+from slicereg.gui.app_model import AppModel
+from slicereg.gui.commands import CommandProvider
+from slicereg.io.tifffile import OmeTiffImageReader
+from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
 from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
@@ -18,36 +22,26 @@ def test_impl():
 
 
 @pytest.fixture
-def repo():
-    repo = Mock(BaseSectionRepo)
-    repo.sections = [
-        Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12.))
-    ]
-    return repo
-
-
-@pytest.fixture
-def command(repo):
-    return GetPixelRegistrationDataCommand(_repo=repo, _atlas_repo=Mock(AtlasRepo), coord_data_requested=Mock(Signal))
+def model():
+    ome_reader = Mock(OmeTiffImageReader)
+    ome_reader.read.return_value = Image(channels=np.empty((2, 3, 4)), resolution_um=12.)
+    atlas_repo = AtlasRepo()
+    atlas_repo.set_atlas(Atlas(volume=np.empty((2, 3, 4)), resolution_um=10))
+    model = AppModel(_commands=CommandProvider(_atlas_repo=atlas_repo, _section_ome_reader=ome_reader))
+    return model
 
 
 @given("I have loaded a section")
-def step_impl(repo: BaseSectionRepo):
-    assert len(repo.sections) == 1
+def step_impl(model: AppModel):
+    model.load_section("myfile.ome.tiff")
 
 
 @when("I indicate a section image coordinate")
-def step_impl(command: GetPixelRegistrationDataCommand):
-    command(i=2, j=1)
+def step_impl(model: AppModel):
+    model.select_coord(i=1, j=2)
 
 
 @then("the coordinate's 2D position and 3D position should appear")
-def step_impl(command: GetPixelRegistrationDataCommand):
-    output = command.coord_data_requested.emit.call_args[1]
-    assert hasattr(output["image_coords"], "i")
-    assert output['image_coords'].i == 2
-    assert hasattr(output["image_coords"], "j")
-    assert output['image_coords'].j == 1
-    assert hasattr(output["atlas_coords"], "x")
-    assert hasattr(output["atlas_coords"], "y")
-    assert hasattr(output["atlas_coords"], "z")
+def step_impl(model: AppModel):
+    assert model.selected_ij == (1, 2)
+    assert isinstance(model.selected_xyz, tuple) and all(isinstance(el, float) for el in model.selected_xyz)
