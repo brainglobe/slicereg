@@ -12,7 +12,7 @@ def model():
     return AppModel(_commands=CommandProvider())
 
 
-@scenario("load_atlas.feature", "List Available Brainglobe Atlases")
+@scenario("features/load_atlas.feature", "List Available Brainglobe Atlases")
 def test_outlined():
     ...
 

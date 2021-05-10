@@ -12,7 +12,7 @@ from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
-@scenario("section_affine_registration.feature", "Check Pixel Coordinate in Atlas Space")
+@scenario("features/section_affine_registration.feature", "Check Pixel Coordinate in Atlas Space")
 def test_impl():
     ...
 

@@ -35,7 +35,7 @@ def model(first_volume, second_volume):
     return model
 
 
-@scenario("load_atlas.feature", "Replace Atlas")
+@scenario("features/load_atlas.feature", "Replace Atlas")
 def test_outlined():
     ...
 

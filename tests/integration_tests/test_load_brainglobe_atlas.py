@@ -29,7 +29,7 @@ def model(atlas_volume, annotation_volume):
     return model
 
 
-@scenario("load_atlas.feature", "Load Atlas")
+@scenario("features/load_atlas.feature", "Load Atlas")
 def test_outlined():
     ...
 

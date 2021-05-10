@@ -13,7 +13,7 @@ from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
-@scenario("resample.feature", "Section Resample")
+@scenario("features/resample.feature", "Section Resample")
 def test_impl():
     ...
 

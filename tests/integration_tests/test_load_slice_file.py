@@ -31,7 +31,7 @@ def model():
     return model
 
 
-@scenario("load_slice.feature", "Single Slice Import")
+@scenario("features/load_slice.feature", "Single Slice Import")
 def test_outlined():
     ...
 

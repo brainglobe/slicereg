@@ -19,7 +19,7 @@ def model():
     return model
 
 
-@scenario("load_atlas.feature", "Load Atlas From File Using imio")
+@scenario("features/load_atlas.feature", "Load Atlas From File Using imio")
 def test_outlined():
     ...
 

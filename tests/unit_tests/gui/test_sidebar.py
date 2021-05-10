@@ -16,6 +16,7 @@ def view_model():
     view = SidebarViewModel(_model=model, updated=Mock(Signal))
     return view
 
+
 def test_resolution_updated_with_section_text_change(view_model: SidebarViewModel):
     view_model.update_section_resolution_textbox('6.28')
-    assert view_model._model.section_image_resolution==6.28
+    assert view_model._model.section_image_resolution == 6.28

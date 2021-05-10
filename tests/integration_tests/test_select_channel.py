@@ -24,7 +24,7 @@ def command(repo):
     return SelectChannelCommand(_repo=repo, channel_changed=Mock(Signal))
 
 
-@scenario("multichannel.feature", "Switch Channels")
+@scenario("features/multichannel.feature", "Switch Channels")
 def test_impl():
     ...
 

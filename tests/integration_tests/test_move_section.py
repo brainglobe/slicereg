@@ -24,7 +24,7 @@ def model():
     return model
 
 
-@scenario("section_affine_registration.feature", "Set Section's 3D Coordinates")
+@scenario("features/section_affine_registration.feature", "Move Section in 3D")
 def test_impl():
     ...
 
@@ -36,12 +36,12 @@ def step_impl(model: AppModel):
     assert model.section_transform is not None
 
 
-@when("I give new translation and/or rotation values")
+@when("I ask for the section to be translated and rotated")
 def step_impl(model: AppModel):
-    model.update_section(x=2, y=5, z=10, rx=0, ry=0, rz=0, res=1)
+    model.move_section(x=2, y=5, z=10, rx=0, ry=0, rz=0)
 
 
-@then("the image is updated with a new 3D transform with indicated paramters set to the requested value")
+@then("the image is updated with a new 3D transform")
 def step_impl(model: AppModel):
     assert model.section_transform is not None  # todo: figure out how to detect a change
 
