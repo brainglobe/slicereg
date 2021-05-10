@@ -15,9 +15,21 @@ def step_impl(sidebar, model: AppModel):
     assert model.section_transform is not None
 
 
-@when("I ask for the section to be translated and rotated")
-def step_impl(sidebar):
-    sidebar.change_z_slider(value=10)
+@when("I <operation_type> the section along the <axis> axis by <amount>")
+def step_impl(sidebar, operation_type, axis, amount):
+    controls = {
+        'translate': {
+            'x': sidebar.change_x_slider,
+            'y': sidebar.change_y_slider,
+            'z': sidebar.change_z_slider,
+        },
+        'rotate': {
+            'x': sidebar.change_rotx_slider,
+            'y': sidebar.change_roty_slider,
+            'z': sidebar.change_rotz_slider,
+        }
+    }
+    controls[operation_type][axis](value=float(amount))
 
 
 @then("the image is updated with a new 3D transform")
