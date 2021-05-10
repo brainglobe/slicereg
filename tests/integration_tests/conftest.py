@@ -6,6 +6,7 @@ from numpy import random
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
+from slicereg.gui.view_models.main_window import MainWindowViewModel
 from slicereg.gui.view_models.sidebar import SidebarViewModel
 from slicereg.gui.view_models.slice import SliceViewModel
 from slicereg.gui.view_models.volume import VolumeViewModel
@@ -82,3 +83,8 @@ def volume_view(model: AppModel):
 @pytest.fixture
 def slice_view(model: AppModel):
     return SliceViewModel(_model=model)
+
+
+@pytest.fixture
+def main_window(model: AppModel):
+    return MainWindowViewModel(_model=model)
