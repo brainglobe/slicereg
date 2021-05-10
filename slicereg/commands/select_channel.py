@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from numpy import ndarray
 
 from slicereg.commands.base import BaseSectionRepo
-from slicereg.commands.utils import Signal
 
 
 @dataclass(frozen=True)
@@ -17,7 +16,6 @@ class SelectChannelResult:
 @dataclass
 class SelectChannelCommand:
     _repo: BaseSectionRepo
-    channel_changed: Signal = Signal()
 
     def __call__(self, channel: int):
         section = self._repo.sections[0]
