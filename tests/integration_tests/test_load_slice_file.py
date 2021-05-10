@@ -1,34 +1,6 @@
-from unittest.mock import Mock
-
-import numpy as np
-import pytest
-from numpy import random
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.base import BaseImageReader
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.commands import CommandProvider
-from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
-from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
-
-
-@pytest.fixture
-def model():
-    reader = Mock(BaseImageReader)
-    reader.read.return_value = Image(channels=np.empty((2, 3, 2)), resolution_um=10)
-
-    atlas_reader = Mock(BrainglobeAtlasReader)
-    atlas_reader.list_available.return_value = ['allen_mouse_25um']
-    atlas_reader.read.return_value = Atlas(
-        volume=random.normal(size=(4, 4, 4)),
-        resolution_um=25,
-        annotation_volume=random.normal(size=(4, 4, 4))
-    )
-    commands = CommandProvider(_section_ome_reader=reader, _bgatlas_reader=atlas_reader)
-    model = AppModel(_commands=commands)
-    model.load_bgatlas('test_atlas')
-    return model
 
 
 @scenario("features/load_slice.feature", "Single Slice Import")

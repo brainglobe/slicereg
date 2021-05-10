@@ -1,27 +1,6 @@
-from unittest.mock import Mock
-
-import numpy as np
-import pytest
-from numpy import random
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.commands import CommandProvider
-from slicereg.io.tifffile import OmeTiffImageReader
-from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
-from slicereg.repos.atlas_repo import AtlasRepo
-
-
-@pytest.fixture
-def model():
-    atlas_repo = AtlasRepo()
-    atlas_repo.set_atlas(Atlas(volume=random.normal(size=(10, 10, 10)), resolution_um=25))
-    reader = Mock(OmeTiffImageReader)
-    reader.read.return_value = Image(channels=np.empty((2, 3, 4)), resolution_um=12.)
-    commands = CommandProvider(_section_ome_reader=reader, _atlas_repo=atlas_repo)
-    model = AppModel(_commands=commands)
-    return model
 
 
 @scenario("features/section_affine_registration.feature", "Set Section's 3D Coordinates")
