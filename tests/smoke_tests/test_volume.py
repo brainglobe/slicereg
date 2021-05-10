@@ -16,7 +16,7 @@ def view():
 
 
 def test_key_press_w(view):
-    view.on_key_press('W')
+    view.press_key('W')
     view._model.move_section.assert_called_with(z=30)
 
 

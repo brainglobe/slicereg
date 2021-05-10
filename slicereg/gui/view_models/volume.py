@@ -31,7 +31,7 @@ class VolumeViewModel:
             kwargs['atlas_volume'] = volume.swapaxes(0, 2)
         self.updated.emit(**kwargs)
 
-    def on_key_press(self, key: str):
+    def press_key(self, key: str):
         model = self._model
         key_commands = {
             '1': lambda: model.select_channel(1),

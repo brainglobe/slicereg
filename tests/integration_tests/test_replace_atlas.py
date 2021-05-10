@@ -8,15 +8,17 @@ def test_outlined():
 
 
 @given("the 25um atlas is currently loaded")
-def load_first_atlas(model, atlas_volume):
-    model.load_bgatlas("first_atlas")
+def load_first_atlas(sidebar, model, atlas_volume):
+    sidebar.change_bgatlas_selection_dropdown("first_atlas")
+    sidebar.click_load_bgatlas_button()
     assert model.atlas_resolution == 25
     npt.assert_almost_equal(model.atlas_volume, atlas_volume)
 
 
 @when("I ask for a 100um atlas")
-def load_second_atlas(model):
-    model.load_bgatlas(name="allen_mouse_100um")
+def load_second_atlas(sidebar):
+    sidebar.change_bgatlas_selection_dropdown("allen_mouse_100um")
+    sidebar.click_load_bgatlas_button()
 
 
 @then("a 3D volume of the 100um allen reference atlas appears.")

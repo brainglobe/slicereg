@@ -29,7 +29,7 @@ class VolumeView(BaseQtWidget, BaseView):
         self._section_image.set_gl_state('additive', depth_test=False)
 
     def on_registration(self, model):
-        self._canvas.events.key_press.connect(lambda event: model.on_key_press(event.key.name))
+        self._canvas.events.key_press.connect(lambda event: model.press_key(event.key.name))
 
     @property
     def qt_widget(self) -> QWidget:
