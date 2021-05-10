@@ -141,8 +141,12 @@ class AppModel:
 
     @property
     def coronal_section_image(self):
-        if (volume := self.atlas_volume) is not None:
-            section_slice_idx = self.atlas_section_coords[0]
-            return volume[section_slice_idx]
-        else:
-            return None
+        return self._section_image(axis=0)
+
+    @property
+    def axial_section_image(self):
+        return self._section_image(axis=1)
+
+    @property
+    def sagittal_section_image(self):
+        return  self._section_image(axis=2)
