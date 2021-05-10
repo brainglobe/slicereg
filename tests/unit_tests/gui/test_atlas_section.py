@@ -20,14 +20,13 @@ def view_model() -> AtlasSectionViewModel:
     return view_model
 
 
-def test_update_atlas_volume(view_model: AtlasSectionViewModel):
-    app_model = view_model._model
-    app_model.atlas_volume = np.random.randint(0, 100, (10, 10, 10), np.uint16)
-    expected = view_model._model.atlas_volume[app_model.atlas_section_coords[0], :, :]
-
-    args, kwargs = view_model.updated.emit.call_args
-    result = kwargs['dto'].section_image
-    npt.assert_equal(result, expected)
+def test_coronal_section_view_model_displays_the_coronal_section_image():
+    app_model = AppModel(
+        _commands=Mock(CommandProvider),
+        atlas_volume=np.random.randint(0, 100, (10, 10, 10), np.uint16)
+    )
+    view_model = AtlasSectionViewModel(axis=0, _model=app_model)
+    npt.assert_equal(app_model.coronal_section_image, view_model.section_image)
 
 
 def test_update_atlas_volume_axis_2():
