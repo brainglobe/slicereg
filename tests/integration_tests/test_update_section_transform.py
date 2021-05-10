@@ -15,9 +15,21 @@ def step_impl(model, sidebar):
     assert model.section_transform is not None
 
 
-@when("I give new translation and/or rotation values")
-def step_impl(slice_view):
-    slice_view.on_left_mouse_drag(x1=10, y1=0, x2=30, y2=20)
+@when("I <operation_type> the section along the <axis> axis by <amount>")
+def step_impl(slice_view, operation_type, axis, amount):
+    controls = {
+        'translate': {
+            'x': lambda: slice_view.on_left_mouse_drag(x1=0, y1=0, x2=10, y2=0),
+            'y': lambda: slice_view.on_left_mouse_drag(x1=0, y1=0, x2=0, y2=10),
+            'z': lambda: slice_view.on_mousewheel_move(increment=10),
+        },
+        'rotate': {
+            'x': lambda: slice_view.on_right_mouse_drag(x1=0, y1=0, x2=10, y2=0),
+            'y': lambda: slice_view.on_right_mouse_drag(x1=0, y1=0, x2=0, y2=10),
+            'z': lambda: (),
+        }
+    }
+    controls[operation_type][axis]()
 
 
 @then("the image is updated with a new 3D transform with indicated paramters set to the requested value")

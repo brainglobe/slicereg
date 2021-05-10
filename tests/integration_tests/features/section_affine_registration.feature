@@ -18,11 +18,20 @@ Feature: Section 3D Affine Registration
       | rotate         | z    | 0.01   |
 
 
-  Scenario: Set Section's 3D Coordinates
+  Scenario Outline: Set Section's 3D Coordinates
     Given I have loaded a section
-    When I give new translation and/or rotation values
+    When I <operation_type> the section along the <axis> axis by <amount>
     Then the image is updated with a new 3D transform with indicated paramters set to the requested value
     And an atlas section image at that transform is shown.
+
+    Examples:
+      | operation_type | axis | amount |
+      | translate      | x    | 10     |
+      | translate      | y    | 8      |
+      | translate      | z    | 26.2   |
+      | rotate         | x    | -45.2  |
+      | rotate         | y    | 239.34 |
+      | rotate         | z    | 0.01   |
 
   Scenario: Check Pixel Coordinate in Atlas Space
     Given I have loaded a section
