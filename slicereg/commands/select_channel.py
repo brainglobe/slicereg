@@ -17,7 +17,7 @@ class SelectChannelResult:
 class SelectChannelCommand:
     _repo: BaseSectionRepo
 
-    def __call__(self, channel: int):
+    def __call__(self, channel: int) -> SelectChannelResult:
         section = self._repo.sections[0]
         image = section.image.channels[channel - 1]
         return SelectChannelResult(section_image=image, current_channel=channel)

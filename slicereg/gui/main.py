@@ -46,7 +46,6 @@ def launch_gui(create_qapp: bool = True):
         app = QApplication([])
 
     model = AppModel(_commands=commands)
-    commands.resample_section.section_resampled.connect(model.on_section_resampled)
 
     coronal_section_viewmodel = AtlasSectionViewModel(axis=0, _model=model)
     coronal_section_view = AtlasSectionView()

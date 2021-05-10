@@ -93,11 +93,13 @@ class AppModel:
 
     # Resample Section
     def resample_section(self, resolution_um: float):
-        self._commands.resample_section(resolution_um=resolution_um)
-
-    def on_section_resampled(self, resolution_um: float, section_image: ndarray, transform: ndarray,
-                             atlas_image: ndarray) -> None:
-        self._update_images(atlas_image=atlas_image, section_image=section_image, section_transform=transform)
+        result = self._commands.resample_section(resolution_um=resolution_um)
+        self._update_images(
+            atlas_image=result.atlas_image,
+            section_image=result.section_image,
+            section_transform=result.section_transform,
+            section_image_resolution=result.resolution_um,
+        )
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):

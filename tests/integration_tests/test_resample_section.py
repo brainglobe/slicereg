@@ -2,15 +2,26 @@ from unittest.mock import Mock
 
 import numpy as np
 import pytest
+from numpy import random
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.commands.base import BaseSectionRepo
-from slicereg.commands.resample_section import ResampleSectionCommand
-from slicereg.commands.utils import Signal
+from slicereg.gui.app_model import AppModel
+from slicereg.gui.commands import CommandProvider
+from slicereg.io.tifffile import OmeTiffImageReader
 from slicereg.models.atlas import Atlas
 from slicereg.models.image import Image
-from slicereg.models.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
+
+
+@pytest.fixture
+def model():
+    atlas_repo = AtlasRepo()
+    atlas_repo.set_atlas(Atlas(volume=random.normal(size=(10, 10, 10)), resolution_um=25))
+    reader = Mock(OmeTiffImageReader)
+    reader.read.return_value = Image(channels=np.empty((2, 3, 4)), resolution_um=10.)
+    commands = CommandProvider(_section_ome_reader=reader, _atlas_repo=atlas_repo)
+    model = AppModel(_commands=commands)
+    return model
 
 
 @scenario("features/resample.feature", "Section Resample")
@@ -18,41 +29,19 @@ def test_impl():
     ...
 
 
-@pytest.fixture
-def repo():
-    repo = Mock(BaseSectionRepo)
-    repo.sections = [
-        Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=20.))
-    ]
-    return repo
-
-
-@pytest.fixture
-def atlas_repo():
-    repo = Mock(AtlasRepo)
-    repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
-    return repo
-
-@pytest.fixture
-def command(repo, atlas_repo):
-    return ResampleSectionCommand(_repo=repo, _atlas_repo=atlas_repo, section_resampled=Mock(Signal))
-
-
-@given("I have a 20um-resolution section loaded")
-def step_impl(repo: BaseSectionRepo):
-    assert len(repo.sections) == 1
-    section = repo.sections[0]
-    assert section.image.resolution_um == 20
+@given("I have a 10um-resolution section loaded")
+def step_impl(model: AppModel):
+    model.load_section("test.ome.tiff")
+    assert model.section_image_resolution == 10
+    assert model.section_image.shape == (3, 4)
 
 
 @when("I set the resolution to 50um")
-def step_impl(command: ResampleSectionCommand):
-    command(resolution_um=50)
-    
+def step_impl(model: AppModel):
+    model.resample_section(resolution_um=50)
+
 
 @then("I should see a 50um resolution slice onscreen")
-def step_impl(command: ResampleSectionCommand):
-    output = command.section_resampled.emit.call_args[1]
-    assert output['resolution_um'] == 50
-    assert 'section_image' in output
-    assert output['transform'].shape == (4, 4)
+def step_impl(model: AppModel):
+    assert model.section_image_resolution == 50
+    assert model.section_image.shape == (1, 1)
