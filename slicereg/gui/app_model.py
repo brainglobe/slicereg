@@ -61,7 +61,7 @@ class AppModel:
         if num_channels is not None:
             self.num_channels = num_channels
             self.current_channel = 1
-            updates['num_channels'] = num_channels
+            updates['num_channels'] = num_channels  # type: ignore
 
         self.updated.emit(**updates)
 

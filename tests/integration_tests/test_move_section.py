@@ -9,15 +9,15 @@ def test_impl():
 
 
 @given("I have loaded a section")
-def step_impl(model: AppModel):
-    model.load_section("test.ome.tiff")
+def step_impl(sidebar, model: AppModel):
+    sidebar.submit_load_section_from_file("test.ome.tiff")
     assert model.section_image is not None
     assert model.section_transform is not None
 
 
 @when("I ask for the section to be translated and rotated")
-def step_impl(model: AppModel):
-    model.move_section(x=2, y=5, z=10, rx=0, ry=0, rz=0)
+def step_impl(sidebar):
+    sidebar.change_z_slider(value=10)
 
 
 @then("the image is updated with a new 3D transform")

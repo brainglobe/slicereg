@@ -16,8 +16,8 @@ def step_impl(model, sidebar):
 
 
 @when("I give new translation and/or rotation values")
-def step_impl(sidebar):
-    sidebar.change_z_slider(value=10)
+def step_impl(slice_view):
+    slice_view.on_left_mouse_drag(x1=10, y1=0, x2=30, y2=20)
 
 
 @then("the image is updated with a new 3D transform with indicated paramters set to the requested value")
