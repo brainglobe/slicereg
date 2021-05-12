@@ -12,8 +12,7 @@ from slicereg.gui.sidebar import SidebarViewModel, SidebarView
 from slicereg.gui.slice_window import SliceViewModel, SliceView
 from slicereg.gui.volume_window import VolumeViewModel, VolumeView
 from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
-from slicereg.repos.atlas_repo import AtlasRepo
-from slicereg.repos.section_repo import SectionRepo
+from slicereg.repos import InMemoryRepo
 
 np.set_printoptions(suppress=True, precision=2)
 
@@ -34,7 +33,7 @@ def launch_gui(create_qapp: bool = True):
         os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
     # Initialize the State
-    commands = CommandProvider(_atlas_repo=AtlasRepo(), _section_repo=SectionRepo())
+    commands = CommandProvider(_repo=InMemoryRepo())
 
     # Wire up the GUI
     if create_qapp:

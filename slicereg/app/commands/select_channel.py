@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.app.commands.base import BaseSectionRepo
+from slicereg.app.repo import BaseRepo
 
 
 @dataclass(frozen=True)
@@ -15,9 +15,12 @@ class SelectChannelResult:
 
 @dataclass
 class SelectChannelCommand:
-    _repo: BaseSectionRepo
+    _repo: BaseRepo
 
     def __call__(self, channel: int) -> SelectChannelResult:
-        section = self._repo.sections[0]
+        sections = self._repo.get_sections()
+        if not sections:
+            raise RuntimeError("Section not loaded yet.")
+        section = sections[0]
         image = section.image.channels[channel - 1]
         return SelectChannelResult(section_image=image, current_channel=channel)

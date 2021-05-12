@@ -4,13 +4,12 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.app.commands.base import BaseSectionRepo
-from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
+from slicereg.app.repo import BaseRepo
 from slicereg.core.image_transform import ImageTransformer
 from slicereg.core.physical_transform import PhysicalTransformer
 from slicereg.core.registration import Registration
 from slicereg.core.section import Section
-from slicereg.repos.atlas_repo import AtlasRepo
+from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
 
 
 @dataclass(frozen=True)
@@ -24,14 +23,13 @@ class LoadImageResult:
 
 @dataclass
 class LoadImageCommand:
-    _repo: BaseSectionRepo
-    _atlas_repo: AtlasRepo
+    _repo: BaseRepo
     _ome_reader: OmeTiffImageReader
     _tiff_reader: TiffImageReader
 
     def __call__(self, filename: str) -> Optional[LoadImageResult]:
         filepath = Path(filename)
-        atlas = self._atlas_repo.get_atlas()
+        atlas = self._repo.get_atlas()
         if not atlas:
             raise RuntimeError('No atlas loaded')
 

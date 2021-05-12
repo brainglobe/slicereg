@@ -5,9 +5,8 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.app.commands.base import BaseSectionRepo
+from slicereg.app.repo import BaseRepo
 from slicereg.core.registration import Registration
-from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass
@@ -18,20 +17,22 @@ class MoveSectionResult:
 
 @dataclass
 class MoveSectionCommand:
-    _section_repo: BaseSectionRepo
-    _atlas_repo: AtlasRepo
+    _repo: BaseRepo
 
     def __call__(self, x=0., y=0., z=0., rx=0., ry=0., rz=0.) -> MoveSectionResult:
-        section = self._section_repo.sections[0]
+        try:
+            section = self._repo.get_sections()[0]
+        except IndexError:
+            raise RuntimeError("No section loaded")
         physical = section.physical_transform.translate(x=x, y=y, z=z).rotate(rx=rx, ry=ry, rz=rz)
         section = section.update(physical_transform=physical)
 
-        atlas = self._atlas_repo.get_atlas()
+        atlas = self._repo.get_atlas()
         if not atlas:
             raise RuntimeError("No atlas loaded")
         registration = Registration(section=section, atlas=atlas)
 
-        self._section_repo.save_section(section)
+        self._repo.save_section(section)
         return MoveSectionResult(
             transform=registration.image_to_volume_transform,
             atlas_slice_image=registration.slice_atlas().channels[0],
@@ -40,16 +41,15 @@ class MoveSectionCommand:
 
 @dataclass
 class UpdateSectionTransformCommand:
-    _section_repo: BaseSectionRepo
-    _atlas_repo: AtlasRepo
+    _repo: BaseRepo
 
     def __call__(self, res: Optional[int] = None, **dims) -> MoveSectionResult:
         for dim in dims:
             if dim not in ['x', 'y', 'z', 'rx', 'ry', 'rz']:
                 raise TypeError(f'Unknown dimension "{dim}"')
 
-        sections = self._section_repo.sections
-        atlas = self._atlas_repo.get_atlas()
+        sections = self._repo.get_sections()
+        atlas = self._repo.get_atlas()
         if not sections:
             raise RuntimeError('Section is not loaded yet')
         if not atlas:
@@ -62,7 +62,7 @@ class UpdateSectionTransformCommand:
         physical = section.physical_transform.update(**dims)
         section = section.update(physical_transform=physical)
         registration = Registration(section=section, atlas=atlas)
-        self._section_repo.save_section(section)
+        self._repo.save_section(section)
         return MoveSectionResult(
             transform=registration.image_to_volume_transform,
             atlas_slice_image=registration.slice_atlas().channels[0]

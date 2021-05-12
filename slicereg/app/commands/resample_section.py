@@ -2,9 +2,8 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.app.commands.base import BaseSectionRepo
+from slicereg.app.repo import BaseRepo
 from slicereg.core.registration import Registration
-from slicereg.repos.atlas_repo import AtlasRepo
 
 
 @dataclass(frozen=True)
@@ -17,14 +16,17 @@ class ResampleSectionResult:
 
 @dataclass
 class ResampleSectionCommand:
-    _repo: BaseSectionRepo
-    _atlas_repo: AtlasRepo
+    _repo: BaseRepo
 
     def __call__(self, resolution_um: float) -> ResampleSectionResult:
-        section = self._repo.sections[0]
+
+        sections = self._repo.get_sections()
+        if not sections:
+            raise RuntimeError("Section not loaded.")
+        section = sections[0]
         section = section.update(image=section.image.resample(resolution_um=resolution_um))
 
-        atlas = self._atlas_repo.get_atlas()
+        atlas = self._repo.get_atlas()
         if not atlas:
             raise RuntimeError("Atlas not Loaded.")
 

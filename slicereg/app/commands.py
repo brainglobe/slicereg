@@ -12,14 +12,12 @@ from slicereg.app.commands.select_channel import SelectChannelCommand
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
-from slicereg.repos.atlas_repo import AtlasRepo
-from slicereg.repos.section_repo import SectionRepo
+from slicereg.app.repo import BaseRepo
 
 
 @dataclass(frozen=True)
 class CommandProvider:
-    _atlas_repo: AtlasRepo = field(default_factory=AtlasRepo)
-    _section_repo: SectionRepo = field(default_factory=SectionRepo)
+    _repo: BaseRepo
     _bgatlas_reader: BrainglobeAtlasReader = field(default_factory=BrainglobeAtlasReader)
     _atlas_file_reader: ImioAtlasReader = field(default_factory=ImioAtlasReader)
     _section_tiff_reader: TiffImageReader = field(default_factory=TiffImageReader)
@@ -27,20 +25,19 @@ class CommandProvider:
 
     @property
     def load_atlas(self) -> LoadBrainglobeAtlasCommand:
-        return LoadBrainglobeAtlasCommand(_repo=self._atlas_repo, _reader=self._bgatlas_reader)
+        return LoadBrainglobeAtlasCommand(_repo=self._repo, _reader=self._bgatlas_reader)
 
     @property
     def load_section(self) -> LoadImageCommand:
         return LoadImageCommand(
-            _repo=self._section_repo,
-            _atlas_repo=self._atlas_repo,
+            _repo=self._repo,
             _ome_reader=self._section_ome_reader,
             _tiff_reader=self._section_tiff_reader
         )
 
     @property
     def load_atlas_from_file(self) -> LoadAtlasFromFileCommand:
-        return LoadAtlasFromFileCommand(_repo=self._atlas_repo, _reader=self._atlas_file_reader)
+        return LoadAtlasFromFileCommand(_repo=self._repo, _reader=self._atlas_file_reader)
 
     @property
     def list_bgatlases(self) -> ListBgAtlasesCommand:
@@ -48,20 +45,20 @@ class CommandProvider:
 
     @property
     def select_channel(self) -> SelectChannelCommand:
-        return SelectChannelCommand(_repo=self._section_repo)
+        return SelectChannelCommand(_repo=self._repo)
 
     @property
     def move_section(self) -> MoveSectionCommand:
-        return MoveSectionCommand(_section_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+        return MoveSectionCommand(_repo=self._repo)
 
     @property
     def update_section(self) -> UpdateSectionTransformCommand:
-        return UpdateSectionTransformCommand(_section_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+        return UpdateSectionTransformCommand(_repo=self._repo)
 
     @property
     def get_atlas_coord(self) -> MapImageCoordToAtlasCoordCommand:
-        return MapImageCoordToAtlasCoordCommand(_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+        return MapImageCoordToAtlasCoordCommand(_repo=self._repo)
 
     @property
     def resample_section(self) -> ResampleSectionCommand:
-        return ResampleSectionCommand(_repo=self._section_repo, _atlas_repo=self._atlas_repo)
+        return ResampleSectionCommand(_repo=self._repo)

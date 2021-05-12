@@ -4,7 +4,7 @@ from dataclasses import dataclass
 from typing import Tuple
 
 from slicereg.app.commands.base import BaseSectionRepo
-from slicereg.repos.atlas_repo import AtlasRepo
+from slicereg.app.repo import BaseRepo
 
 
 @dataclass(frozen=True)
@@ -15,11 +15,10 @@ class MapImageCoordToAtlasCoordResult:
 
 @dataclass
 class MapImageCoordToAtlasCoordCommand:
-    _repo: BaseSectionRepo
-    _atlas_repo: AtlasRepo
+    _repo: BaseRepo
 
     def __call__(self, i: int, j: int) -> MapImageCoordToAtlasCoordResult:
-        sections = self._repo.sections
+        sections = self._repo.get_sections()
         if not sections:
             raise RuntimeError('no section loaded')
         section = sections[0]

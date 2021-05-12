@@ -5,9 +5,10 @@ from typing import Optional
 
 from numpy import ndarray
 
+from slicereg.app.repo import BaseRepo
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
-from slicereg.repos.atlas_repo import AtlasRepo
+
 
 
 @dataclass(frozen=True)
@@ -20,7 +21,7 @@ class LoadAtlasResult:
 
 @dataclass
 class LoadBrainglobeAtlasCommand:
-    _repo: AtlasRepo
+    _repo: BaseRepo
     _reader: BrainglobeAtlasReader
 
     def __call__(self, bgatlas_name: str) -> LoadAtlasResult:
@@ -36,7 +37,7 @@ class LoadBrainglobeAtlasCommand:
 
 @dataclass
 class LoadAtlasFromFileCommand:
-    _repo: AtlasRepo
+    _repo: BaseRepo
     _reader: ImioAtlasReader
 
     def __call__(self, filename: str, resolution_um: int) -> LoadAtlasResult:
