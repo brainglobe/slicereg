@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 
+from slicereg.gui.view_models.sidebar import SidebarViewModel
 from slicereg.gui.views.base import BaseQtWidget, BaseView
 from slicereg.gui.widgets.slider import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
@@ -86,8 +87,8 @@ class SidebarView(BaseQtWidget, BaseView):
         self.coronal_button = QPushButton("Coronal")
         buttons_layout.addWidget(self.coronal_button)
 
-        self.sagittal_button = QPushButton("Sagittal")
-        buttons_layout.addWidget(self.sagittal_button)
+        self.annotation_atlas_button = QPushButton("Sagittal")
+        buttons_layout.addWidget(self.annotation_atlas_button)
 
         self.axial_button = QPushButton("Axial")
         buttons_layout.addWidget(self.axial_button)
@@ -101,7 +102,18 @@ class SidebarView(BaseQtWidget, BaseView):
         self.volume_slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
         layout.addWidget(self.volume_slice_clim_slider)
 
-    def on_registration(self, model):
+        # Atlas Type Buttons
+        buttons_layout = QHBoxLayout()
+
+        self.registration_atlas_button = QPushButton("Registration")
+        buttons_layout.addWidget(self.registration_atlas_button)
+
+        self.annotation_atlas_button = QPushButton("Annotation")
+        buttons_layout.addWidget(self.annotation_atlas_button)
+
+        layout.addLayout(buttons_layout)
+
+    def on_registration(self, model: SidebarViewModel):
         def show_load_image_dialog():
             filename, filetype = QFileDialog.getOpenFileName(
                 parent=self.qt_widget,
@@ -141,10 +153,12 @@ class SidebarView(BaseQtWidget, BaseView):
         self.roty_slider.connect(model.change_roty_slider)
         self.rotz_slider.connect(model.change_rotz_slider)
         self.coronal_button.clicked.connect(model.click_coronal_button)
-        self.sagittal_button.clicked.connect(model.click_sagittal_button)
+        self.annotation_atlas_button.clicked.connect(model.click_sagittal_button)
         self.axial_button.clicked.connect(model.click_axial_button)
         self.slice_clim_slider.valuesChanged.connect(model.move_clim_slice_slider)
         self.volume_slice_clim_slider.valuesChanged.connect(model.move_clim_volume_slider)
+        self.registration_atlas_button.clicked.connect(model.click_registration_atlas_selector_button)
+        self.annotation_atlas_button.clicked.connect(model.click_annotation_atlas_selector_button)
 
     @property
     def qt_widget(self) -> QWidget:

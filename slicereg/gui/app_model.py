@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
+from enum import Enum, auto
 from typing import Tuple, List, Optional
 
 import numpy as np
@@ -6,6 +9,11 @@ from numpy import ndarray
 
 from slicereg.commands.utils import Signal
 from slicereg.gui.commands import CommandProvider
+
+
+class VolumeType(Enum):
+    REGISTRATION = auto()
+    ANNOTATION = auto()
 
 
 @dataclass
@@ -19,7 +27,7 @@ class AppModel:
     section_image_resolution: Optional[float] = None
     section_transform: Optional[ndarray] = None
     atlas_image: Optional[ndarray] = None
-    atlas_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
+    registration_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
     atlas_section_coords: Tuple[int, int, int] = (0, 0, 0)
     selected_ij: Tuple[int, int] = (0, 0)
     selected_xyz: Tuple[float, float, float] = (0, 0, 0)
@@ -28,42 +36,21 @@ class AppModel:
     atlas_resolution: Optional[int] = None
     num_channels: Optional[int] = None
     current_channel: int = 1
+    visible_volume: VolumeType = VolumeType.REGISTRATION
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
+        print(key, 'updated')
         if hasattr(self, 'updated'):
             self.updated.emit(**{key: value})
 
-    def _update_images(self,
-                       atlas_image: Optional[ndarray] = None,
-                       section_image: Optional[ndarray] = None,
-                       section_transform: Optional[ndarray] = None,
-                       section_image_resolution: Optional[float] = None,
-                       num_channels: Optional[int] = None,
-                       ):
-        updates = {}
-        if atlas_image is not None:
-            self.atlas_image = atlas_image
-            updates['atlas_image'] = atlas_image
-
-        if section_image is not None:
-            self.section_image = section_image
-            updates['section_image'] = section_image
-
-        if section_transform is not None:
-            self.section_transform = section_transform
-            updates['section_transform'] = section_transform
-
-        if section_image_resolution is not None:
-            self.section_image_resolution = section_image_resolution
-            updates['section_image_resolution'] = section_image_resolution  # type: ignore
-
-        if num_channels is not None:
-            self.num_channels = num_channels
-            self.current_channel = 1
-            updates['num_channels'] = num_channels  # type: ignore
-
-        self.updated.emit(**updates)
+    @property
+    def atlas_volume(self):
+        volumes = {
+            VolumeType.REGISTRATION: self.registration_volume,
+            VolumeType.ANNOTATION: self.registration_volume
+        }
+        return volumes[self.visible_volume]
 
     @property
     def clim_2d_values(self):
@@ -76,56 +63,47 @@ class AppModel:
     # Load Section
     def load_section(self, filename: str):
         result = self._commands.load_section(filename=filename)
-        if result is not None:
-            self._update_images(
-                section_image=result.image,
-                section_transform=result.transform,
-                section_image_resolution=result.resolution_um,
-                atlas_image=result.atlas_image,
-                num_channels=result.num_channels,
-            )
+        self.section_image = result.image
+        self.section_transform = result.transform
+        self.section_image_resolution = result.resolution_um
+        self.atlas_image = result.atlas_image
+        self.num_channels = result.num_channels
 
     # Select Channel
     def select_channel(self, num: int):
         result = self._commands.select_channel(channel=num)
         self.current_channel = result.current_channel
-        self._update_images(section_image=result.section_image)
+        self.section_image = result.section_image
 
     # Resample Section
     def resample_section(self, resolution_um: float):
         result = self._commands.resample_section(resolution_um=resolution_um)
-        self._update_images(
-            atlas_image=result.atlas_image,
-            section_image=result.section_image,
-            section_transform=result.section_transform,
-            section_image_resolution=result.resolution_um,
-        )
+        self.atlas_image = result.atlas_image
+        self.section_image = result.section_image
+        self.section_transform = result.section_transform
+        self.section_image_resolution = result.resolution_um
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
         results = self._commands.move_section(**kwargs)
-        self._update_images(
-            atlas_image=results.atlas_slice_image,
-            section_transform=results.transform
-        )
+        self.atlas_image = results.atlas_slice_image
+        self.section_transform = results.transform
 
     def update_section(self, **kwargs):
         results = self._commands.update_section(**kwargs)
-        self._update_images(
-            atlas_image=results.atlas_slice_image,
-            section_transform=results.transform
-        )
+        self.atlas_image = results.atlas_slice_image
+        self.section_transform = results.transform
 
     # Load Atlases
     def load_bgatlas(self, name: str):
         result = self._commands.load_atlas(bgatlas_name=name)
-        self.atlas_volume = result.volume
+        self.registration_volume = result.volume
         self.atlas_resolution = int(result.resolution)
         self.annotation_volume = result.annotation_volume
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         result = self._commands.load_atlas_from_file(filename=filename, resolution_um=resolution_um)
-        self.atlas_volume = result.volume
+        self.registration_volume = result.volume
         self.atlas_resolution = int(result.resolution)
         x, y, z = tuple((np.array(self.atlas_volume.shape) * 0.5).astype(int).tolist())
         self.atlas_section_coords = x, y, z
@@ -158,4 +136,4 @@ class AppModel:
 
     @property
     def sagittal_section_image(self):
-        return  self._section_image(axis=2)
+        return self._section_image(axis=2)

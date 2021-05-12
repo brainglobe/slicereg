@@ -24,7 +24,6 @@ class AtlasSectionViewModel:
         self._model.updated.connect(self.update)
 
     def update(self, **kwargs):
-        print(self.__class__.__name__, f"updated {kwargs.keys()}")
         updates = AtlasSectionDTO()
         if 'atlas_volume' in kwargs or 'atlas_section_coords' in kwargs:
             updates.section_image = self.section_image

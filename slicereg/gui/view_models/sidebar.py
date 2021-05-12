@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
 from slicereg.commands.utils import Signal
-from slicereg.gui.app_model import AppModel
+from slicereg.gui.app_model import AppModel, VolumeType
 
 
 @dataclass(unsafe_hash=True)
@@ -16,7 +16,6 @@ class SidebarViewModel:
         self._model.updated.connect(self.update)
 
     def update(self, **kwargs):
-        print(self.__class__.__name__, f"updated {kwargs.keys()}")
         self.updated.emit(**kwargs)
 
     @property
@@ -31,9 +30,8 @@ class SidebarViewModel:
     def bgatlas_names(self) -> List[str]:
         return self._model.bgatlas_names
 
-    def update_section_resolution_textbox(self, resolution: str)->None:
+    def update_section_resolution_textbox(self, resolution: str) -> None:
         self._model.section_image_resolution = float(resolution)
-        print(resolution)
 
     def click_coronal_button(self):
         self._model.update_section(rx=0, ry=0, rz=-90)
@@ -68,7 +66,6 @@ class SidebarViewModel:
         self._model.load_atlas_from_file(filename=filename, resolution_um=self.loadatlas_resolution)
 
     def click_load_bgatlas_button(self):
-        print(f"Loading Atlas: {self.selected_bgatlas}")
         self._model.load_bgatlas(name=self.selected_bgatlas)
 
     def change_bgatlas_selection_dropdown(self, text: str):
@@ -97,3 +94,9 @@ class SidebarViewModel:
 
     def update_resolution_textbox(self, text: str):
         self.loadatlas_resolution = int(text)
+
+    def click_registration_atlas_selector_button(self):
+        self._model.visible_volume = VolumeType.REGISTRATION
+
+    def click_annotation_atlas_selector_button(self):
+        self._model.visible_volume = VolumeType.ANNOTATION

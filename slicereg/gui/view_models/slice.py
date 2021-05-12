@@ -23,7 +23,6 @@ class SliceViewModel:
         self._model.updated.connect(self.update)
 
     def update(self, **kwargs):
-        print(self.__class__.__name__, f"updated {kwargs.keys()}")
         updates = SliceViewDTO()
         if 'atlas_image' in kwargs:
             updates.atlas_image = kwargs['atlas_image']
