@@ -29,11 +29,12 @@ class LoadImageCommand:
         image = self._image_reader.read(filename=filename, resolution=resolution)
         if image is None:
             raise IOError("Image failed to load.")
-        image = image.resample(resolution_um=10)
 
         atlas = self._repo.get_atlas()
         if not atlas:
             raise RuntimeError('No atlas loaded')
+
+        image = image.resample(resolution_um=10)
         cx, cy, cz = atlas.center
 
         section = Section(
