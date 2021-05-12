@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Tuple
 
-from slicereg.commands.base import BaseSectionRepo
+from slicereg.app.commands.base import BaseSectionRepo
 from slicereg.repos.atlas_repo import AtlasRepo
 
 

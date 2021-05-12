@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 
-from slicereg.models.atlas import Atlas
+from slicereg.core.atlas import Atlas
 
 
 class AtlasRepo:

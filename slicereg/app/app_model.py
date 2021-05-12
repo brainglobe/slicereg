@@ -7,8 +7,8 @@ from typing import Tuple, List, Optional
 import numpy as np
 from numpy import ndarray
 
-from slicereg.commands.utils import Signal
-from slicereg.gui.commands import CommandProvider
+from slicereg.app.commands.utils import Signal
+from slicereg.app.commands import CommandProvider
 
 
 class VolumeType(Enum):

@@ -5,8 +5,8 @@ import numpy as np
 from PySide2.QtWidgets import QApplication
 from packaging import version
 
-from slicereg.gui.commands import CommandProvider
-from slicereg.gui.app_model import AppModel
+from slicereg.app.commands import CommandProvider
+from slicereg.app.app_model import AppModel
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
 from slicereg.gui.sidebar import SidebarViewModel, SidebarView
 from slicereg.gui.slice_window import SliceViewModel, SliceView

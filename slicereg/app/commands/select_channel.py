@@ -4,7 +4,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseSectionRepo
+from slicereg.app.commands.base import BaseSectionRepo
 
 
 @dataclass(frozen=True)

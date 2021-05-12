@@ -3,9 +3,9 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
-from slicereg.commands.utils import Signal
-from slicereg.gui.app_model import AppModel
-from slicereg.gui.commands import CommandProvider
+from slicereg.app.commands import Signal
+from slicereg.app.app_model import AppModel
+from slicereg.app.commands import CommandProvider
 from slicereg.gui.sidebar.model import SidebarViewModel
 
 

@@ -1,6 +1,6 @@
 import imio
 
-from slicereg.models.atlas import Atlas
+from slicereg.core.atlas import Atlas
 
 
 class ImioAtlasReader:

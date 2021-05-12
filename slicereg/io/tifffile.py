@@ -3,8 +3,8 @@ import tifffile as tif
 import xmltodict
 from numpy import uint16
 
-from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
+from slicereg.core.atlas import Atlas
+from slicereg.core.image import Image
 
 
 class TifffileAtlasReader:

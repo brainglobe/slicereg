@@ -1,7 +1,7 @@
 import numpy as np
 
-from slicereg.models.image import Image
-from slicereg.models.section import Section
+from slicereg.core.image import Image
+from slicereg.core.section import Section
 from slicereg.repos.section_repo import SectionRepo
 
 

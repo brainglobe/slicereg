@@ -3,7 +3,7 @@ from pytest import approx
 from hypothesis import given
 from hypothesis.strategies import integers
 
-from slicereg.models.atlas import Atlas
+from slicereg.core.atlas import Atlas
 
 
 @given(res=integers(1, 1000), w=integers(1, 100), h=integers(1, 100), d=integers(1, 100))

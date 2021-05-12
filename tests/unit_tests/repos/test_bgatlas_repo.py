@@ -1,6 +1,6 @@
 import numpy as np
 
-from slicereg.models.atlas import Atlas
+from slicereg.core.atlas import Atlas
 from slicereg.repos.atlas_repo import AtlasRepo
 
 

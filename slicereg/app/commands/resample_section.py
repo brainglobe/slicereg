@@ -2,8 +2,8 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseSectionRepo
-from slicereg.models.registration import Registration
+from slicereg.app.commands.base import BaseSectionRepo
+from slicereg.core.registration import Registration
 from slicereg.repos.atlas_repo import AtlasRepo
 
 

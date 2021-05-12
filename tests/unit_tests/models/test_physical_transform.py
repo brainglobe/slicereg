@@ -4,7 +4,7 @@ import numpy as np
 from hypothesis import given
 from hypothesis.strategies import floats
 
-from slicereg.models.physical_transform import PhysicalTransformer
+from slicereg.core.physical_transform import PhysicalTransformer
 
 real_floats = partial(floats, allow_infinity=False, allow_nan=False)
 

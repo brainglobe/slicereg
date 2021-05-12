@@ -5,7 +5,7 @@ from hypothesis import given
 from hypothesis.strategies import floats
 from numpy import cos, sin, testing as npt
 
-from slicereg.models.image_transform import ImageTransformer
+from slicereg.core.image_transform import ImageTransformer
 
 sensible_floats = partial(floats, allow_nan=False, allow_infinity=False)
 

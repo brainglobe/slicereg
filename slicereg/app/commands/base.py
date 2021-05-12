@@ -1,8 +1,8 @@
 from abc import ABC, abstractmethod
 from typing import List
 
-from slicereg.models.image import Image
-from slicereg.models.section import Section
+from slicereg.core.image import Image
+from slicereg.core.section import Section
 
 
 class BaseSectionRepo(ABC):

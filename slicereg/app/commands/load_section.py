@@ -1,15 +1,15 @@
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseSectionRepo
+from slicereg.app.commands.base import BaseSectionRepo
 from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
-from slicereg.models.image_transform import ImageTransformer
-from slicereg.models.physical_transform import PhysicalTransformer
-from slicereg.models.registration import Registration
-from slicereg.models.section import Section
+from slicereg.core.image_transform import ImageTransformer
+from slicereg.core.physical_transform import PhysicalTransformer
+from slicereg.core.registration import Registration
+from slicereg.core.section import Section
 from slicereg.repos.atlas_repo import AtlasRepo
 
 

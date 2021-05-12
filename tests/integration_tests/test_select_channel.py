@@ -1,7 +1,7 @@
 from numpy.testing import assert_almost_equal
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.gui.app_model import AppModel
+from slicereg.app.app_model import AppModel
 
 
 @scenario("features/multichannel.feature", "Switch Channels")

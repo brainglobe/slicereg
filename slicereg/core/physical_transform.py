@@ -5,7 +5,7 @@ from dataclasses import dataclass, replace
 import numpy as np
 from numpy import ndarray
 
-from slicereg.models.base import FrozenUpdater
+from slicereg.core.base import FrozenUpdater
 
 
 @dataclass(frozen=True)

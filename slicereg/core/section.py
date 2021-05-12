@@ -6,10 +6,10 @@ from uuid import UUID, uuid4
 
 import numpy as np
 
-from slicereg.models.base import FrozenUpdater
-from slicereg.models.image import Image
-from slicereg.models.image_transform import ImageTransformer, ij_to_xyz_matrix
-from slicereg.models.physical_transform import PhysicalTransformer
+from slicereg.core.base import FrozenUpdater
+from slicereg.core.image import Image
+from slicereg.core.image_transform import ImageTransformer, ij_to_xyz_matrix
+from slicereg.core.physical_transform import PhysicalTransformer
 
 
 @dataclass(frozen=True)

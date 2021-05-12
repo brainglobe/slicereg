@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from slicereg.models.base import FrozenUpdater
+from slicereg.core.base import FrozenUpdater
 
 
 def test_updater_mixin_updates_dataframes():

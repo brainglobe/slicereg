@@ -8,12 +8,12 @@ from hypothesis.strategies import integers, floats
 from numpy import arange, sin, cos, radians
 from pytest import approx
 
-from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
-from slicereg.models.image_transform import ImageTransformer
-from slicereg.models.registration import Registration
-from slicereg.models.section import Section
-from slicereg.models.physical_transform import PhysicalTransformer
+from slicereg.core.atlas import Atlas
+from slicereg.core.image import Image
+from slicereg.core.image_transform import ImageTransformer
+from slicereg.core.registration import Registration
+from slicereg.core.section import Section
+from slicereg.core.physical_transform import PhysicalTransformer
 
 
 def test_section_registration_to_an_atlas_gets_an_image_with_same_image_parameters():

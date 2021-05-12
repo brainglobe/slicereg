@@ -1,6 +1,6 @@
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.gui.app_model import AppModel
+from slicereg.app.app_model import AppModel
 
 
 @scenario("features/section_affine_registration.feature", "Set Section's 3D Coordinates")

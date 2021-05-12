@@ -7,10 +7,10 @@ from hypothesis.strategies import integers, floats
 from numpy import sin, cos, radians
 from pytest import approx
 
-from slicereg.models.image import Image
-from slicereg.models.image_transform import ImageTransformer
-from slicereg.models.physical_transform import PhysicalTransformer
-from slicereg.models.section import Section
+from slicereg.core.image import Image
+from slicereg.core.image_transform import ImageTransformer
+from slicereg.core.physical_transform import PhysicalTransformer
+from slicereg.core.section import Section
 from tests.unit_tests.models.test_image import sensible_floats
 
 real_floats = partial(floats, allow_nan=False, allow_infinity=False)

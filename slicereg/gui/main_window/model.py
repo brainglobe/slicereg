@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple
 
-from slicereg.commands.utils import Signal
-from slicereg.gui.app_model import AppModel
+from slicereg.app.commands.utils import Signal
+from slicereg.app.app_model import AppModel
 
 
 @dataclass(unsafe_hash=True)

@@ -1,11 +1,6 @@
 from abc import abstractmethod, ABC
-from typing import Optional
 
 from PySide2.QtWidgets import QWidget
-
-from slicereg.commands.utils import Signal
-from slicereg.gui.commands import CommandProvider
-from slicereg.gui.app_model import AppModel
 
 
 class BaseQtWidget(ABC):

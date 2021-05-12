@@ -7,7 +7,7 @@ from pytest import approx
 from hypothesis import given
 from hypothesis.strategies import integers, floats
 
-from slicereg.models.image import Image
+from slicereg.core.image import Image
 
 sensible_floats = partial(floats, allow_nan=False, allow_infinity=False)
 

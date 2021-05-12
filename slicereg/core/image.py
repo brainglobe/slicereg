@@ -6,7 +6,7 @@ from functools import cached_property
 import numpy as np
 from scipy import ndimage
 
-from slicereg.models.base import FrozenUpdater
+from slicereg.core.base import FrozenUpdater
 
 
 @dataclass(frozen=True)

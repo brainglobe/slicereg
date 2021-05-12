@@ -3,8 +3,8 @@ from __future__ import annotations
 from typing import List, Dict
 from uuid import UUID
 
-from slicereg.commands.base import BaseSectionRepo
-from slicereg.models.section import Section
+from slicereg.app.commands import BaseSectionRepo
+from slicereg.core.section import Section
 
 
 class SectionRepo(BaseSectionRepo):

@@ -4,9 +4,9 @@ import pytest
 import numpy as np
 import numpy.testing as npt
 
-from slicereg.commands.utils import Signal
-from slicereg.gui.app_model import AppModel
-from slicereg.gui.commands import CommandProvider
+from slicereg.app.commands import Signal
+from slicereg.app.app_model import AppModel
+from slicereg.app.commands import CommandProvider
 from slicereg.gui.atlas_section_window.model import AtlasSectionViewModel
 
 

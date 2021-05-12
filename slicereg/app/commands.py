@@ -2,13 +2,13 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 
-from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
-from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
-from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand, LoadAtlasFromFileCommand
-from slicereg.commands.load_section import LoadImageCommand
-from slicereg.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
-from slicereg.commands.resample_section import ResampleSectionCommand
-from slicereg.commands.select_channel import SelectChannelCommand
+from slicereg.app.commands.get_coords import MapImageCoordToAtlasCoordCommand
+from slicereg.app.commands.list_bgatlases import ListBgAtlasesCommand
+from slicereg.app.commands.load_atlas import LoadBrainglobeAtlasCommand, LoadAtlasFromFileCommand
+from slicereg.app.commands.load_section import LoadImageCommand
+from slicereg.app.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
+from slicereg.app.commands.resample_section import ResampleSectionCommand
+from slicereg.app.commands.select_channel import SelectChannelCommand
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader

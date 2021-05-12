@@ -3,11 +3,11 @@ from typing import Tuple
 
 import numpy as np
 
-from slicereg.models.atlas import Atlas
-from slicereg.models.base import FrozenUpdater
-from slicereg.models.section import Section
-from slicereg.models.image import Image
-from slicereg.models.utils import _fancy_index_3d_numba
+from slicereg.core.atlas import Atlas
+from slicereg.core.base import FrozenUpdater
+from slicereg.core.section import Section
+from slicereg.core.image import Image
+from slicereg.core.utils import _fancy_index_3d_numba
 
 @dataclass(frozen=True)
 class Registration(FrozenUpdater):

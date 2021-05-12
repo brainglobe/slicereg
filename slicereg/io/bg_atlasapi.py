@@ -5,7 +5,7 @@ from typing import List
 from bg_atlasapi import BrainGlobeAtlas
 from bg_atlasapi import utils as bg_utils
 
-from slicereg.models.atlas import Atlas
+from slicereg.core.atlas import Atlas
 
 
 class BrainglobeAtlasReader:

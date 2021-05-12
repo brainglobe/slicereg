@@ -4,8 +4,8 @@ import numpy as np
 import pytest
 from numpy import random
 
-from slicereg.gui.app_model import AppModel
-from slicereg.gui.commands import CommandProvider
+from slicereg.app.app_model import AppModel
+from slicereg.app.commands import CommandProvider
 from slicereg.gui.main_window.model import MainWindowViewModel
 from slicereg.gui.sidebar.model import SidebarViewModel
 from slicereg.gui.slice_window.model import SliceViewModel
@@ -13,8 +13,8 @@ from slicereg.gui.volume_window.model import VolumeViewModel
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader
-from slicereg.models.atlas import Atlas
-from slicereg.models.image import Image
+from slicereg.core.atlas import Atlas
+from slicereg.core.image import Image
 from slicereg.repos.atlas_repo import AtlasRepo
 
 
