@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from typing import Tuple
 
 import numpy as np
 from vispy.app import use_app
@@ -11,45 +12,42 @@ from slicereg.gui.app_model import AppModel
 class VolumeViewModel:
     _model: AppModel = field(hash=False)
     updated: Signal = field(default_factory=Signal)
+    section_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
+    section_transform: np.ndarray = np.eye(4)
+    clim: Tuple[int, int] = (0, 2)
+    atlas_volume: np.ndarray = np.zeros(shape=(3, 3, 3), dtype=np.uint16)
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
 
-    def update(self, **kwargs):
-        if (image := kwargs.get('section_image')) is not None:
-            kwargs['section_image'] = image.T
-            kwargs['clim'] = self._model.clim_3d_values
-        if kwargs.get('clim_3d') is not None:
-            kwargs['clim'] = self._model.clim_3d_values
-        if (transform := kwargs.get('section_transform')) is not None:
-            kwargs['section_transform'] = transform.T
-        if (volume := kwargs.get('atlas_volume')) is not None:
-            kwargs['camera_center'] = tuple(dim / 2 for dim in volume.shape)
-            kwargs['camera_distance'] = np.mean(volume.shape)
-            kwargs['volume_clim'] = (np.min(volume), np.max(volume))
-            kwargs['atlas_volume'] = volume.swapaxes(0, 2)
-        self.updated.emit(**kwargs)
+    def __setattr__(self, key, value):
+        super().__setattr__(key, value)
+        if hasattr(self, 'updated'):
+            print('VolumeViewModel:', key, 'updated')
+            self.updated.emit(**{key: value, 'model': self, 'changed': key})
+
+    def update(self, model: AppModel, changed: str, **kwargs):
+        if changed == 'section_image':
+            self.section_image = model.section_image
+        elif changed == 'section_transform':
+            self.section_transform = model.section_transform
+        elif changed == 'clim_3d_values':
+            self.clim = model.clim_3d_values
+        elif changed in ['registration_volume', 'annotation_volume', 'visible_volume']:
+            self.atlas_volume = model.atlas_volume
+
+    @property
+    def camera_center(self) -> Tuple[float, float, float]:
+        x, y, z = self.atlas_volume.shape
+        return x / 2, y / 2, z / 2
+
+    @property
+    def camera_distance(self) -> float:
+        return np.mean(self.atlas_volume.shape)
+
+    @property
+    def volume_clim(self) -> Tuple[int, int]:
+        return np.min(self.atlas_volume), np.max(self.atlas_volume)
 
     def press_key(self, key: str):
-        model = self._model
-        key_commands = {
-            '1': lambda: model.select_channel(1),
-            '2': lambda: model.select_channel(2),
-            '3': lambda: model.select_channel(3),
-            '4': lambda: model.select_channel(4),
-            'W': lambda: model.move_section(z=30),
-            'S': lambda: model.move_section(z=-30),
-            'A': lambda: model.move_section(x=-30),
-            'D': lambda: model.move_section(x=30),
-            'Q': lambda: model.move_section(y=-30),
-            'E': lambda: model.move_section(y=30),
-            'I': lambda: model.move_section(rz=3),
-            'K': lambda: model.move_section(rz=-3),
-            'J': lambda: model.move_section(rx=-3),
-            'L': lambda: model.move_section(rx=3),
-            'U': lambda: model.move_section(ry=-3),
-            'O': lambda: model.move_section(ry=3),
-            'Escape': use_app().quit,
-        }
-        if command := key_commands.get(key):
-            command()
+        self._model.keyboard_shortcut(key=key)

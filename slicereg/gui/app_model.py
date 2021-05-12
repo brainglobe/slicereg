@@ -40,15 +40,14 @@ class AppModel:
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
-        print(key, 'updated')
         if hasattr(self, 'updated'):
-            self.updated.emit(**{key: value, 'model': self})
+            self.updated.emit(**{key: value, 'model': self, 'changed': key})
 
     @property
-    def atlas_volume(self):
+    def atlas_volume(self) -> ndarray:
         volumes = {
             VolumeType.REGISTRATION: self.registration_volume,
-            VolumeType.ANNOTATION: self.registration_volume
+            VolumeType.ANNOTATION: self.annotation_volume,
         }
         return volumes[self.visible_volume]
 
@@ -68,6 +67,7 @@ class AppModel:
         self.section_image_resolution = result.resolution_um
         self.atlas_image = result.atlas_image
         self.num_channels = result.num_channels
+        self.visible_volume = VolumeType.REGISTRATION
 
     # Select Channel
     def select_channel(self, num: int):
@@ -137,3 +137,25 @@ class AppModel:
     @property
     def sagittal_section_image(self):
         return self._section_image(axis=2)
+
+    def keyboard_shortcut(self, key: str):
+        key_commands = {
+            '1': lambda: self.select_channel(1),
+            '2': lambda: self.select_channel(2),
+            '3': lambda: self.select_channel(3),
+            '4': lambda: self.select_channel(4),
+            'W': lambda: self.move_section(z=30),
+            'S': lambda: self.move_section(z=-30),
+            'A': lambda: self.move_section(x=-30),
+            'D': lambda: self.move_section(x=30),
+            'Q': lambda: self.move_section(y=-30),
+            'E': lambda: self.move_section(y=30),
+            'I': lambda: self.move_section(rz=3),
+            'K': lambda: self.move_section(rz=-3),
+            'J': lambda: self.move_section(rx=-3),
+            'L': lambda: self.move_section(rx=3),
+            'U': lambda: self.move_section(ry=-3),
+            'O': lambda: self.move_section(ry=3),
+        }
+        if command := key_commands.get(key):
+            command()

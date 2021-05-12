@@ -1,12 +1,12 @@
 from __future__ import annotations
 
-import numpy as np
 from PySide2.QtWidgets import QWidget
 from numpy import array
 from vispy.scene import SceneCanvas, ViewBox, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
+from slicereg.gui.view_models.volume import VolumeViewModel
 from slicereg.gui.views.base import BaseQtWidget, BaseView
 
 
@@ -35,21 +35,29 @@ class VolumeView(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def update(self, **kwargs) -> None:
-        model = kwargs['model']
+    def update(self, model: VolumeViewModel, changed: str, **kwargs) -> None:
+        render_funs = {
+            'atlas_volume': self._render_volume,
+            'section_image': self._render_section,
+            'section_transform': self._render_section_transform,
+            'clim': self._render_section_clim,
+        }
+        render_funs[changed](model=model)
 
-        if kwargs.get('atlas_type') is not None:
-            self._atlas_volume.set_data(model.atlas_volume, clim=kwargs['volume_clim'])
-            self._viewbox.camera.center = kwargs['camera_center']
-            self._viewbox.camera.scale_factor = kwargs['camera_distance']
+    def _render_section_clim(self, model: VolumeViewModel) -> None:
+        self._section_image.clim = model.clim
+        self._canvas.update()
 
-        if (image := kwargs.get('section_image')) is not None:
-            self._section_image.set_data(image)
+    def _render_section_transform(self, model: VolumeViewModel) -> None:
+        self._section_image.transform = MatrixTransform(model.section_transform.T)
+        self._canvas.update()
 
-        if (transform := kwargs.get('section_transform')) is not None:
-            self._section_image.transform = MatrixTransform(transform)
+    def _render_section(self, model: VolumeViewModel) -> None:
+        self._section_image.set_data(model.section_image.T)
+        self._canvas.update()
 
-        if (clim := kwargs.get('clim')) is not None:
-            self._section_image.clim = clim
-
+    def _render_volume(self, model: VolumeViewModel) -> None:
+        self._atlas_volume.set_data(model.atlas_volume.swapaxes(0, 2), clim=model.volume_clim)
+        self._viewbox.camera.center = model.camera_center
+        self._viewbox.camera.scale_factor = model.camera_distance
         self._canvas.update()
