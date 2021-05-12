@@ -5,7 +5,7 @@ import numpy as np
 from PySide2.QtWidgets import QApplication
 from packaging import version
 
-from slicereg.commands.builder import CommandBuilder
+from slicereg.utils.dependency_injector import DependencyInjector
 from slicereg.app.app_model import AppModel
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
 from slicereg.gui.sidebar import SidebarViewModel, SidebarView
@@ -34,7 +34,7 @@ def launch_gui(create_qapp: bool = True):
         os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
     # Initialize the State
-    commands = CommandBuilder(
+    injector = DependencyInjector(
         _repo=InMemoryRepo(),
         _remote_atlas_reader=BrainglobeRemoteAtlasReader(),
         _local_atlas_reader=ImioLocalAtlasReader(),
@@ -45,7 +45,7 @@ def launch_gui(create_qapp: bool = True):
     if create_qapp:
         app = QApplication([])
 
-    model = AppModel(_commands=commands)
+    model = AppModel(_injector=injector)
 
     coronal_section_viewmodel = AtlasSectionViewModel(axis=0, _model=model)
     coronal_section_view = AtlasSectionView()

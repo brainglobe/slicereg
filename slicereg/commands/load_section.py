@@ -20,7 +20,7 @@ class LoadImageResult:
 
 
 @dataclass
-class LoadImageCommand:
+class LoadSectionCommand:
     _repo: BaseRepo
     _image_reader: BaseLocalImageReader
 
