@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QComboBox, QLineEdit, QHBoxLayout, QLabel
 
-from slicereg.gui.view_models.sidebar import SidebarViewModel
-from slicereg.gui.views.base import BaseQtWidget, BaseView
+from slicereg.gui.sidebar.model import SidebarViewModel
+from slicereg.gui.base import BaseQtWidget, BaseView
 from slicereg.gui.widgets.slider import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 

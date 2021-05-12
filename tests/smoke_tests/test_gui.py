@@ -1,12 +1,12 @@
 from slicereg.gui.main import launch_gui
-from slicereg.gui.views.sidebar import SidebarView
-from slicereg.gui.views.slice import SliceView
-from slicereg.gui.views.volume import VolumeView
-from slicereg.gui.views.main_window import MainWindow
+from slicereg.gui.sidebar.view import SidebarView
+from slicereg.gui.slice_window.view import SliceView
+from slicereg.gui.volume_window.view import VolumeView
+from slicereg.gui.main_window.view import MainWindowView
 
 
 def test_gui_launches_without_errors(qtbot):
-    qtbot.addWidget(MainWindow().qt_widget)
+    qtbot.addWidget(MainWindowView().qt_widget)
 
 
 def test_volume_view_launches_without_errors(qtbot):

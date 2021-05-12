@@ -4,8 +4,8 @@ from PySide2.QtWidgets import QWidget
 from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image, InfiniteLine
 from vispy.scene.events import SceneMouseEvent
 
-from slicereg.gui.view_models.atlas_section import AtlasSectionDTO
-from slicereg.gui.views.base import BaseQtWidget, BaseView
+from slicereg.gui.atlas_section_window.model import AtlasSectionDTO
+from slicereg.gui.base import BaseQtWidget, BaseView
 
 
 class AtlasSectionView(BaseQtWidget, BaseView):

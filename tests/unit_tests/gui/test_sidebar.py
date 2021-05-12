@@ -6,7 +6,7 @@ import pytest
 from slicereg.commands.utils import Signal
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.view_models.sidebar import SidebarViewModel
+from slicereg.gui.sidebar.model import SidebarViewModel
 
 
 @pytest.fixture

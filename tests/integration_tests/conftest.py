@@ -6,10 +6,10 @@ from numpy import random
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.view_models.main_window import MainWindowViewModel
-from slicereg.gui.view_models.sidebar import SidebarViewModel
-from slicereg.gui.view_models.slice import SliceViewModel
-from slicereg.gui.view_models.volume import VolumeViewModel
+from slicereg.gui.main_window.model import MainWindowViewModel
+from slicereg.gui.sidebar.model import SidebarViewModel
+from slicereg.gui.slice_window.model import SliceViewModel
+from slicereg.gui.volume_window.model import VolumeViewModel
 from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
 from slicereg.io.imio import ImioAtlasReader
 from slicereg.io.tifffile import OmeTiffImageReader

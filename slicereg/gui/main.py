@@ -7,16 +7,11 @@ from packaging import version
 
 from slicereg.gui.commands import CommandProvider
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.view_models.atlas_section import AtlasSectionViewModel
-from slicereg.gui.views.atlas_section import AtlasSectionView
-from slicereg.gui.views.sidebar import SidebarView
-from slicereg.gui.view_models.sidebar import SidebarViewModel
-from slicereg.gui.views.slice import SliceView
-from slicereg.gui.view_models.slice import SliceViewModel
-from slicereg.gui.views.volume import VolumeView
-from slicereg.gui.view_models.volume import VolumeViewModel
-from slicereg.gui.views.main_window import MainWindow
-from slicereg.gui.view_models.main_window import MainWindowViewModel
+from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
+from slicereg.gui.sidebar import SidebarViewModel, SidebarView
+from slicereg.gui.slice_window import SliceViewModel, SliceView
+from slicereg.gui.volume_window import VolumeViewModel, VolumeView
+from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
 from slicereg.repos.atlas_repo import AtlasRepo
 from slicereg.repos.section_repo import SectionRepo
 
@@ -70,7 +65,7 @@ def launch_gui(create_qapp: bool = True):
     sidebar_view.register(sidebar_viewmodel)
 
     window_viewmodel = MainWindowViewModel(_model=model)
-    window = MainWindow(
+    window = MainWindowView(
         coronal_widget=coronal_section_view.qt_widget,
         axial_widget=axial_section_view.qt_widget,
         sagittal_widget=sagittal_section_view.qt_widget,

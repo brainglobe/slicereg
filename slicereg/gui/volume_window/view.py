@@ -7,8 +7,8 @@ from vispy.scene import SceneCanvas, ViewBox, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from slicereg.gui.view_models.volume import VolumeViewModel
-from slicereg.gui.views.base import BaseQtWidget
+from slicereg.gui.volume_window.model import VolumeViewModel
+from slicereg.gui.base import BaseQtWidget
 
 
 @dataclass

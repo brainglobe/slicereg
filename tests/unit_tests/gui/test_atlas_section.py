@@ -7,7 +7,7 @@ import numpy.testing as npt
 from slicereg.commands.utils import Signal
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.commands import CommandProvider
-from slicereg.gui.view_models.atlas_section import AtlasSectionViewModel
+from slicereg.gui.atlas_section_window.model import AtlasSectionViewModel
 
 
 cases = [

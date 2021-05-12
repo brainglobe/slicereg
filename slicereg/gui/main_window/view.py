@@ -5,11 +5,11 @@ from typing import Optional
 from PySide2 import QtCore
 from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel, QVBoxLayout
 
-from slicereg.gui.view_models.main_window import MainWindowViewModel
-from slicereg.gui.views.base import BaseQtWidget, BaseView
+from slicereg.gui.main_window.model import MainWindowViewModel
+from slicereg.gui.base import BaseQtWidget, BaseView
 
 
-class MainWindow(BaseQtWidget, BaseView):
+class MainWindowView(BaseQtWidget, BaseView):
 
     def __init__(
             self,
