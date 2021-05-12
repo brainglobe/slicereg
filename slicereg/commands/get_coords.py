@@ -3,8 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Tuple
 
-from slicereg.app.commands.base import BaseSectionRepo
-from slicereg.app.repo import BaseRepo
+from slicereg.commands.base import BaseRepo
 
 
 @dataclass(frozen=True)

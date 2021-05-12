@@ -5,9 +5,9 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.app.repo import BaseRepo
-from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
-from slicereg.io.imio import ImioAtlasReader
+from slicereg.commands.base import BaseRepo
+from slicereg.io.brainglobe.atlas import BrainglobeAtlasReader
+from slicereg.io.imio.atlas import ImioAtlasReader
 
 
 

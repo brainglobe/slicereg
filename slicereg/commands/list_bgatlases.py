@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
-from slicereg.io.bg_atlasapi import BrainglobeAtlasReader
+from slicereg.io.brainglobe.atlas import BrainglobeAtlasReader
 
 
 @dataclass(frozen=True)

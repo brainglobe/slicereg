@@ -2,7 +2,14 @@ from abc import ABC, abstractmethod
 from typing import List, Optional
 
 from slicereg.core.atlas import Atlas
+from slicereg.core.image import Image
 from slicereg.core.section import Section
+
+
+class BaseImageReader(ABC):
+
+    @abstractmethod
+    def read(self, filename: str, resolution: Optional[float]) -> Image: ...
 
 
 class BaseRepo(ABC):

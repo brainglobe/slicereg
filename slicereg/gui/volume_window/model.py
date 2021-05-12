@@ -3,7 +3,7 @@ from typing import Tuple
 
 import numpy as np
 
-from slicereg.app.commands.utils import Signal
+from slicereg.commands.utils import Signal
 from slicereg.app.app_model import AppModel
 
 

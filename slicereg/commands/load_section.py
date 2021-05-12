@@ -4,12 +4,12 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.app.repo import BaseRepo
+from slicereg.commands.base import BaseRepo
 from slicereg.core.image_transform import ImageTransformer
 from slicereg.core.physical_transform import PhysicalTransformer
 from slicereg.core.registration import Registration
 from slicereg.core.section import Section
-from slicereg.io.tifffile import OmeTiffImageReader, TiffImageReader
+from slicereg.io.tifffile.image import TiffImageReader, OmeTiffImageReader
 
 
 @dataclass(frozen=True)

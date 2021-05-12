@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Dict, List
 from uuid import UUID
 
-from slicereg.app.repo import BaseRepo
+from slicereg.commands.base import BaseRepo
 from slicereg.core.atlas import Atlas
 from slicereg.core.section import Section
 

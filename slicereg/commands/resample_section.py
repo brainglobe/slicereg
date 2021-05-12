@@ -2,7 +2,7 @@ from dataclasses import dataclass
 
 from numpy import ndarray
 
-from slicereg.app.repo import BaseRepo
+from slicereg.commands.base import BaseRepo
 from slicereg.core.registration import Registration
 
 
