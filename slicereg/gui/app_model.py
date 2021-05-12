@@ -42,7 +42,7 @@ class AppModel:
         super().__setattr__(key, value)
         print(key, 'updated')
         if hasattr(self, 'updated'):
-            self.updated.emit(**{key: value})
+            self.updated.emit(**{key: value, 'model': self})
 
     @property
     def atlas_volume(self):
