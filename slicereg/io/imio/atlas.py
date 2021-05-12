@@ -1,14 +1,16 @@
+from typing import Optional
+
 import imio
 
+from slicereg.commands.base import BaseLocalAtlasReader
 from slicereg.core.atlas import Atlas
 
 
-class ImioAtlasReader:
+class ImioLocalAtlasReader(BaseLocalAtlasReader):
 
-    @staticmethod
-    def read(path: str, resolution_um: int) -> Atlas:
-        # TODO: can support scaling, parallel loading, map to coordinate space (anterior, left, superior, etc.)
-        volume = imio.load_any(path)
+    def read(self, filename: str, resolution_um: float) -> Atlas:
+
+        volume = imio.load_any(filename)
 
         return Atlas(
             volume=volume,

@@ -1,4 +1,4 @@
-from slicereg.gui.main import launch_gui
+from slicereg.main import launch_gui
 from slicereg.gui.sidebar.view import SidebarView
 from slicereg.gui.slice_window.view import SliceView
 from slicereg.gui.volume_window.view import VolumeView

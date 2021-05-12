@@ -10,8 +10,8 @@ from slicereg.gui.main_window.model import MainWindowViewModel
 from slicereg.gui.sidebar.model import SidebarViewModel
 from slicereg.gui.slice_window.model import SliceViewModel
 from slicereg.gui.volume_window.model import VolumeViewModel
-from slicereg.io.brainglobe.atlas import BrainglobeAtlasReader
-from slicereg.io.imio.atlas import ImioAtlasReader
+from slicereg.io.brainglobe.atlas import BrainglobeRemoteAtlasReader
+from slicereg.io.imio.atlas import ImioLocalAtlasReader
 from slicereg.io.tifffile.image import OmeTiffImageReader
 from slicereg.core.atlas import Atlas
 from slicereg.core.image import Image
@@ -48,14 +48,14 @@ def model(atlas_volume, second_volume, annotation_volume, channels, bg_atlases):
     ome_reader = Mock(OmeTiffImageReader)
     ome_reader.read.return_value = Image(channels=channels, resolution_um=10.)
 
-    atlas_reader = Mock(BrainglobeAtlasReader)
+    atlas_reader = Mock(BrainglobeRemoteAtlasReader)
     atlas_reader.list_available.return_value = bg_atlases
     atlas_reader.read.side_effect = [
         Atlas(volume=atlas_volume, resolution_um=25, annotation_volume=annotation_volume),
         Atlas(volume=second_volume, resolution_um=100),
     ]
 
-    atlas_file_reader = Mock(ImioAtlasReader)
+    atlas_file_reader = Mock(ImioLocalAtlasReader)
     atlas_file_reader.read.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=10)
 
     atlas_repo = AtlasRepo()

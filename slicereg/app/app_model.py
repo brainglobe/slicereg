@@ -7,8 +7,8 @@ from typing import Tuple, List, Optional
 import numpy as np
 from numpy import ndarray
 
-from slicereg.commands.utils import Signal
-from slicereg.commands import CommandProvider
+from slicereg.utils import Signal
+from slicereg.commands.builder import CommandBuilder
 
 
 class VolumeType(Enum):
@@ -18,7 +18,7 @@ class VolumeType(Enum):
 
 @dataclass
 class AppModel:
-    _commands: CommandProvider
+    _commands: CommandBuilder
     updated: Signal = field(default_factory=Signal)
     window_title: str = "bg-slicereg"
     clim_2d: Tuple[float, float] = (0., 1.)
@@ -49,7 +49,7 @@ class AppModel:
             VolumeType.REGISTRATION: self.registration_volume,
             VolumeType.ANNOTATION: self.annotation_volume,
         }
-        return volumes[self.visible_volume]
+        return volume if (volume := volumes[self.visible_volume]) is not None else None
 
     @property
     def clim_2d_values(self):
@@ -96,7 +96,7 @@ class AppModel:
 
     # Load Atlases
     def load_bgatlas(self, name: str):
-        result = self._commands.load_atlas(bgatlas_name=name)
+        result = self._commands.load_atlas(name=name)
         self.registration_volume = result.volume
         self.atlas_resolution = int(result.resolution)
         self.annotation_volume = result.annotation_volume

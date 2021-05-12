@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
-from slicereg.commands.utils import Signal
+from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel, VolumeType
 
 

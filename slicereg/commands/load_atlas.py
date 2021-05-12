@@ -5,10 +5,7 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseRepo
-from slicereg.io.brainglobe.atlas import BrainglobeAtlasReader
-from slicereg.io.imio.atlas import ImioAtlasReader
-
+from slicereg.commands.base import BaseRepo, BaseRemoteAtlasReader, BaseLocalAtlasReader
 
 
 @dataclass(frozen=True)
@@ -20,12 +17,14 @@ class LoadAtlasResult:
 
 
 @dataclass
-class LoadBrainglobeAtlasCommand:
+class LoadRemoteAtlasCommand:
     _repo: BaseRepo
-    _reader: BrainglobeAtlasReader
+    _remote_atlas_reader: BaseRemoteAtlasReader
 
-    def __call__(self, bgatlas_name: str) -> LoadAtlasResult:
-        atlas = self._reader.read(path=bgatlas_name)
+    def __call__(self, name: str) -> LoadAtlasResult:
+        atlas = self._remote_atlas_reader.read(name=name)
+        if atlas is None:
+            raise RuntimeError("Atlas not loaded.")
         self._repo.set_atlas(atlas=atlas)
         return LoadAtlasResult(
             volume=atlas.volume,
@@ -38,10 +37,10 @@ class LoadBrainglobeAtlasCommand:
 @dataclass
 class LoadAtlasFromFileCommand:
     _repo: BaseRepo
-    _reader: ImioAtlasReader
+    _local_atlas_reader: BaseLocalAtlasReader
 
     def __call__(self, filename: str, resolution_um: int) -> LoadAtlasResult:
-        atlas = self._reader.read(path=filename, resolution_um=resolution_um)
+        atlas = self._local_atlas_reader.read(filename=filename, resolution_um=resolution_um)
         self._repo.set_atlas(atlas=atlas)
         return LoadAtlasResult(
             volume=atlas.volume,

@@ -5,7 +5,7 @@ import tifffile
 import xmltodict
 from numpy import uint16
 
-from slicereg.commands.base import BaseImageReader
+from slicereg.commands.base import BaseLocalImageReader
 from slicereg.core.image import Image
 
 
@@ -22,7 +22,7 @@ class TiffImageReader:
         return Image(channels=image, resolution_um=resolution_um)
 
 
-class OmeTiffImageReader(BaseImageReader):
+class OmeTiffImageReader(BaseLocalImageReader):
 
     def read(self, filename: str, resolution: Optional[float] = None) -> Image:
         f = tifffile.TiffFile(filename)

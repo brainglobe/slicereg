@@ -1,47 +1,43 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
+from slicereg.commands.base import BaseRepo, BaseRemoteAtlasReader, BaseLocalAtlasReader, BaseLocalImageReader
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
-from slicereg.commands.list_bgatlases import ListBgAtlasesCommand
-from slicereg.commands.load_atlas import LoadBrainglobeAtlasCommand, LoadAtlasFromFileCommand
+from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
+from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadImageCommand
 from slicereg.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
-from slicereg.io.brainglobe.atlas import BrainglobeAtlasReader
-from slicereg.io.imio.atlas import ImioAtlasReader
-from slicereg.io.tifffile.image import TiffImageReader, OmeTiffImageReader
-from slicereg.commands.base import BaseRepo
 
 
 @dataclass(frozen=True)
-class CommandProvider:
+class CommandBuilder:
     _repo: BaseRepo
-    _bgatlas_reader: BrainglobeAtlasReader = field(default_factory=BrainglobeAtlasReader)
-    _atlas_file_reader: ImioAtlasReader = field(default_factory=ImioAtlasReader)
-    _section_tiff_reader: TiffImageReader = field(default_factory=TiffImageReader)
-    _section_ome_reader: OmeTiffImageReader = field(default_factory=OmeTiffImageReader)
+    _remote_atlas_reader: BaseRemoteAtlasReader
+    _local_atlas_reader: BaseLocalAtlasReader
+    _image_reader: BaseLocalImageReader
+
 
     @property
-    def load_atlas(self) -> LoadBrainglobeAtlasCommand:
-        return LoadBrainglobeAtlasCommand(_repo=self._repo, _reader=self._bgatlas_reader)
+    def load_atlas(self) -> LoadRemoteAtlasCommand:
+        return LoadRemoteAtlasCommand(_repo=self._repo, _remote_atlas_reader=self._remote_atlas_reader)
 
     @property
     def load_section(self) -> LoadImageCommand:
         return LoadImageCommand(
             _repo=self._repo,
-            _ome_reader=self._section_ome_reader,
-            _tiff_reader=self._section_tiff_reader
+            _image_reader=self._image_reader,
         )
 
     @property
     def load_atlas_from_file(self) -> LoadAtlasFromFileCommand:
-        return LoadAtlasFromFileCommand(_repo=self._repo, _reader=self._atlas_file_reader)
+        return LoadAtlasFromFileCommand(_repo=self._repo, _local_atlas_reader=self._local_atlas_reader)
 
     @property
-    def list_bgatlases(self) -> ListBgAtlasesCommand:
-        return ListBgAtlasesCommand(_reader=self._bgatlas_reader)
+    def list_bgatlases(self) -> ListRemoteAtlasesCommand:
+        return ListRemoteAtlasesCommand(_remote_atlas_reader=self._remote_atlas_reader)
 
     @property
     def select_channel(self) -> SelectChannelCommand:

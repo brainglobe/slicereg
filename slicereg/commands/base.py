@@ -6,10 +6,29 @@ from slicereg.core.image import Image
 from slicereg.core.section import Section
 
 
-class BaseImageReader(ABC):
+class BaseLocalImageReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str, resolution: Optional[float]) -> Optional[Image]: ...
+    def read(self, filename: str, resolution: Optional[float]) -> Image: ...
+
+
+class BaseLocalAtlasReader(ABC):
+
+    @abstractmethod
+    def read(self, filename: str, resolution_um: float) -> Atlas: ...
+
+
+class BaseRemoteAtlasReader:
+
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+    @abstractmethod
+    def read(self, name: str) -> Atlas: ...
+
+    @abstractmethod
+    def list(self) -> List[str]: ...
 
 
 class BaseRepo(ABC):

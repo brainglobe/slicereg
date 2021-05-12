@@ -3,7 +3,7 @@ from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseRepo, BaseImageReader
+from slicereg.commands.base import BaseRepo, BaseLocalImageReader
 from slicereg.core.image_transform import ImageTransformer
 from slicereg.core.physical_transform import PhysicalTransformer
 from slicereg.core.registration import Registration
@@ -22,9 +22,9 @@ class LoadImageResult:
 @dataclass
 class LoadImageCommand:
     _repo: BaseRepo
-    _image_reader: BaseImageReader
+    _image_reader: BaseLocalImageReader
 
-    def __call__(self, filename: str, resolution: Optional[float]) -> Optional[LoadImageResult]:
+    def __call__(self, filename: str, resolution: Optional[float] = None) -> Optional[LoadImageResult]:
 
         image = self._image_reader.read(filename=filename, resolution=resolution)
         if image is None:

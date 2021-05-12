@@ -5,13 +5,14 @@ import numpy as np
 from PySide2.QtWidgets import QApplication
 from packaging import version
 
-from slicereg.commands import CommandProvider
+from slicereg.commands.builder import CommandBuilder
 from slicereg.app.app_model import AppModel
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
 from slicereg.gui.sidebar import SidebarViewModel, SidebarView
 from slicereg.gui.slice_window import SliceViewModel, SliceView
 from slicereg.gui.volume_window import VolumeViewModel, VolumeView
 from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
+from slicereg.io import BrainglobeRemoteAtlasReader, ImioLocalAtlasReader, ImageReader
 from slicereg.repos import InMemoryRepo
 
 np.set_printoptions(suppress=True, precision=2)
@@ -33,7 +34,12 @@ def launch_gui(create_qapp: bool = True):
         os.environ['QT_MAC_WANTS_LAYER'] = '1'
 
     # Initialize the State
-    commands = CommandProvider(_repo=InMemoryRepo())
+    commands = CommandBuilder(
+        _repo=InMemoryRepo(),
+        _remote_atlas_reader=BrainglobeRemoteAtlasReader(),
+        _local_atlas_reader=ImioLocalAtlasReader(),
+        _image_reader=ImageReader(),
+    )
 
     # Wire up the GUI
     if create_qapp:
