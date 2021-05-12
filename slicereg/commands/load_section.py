@@ -1,15 +1,13 @@
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Optional
 
 from numpy import ndarray
 
-from slicereg.commands.base import BaseRepo
+from slicereg.commands.base import BaseRepo, BaseImageReader
 from slicereg.core.image_transform import ImageTransformer
 from slicereg.core.physical_transform import PhysicalTransformer
 from slicereg.core.registration import Registration
 from slicereg.core.section import Section
-from slicereg.io.tifffile.image import TiffImageReader, OmeTiffImageReader
 
 
 @dataclass(frozen=True)
@@ -24,25 +22,20 @@ class LoadImageResult:
 @dataclass
 class LoadImageCommand:
     _repo: BaseRepo
-    _ome_reader: OmeTiffImageReader
-    _tiff_reader: TiffImageReader
+    _image_reader: BaseImageReader
 
-    def __call__(self, filename: str) -> Optional[LoadImageResult]:
-        filepath = Path(filename)
+    def __call__(self, filename: str, resolution: Optional[float]) -> Optional[LoadImageResult]:
+
+        image = self._image_reader.read(filename=filename, resolution=resolution)
+        if image is None:
+            raise IOError("Image failed to load.")
+        image = image.resample(resolution_um=10)
+
         atlas = self._repo.get_atlas()
         if not atlas:
             raise RuntimeError('No atlas loaded')
-
         cx, cy, cz = atlas.center
 
-        if '.ome' in filepath.suffixes:
-            image = self._ome_reader.read(filename=str(filepath))
-        elif filepath.suffix.lower() in ['.tiff', '.tif']:
-            image = self._tiff_reader.read(filename=str(filepath), resolution_um=10)
-        else:
-            raise ValueError(f"{filepath.suffix} not supported")
-
-        image = image.resample(resolution_um=10)
         section = Section(
             image=image,
             image_transform=ImageTransformer(i_shift=-0.5, j_shift=-0.5),

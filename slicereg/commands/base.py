@@ -9,7 +9,7 @@ from slicereg.core.section import Section
 class BaseImageReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str, resolution: Optional[float]) -> Image: ...
+    def read(self, filename: str, resolution: Optional[float]) -> Optional[Image]: ...
 
 
 class BaseRepo(ABC):
