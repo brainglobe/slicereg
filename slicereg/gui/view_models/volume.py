@@ -2,7 +2,6 @@ from dataclasses import dataclass, field
 from typing import Tuple
 
 import numpy as np
-from vispy.app import use_app
 
 from slicereg.commands.utils import Signal
 from slicereg.gui.app_model import AppModel
@@ -23,8 +22,7 @@ class VolumeViewModel:
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
-            print('VolumeViewModel:', key, 'updated')
-            self.updated.emit(**{key: value, 'model': self, 'changed': key})
+            self.updated.emit(model=self, changed=key)
 
     def update(self, model: AppModel, changed: str, **kwargs):
         if changed == 'section_image':
