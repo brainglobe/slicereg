@@ -4,7 +4,7 @@ from PySide2.QtWidgets import QWidget, QVBoxLayout, QPushButton, QFileDialog, QC
 
 from slicereg.gui.sidebar.model import SidebarViewModel
 from slicereg.gui.base import BaseQtWidget, BaseView
-from slicereg.gui.widgets.slider import LabelledSliderWidget
+from slicereg.gui.sidebar.slider_widget import LabelledSliderWidget
 from vendor.napari_qrange_slider.qt_range_slider import QHRangeSlider
 
 
