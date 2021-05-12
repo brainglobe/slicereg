@@ -63,9 +63,7 @@ def launch_gui(create_qapp: bool = True):
     slice_view = SliceView()
     slice_view.register(slice_viewmodel)
 
-    volume_viewmodel = VolumeViewModel(_model=model)
-    volume_view = VolumeView()
-    volume_view.register(volume_viewmodel)
+    volume_view = VolumeView(_model=VolumeViewModel(_model=model))
 
     sidebar_viewmodel = SidebarViewModel(_model=model)
     sidebar_view = SidebarView()

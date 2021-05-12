@@ -22,7 +22,7 @@ class VolumeViewModel:
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
-            self.updated.emit(model=self, changed=key)
+            self.updated.emit(changed=key)
 
     def update(self, model: AppModel, changed: str, **kwargs):
         if changed == 'section_image':
