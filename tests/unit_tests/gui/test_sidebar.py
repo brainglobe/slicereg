@@ -3,20 +3,19 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
-from slicereg.commands import Signal
 from slicereg.app.app_model import AppModel
-from slicereg.commands import CommandProvider
 from slicereg.gui.sidebar.model import SidebarViewModel
+from slicereg.utils import DependencyInjector, Signal
 
 
 @pytest.fixture
 def view_model():
     image = np.linspace(0, 10, num=10)[:, np.newaxis]
-    model = AppModel(Mock(CommandProvider), section_image=image)
+    model = AppModel(_injector=Mock(DependencyInjector), section_image=image)
     view = SidebarViewModel(_model=model, updated=Mock(Signal))
     return view
 
 
 def test_resolution_updated_with_section_text_change(view_model: SidebarViewModel):
-    view_model.update_section_resolution_textbox('6.28')
+    view_model.section_resolution_text = '6.28'
     assert view_model._model.section_image_resolution == 6.28

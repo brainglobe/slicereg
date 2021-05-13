@@ -5,17 +5,15 @@ import pytest
 from numpy import random
 
 from slicereg.app.app_model import AppModel
-from slicereg.commands import CommandProvider
+from slicereg.commands.base import BaseRemoteAtlasReader, BaseLocalAtlasReader, BaseLocalImageReader
+from slicereg.core.atlas import Atlas
+from slicereg.core.image import Image
 from slicereg.gui.main_window.model import MainWindowViewModel
 from slicereg.gui.sidebar.model import SidebarViewModel
 from slicereg.gui.slice_window.model import SliceViewModel
 from slicereg.gui.volume_window.model import VolumeViewModel
-from slicereg.io.brainglobe.atlas import BrainglobeRemoteAtlasReader
-from slicereg.io.imio.atlas import ImioLocalAtlasReader
-from slicereg.io.tifffile.image import OmeTiffImageReader
-from slicereg.core.atlas import Atlas
-from slicereg.core.image import Image
-from slicereg.repos.atlas_repo import AtlasRepo
+from slicereg.repos import InMemoryRepo
+from slicereg.utils.dependency_injector import DependencyInjector
 
 
 @pytest.fixture
@@ -45,28 +43,29 @@ def channels():
 
 @pytest.fixture
 def model(atlas_volume, second_volume, annotation_volume, channels, bg_atlases):
-    ome_reader = Mock(OmeTiffImageReader)
-    ome_reader.read.return_value = Image(channels=channels, resolution_um=10.)
+    image_reader = Mock(BaseLocalImageReader)
+    image_reader.read.return_value = Image(channels=channels, resolution_um=10.)
 
-    atlas_reader = Mock(BrainglobeRemoteAtlasReader)
-    atlas_reader.list_available.return_value = bg_atlases
+    atlas_reader = Mock(BaseRemoteAtlasReader)
+    atlas_reader.list.return_value = bg_atlases
     atlas_reader.read.side_effect = [
         Atlas(volume=atlas_volume, resolution_um=25, annotation_volume=annotation_volume),
         Atlas(volume=second_volume, resolution_um=100),
     ]
 
-    atlas_file_reader = Mock(ImioLocalAtlasReader)
+    atlas_file_reader = Mock(BaseLocalAtlasReader)
     atlas_file_reader.read.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=10)
 
-    atlas_repo = AtlasRepo()
-    atlas_repo.set_atlas(Atlas(volume=np.empty((2, 3, 4)), resolution_um=10))
-    commands = CommandProvider(
-        _bgatlas_reader=atlas_reader,
-        _atlas_file_reader=atlas_file_reader,
-        _atlas_repo=atlas_repo,
-        _section_ome_reader=ome_reader
+    repo = InMemoryRepo()
+    repo.set_atlas(Atlas(volume=np.empty((2, 3, 4)), resolution_um=10))
+
+    injector = DependencyInjector(
+        _repo=repo,
+        _remote_atlas_reader=atlas_reader,
+        _local_atlas_reader=atlas_file_reader,
+        _image_reader=image_reader,
     )
-    model = AppModel(_commands=commands)
+    model = AppModel(_injector=injector)
     return model
 
 
