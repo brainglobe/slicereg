@@ -12,6 +12,7 @@ class SidebarViewModel:
     selected_bgatlas: Optional[str] = None
     _atlas_resolution_text: str = ''
     bgatlas_dropdown_entries: List[str] = field(default_factory=list)
+    _section_resolution_text: str = ''
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
@@ -24,9 +25,31 @@ class SidebarViewModel:
     def update(self, changed: str):
         if changed == 'bgatlas_names':
             self.bgatlas_dropdown_entries = self._model.bgatlas_names
+        elif changed == 'section_image_resolution':
+            res = self._model.section_image_resolution
+            if res is None:
+                text = ''
+            elif int(res) == float(res):
+                text = str(int(res))
+            else:
+                text = str(float(res))
+            self._section_resolution_text = text
 
-    def update_section_resolution_textbox(self, resolution: str) -> None:
-        self._model.section_image_resolution = float(resolution)
+    @property
+    def section_resolution_text(self) -> str:
+        return self._section_resolution_text
+
+    @section_resolution_text.setter
+    def section_resolution_text(self, text: str):
+        # Validate: is float
+        try:
+            if text:
+                self._model.section_image_resolution = float(text)
+            else:
+                self._model.section_image_resolution = None
+        except ValueError:
+            self._section_resolution_text = self._section_resolution_text
+            return
 
     def click_coronal_button(self):
         self._model.update_section(rx=0, ry=0, rz=-90)

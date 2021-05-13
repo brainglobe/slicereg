@@ -53,8 +53,7 @@ class SidebarView(BaseQtWidget):
 
         self.section_resolution_textbox = QLineEdit()
         load_section_layout.addWidget(self.section_resolution_textbox)
-        self.section_resolution_textbox.textEdited.connect(
-            lambda text: self._model.update_section_resolution_textbox(text))
+        self.section_resolution_textbox.textEdited.connect(lambda text: setattr(self._model, 'section_resolution_text', text))
 
         # Load Section Buttons
         self.load_image_button = QPushButton("Load Section")
@@ -172,6 +171,7 @@ class SidebarView(BaseQtWidget):
             'bgatlas_names': self._render_bgatlas_list_dropdown,
             'selected_bgatlas': (lambda: None),
             'atlas_resolution_text': self._render_atlas_resolution_textbox,
+            'section_resolution_text': self._render_section_resolution_textbox,
         }
         render_funs[changed]()
 
@@ -181,3 +181,6 @@ class SidebarView(BaseQtWidget):
 
     def _render_atlas_resolution_textbox(self):
         self.atlas_resolution_textbox.setText(self._model.atlas_resolution_text)
+
+    def _render_section_resolution_textbox(self):
+        self.section_resolution_textbox.setText(self._model.section_resolution_text)
