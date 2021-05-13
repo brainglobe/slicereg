@@ -24,15 +24,15 @@ class VolumeViewModel:
         if hasattr(self, 'updated'):
             self.updated.emit(changed=key)
 
-    def update(self, model: AppModel, changed: str, **kwargs):
+    def update(self, changed: str):
         if changed == 'section_image':
-            self.section_image = model.section_image
+            self.section_image = self._model.section_image
         elif changed == 'section_transform':
-            self.section_transform = model.section_transform
+            self.section_transform = self._model.section_transform
         elif changed == 'clim_3d_values':
-            self.clim = model.clim_3d_values
+            self.clim = self._model.clim_3d_values
         elif changed in ['registration_volume', 'annotation_volume', 'visible_volume']:
-            self.atlas_volume = model.atlas_volume
+            self.atlas_volume = self._model.atlas_volume
 
     @property
     def camera_center(self) -> Tuple[float, float, float]:

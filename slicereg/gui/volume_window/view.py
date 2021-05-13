@@ -1,21 +1,20 @@
 from __future__ import annotations
 
-from dataclasses import dataclass
-
 from PySide2.QtWidgets import QWidget
 from vispy.scene import SceneCanvas, ViewBox, Volume, Image, ArcballCamera
 from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
-from slicereg.gui.volume_window.model import VolumeViewModel
 from slicereg.gui.base import BaseQtWidget
+from slicereg.gui.volume_window.model import VolumeViewModel
 
 
-@dataclass
 class VolumeView(BaseQtWidget):
-    _model: VolumeViewModel
 
-    def __post_init__(self):
+    def __init__(self, _model: VolumeViewModel):
+
+        self._model = _model
+
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
