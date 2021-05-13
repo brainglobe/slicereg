@@ -6,13 +6,14 @@ from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image
 from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
-from slicereg.gui.slice_window.model import SliceViewDTO
-from slicereg.gui.base import BaseQtWidget, BaseView
+from slicereg.gui.base import BaseQtWidget
+from slicereg.gui.slice_window.model import SliceViewModel
 
 
-class SliceView(BaseQtWidget, BaseView):
+class SliceView(BaseQtWidget):
 
-    def __init__(self):
+    def __init__(self, _model: SliceViewModel):
+        self._model = _model
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
@@ -33,7 +34,6 @@ class SliceView(BaseQtWidget, BaseView):
         self._slice.attach(ColorFilter((0., .5, 1., 1.)))
         self._slice.set_gl_state('additive', depth_test=False)
 
-    def on_registration(self, model):
         def _vispy_mouse_event(event: SceneMouseEvent) -> None:
             if event.type == 'mouse_press':
                 event.handled = True
@@ -44,12 +44,12 @@ class SliceView(BaseQtWidget, BaseView):
                 x1, y1 = event.last_event.pos
                 x2, y2 = event.pos
                 if event.button == 1:  # Left Mouse Button
-                    model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
+                    self._model.on_left_mouse_drag(x1=x1, x2=x2, y1=y1, y2=y2)
                 elif event.button == 2:  # Right Mouse Button
-                    model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
+                    self._model.on_right_mouse_drag(x1=x1, y1=y1, x2=x2, y2=y2)
 
             elif event.type == 'mouse_wheel':
-                model.on_mousewheel_move(increment=int(event.delta[1]))
+                self._model.on_mousewheel_move(increment=int(event.delta[1]))
 
         self._canvas.events.mouse_press.connect(_vispy_mouse_event)
         self._canvas.events.mouse_move.connect(_vispy_mouse_event)
@@ -60,19 +60,27 @@ class SliceView(BaseQtWidget, BaseView):
     def qt_widget(self) -> QWidget:
         return self._canvas.native
 
-    def update(self, dto):
-        dto: SliceViewDTO
+    def update(self, changed: str) -> None:
+        render_funs = {
+            'section_image': self._render_section_image,
+            'clim': self._render_section_clim,
+            'atlas_image': self._render_atlas_image,
+        }
+        render_funs[changed]()
 
-        if (image := dto.section_image) is not None:
-            self._slice.set_data(image)
-            self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
-            self._viewbox.camera.scale_factor = image.shape[1]
+    def _render_atlas_image(self):
+        image = self._model.atlas_image
+        self._reference_slice.set_data(image)
+        self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
+        self._canvas.update()
 
-        if (clim := dto.clim) is not None:
-            self._slice.clim = clim
+    def _render_section_clim(self):
+        self._slice.clim = self._model.clim
+        self._canvas.update()
 
-        if (image := dto.atlas_image) is not None:
-            self._reference_slice.set_data(image)
-            self._reference_slice.clim = (np.min(image), np.max(image)) if np.max(image) - np.min(image) > 0 else (0, 1)
-
+    def _render_section_image(self):
+        image = self._model.section_image
+        self._slice.set_data(image)
+        self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
+        self._viewbox.camera.scale_factor = image.shape[1]
         self._canvas.update()

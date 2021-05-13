@@ -48,7 +48,7 @@ class AppModel:
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
-            self.updated.emit(**{key: value, 'model': self, 'changed': key})
+            self.updated.emit(changed=key)
 
     @property
     def atlas_volume(self) -> ndarray:

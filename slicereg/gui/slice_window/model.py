@@ -1,37 +1,36 @@
 from dataclasses import dataclass, field
-from typing import Tuple, Optional
+from typing import Tuple
 
-from numpy import ndarray
+import numpy as np
 
-from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel
-
-
-@dataclass
-class SliceViewDTO:
-    section_image: Optional[ndarray] = None
-    atlas_image: Optional[ndarray] = None
-    clim: Optional[Tuple[int, int]] = None
+from slicereg.utils.signal import Signal
 
 
 @dataclass(unsafe_hash=True)
 class SliceViewModel:
     _model: AppModel = field(hash=False)
     updated: Signal = field(default_factory=Signal)
+    atlas_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
+    section_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
+    clim: Tuple[int, int] = (0, 2)
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
 
-    def update(self, **kwargs):
-        updates = SliceViewDTO()
-        if 'atlas_image' in kwargs:
-            updates.atlas_image = kwargs['atlas_image']
-        if 'section_image' in kwargs:
-            updates.section_image = kwargs['section_image']
-            updates.clim = self._model.clim_2d_values
-        if 'clim_2d' in kwargs:
-            updates.clim = self._model.clim_2d_values
-        self.updated.emit(dto=updates)
+    def __setattr__(self, key, value):
+        super().__setattr__(key, value)
+        if hasattr(self, 'updated'):
+            self.updated.emit(changed=key)
+
+    def update(self, changed: str):
+        if changed == 'atlas_image':
+            self.atlas_image = self._model.atlas_image
+        if changed == 'section_image':
+            self.section_image = self._model.section_image
+            self.clim = self._model.clim_2d_values
+        if changed == 'clim_2d':
+            self.clim = self._model.clim_2d_values
 
     def on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
         scale = 4.

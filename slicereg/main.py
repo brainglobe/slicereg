@@ -59,15 +59,9 @@ def launch_gui(create_qapp: bool = True):
     sagittal_section_view = AtlasSectionView()
     sagittal_section_view.register(sagittal_section_viewmodel)
 
-    slice_viewmodel = SliceViewModel(_model=model)
-    slice_view = SliceView()
-    slice_view.register(slice_viewmodel)
-
+    slice_view = SliceView(_model=SliceViewModel(_model=model))
     volume_view = VolumeView(_model=VolumeViewModel(_model=model))
-
-    sidebar_viewmodel = SidebarViewModel(_model=model)
-    sidebar_view = SidebarView()
-    sidebar_view.register(sidebar_viewmodel)
+    sidebar_view = SidebarView(_model=SidebarViewModel(_model=model))
 
     window_viewmodel = MainWindowViewModel(_model=model)
     window = MainWindowView(

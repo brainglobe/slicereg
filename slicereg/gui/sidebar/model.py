@@ -8,27 +8,22 @@ from slicereg.app.app_model import AppModel, VolumeType
 @dataclass(unsafe_hash=True)
 class SidebarViewModel:
     _model: AppModel = field(hash=False)
+    updated: Signal = field(default_factory=Signal)
     selected_bgatlas: Optional[str] = None
     loadatlas_resolution: Optional[int] = None
-    updated: Signal = field(default_factory=Signal)
+    bgatlas_names: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
 
-    def update(self, **kwargs):
-        self.updated.emit(**kwargs)
+    def __setattr__(self, key, value):
+        super().__setattr__(key, value)
+        if hasattr(self, 'updated'):
+            self.updated.emit(changed=key)
 
-    @property
-    def clim_2d(self) -> Tuple[float, float]:
-        return self._model.clim_2d
-
-    @property
-    def clim_3d(self) -> Tuple[float, float]:
-        return self._model.clim_3d
-
-    @property
-    def bgatlas_names(self) -> List[str]:
-        return self._model.bgatlas_names
+    def update(self, changed: str):
+        if changed == 'bgatlas_names':
+            self.bgatlas_names = self._model.bgatlas_names
 
     def update_section_resolution_textbox(self, resolution: str) -> None:
         self._model.section_image_resolution = float(resolution)
