@@ -9,16 +9,29 @@ from slicereg.app.app_model import AppModel
 class MainWindowViewModel:
     _model: AppModel = field(hash=False)
     updated: Signal = field(default_factory=Signal)
+    footer: str = ""
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
 
-    def update(self, **kwargs):
-        self.updated.emit(**kwargs)
+    def __setattr__(self, key, value):
+        super().__setattr__(key, value)
+        if hasattr(self, 'updated'):
+            self.updated.emit(changed=key)
+
+    def update(self, changed: str):
+        if changed in ['selected_ij', 'selected_xyz']:
+            self._update_footer()
 
     @property
     def title(self) -> str:
         return self._model.window_title
+
+    def _update_footer(self):
+        ij = self._model.selected_ij
+        xyz = self._model.selected_xyz
+        text = f"(i={ij[0]}, j={ij[1]})   (x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})"
+        self.footer = text
 
     @property
     def highlighted_image_coords(self) -> Optional[Tuple[int, int]]:

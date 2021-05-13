@@ -63,8 +63,8 @@ def launch_gui(create_qapp: bool = True):
     volume_view = VolumeView(_model=VolumeViewModel(_model=model))
     sidebar_view = SidebarView(_model=SidebarViewModel(_model=model))
 
-    window_viewmodel = MainWindowViewModel(_model=model)
     window = MainWindowView(
+        _model=MainWindowViewModel(_model=model),
         coronal_widget=coronal_section_view.qt_widget,
         axial_widget=axial_section_view.qt_widget,
         sagittal_widget=sagittal_section_view.qt_widget,
@@ -72,7 +72,6 @@ def launch_gui(create_qapp: bool = True):
         slice_widget=slice_view.qt_widget,
         side_controls=sidebar_view.qt_widget,
     )
-    window.register(window_viewmodel)
 
     # Start the Event Loop!
     if create_qapp:

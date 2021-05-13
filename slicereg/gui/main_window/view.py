@@ -5,14 +5,15 @@ from typing import Optional
 from PySide2 import QtCore
 from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel, QVBoxLayout
 
+from slicereg.gui.base import BaseQtWidget
 from slicereg.gui.main_window.model import MainWindowViewModel
-from slicereg.gui.base import BaseQtWidget, BaseView
 
 
-class MainWindowView(BaseQtWidget, BaseView):
+class MainWindowView(BaseQtWidget):
 
     def __init__(
             self,
+            _model: MainWindowViewModel,
             coronal_widget: Optional[QWidget] = None,
             axial_widget: Optional[QWidget] = None,
             sagittal_widget: Optional[QWidget] = None,
@@ -20,8 +21,9 @@ class MainWindowView(BaseQtWidget, BaseView):
             slice_widget: Optional[QWidget] = None,
             side_controls: Optional[QWidget] = None,
     ):
-        BaseView.__init__(self)
-        self.model: Optional[MainWindowViewModel] = None
+
+        self._model = _model
+        self._model.updated.connect(self.update)
 
         self.win = QMainWindow()
 
@@ -75,16 +77,20 @@ class MainWindowView(BaseQtWidget, BaseView):
         self.statusbar.addPermanentWidget(self.image_coord_label)
 
         self.win.show()
-        self.update()
 
     @property
     def qt_widget(self) -> QWidget:
         return self.win
 
-    def update(self, **kwargs) -> None:
-        if self.model is not None:
-            self.win.setWindowTitle(self.model.title)
+    def update(self, changed: str) -> None:
+        render_funs = {
+            'title': self._render_title,
+            'footer': self._render_footer,
+        }
+        render_funs[changed]()
 
-            if (ij := self.model.highlighted_image_coords) and (xyz := self.model.highlighted_physical_coords):
-                self.image_coord_label.setText(
-                    f"(i={ij[0]}, j={ij[1]})   (x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})")
+    def _render_title(self):
+        self.win.setWindowTitle(self._model.title)
+
+    def _render_footer(self):
+        self.image_coord_label.setText(self._model.footer)

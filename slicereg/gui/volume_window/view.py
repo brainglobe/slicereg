@@ -14,6 +14,7 @@ class VolumeView(BaseQtWidget):
     def __init__(self, _model: VolumeViewModel):
 
         self._model = _model
+        self._model.updated.connect(self.update)
 
         self._canvas = SceneCanvas()
 
@@ -30,7 +31,6 @@ class VolumeView(BaseQtWidget):
         self._section_image.set_gl_state('additive', depth_test=False)
 
         self._canvas.events.key_press.connect(lambda event: self._model.press_key(event.key.name))
-        self._model.updated.connect(self.update)
 
     @property
     def qt_widget(self) -> QWidget:
