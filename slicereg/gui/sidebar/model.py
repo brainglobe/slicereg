@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Any
 
 from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel, VolumeType
@@ -10,20 +10,20 @@ class SidebarViewModel:
     _model: AppModel = field(hash=False)
     updated: Signal = field(default_factory=Signal)
     selected_bgatlas: Optional[str] = None
-    loadatlas_resolution: Optional[int] = None
-    bgatlas_names: List[str] = field(default_factory=list)
+    _atlas_resolution_text: str = ''
+    bgatlas_dropdown_entries: List[str] = field(default_factory=list)
 
     def __post_init__(self):
         self._model.updated.connect(self.update)
 
-    def __setattr__(self, key, value):
+    def __setattr__(self, key: str, value: Any):
         super().__setattr__(key, value)
-        if hasattr(self, 'updated'):
+        if hasattr(self, 'updated') and not key.startswith('_'):
             self.updated.emit(changed=key)
 
     def update(self, changed: str):
         if changed == 'bgatlas_names':
-            self.bgatlas_names = self._model.bgatlas_names
+            self.bgatlas_dropdown_entries = self._model.bgatlas_names
 
     def update_section_resolution_textbox(self, resolution: str) -> None:
         self._model.section_image_resolution = float(resolution)
@@ -56,9 +56,7 @@ class SidebarViewModel:
         self._model.list_bgatlases()
 
     def submit_load_atlas_from_file(self, filename: str):
-        if self.loadatlas_resolution is None:
-            return
-        self._model.load_atlas_from_file(filename=filename, resolution_um=self.loadatlas_resolution)
+        self._model.load_atlas_from_file(filename=filename, resolution_um=int(self.atlas_resolution_text))
 
     def click_load_bgatlas_button(self):
         self._model.load_bgatlas(name=self.selected_bgatlas)
@@ -87,8 +85,13 @@ class SidebarViewModel:
     def change_rotz_slider(self, value: int):
         self._model.update_section(rz=value)
 
-    def update_resolution_textbox(self, text: str):
-        self.loadatlas_resolution = int(text)
+    @property
+    def atlas_resolution_text(self) -> str:
+        return self._atlas_resolution_text
+
+    @atlas_resolution_text.setter
+    def atlas_resolution_text(self, text: str):
+        self._atlas_resolution_text = text if text.isdigit() or not text else self._atlas_resolution_text
 
     def click_registration_atlas_selector_button(self):
         self._model.visible_volume = VolumeType.REGISTRATION

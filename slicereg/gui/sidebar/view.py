@@ -24,9 +24,9 @@ class SidebarView(BaseQtWidget):
         load_atlas_layout = QHBoxLayout()
         load_atlas_layout.addWidget(QLabel(text='Res (μm):'))
 
-        self.resolution_textbox = QLineEdit()
-        load_atlas_layout.addWidget(self.resolution_textbox)
-        self.resolution_textbox.textEdited.connect(lambda text: self._model.update_resolution_textbox(text))
+        self.atlas_resolution_textbox = QLineEdit(self._model.atlas_resolution_text)
+        load_atlas_layout.addWidget(self.atlas_resolution_textbox)
+        self.atlas_resolution_textbox.textEdited.connect(lambda text: setattr(self._model, 'atlas_resolution_text', text))
 
         self.load_atlas_from_file_button = QPushButton("Load Atlas File")
         load_atlas_layout.addWidget(self.load_atlas_from_file_button)
@@ -40,7 +40,8 @@ class SidebarView(BaseQtWidget):
 
         self.list_atlas_dropdown = QComboBox()
         layout.addWidget(self.list_atlas_dropdown)
-        self.list_atlas_dropdown.currentTextChanged.connect(lambda text: self._model.change_bgatlas_selection_dropdown(text))
+        self.list_atlas_dropdown.currentTextChanged.connect(
+            lambda text: self._model.change_bgatlas_selection_dropdown(text))
 
         self.load_atlas_button = QPushButton("Load Atlas")
         layout.addWidget(self.load_atlas_button)
@@ -52,7 +53,8 @@ class SidebarView(BaseQtWidget):
 
         self.section_resolution_textbox = QLineEdit()
         load_section_layout.addWidget(self.section_resolution_textbox)
-        self.section_resolution_textbox.textEdited.connect(lambda text: self._model.update_section_resolution_textbox(text))
+        self.section_resolution_textbox.textEdited.connect(
+            lambda text: self._model.update_section_resolution_textbox(text))
 
         # Load Section Buttons
         self.load_image_button = QPushButton("Load Section")
@@ -167,10 +169,15 @@ class SidebarView(BaseQtWidget):
     def update(self, changed: str) -> None:
         print('changed', changed)
         render_funs = {
-            'bgatlas_names': self._render_bgatlas_list_dropdown
+            'bgatlas_names': self._render_bgatlas_list_dropdown,
+            'selected_bgatlas': (lambda: None),
+            'atlas_resolution_text': self._render_atlas_resolution_textbox,
         }
         render_funs[changed]()
 
     def _render_bgatlas_list_dropdown(self):
         self.list_atlas_dropdown.clear()
-        self.list_atlas_dropdown.addItems(self._model.bgatlas_names)
+        self.list_atlas_dropdown.addItems(self._model.bgatlas_dropdown_entries)
+
+    def _render_atlas_resolution_textbox(self):
+        self.atlas_resolution_textbox.setText(self._model.atlas_resolution_text)

@@ -47,18 +47,9 @@ def launch_gui(create_qapp: bool = True):
 
     model = AppModel(_injector=injector)
 
-    coronal_section_viewmodel = AtlasSectionViewModel(axis=0, _model=model)
-    coronal_section_view = AtlasSectionView()
-    coronal_section_view.register(coronal_section_viewmodel)
-
-    axial_section_viewmodel = AtlasSectionViewModel(axis=1, _model=model)
-    axial_section_view = AtlasSectionView()
-    axial_section_view.register(axial_section_viewmodel)
-
-    sagittal_section_viewmodel = AtlasSectionViewModel(axis=2, _model=model)
-    sagittal_section_view = AtlasSectionView()
-    sagittal_section_view.register(sagittal_section_viewmodel)
-
+    coronal_section_view = AtlasSectionView(_model=AtlasSectionViewModel(axis=0, _model=model))
+    axial_section_view = AtlasSectionView(_model=AtlasSectionViewModel(axis=1, _model=model))
+    sagittal_section_view = AtlasSectionView(_model=AtlasSectionViewModel(axis=2, _model=model))
     slice_view = SliceView(_model=SliceViewModel(_model=model))
     volume_view = VolumeView(_model=VolumeViewModel(_model=model))
     sidebar_view = SidebarView(_model=SidebarViewModel(_model=model))
