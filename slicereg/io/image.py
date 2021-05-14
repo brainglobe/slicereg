@@ -3,7 +3,8 @@ from typing import Optional
 
 from slicereg.commands.base import BaseLocalImageReader
 from slicereg.core.image import Image
-from slicereg.io.tifffile.image import OmeTiffImageReader, TiffImageReader
+from slicereg.io.tifffile.tiff_image import TiffImageReader
+from slicereg.io.tifffile.ome_image import OmeTiffImageReader
 
 
 class ImageReader(BaseLocalImageReader):
