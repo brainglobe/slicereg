@@ -1,4 +1,4 @@
-# Created by Nick at 13/01/2021
+
 Feature: Multichannel Image Data
   Import and Visualize multichannel sections
 

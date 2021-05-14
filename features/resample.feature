@@ -1,3 +1,4 @@
+
 Feature: Resample Section
     Users can downsample their slices for performance / visual comparison reasons.
 
