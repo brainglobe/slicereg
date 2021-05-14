@@ -1,18 +1,25 @@
 from unittest.mock import Mock
 
+import pytest
+
 from slicereg.utils.observable import HasObservableAttributes
 
 
-def test_observable_calls_fun_when_attributes_are_modified():
-    class A(HasObservableAttributes):
+@pytest.fixture
+def observable():
+    class Observable(HasObservableAttributes):
         def __init__(self):
             HasObservableAttributes.__init__(self)
             self.a = 3
             self.b = 5
             self.c = 10
 
+    return Observable()
+
+
+def test_observable_calls_fun_when_attributes_are_modified(observable):
+
     callback = Mock()
-    observable = A()
     observable.register(callback)
     assert callback.call_count == 0
 
@@ -32,4 +39,15 @@ def test_observable_calls_fun_when_attributes_are_modified():
     assert callback.call_count == 4
     assert callback.call_args[1] == {'changed': 'new_attr'}
 
+
+def test_obserable_calls_all_registered_funs(observable):
+
+    a, b, c = Mock(), Mock(), Mock()
+    observable.register(a)
+    observable.register(b)
+
+    observable.x = 3
+    assert a.call_args[1] == {'changed': 'x'}
+    assert b.call_args[1] == {'changed': 'x'}
+    assert c.call_count == 0
 
