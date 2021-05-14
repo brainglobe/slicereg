@@ -8,7 +8,7 @@ def test_outlined():
 
 @when("I load the mock.tiff atlas with 10um resolution")
 def load_atlas(sidebar):
-    sidebar.update_resolution_textbox(text="10")
+    sidebar.atlas_resolution_text = "10"
     sidebar.submit_load_atlas_from_file(filename='mock.tiff')
 
 
