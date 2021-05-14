@@ -6,7 +6,7 @@ from vispy.visuals import filters
 from vispy.visuals.transforms import MatrixTransform
 
 from slicereg.gui.base import BaseQtWidget
-from slicereg.gui.volume_window.model import VolumeViewModel
+from slicereg.gui.volume_window.viewmodel import VolumeViewModel
 
 
 class VolumeView(BaseQtWidget):

@@ -7,7 +7,7 @@ from vispy.scene.events import SceneMouseEvent
 from vispy.visuals.filters import ColorFilter
 
 from slicereg.gui.base import BaseQtWidget
-from slicereg.gui.slice_window.model import SliceViewModel
+from slicereg.gui.slice_window.viewmodel import SliceViewModel
 
 
 class SliceView(BaseQtWidget):

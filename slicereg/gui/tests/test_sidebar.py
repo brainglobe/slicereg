@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 
 from slicereg.app.app_model import AppModel
-from slicereg.gui.sidebar.model import SidebarViewModel
+from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.utils import DependencyInjector, Signal
 
 

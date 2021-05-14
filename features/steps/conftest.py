@@ -8,10 +8,10 @@ from slicereg.app.app_model import AppModel
 from slicereg.commands.base import BaseRemoteAtlasReader, BaseLocalAtlasReader, BaseLocalImageReader
 from slicereg.core.atlas import Atlas
 from slicereg.core.image import Image
-from slicereg.gui.main_window.model import MainWindowViewModel
-from slicereg.gui.sidebar.model import SidebarViewModel
-from slicereg.gui.slice_window.model import SliceViewModel
-from slicereg.gui.volume_window.model import VolumeViewModel
+from slicereg.gui.main_window.viewmodel import MainWindowViewModel
+from slicereg.gui.sidebar.viewmodel import SidebarViewModel
+from slicereg.gui.slice_window.viewmodel import SliceViewModel
+from slicereg.gui.volume_window.viewmodel import VolumeViewModel
 from slicereg.repos import InMemoryRepo
 from slicereg.utils.dependency_injector import DependencyInjector
 

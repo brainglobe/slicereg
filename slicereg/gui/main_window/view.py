@@ -6,7 +6,7 @@ from PySide2 import QtCore
 from PySide2.QtWidgets import QMainWindow, QWidget, QHBoxLayout, QLabel, QVBoxLayout
 
 from slicereg.gui.base import BaseQtWidget
-from slicereg.gui.main_window.model import MainWindowViewModel
+from slicereg.gui.main_window.viewmodel import MainWindowViewModel
 
 
 class MainWindowView(BaseQtWidget):

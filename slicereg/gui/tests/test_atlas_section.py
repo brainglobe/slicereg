@@ -5,7 +5,7 @@ import numpy.testing as npt
 import pytest
 
 from slicereg.app.app_model import AppModel
-from slicereg.gui.atlas_section_window.model import AtlasSectionViewModel
+from slicereg.gui.atlas_section_window.viewmodel import AtlasSectionViewModel
 from slicereg.utils import DependencyInjector, Signal
 
 cases = [

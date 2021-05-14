@@ -1,2 +1,2 @@
-from .model import AtlasSectionViewModel
+from .viewmodel import AtlasSectionViewModel
 from .view import AtlasSectionView

@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 
 from slicereg.app.app_model import AppModel
-from slicereg.gui.volume_window.model import VolumeViewModel
+from slicereg.gui.volume_window.viewmodel import VolumeViewModel
 
 
 @pytest.fixture

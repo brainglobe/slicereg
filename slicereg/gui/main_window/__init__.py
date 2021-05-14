@@ -1,2 +1,2 @@
-from .model import MainWindowViewModel
+from .viewmodel import MainWindowViewModel
 from .view import MainWindowView
