@@ -27,4 +27,3 @@ def test_slice_viewmodel_displays_app_clim2d_values():
         model.section_image = image
         model.clim_2d = (np.random.random() * 0.5, np.random.random() * 0.5 + 0.5)
         assert view.clim == model.clim_2d_values
-
