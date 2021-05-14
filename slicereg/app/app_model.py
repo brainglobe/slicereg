@@ -67,12 +67,13 @@ class AppModel:
     def load_section(self, filename: str):
         load_section = self._injector.inject(LoadSectionCommand)
         result = load_section(filename=filename)
-        self.section_image = result.image
-        self.section_transform = result.transform
-        self.section_image_resolution = result.resolution_um
-        self.atlas_image = result.atlas_image
-        self.num_channels = result.num_channels
-        self.visible_volume = VolumeType.REGISTRATION
+        if result is not None:
+            self.section_image = result.image
+            self.section_transform = result.transform
+            self.section_image_resolution = result.resolution_um
+            self.atlas_image = result.atlas_image
+            self.num_channels = result.num_channels
+            self.visible_volume = VolumeType.REGISTRATION
 
     # Select Channel
     def select_channel(self, num: int):

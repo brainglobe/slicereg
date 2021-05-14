@@ -28,9 +28,9 @@ class SliceViewModel:
         self.updated.connect(fun)
 
     def update(self, changed: str):
-        if changed == 'atlas_image':
+        if changed == 'atlas_image' and self._model.atlas_image is not None:
             self.atlas_image = self._model.atlas_image
-        if changed == 'section_image':
+        if changed == 'section_image' and self._model.section_image is not None:
             self.section_image = self._model.section_image
             self.clim = self._model.clim_2d_values
         if changed == 'clim_2d':
