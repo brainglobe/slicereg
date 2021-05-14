@@ -3,7 +3,7 @@ from collections import Callable
 from slicereg.utils import Signal
 
 
-class ObservableAttributes:
+class HasObservableAttributes:
 
     def __init__(self):
         self.updated = Signal()
