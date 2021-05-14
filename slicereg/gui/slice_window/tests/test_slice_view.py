@@ -3,7 +3,6 @@ from typing import Callable, List
 from unittest.mock import Mock
 
 from vispy.scene.events import SceneMouseEvent
-from vispy.util.event import Event
 
 from slicereg.app.app_model import AppModel
 from slicereg.gui.slice_window import SliceView, SliceViewModel
@@ -59,3 +58,14 @@ def test_slice_view_triggers_right_mouse_drag_on_viewmodel(qtbot):
     view.mouse_move(event)
     model.on_left_mouse_drag.assert_not_called()
     model.on_right_mouse_drag.assert_called_with(x1=1, y1=2, x2=5, y2=10)
+
+
+def test_slice_view_acknowledges_mouse_press(qtbot):
+    model = Mock(SliceViewModel)
+    view = SliceView(_model=model)
+    qtbot.addWidget(view.qt_widget)
+
+    event = Mock(SceneMouseEvent)
+    event.handled = False
+    view.mouse_press(event)
+    assert event.handled == True
