@@ -14,5 +14,5 @@ def load_atlas(sidebar):
 
 @then("a 3D volume of the atlas appears onscreen")
 def check_3d_atlas_data_shown(model):
-    assert model.atlas_volume.ndim == 3
+    assert model.registration_volume.ndim == 3
     assert model.atlas_resolution == 10

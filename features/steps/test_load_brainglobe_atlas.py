@@ -17,7 +17,7 @@ def load_atlas(sidebar):
 
 @then("a 3D volume of the 25um allen reference atlas is loaded.")
 def check_3d_atlas_data_shown(model: AppModel, atlas_volume):
-    npt.assert_almost_equal(model.atlas_volume, atlas_volume)
+    npt.assert_almost_equal(model.registration_volume, atlas_volume)
 
 @then("a 3D annotation volume of the 25um allen reference atlas is loaded.")
 def check_3d_atlas_data_shown(model: AppModel, annotation_volume):

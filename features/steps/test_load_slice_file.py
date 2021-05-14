@@ -24,7 +24,7 @@ def no_sections_loaded(model: AppModel):
 def atlas_is_loaded(sidebar, model):
     sidebar.change_bgatlas_selection_dropdown("allen_mouse_25um")
     sidebar.click_load_bgatlas_button()
-    assert model.atlas_volume is not None
+    assert model.registration_volume is not None
 
 
 @when("I load the file")

@@ -56,14 +56,6 @@ class AppModel:
         self.updated.connect(fun)
 
     @property
-    def atlas_volume(self) -> ndarray:
-        volumes = {
-            VolumeType.REGISTRATION: self.registration_volume,
-            VolumeType.ANNOTATION: self.annotation_volume,
-        }
-        return volume if (volume := volumes[self.visible_volume]) is not None else None
-
-    @property
     def clim_2d_values(self):
         return tuple(np.percentile(self.section_image, [self.clim_2d[0] * 100, self.clim_2d[1] * 100]))
 
@@ -124,7 +116,7 @@ class AppModel:
         result = load_atlas(filename=filename, resolution_um=resolution_um)
         self.registration_volume = result.volume
         self.atlas_resolution = int(result.resolution)
-        x, y, z = tuple((np.array(self.atlas_volume.shape) * 0.5).astype(int).tolist())
+        x, y, z = tuple((np.array(self.registration_volume.shape) * 0.5).astype(int).tolist())
         self.atlas_section_coords = x, y, z
 
     # List Brainglobe Atlases
@@ -141,7 +133,7 @@ class AppModel:
         self.selected_xyz = results.xyz
 
     def _section_image(self, axis):
-        if (volume := self.atlas_volume) is not None:
+        if (volume := self.registration_volume) is not None:
             section_slice_idx = self.atlas_section_coords[axis]
             return np.rollaxis(volume, axis)[section_slice_idx]
         else:

@@ -4,7 +4,7 @@ from typing import Tuple, Callable
 import numpy as np
 
 from slicereg.utils.signal import Signal
-from slicereg.app.app_model import AppModel
+from slicereg.app.app_model import AppModel, VolumeType
 
 
 @dataclass(unsafe_hash=True)
@@ -35,8 +35,15 @@ class VolumeViewModel:
             self.section_transform = self._model.section_transform
         elif changed == 'clim_3d_values':
             self.clim = self._model.clim_3d_values
-        elif changed in ['registration_volume', 'annotation_volume', 'visible_volume']:
-            self.atlas_volume = self._model.atlas_volume
+        elif changed == 'visible_volume':
+            m = self._model
+            self.atlas_volume = m.registration_volume if m.visible_volume == VolumeType.REGISTRATION else m.annotation_volume
+        elif changed == 'registration_volume':
+            if self._model.visible_volume == VolumeType.REGISTRATION:
+                self.atlas_volume = self._model.registration_volume
+        elif changed == 'annotation_volume':
+            if self._model.visible_volume == VolumeType.ANNOTATION:
+                self.atlas_volume = self._model.annotation_volume
 
     @property
     def camera_center(self) -> Tuple[float, float, float]:
