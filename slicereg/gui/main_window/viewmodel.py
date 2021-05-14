@@ -1,27 +1,18 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, Callable
 
-from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel
+from slicereg.utils.observable import HasObservableAttributes
 
 
 @dataclass(unsafe_hash=True)
-class MainWindowViewModel:
+class MainWindowViewModel(HasObservableAttributes):
     _model: AppModel = field(hash=False)
-    updated: Signal = field(default_factory=Signal)
     footer: str = ""
 
     def __post_init__(self):
+        HasObservableAttributes.__init__(self)
         self._model.register(self.update)
-
-    def __setattr__(self, key, value):
-        super().__setattr__(key, value)
-        if hasattr(self, 'updated'):
-            self.updated.emit(changed=key)
-
-    def register(self, fun: Callable[[str], None]):
-        """Takes a callback function that gets called with the name of the changed argument."""
-        self.updated.connect(fun)
 
     def update(self, changed: str):
         if changed in ['selected_ij', 'selected_xyz']:

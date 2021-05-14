@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Tuple, List, Optional, Callable
+from typing import Tuple, List, Optional
 
 import numpy as np
 from numpy import ndarray
@@ -14,8 +14,8 @@ from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
-from slicereg.utils import Signal
 from slicereg.utils.dependency_injector import DependencyInjector
+from slicereg.utils.observable import HasObservableAttributes
 
 
 class VolumeType(Enum):
@@ -25,9 +25,8 @@ class VolumeType(Enum):
 
 
 @dataclass
-class AppModel:
+class AppModel(HasObservableAttributes):
     _injector: DependencyInjector
-    updated: Signal = field(default_factory=Signal)
     window_title: str = "bg-slicereg"
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
@@ -46,14 +45,8 @@ class AppModel:
     current_channel: int = 1
     visible_volume: VolumeType = VolumeType.REGISTRATION
 
-    def __setattr__(self, key, value):
-        super().__setattr__(key, value)
-        if hasattr(self, 'updated'):
-            self.updated.emit(changed=key)
-
-    def register(self, fun: Callable[[str], None]):
-        """Takes a callback function that gets called with the name of the changed argument."""
-        self.updated.connect(fun)
+    def __post_init__(self):
+        HasObservableAttributes.__init__(self)
 
     @property
     def clim_2d_values(self):

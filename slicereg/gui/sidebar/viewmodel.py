@@ -1,30 +1,21 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, List, Any, Callable
 
-from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel, VolumeType
+from slicereg.utils.observable import HasObservableAttributes
 
 
 @dataclass(unsafe_hash=True)
-class SidebarViewModel:
+class SidebarViewModel(HasObservableAttributes):
     _model: AppModel = field(hash=False)
-    updated: Signal = field(default_factory=Signal)
     selected_bgatlas: Optional[str] = None
     _atlas_resolution_text: str = ''
     bgatlas_dropdown_entries: List[str] = field(default_factory=list)
     _section_resolution_text: str = ''
 
     def __post_init__(self):
+        HasObservableAttributes.__init__(self)
         self._model.register(self.update)
-
-    def __setattr__(self, key: str, value: Any):
-        super().__setattr__(key, value)
-        if hasattr(self, 'updated') and not key.startswith('_'):
-            self.updated.emit(changed=key)
-
-    def register(self, fun: Callable[[str], None]):
-        """Takes a callback function that gets called with the name of the changed argument."""
-        self.updated.connect(fun)
 
     def update(self, changed: str):
         if changed == 'bgatlas_names':

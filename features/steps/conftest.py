@@ -9,6 +9,7 @@ from slicereg.commands.base import BaseRemoteAtlasReader, BaseLocalAtlasReader, 
 from slicereg.core.atlas import Atlas
 from slicereg.core.image import Image
 from slicereg.gui.main_window.viewmodel import MainWindowViewModel
+from slicereg.gui.sidebar import SidebarView
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.gui.slice_window.viewmodel import SliceViewModel
 from slicereg.gui.volume_window.viewmodel import VolumeViewModel

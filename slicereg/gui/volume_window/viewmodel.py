@@ -3,30 +3,21 @@ from typing import Tuple, Callable
 
 import numpy as np
 
-from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel, VolumeType
+from slicereg.utils.observable import HasObservableAttributes
 
 
 @dataclass(unsafe_hash=True)
-class VolumeViewModel:
+class VolumeViewModel(HasObservableAttributes):
     _model: AppModel = field(hash=False)
-    updated: Signal = field(default_factory=Signal)
     section_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
     section_transform: np.ndarray = np.eye(4)
     clim: Tuple[int, int] = (0, 2)
     atlas_volume: np.ndarray = np.zeros(shape=(3, 3, 3), dtype=np.uint16)
 
     def __post_init__(self):
+        HasObservableAttributes.__init__(self)
         self._model.register(self.update)
-
-    def __setattr__(self, key, value):
-        super().__setattr__(key, value)
-        if hasattr(self, 'updated'):
-            self.updated.emit(changed=key)
-
-    def register(self, fun: Callable[[str], None]):
-        """Takes a callback function that gets called with the name of the changed argument."""
-        self.updated.connect(fun)
 
     def update(self, changed: str):
         if changed == 'section_image' and (image := self._model.section_image) is not None:
