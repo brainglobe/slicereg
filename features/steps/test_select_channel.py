@@ -4,7 +4,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.app.app_model import AppModel
 
 
-@scenario("features/multichannel.feature", "Switch Channels")
+@scenario("../multichannel.feature", "Switch Channels")
 def test_impl():
     ...
 

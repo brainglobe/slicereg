@@ -2,7 +2,7 @@ import numpy.testing as npt
 from pytest_bdd import scenario, given, when, then
 
 
-@scenario("features/load_atlas.feature", "Replace Atlas")
+@scenario("../load_atlas.feature", "Replace Atlas")
 def test_outlined():
     ...
 

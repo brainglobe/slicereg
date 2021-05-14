@@ -1,7 +1,7 @@
 from pytest_bdd import scenario, given, when, then
 
 
-@scenario("features/section_affine_registration.feature", "Check Pixel Coordinate in Atlas Space")
+@scenario("../section_affine_registration.feature", "Check Pixel Coordinate in Atlas Space")
 def test_impl():
     ...
 

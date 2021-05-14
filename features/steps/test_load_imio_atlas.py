@@ -1,7 +1,7 @@
 from pytest_bdd import scenario, when, then
 
 
-@scenario("features/load_atlas.feature", "Load Atlas From File Using imio")
+@scenario("../load_atlas.feature", "Load Atlas From File Using imio")
 def test_outlined():
     ...
 

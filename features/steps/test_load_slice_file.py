@@ -3,7 +3,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.app.app_model import AppModel
 
 
-@scenario("features/load_slice.feature", "Single Slice Import")
+@scenario("../load_slice.feature", "Single Slice Import")
 def test_outlined():
     ...
 

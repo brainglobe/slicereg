@@ -1,7 +1,7 @@
 from pytest_bdd import scenario, when, then
 
 
-@scenario("features/load_atlas.feature", "List Available Brainglobe Atlases")
+@scenario("../load_atlas.feature", "List Available Brainglobe Atlases")
 def test_outlined():
     ...
 

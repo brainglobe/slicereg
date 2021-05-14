@@ -4,7 +4,7 @@ from pytest_bdd import scenario, when, then
 from slicereg.app.app_model import AppModel
 
 
-@scenario("features/load_atlas.feature", "Load Atlas")
+@scenario("../load_atlas.feature", "Load Atlas")
 def test_outlined():
     ...
 

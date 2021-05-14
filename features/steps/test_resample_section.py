@@ -3,7 +3,7 @@ from pytest_bdd import scenario, given, when, then
 from slicereg.app.app_model import AppModel
 
 
-@scenario("features/resample.feature", "Section Resample")
+@scenario("../resample.feature", "Section Resample")
 def test_impl():
     ...
 
