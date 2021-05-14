@@ -12,7 +12,7 @@ class DependencyInjector:
     def __init__(self, **kwargs):
         self.attrs = kwargs
 
-    def inject(self, command: Type[T]) -> T:
+    def build(self, command: Type[T]) -> T:
         """
         Constructs a command, mapping Commandbuilder's inputs to its inputs.
 

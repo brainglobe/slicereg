@@ -65,7 +65,7 @@ class AppModel:
 
     # Load Section
     def load_section(self, filename: str):
-        load_section = self._injector.inject(LoadSectionCommand)
+        load_section = self._injector.build(LoadSectionCommand)
         result = load_section(filename=filename)
         if result is not None:
             self.section_image = result.image
@@ -77,14 +77,14 @@ class AppModel:
 
     # Select Channel
     def select_channel(self, num: int):
-        select_channel = self._injector.inject(SelectChannelCommand)
+        select_channel = self._injector.build(SelectChannelCommand)
         result = select_channel(channel=num)
         self.current_channel = result.current_channel
         self.section_image = result.section_image
 
     # Resample Section
     def resample_section(self, resolution_um: float):
-        resample_section = self._injector.inject(ResampleSectionCommand)
+        resample_section = self._injector.build(ResampleSectionCommand)
         result = resample_section(resolution_um=resolution_um)
         self.atlas_image = result.atlas_image
         self.section_image = result.section_image
@@ -93,27 +93,27 @@ class AppModel:
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
-        move_section = self._injector.inject(MoveSectionCommand)
+        move_section = self._injector.build(MoveSectionCommand)
         results = move_section(**kwargs)
         self.atlas_image = results.atlas_slice_image
         self.section_transform = results.transform
 
     def update_section(self, **kwargs):
-        update_section = self._injector.inject(UpdateSectionTransformCommand)
+        update_section = self._injector.build(UpdateSectionTransformCommand)
         results = update_section(**kwargs)
         self.atlas_image = results.atlas_slice_image
         self.section_transform = results.transform
 
     # Load Atlases
     def load_bgatlas(self, name: str):
-        load_atlas = self._injector.inject(LoadRemoteAtlasCommand)
+        load_atlas = self._injector.build(LoadRemoteAtlasCommand)
         result = load_atlas(name=name)
         self.registration_volume = result.volume
         self.atlas_resolution = int(result.resolution)
         self.annotation_volume = result.annotation_volume
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
-        load_atlas = self._injector.inject(LoadAtlasFromFileCommand)
+        load_atlas = self._injector.build(LoadAtlasFromFileCommand)
         result = load_atlas(filename=filename, resolution_um=resolution_um)
         self.registration_volume = result.volume
         self.atlas_resolution = int(result.resolution)
@@ -122,13 +122,13 @@ class AppModel:
 
     # List Brainglobe Atlases
     def list_bgatlases(self):
-        list_bgatlases = self._injector.inject(ListRemoteAtlasesCommand)
+        list_bgatlases = self._injector.build(ListRemoteAtlasesCommand)
         results = list_bgatlases()
         self.bgatlas_names = results.atlas_names
 
     # Get Physical Coordinate from Image Coordinate
     def select_coord(self, i: int, j: int):
-        get_atlas_coord = self._injector.inject(MapImageCoordToAtlasCoordCommand)
+        get_atlas_coord = self._injector.build(MapImageCoordToAtlasCoordCommand)
         results = get_atlas_coord(i=i, j=j)
         self.selected_ij = results.ij
         self.selected_xyz = results.xyz
