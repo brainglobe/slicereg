@@ -75,26 +75,6 @@ conda create -n py38 python=3.8
 conda activate py38
 ```
 
-#### Troubleshooting
-##### "Virtual environment already activated:"
-To solve this you will need to use pip to install the dependencies:
-```
-poetry export -f requirements.txt --dev --without-hashes --output requirements.txt
-pip install -r requirements.txt
-```
-##### Display issues
-In some cases (e.g. using WSL), you might need to export the display.
-
-  1. `export DISPLAY=:0`
-  2. run Xming
-
-##### Data download
-In case DVC pull is not working
-```
-ERROR: failed to pull data from the cloud - Checkout failed for following targets:
-```
-  1. delete the folder **cache** in **.dvc**
-  2. rerun `dvc pull`
 
 #### Running the Project
 
@@ -118,14 +98,26 @@ It will ask you to go to a Google Drive link and log in.
 Once you've logged in, copy-paste the authentication token from the browser into your terminal and press enter.  
 The example data will appear in the project's data directory.
 
-#### Documentation
-
-Developer documentation is found in README files in the subdirectories.  
-Open different folders to learn more about what their purpose is.
 
 
-## Contributors
+#### Troubleshooting
 
-Many thanks to:
+##### "Virtual environment already activated:"
+To solve this you will need to use pip to install the dependencies:
+```
+poetry export -f requirements.txt --dev --without-hashes --output requirements.txt
+pip install -r requirements.txt
+```
+##### Display issues
+In some cases (e.g. using WSL), you might need to export the display.
 
-  - Harald Reingruber: Organized Software Crafters to contribute to this project!
+  1. `export DISPLAY=:0`
+  2. run Xming
+
+##### Data download
+In case DVC pull is not working
+```
+ERROR: failed to pull data from the cloud - Checkout failed for following targets:
+```
+  1. delete the folder **cache** in **.dvc**
+  2. rerun `dvc pull`
