@@ -29,7 +29,7 @@ pytest-qt = "^3.3.0"
 hypothesis = "^6.0.0"
 pytest-bdd = "^4.0.2"
 coverage = {extras = ["toml"], version = "^5.3.1"}
-mypy = "^0.790"
+mypy = "^0.812"
 rope = "^0.18.0"
 
 [build-system]

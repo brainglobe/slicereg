@@ -15,7 +15,7 @@ def test_updater_mixin_updates_dataframes():
     assert a2.a == 33
 
 
-def test_updater_mixin_updates_dataframes():
+def test_updater_mixin_updates_dataframes2():
     @dataclass(frozen=True)
     class A(FrozenUpdater):
         a: int
