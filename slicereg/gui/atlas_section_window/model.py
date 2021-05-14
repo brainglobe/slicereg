@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Tuple, Callable
 
 import numpy as np
 
@@ -16,28 +16,26 @@ class AtlasSectionViewModel:
     coords: Tuple[int, int] = (0, 0)
 
     def __post_init__(self):
-        self._model.updated.connect(self.update)
+        self._model.register(self.update)
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
             self.updated.emit(changed=key)
 
+    def register(self, fun: Callable[[str], None]):
+        """Takes a callback function that gets called with the name of the changed argument."""
+        self.updated.connect(fun)
+
     def update(self, changed: str):
-        if changed == 'atlas_volume':
-            self._update_section_image()
+        print("changed", changed)
+        if changed == 'registration_volume':
+            self.atlas_section_image = self._model.coronal_section_image
         elif changed == 'atlas_section_coords':
             self._update_coords()
 
     def _update_coords(self):
         self.coords = tuple(np.delete(self._model.atlas_section_coords, self.axis))
-
-    def _update_section_image(self):
-        if (volume := self._model.atlas_volume) is not None:
-            section_slice_idx = self._model.atlas_section_coords[self.axis]
-            return np.rollaxis(volume, self.axis)[section_slice_idx]
-        else:
-            return None
 
     @property
     def axis_colors(self):

@@ -13,7 +13,7 @@ class SidebarView(BaseQtWidget):
     def __init__(self, _model: SidebarViewModel):
 
         self._model = _model
-        self._model.updated.connect(self.update)
+        self._model.register(self.update)
 
         self.widget = QWidget()
 
@@ -168,7 +168,7 @@ class SidebarView(BaseQtWidget):
     def update(self, changed: str) -> None:
         print('changed', changed)
         render_funs = {
-            'bgatlas_names': self._render_bgatlas_list_dropdown,
+            'bgatlas_dropdown_entries': self._render_bgatlas_list_dropdown,
             'selected_bgatlas': (lambda: None),
             'atlas_resolution_text': self._render_atlas_resolution_textbox,
             'section_resolution_text': self._render_section_resolution_textbox,

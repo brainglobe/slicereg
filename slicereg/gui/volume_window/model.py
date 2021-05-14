@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Tuple, Callable
 
 import numpy as np
 
@@ -17,12 +17,16 @@ class VolumeViewModel:
     atlas_volume: np.ndarray = np.zeros(shape=(3, 3, 3), dtype=np.uint16)
 
     def __post_init__(self):
-        self._model.updated.connect(self.update)
+        self._model.register(self.update)
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
             self.updated.emit(changed=key)
+
+    def register(self, fun: Callable[[str], None]):
+        """Takes a callback function that gets called with the name of the changed argument."""
+        self.updated.connect(fun)
 
     def update(self, changed: str):
         if changed == 'section_image':
@@ -48,4 +52,4 @@ class VolumeViewModel:
         return np.min(self.atlas_volume), np.max(self.atlas_volume)
 
     def press_key(self, key: str):
-        self._model.keyboard_shortcut(key=key)
+        self._model.press_key(key=key)

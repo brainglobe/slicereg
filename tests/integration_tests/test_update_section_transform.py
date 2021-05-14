@@ -11,8 +11,6 @@ def test_impl():
 @given("I have loaded a section")
 def step_impl(model, sidebar):
     sidebar.submit_load_section_from_file("test.ome.tiff")
-    assert model.atlas_section_image is not None
-    assert model.section_transform is not None
 
 
 @when("I <operation_type> the section along the <axis> axis by <amount>")

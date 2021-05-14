@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Callable
 
 import numpy as np
 from numpy import ndarray
@@ -21,6 +21,7 @@ from slicereg.utils.dependency_injector import DependencyInjector
 class VolumeType(Enum):
     REGISTRATION = auto()
     ANNOTATION = auto()
+
 
 
 @dataclass
@@ -49,6 +50,10 @@ class AppModel:
         super().__setattr__(key, value)
         if hasattr(self, 'updated'):
             self.updated.emit(changed=key)
+
+    def register(self, fun: Callable[[str], None]):
+        """Takes a callback function that gets called with the name of the changed argument."""
+        self.updated.connect(fun)
 
     @property
     def atlas_volume(self) -> ndarray:
@@ -154,7 +159,7 @@ class AppModel:
     def sagittal_section_image(self):
         return self._section_image(axis=2)
 
-    def keyboard_shortcut(self, key: str):
+    def press_key(self, key: str):
         key_commands = {
             '1': lambda: self.select_channel(1),
             '2': lambda: self.select_channel(2),

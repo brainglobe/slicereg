@@ -1,5 +1,5 @@
 from dataclasses import dataclass, field
-from typing import Optional, Tuple, List, Any
+from typing import Optional, Tuple, List, Any, Callable
 
 from slicereg.utils.signal import Signal
 from slicereg.app.app_model import AppModel, VolumeType
@@ -15,12 +15,16 @@ class SidebarViewModel:
     _section_resolution_text: str = ''
 
     def __post_init__(self):
-        self._model.updated.connect(self.update)
+        self._model.register(self.update)
 
     def __setattr__(self, key: str, value: Any):
         super().__setattr__(key, value)
         if hasattr(self, 'updated') and not key.startswith('_'):
             self.updated.emit(changed=key)
+
+    def register(self, fun: Callable[[str], None]):
+        """Takes a callback function that gets called with the name of the changed argument."""
+        self.updated.connect(fun)
 
     def update(self, changed: str):
         if changed == 'bgatlas_names':

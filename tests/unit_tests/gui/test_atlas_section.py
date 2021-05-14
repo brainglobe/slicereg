@@ -25,20 +25,8 @@ def test_app_model_coronal_section_is_the_first_axis_of_the_atlas_volume_and_at_
 
 
 def test_coronal_section_view_model_displays_the_coronal_section_image():
-    app_model = AppModel(
-        _injector=Mock(DependencyInjector),
-        registration_volume=np.random.randint(0, 100, (10, 10, 10), np.uint16)
-    )
+    app_model = AppModel(_injector=DependencyInjector())
     view_model = AtlasSectionViewModel(axis=0, _model=app_model)
-    npt.assert_equal(app_model.coronal_section_image, view_model.section_image)
+    app_model.registration_volume = np.random.randint(0, 100, (10, 10, 10), np.uint16)
+    npt.assert_equal(app_model.coronal_section_image, view_model.atlas_section_image)
 
-
-def test_update_coords():
-    model = AppModel(
-        _injector=Mock(DependencyInjector),
-        registration_volume=np.random.randint(0, 100, (10, 10, 10), np.uint16),
-    )
-    view_model = AtlasSectionViewModel(axis=0, _model=model, updated=Mock(Signal))
-    model.atlas_section_coords = (1, 2, 3)
-    result = view_model.updated.emit.call_args[1]['dto']
-    npt.assert_equal(result.coords, (2, 3))

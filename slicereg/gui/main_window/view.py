@@ -23,7 +23,7 @@ class MainWindowView(BaseQtWidget):
     ):
 
         self._model = _model
-        self._model.updated.connect(self.update)
+        self._model.register(self.update)
 
         self.win = QMainWindow()
 

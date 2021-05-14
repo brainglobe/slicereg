@@ -12,7 +12,7 @@ class AtlasSectionView(BaseQtWidget):
 
     def __init__(self, _model: AtlasSectionViewModel):
         self._model = _model
-        self._model.updated.connect(self.update)
+        self._model.register(self.update)
 
         self._canvas = SceneCanvas()
 

@@ -14,6 +14,8 @@ class SliceView(BaseQtWidget):
 
     def __init__(self, _model: SliceViewModel):
         self._model = _model
+        self._model.register(self.update)
+
         self._canvas = SceneCanvas()
 
         self._viewbox = ViewBox(parent=self._canvas.scene)
