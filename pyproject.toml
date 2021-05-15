@@ -20,6 +20,7 @@ imio = "^0.0.5"
 packaging = "^20.9"
 traitlets = "^5.0.5"
 traittypes = "^0.2.1"
+pytest-env = "^0.6.2"
 
 [tool.poetry.dev-dependencies]
 dvc = { extras = ["gdrive"], version = "^2.0" }
