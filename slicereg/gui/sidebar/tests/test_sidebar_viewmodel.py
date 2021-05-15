@@ -1,4 +1,3 @@
-from functools import partial
 from unittest.mock import Mock
 
 import pytest
@@ -33,7 +32,6 @@ def test_app_updates_with_None_when_viewmode_sets_resolution_to_empty_string(vie
     assert view_model._model.section_image_resolution is None
 
 
-
 @given(resolution=floats(0.01, 100))
 def test_viewmodel_resolution_updated_when_app_updates(resolution, view_model: SidebarViewModel, app_model):
     app_model.section_image_resolution = resolution
@@ -53,7 +51,6 @@ def test_viewmodel_resolution_text_does_not_accept_nonnumeric_strings(view_model
     view_model.section_resolution_text = "3.1"
     view_model.section_resolution_text = text
     assert view_model.section_resolution_text == "3.1"
-
 
 
 def test_viewmodel_bgatlas_dropdown_fills_with_atlas_names_when_app_gets_them(app_model, view_model: SidebarViewModel):
@@ -81,3 +78,27 @@ def test_clicking_sagittal_orientation_button_tells_app_to_rotate_slice_to_sagit
     view_model = SidebarViewModel(_model=app_model)
     view_model.click_sagittal_button()
     assert app_model.orient_section_to_sagittal.call_count == 1
+
+
+def test_moving_clim_section_2d_slider_sets_the_apps_clim_2d(app_model, view_model):
+    clim = (0.3, 0.8)
+    view_model.move_clim_section_2d_slider(clim)
+    assert app_model.clim_2d == approx(clim)
+
+
+def test_moving_clim_section_3d_slider_sets_the_apps_clim_3d(app_model, view_model):
+    clim = (0.3, 0.9)
+    view_model.move_clim_section_3d_slider(clim)
+    assert app_model.clim_3d == approx(clim)
+
+
+def test_setting_app_clim2d_updates_viewmodels_section_2d_slider(app_model, view_model: SidebarViewModel):
+    clim = (0.4, 0.5)
+    app_model.clim_2d = clim
+    assert view_model.clim_section_2d == approx(clim)
+
+
+def test_setting_app_clim3d_updates_viewmodels_section_3d_slider(app_model, view_model: SidebarViewModel):
+    clim = (0.4, 0.5)
+    app_model.clim_3d = clim
+    assert view_model.clim_section_3d == approx(clim)

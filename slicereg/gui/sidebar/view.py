@@ -120,11 +120,11 @@ class SidebarView(BaseQtWidget):
         # clim sliders
         self.slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
         layout.addWidget(self.slice_clim_slider)
-        self.slice_clim_slider.valuesChanged.connect(lambda vals: self._model.move_clim_slice_slider(vals))
+        self.slice_clim_slider.valuesChanged.connect(lambda vals: self._model.move_clim_section_2d_slider(vals))
 
         self.volume_slice_clim_slider = QHRangeSlider(initial_values=(0., 1.), data_range=(0., 1.), step_size=0.01)
         layout.addWidget(self.volume_slice_clim_slider)
-        self.volume_slice_clim_slider.valuesChanged.connect(lambda vals: self._model.move_clim_volume_slider(vals))
+        self.volume_slice_clim_slider.valuesChanged.connect(lambda vals: self._model.move_clim_section_3d_slider(vals))
 
         # Atlas Type Buttons
         buttons_layout = QHBoxLayout()

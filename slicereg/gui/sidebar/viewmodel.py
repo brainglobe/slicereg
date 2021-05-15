@@ -12,6 +12,8 @@ class SidebarViewModel(HasObservableAttributes):
     _atlas_resolution_text: str = ''
     bgatlas_dropdown_entries: List[str] = field(default_factory=list)
     _section_resolution_text: str = ''
+    _clim_section_2d: Tuple[float, float] = (0., 1.)
+    _clim_section_3d: Tuple[float, float] = (0., 1.)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -21,6 +23,8 @@ class SidebarViewModel(HasObservableAttributes):
         update_funs = {
             'bgatlas_names': self._update_bgatlas_dropdown_list,
             'section_image_resolution': self._update_section_resolution_text,
+            'clim_2d': self._update_clim2d,
+            'clim_3d': self._update_clim3d,
         }
         if (fun := update_funs.get(changed)) is not None:
             fun()
@@ -63,10 +67,24 @@ class SidebarViewModel(HasObservableAttributes):
     def click_axial_button(self):
         self._model.orient_section_to_axial()
 
-    def move_clim_slice_slider(self, values: Tuple[int, int]):
+    def move_clim_section_2d_slider(self, values: Tuple[float, float]):
         self._model.clim_2d = values
 
-    def move_clim_volume_slider(self, values: Tuple[int, int]):
+    @property
+    def clim_section_2d(self) -> Tuple[float, float]:
+        return self._clim_section_2d
+
+    def _update_clim2d(self):
+        self._clim_section_2d = self._model.clim_2d
+
+    @property
+    def clim_section_3d(self) -> Tuple[float, float]:
+        return self._clim_section_3d
+
+    def _update_clim3d(self):
+        self._clim_section_3d = self._model.clim_3d
+
+    def move_clim_section_3d_slider(self, values: Tuple[int, int]):
         self._model.clim_3d = values
 
     def click_quick_load_section_button(self):
