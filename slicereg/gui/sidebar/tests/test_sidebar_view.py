@@ -29,16 +29,18 @@ def test_slice_view_updates_without_error_for_all_viewmodel_fields(qtbot):
         setattr(model, attr, getattr(model, attr))  # set attribute with its own value
 
 
-def test_sidebar_show_image_dialog_doesnt_crash(qtbot, view):
+@pytest.mark.parametrize("filename", ["myfile.tiff", "", None])
+def test_sidebar_show_image_dialog_doesnt_crash(qtbot, view, filename):
     qtbot.addWidget(view.qt_widget)
     with patch('slicereg.gui.sidebar.view.QFileDialog.getOpenFileName') as get_filename:
-        get_filename.return_value = "myfile.tiff", ".tiff"
+        get_filename.return_value = filename, ".tiff"
         view.show_load_image_dialog()
 
 
-def test_sidebar_show_atlas_dialog_doesnt_crash(qtbot, view: SidebarView, view_model):
+@pytest.mark.parametrize("filename", ["myfile.tiff", "", None])
+def test_sidebar_show_atlas_dialog_doesnt_crash(qtbot, view, view_model, filename):
     qtbot.addWidget(view.qt_widget)
     view_model.atlas_resolution_text = "10"
     with patch('slicereg.gui.sidebar.view.QFileDialog.getOpenFileName') as get_filename:
-        get_filename.return_value = "myfile.tiff", ".tiff"
+        get_filename.return_value = filename, ".tiff"
         view.show_load_atlas_dialog()
