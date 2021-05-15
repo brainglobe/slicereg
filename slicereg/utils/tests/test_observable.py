@@ -18,7 +18,6 @@ def observable():
 
 
 def test_observable_calls_fun_when_attributes_are_modified(observable):
-
     callback = Mock()
     observable.register(callback)
     assert callback.call_count == 0
@@ -40,8 +39,7 @@ def test_observable_calls_fun_when_attributes_are_modified(observable):
     assert callback.call_args[1] == {'changed': 'new_attr'}
 
 
-def test_obserable_calls_all_registered_funs(observable):
-
+def test_observable_calls_all_registered_funs(observable):
     a, b, c = Mock(), Mock(), Mock()
     observable.register(a)
     observable.register(b)
@@ -51,3 +49,12 @@ def test_obserable_calls_all_registered_funs(observable):
     assert b.call_args[1] == {'changed': 'x'}
     assert c.call_count == 0
 
+
+def test_observable_doesnt_emit_protected_nor_private_attrs(observable):
+    a = Mock()
+    observable.register(a)
+    observable._x = 10
+    assert a.call_count == 0
+
+    observable.__x = 20
+    assert a.call_count == 0

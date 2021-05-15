@@ -10,7 +10,7 @@ class HasObservableAttributes:
 
     def __setattr__(self, key, value):
         super().__setattr__(key, value)
-        if hasattr(self, 'updated'):
+        if hasattr(self, 'updated') and not key.startswith('_'):
             self.updated.emit(changed=key)
 
     def register(self, fun: Callable[[str], None]):
