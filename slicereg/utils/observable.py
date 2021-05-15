@@ -24,6 +24,7 @@ class HasObservableAttributes:
             elif changed == 'b':
                 print("You updated b!")
 
+        >> observable = HasObservableAttributes()
         >> observable.register(update)
         >> observable.a = 5
         You updated a!
