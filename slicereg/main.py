@@ -1,9 +1,7 @@
 import os
-import platform
 
 import numpy as np
 from PySide2.QtWidgets import QApplication
-from packaging import version
 
 from slicereg.utils.dependency_injector import DependencyInjector
 from slicereg.app.app_model import AppModel
@@ -14,17 +12,9 @@ from slicereg.gui.volume_window import VolumeViewModel, VolumeView
 from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
 from slicereg.io import BrainglobeRemoteAtlasReader, ImioLocalAtlasReader, ImageReader
 from slicereg.repos import InMemoryRepo
+from slicereg.utils.platform import is_mac_big_sur
 
 np.set_printoptions(suppress=True, precision=2)
-
-
-def is_mac_big_sur() -> bool:
-    """
-    platform.system(): 'Darwin'
-    platform.release(): '20.3.0' or '20.4.0'
-    platform.mac_ver(): ('10.16', ('', '', ''), 'arm64') or ('10.16', ('', '', ''), 'x86_64') or ('11.3', ('', '', ''), 'arm64')
-    """
-    return platform.system() == 'Darwin' and version.parse(platform.mac_ver()[0]) >= version.parse('10.16')
 
 
 def launch_gui(create_qapp: bool = True):
