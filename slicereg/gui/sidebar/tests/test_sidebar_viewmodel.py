@@ -5,7 +5,7 @@ from hypothesis import given
 from hypothesis.strategies import floats, text
 from pytest import approx
 
-from slicereg.app.app_model import AppModel
+from slicereg.app.app_model import AppModel, VolumeType
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.utils import DependencyInjector
 
@@ -102,3 +102,34 @@ def test_setting_app_clim2d_updates_viewmodels_section_2d_slider(clim, app_model
 def test_setting_app_clim3d_updates_viewmodels_section_3d_slider(clim, app_model, view_model: SidebarViewModel):
     app_model.clim_3d = clim
     assert view_model.clim_section_3d == approx(clim)
+
+
+def test_clicking_quickload_button_calls_apps_load_section():
+    app_model = Mock(AppModel)
+    view_model = SidebarViewModel(_model=app_model)
+    assert app_model.load_section.call_count == 0
+    view_model.click_quick_load_section_button()
+    assert app_model.load_section.call_count == 1
+
+
+def test_clicking_load_section_button_calls_apps_load_section():
+    app_model = Mock(AppModel)
+    view_model = SidebarViewModel(_model=app_model)
+
+    assert app_model.load_section.call_count == 0
+    view_model.submit_load_section_from_file("myfile.tiff")
+    assert app_model.load_section.call_count == 1
+    assert app_model.load_section.called_with(filename="myfile.tiff")
+
+
+def test_atlas_atlas_type_selector_buttons_selects_matching_volume(app_model, view_model):
+    view_model.click_registration_atlas_selector_button()
+    assert app_model.visible_volume == VolumeType.REGISTRATION
+
+    view_model.click_annotation_atlas_selector_button()
+    assert app_model.visible_volume == VolumeType.ANNOTATION
+
+    view_model.click_registration_atlas_selector_button()
+    assert app_model.visible_volume == VolumeType.REGISTRATION
+
+
