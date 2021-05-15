@@ -19,7 +19,6 @@ class AtlasSectionViewModel(HasObservableAttributes):
         self._model.register(self.update)
 
     def update(self, changed: str):
-        print("changed", changed)
         if changed == 'registration_volume':
             self.atlas_section_image = self._model.coronal_section_image
         elif changed == 'atlas_section_coords':

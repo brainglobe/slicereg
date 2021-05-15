@@ -166,7 +166,6 @@ class SidebarView(BaseQtWidget):
         return self.widget
 
     def update(self, changed: str) -> None:
-        print('changed', changed)
         render_funs = {
             'bgatlas_dropdown_entries': self._render_bgatlas_list_dropdown,
             'selected_bgatlas': (lambda: None),

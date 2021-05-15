@@ -1,20 +1,17 @@
 import os
 
-import numpy as np
 from PySide2.QtWidgets import QApplication
 
-from slicereg.utils.dependency_injector import DependencyInjector
 from slicereg.app.app_model import AppModel
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
+from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
 from slicereg.gui.sidebar import SidebarViewModel, SidebarView
 from slicereg.gui.slice_window import SliceViewModel, SliceView
 from slicereg.gui.volume_window import VolumeViewModel, VolumeView
-from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
 from slicereg.io import BrainglobeRemoteAtlasReader, ImioLocalAtlasReader, ImageReader
 from slicereg.repos import InMemoryRepo
+from slicereg.utils.dependency_injector import DependencyInjector
 from slicereg.utils.platform import is_mac_big_sur
-
-np.set_printoptions(suppress=True, precision=2)
 
 
 def launch_gui(create_qapp: bool = True):
