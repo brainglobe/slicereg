@@ -18,17 +18,25 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.register(self.update)
 
     def update(self, changed: str):
-        if changed == 'bgatlas_names':
-            self.bgatlas_dropdown_entries = self._model.bgatlas_names
-        elif changed == 'section_image_resolution':
-            res = self._model.section_image_resolution
-            if res is None:
-                text = ''
-            elif int(res) == float(res):
-                text = str(int(res))
-            else:
-                text = str(float(res))
-            self._section_resolution_text = text
+        update_funs = {
+            'bgatlas_names': self._update_bgatlas_dropdown_list,
+            'section_image_resolution': self._update_section_resolution_text,
+        }
+        if (fun := update_funs.get(changed)) is not None:
+            fun()
+
+    def _update_bgatlas_dropdown_list(self):
+        self.bgatlas_dropdown_entries = self._model.bgatlas_names
+
+    def _update_section_resolution_text(self):
+        res = self._model.section_image_resolution
+        if res is None:
+            text = ''
+        elif int(res) == float(res):
+            text = str(int(res))
+        else:
+            text = str(float(res))
+        self._section_resolution_text = text
 
     @property
     def section_resolution_text(self) -> str:
