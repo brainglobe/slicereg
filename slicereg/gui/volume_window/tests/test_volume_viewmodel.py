@@ -5,7 +5,7 @@ import numpy.testing as npt
 import pytest
 from pytest import approx
 
-from slicereg.app.app_model import AppModel
+from slicereg.app.app_model import AppModel, VolumeType
 from slicereg.gui.volume_window import VolumeViewModel
 from slicereg.utils import DependencyInjector
 
@@ -36,3 +36,20 @@ def test_volume_viewmodel_updates_section_clim_when_clim_updates_in_the_app(app_
     app_model.section_image = np.random.randint(0, 100, size=(10, 10), dtype=np.uint16)
     app_model.clim_3d = (0.5, 0.2)
     assert app_model.clim_3d_values == approx(view_model.clim)
+
+
+def test_volume_viewmodel_updates_volume_when_registration_volume_loaded(app_model, view_model: VolumeViewModel):
+    app_model.registration_volume = np.random.randint(0, 100, size=(10, 10, 10), dtype=np.uint16)
+    npt.assert_almost_equal(app_model.registration_volume, view_model.atlas_volume)
+
+def test_volume_viewmodel_updates_volume_when_switching_between_registration_volume_and_annotation_volume(app_model, view_model: VolumeViewModel):
+    app_model.registration_volume = np.random.randint(0, 100, size=(10, 10, 10), dtype=np.uint16)
+    app_model.annotation_volume = np.random.randint(0, 100, size=(10, 10, 10), dtype=np.uint16)
+    app_model.visible_volume = VolumeType.REGISTRATION
+    npt.assert_almost_equal(app_model.registration_volume, view_model.atlas_volume)
+
+    app_model.visible_volume = VolumeType.ANNOTATION
+    npt.assert_almost_equal(app_model.annotation_volume, view_model.atlas_volume)
+
+    app_model.visible_volume = VolumeType.REGISTRATION
+    npt.assert_almost_equal(app_model.registration_volume, view_model.atlas_volume)
