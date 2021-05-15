@@ -26,7 +26,7 @@ def test_app_model_coronal_section_is_the_first_axis_of_the_atlas_volume_and_at_
 
 def test_coronal_section_view_model_displays_the_coronal_section_image():
     app_model = AppModel(_injector=DependencyInjector())
-    view_model = AtlasSectionViewModel(axis=0, _model=app_model)
+    view_model = AtlasSectionViewModel(_axis=0, _model=app_model)
     app_model.registration_volume = np.random.randint(0, 100, (10, 10, 10), np.uint16)
     npt.assert_equal(app_model.coronal_section_image, view_model.atlas_section_image)
 
