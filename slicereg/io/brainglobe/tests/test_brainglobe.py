@@ -23,3 +23,16 @@ def test_brainglobe_reader_creates_atlas():
         atlas = reader.read("super_atlas")
 
     assert isinstance(atlas, Atlas)
+
+
+def test_brainglobe_reader_says_source_is_brainglobe():
+    reader = BrainglobeRemoteAtlasReader()
+    assert reader.name == 'Brainglobe'
+
+
+def test_brainglobe_reader_gets_list_of_atlases():
+    reader = BrainglobeRemoteAtlasReader()
+
+    fake_atlases = [('allen_rhinoceros_1000um', '1.0'), ('mpi_zebrafinch_1um', '1.2')]
+    with patch("slicereg.io.brainglobe.atlas.bg_utils.conf_from_url", return_value={'atlases': fake_atlases}):
+        assert reader.list() == ['allen_rhinoceros_1000um', 'mpi_zebrafinch_1um']
