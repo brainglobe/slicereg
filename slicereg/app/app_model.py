@@ -55,8 +55,8 @@ class AppModel(HasObservableAttributes):
     @property
     def clim_3d_values(self) -> Optional[Tuple[int, int]]:
         if self.section_image is not None:
-            clim = np.percentile(self.section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100])
-            return tuple(clim)
+            c_min, c_max = np.percentile(self.section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100])
+            return c_min, c_max
         else:
             return None
 
