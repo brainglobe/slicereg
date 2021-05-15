@@ -19,10 +19,7 @@ class HasObservableAttributes:
 
         Example:
         def update(changed: str):
-            if changed == 'a':
-                print("You updated a!")
-            elif changed == 'b':
-                print("You updated b!")
+            print(f"You updated {changed}!")
 
         >> observable = HasObservableAttributes()
         >> observable.register(update)
