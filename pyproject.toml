@@ -18,17 +18,15 @@ vispy = "^0.6.0"
 numba = "^0.53.0"
 imio = "^0.0.5"
 packaging = "^20.9"
-traitlets = "^5.0.5"
-traittypes = "^0.2.1"
-pytest-env = "^0.6.2"
 
 [tool.poetry.dev-dependencies]
 dvc = { extras = ["gdrive"], version = "^2.0" }
 pywin32 = {version = "225", platform = "win32"}
 pytest = "^6.2.1"
 pytest-qt = "^3.3.0"
-hypothesis = "^6.0.0"
 pytest-bdd = "^4.0.2"
+pytest-env = "^0.6.2"
+hypothesis = "^6.0.0"
 coverage = {extras = ["toml"], version = "^5.3.1"}
 mypy = "^0.812"
 rope = "^0.18.0"
