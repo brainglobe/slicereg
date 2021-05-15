@@ -8,8 +8,7 @@ from slicereg.utils.introspection import get_public_attrs
 
 
 def test_slice_view_launches_without_errors(qtbot):
-    model = SliceViewModel(_model=Mock(AppModel))
-    view = SliceView(_model=model)
+    view = SliceView(_model=SliceViewModel(_model=Mock(AppModel)))
     qtbot.addWidget(view.qt_widget)
 
 
