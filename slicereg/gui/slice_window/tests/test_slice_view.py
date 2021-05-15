@@ -1,15 +1,10 @@
-import inspect
-from typing import Callable, List
 from unittest.mock import Mock
 
 from vispy.scene.events import SceneMouseEvent
 
 from slicereg.app.app_model import AppModel
 from slicereg.gui.slice_window import SliceView, SliceViewModel
-
-
-def get_public_attrs(fun: Callable) -> List[str]:
-    return [attr for attr in inspect.signature(fun).parameters if not attr.startswith('_')]
+from slicereg.utils.introspection import get_public_attrs
 
 
 def test_slice_view_launches_without_errors(qtbot):
