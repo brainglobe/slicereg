@@ -137,6 +137,15 @@ class AppModel(HasObservableAttributes):
         else:
             return None
 
+    def orient_section_to_coronal(self):
+        self.update_section(rx=0, ry=0, rz=-90)
+
+    def orient_section_to_sagittal(self):
+        self.update_section(rx=90, ry=0, rz=-90)
+
+    def orient_section_to_axial(self):
+        self.update_section(rx=0, ry=90, rz=-90)
+
     @property
     def coronal_section_image(self):
         return self._section_image(axis=0)

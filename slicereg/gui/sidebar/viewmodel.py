@@ -55,13 +55,13 @@ class SidebarViewModel(HasObservableAttributes):
             return
 
     def click_coronal_button(self):
-        self._model.update_section(rx=0, ry=0, rz=-90)
+        self._model.orient_section_to_coronal()
 
     def click_sagittal_button(self):
-        self._model.update_section(rx=90, ry=0, rz=-90)
+        self._model.orient_section_to_sagittal()
 
     def click_axial_button(self):
-        self._model.update_section(rx=0, ry=90, rz=-90)
+        self._model.orient_section_to_axial()
 
     def move_clim_slice_slider(self, values: Tuple[int, int]):
         self._model.clim_2d = values
