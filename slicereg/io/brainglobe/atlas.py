@@ -1,6 +1,6 @@
 from contextlib import redirect_stdout
 from io import StringIO
-from typing import List, Optional
+from typing import List
 
 from bg_atlasapi import BrainGlobeAtlas
 from bg_atlasapi import utils as bg_utils
