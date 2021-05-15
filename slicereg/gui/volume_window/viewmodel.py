@@ -71,7 +71,7 @@ class VolumeViewModel(HasObservableAttributes):
 
     @property
     def volume_clim(self) -> Tuple[int, int]:
-        return np.min(self.atlas_volume), np.max(self.atlas_volume)
+        return int(np.min(self.atlas_volume)), int(np.max(self.atlas_volume))
 
-    def press_key(self, key: str):
+    def press_key(self, key: str) -> None:
         self._model.press_key(key=key)
