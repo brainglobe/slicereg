@@ -18,9 +18,7 @@ class HasObservableAttributes:
         Takes a callback function that gets called with the name of the changed argument.
 
         Example:
-        def update(changed: str):
-            print(f"You updated {changed}!")
-
+        >> update = lambda changed: print(f"You updated {changed}!")
         >> observable = HasObservableAttributes()
         >> observable.register(update)
         >> observable.a = 5
