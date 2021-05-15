@@ -80,25 +80,25 @@ def test_clicking_sagittal_orientation_button_tells_app_to_rotate_slice_to_sagit
     assert app_model.orient_section_to_sagittal.call_count == 1
 
 
-def test_moving_clim_section_2d_slider_sets_the_apps_clim_2d(app_model, view_model):
-    clim = (0.3, 0.8)
+@pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])
+def test_moving_clim_section_2d_slider_sets_the_apps_clim_2d(clim, app_model, view_model):
     view_model.move_clim_section_2d_slider(clim)
     assert app_model.clim_2d == approx(clim)
 
 
-def test_moving_clim_section_3d_slider_sets_the_apps_clim_3d(app_model, view_model):
-    clim = (0.3, 0.9)
+@pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])
+def test_moving_clim_section_3d_slider_sets_the_apps_clim_3d(clim, app_model, view_model):
     view_model.move_clim_section_3d_slider(clim)
     assert app_model.clim_3d == approx(clim)
 
 
-def test_setting_app_clim2d_updates_viewmodels_section_2d_slider(app_model, view_model: SidebarViewModel):
-    clim = (0.4, 0.5)
+@pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])
+def test_setting_app_clim2d_updates_viewmodels_section_2d_slider(clim, app_model, view_model: SidebarViewModel):
     app_model.clim_2d = clim
     assert view_model.clim_section_2d == approx(clim)
 
 
-def test_setting_app_clim3d_updates_viewmodels_section_3d_slider(app_model, view_model: SidebarViewModel):
-    clim = (0.4, 0.5)
+@pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])
+def test_setting_app_clim3d_updates_viewmodels_section_3d_slider(clim, app_model, view_model: SidebarViewModel):
     app_model.clim_3d = clim
     assert view_model.clim_section_3d == approx(clim)
