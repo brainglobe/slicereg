@@ -23,7 +23,7 @@ class VolumeViewModel(HasObservableAttributes):
         update_funs = {
             'section_image': self._update_section_image,
             'section_transform': self._update_section_transform,
-            'clim_3d_values': self._update_clim,
+            'clim_3d': self._update_clim,
             'visible_volume': self._switch_visible_volume,
             'registration_volume': self._update_visible_volume_to_registration,
             'annotation_volume': self._update_visible_volume_to_annotation,
@@ -34,6 +34,7 @@ class VolumeViewModel(HasObservableAttributes):
     def _update_section_image(self):
         if (image := self._model.section_image) is not None:
             self.section_image = image
+            self._update_clim()
 
     def _update_section_transform(self):
         if (transform := self._model.section_transform) is not None:

@@ -53,8 +53,12 @@ class AppModel(HasObservableAttributes):
         return tuple(np.percentile(self.section_image, [self.clim_2d[0] * 100, self.clim_2d[1] * 100]))
 
     @property
-    def clim_3d_values(self):
-        return tuple(np.percentile(self.section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100]))
+    def clim_3d_values(self) -> Optional[Tuple[int, int]]:
+        if self.section_image is not None:
+            clim = np.percentile(self.section_image, [self.clim_3d[0] * 100, self.clim_3d[1] * 100])
+            return tuple(clim)
+        else:
+            return None
 
     # Load Section
     def load_section(self, filename: str):
