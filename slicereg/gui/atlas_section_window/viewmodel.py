@@ -19,10 +19,15 @@ class AtlasSectionViewModel(HasObservableAttributes):
         self._model.register(self.update)
 
     def update(self, changed: str):
-        if changed == 'registration_volume':
-            self.atlas_section_image = self._model.coronal_section_image
-        elif changed == 'atlas_section_coords':
-            self._update_coords()
+        update_funs = {
+            'registration_volume': self._update_section_image,
+            'atlas_section_coords': self._update_coords,
+        }
+        if (render_fun := update_funs.get(changed)) is not None:
+            render_fun()
+
+    def _update_section_image(self):
+        self.atlas_section_image = self._model.coronal_section_image
 
     def _update_coords(self):
         self.coords = tuple(np.delete(self._model.atlas_section_coords, self._axis))
