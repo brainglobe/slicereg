@@ -4,7 +4,6 @@ import numpy as np
 
 from slicereg.commands.base import BaseRepo, BaseLocalImageReader, ImageReaderData
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.core.atlas import Atlas
 
 
 def test_load_section_command_gets_section_image_from_file():
