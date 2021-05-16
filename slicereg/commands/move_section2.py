@@ -44,9 +44,16 @@ class MoveSectionCommand2:
             (MoveType.ROTATION, Axis.Y): 'ry',
             (MoveType.ROTATION, Axis.Z): 'rz',
         }
+
         coord = coord_vals[(type, axis)]
-        physical = section.physical_transform.update(**{coord: value})
+        if absolute:
+            physical = section.physical_transform.update(**{coord: value})
+        elif type is MoveType.ROTATION:
+            physical = section.physical_transform.rotate(**{coord: value})
+        elif type is MoveType.TRANSLATION:
+            physical = section.physical_transform.translate(**{coord: value})
         section = section.update(physical_transform=physical)
+
         self._repo.save_section(section)
         return Ok(MoveSectionData2(
             x=physical.x,
