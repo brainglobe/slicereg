@@ -16,4 +16,4 @@ def test_list_atlases_gets_brainglobe_atlas_names():
     list_atlases = ListRemoteAtlasesCommand(_remote_atlas_reader=reader)
 
     result = list_atlases()
-    assert result.atlas_names == atlases
+    assert result.ok().atlas_names == atlases

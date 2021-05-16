@@ -3,11 +3,13 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
+from result import Result, Ok
+
 from slicereg.commands.base import BaseRemoteAtlasReader
 
 
 @dataclass(frozen=True)
-class ListBgAtlasesResult:
+class ListBgAtlasesData:
     atlas_names: List[str]
 
 
@@ -15,6 +17,6 @@ class ListBgAtlasesResult:
 class ListRemoteAtlasesCommand:
     _remote_atlas_reader: BaseRemoteAtlasReader
 
-    def __call__(self):
+    def __call__(self) -> Result[ListBgAtlasesData, str]:
         atlas_names = self._remote_atlas_reader.list()
-        return ListBgAtlasesResult(atlas_names=atlas_names)
+        return Ok(ListBgAtlasesData(atlas_names=atlas_names))

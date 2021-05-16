@@ -65,36 +65,43 @@ class AppModel(HasObservableAttributes):
     def load_section(self, filename: str):
         load_section = self._injector.build(LoadSectionCommand)
         result = load_section(filename=filename)
-        if result is not None:
-            self.section_image = result.section_image
-            self.section_transform = result.transform
-            self.section_image_resolution = result.resolution_um
-            self.atlas_image = result.atlas_image
-            self.num_channels = result.num_channels
+        if isinstance(result, Ok):
+            data = result.value
+            self.section_image = data.section_image
+            self.section_transform = data.transform
+            self.section_image_resolution = data.resolution_um
+            self.atlas_image = data.atlas_image
+            self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
 
     # Select Channel
     def select_channel(self, num: int):
         select_channel = self._injector.build(SelectChannelCommand)
         result = select_channel(channel=num)
-        self.current_channel = result.current_channel
-        self.section_image = result.section_image
+        if isinstance(result, Ok):
+            data = result.value
+            self.current_channel = data.current_channel
+            self.section_image = data.section_image
 
     # Resample Section
     def resample_section(self, resolution_um: float):
         resample_section = self._injector.build(ResampleSectionCommand)
         result = resample_section(resolution_um=resolution_um)
-        self.atlas_image = result.atlas_image
-        self.section_image = result.section_image
-        self.section_transform = result.section_transform
-        self.section_image_resolution = result.resolution_um
+        if isinstance(result, Ok):
+            data = result.value
+            self.atlas_image = data.atlas_image
+            self.section_image = data.section_image
+            self.section_transform = data.section_transform
+            self.section_image_resolution = data.resolution_um
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
         move_section = self._injector.build(MoveSectionCommand)
-        results = move_section(**kwargs)
-        self.atlas_image = results.atlas_slice_image
-        self.section_transform = results.transform
+        result = move_section(**kwargs)
+        if isinstance(result, Ok):
+            data = result.value
+            self.atlas_image = data.atlas_slice_image
+            self.section_transform = data.transform
 
     def update_section(self, **kwargs):
         update_section = self._injector.build(UpdateSectionTransformCommand)
@@ -125,15 +132,19 @@ class AppModel(HasObservableAttributes):
     # List Brainglobe Atlases
     def list_bgatlases(self):
         list_bgatlases = self._injector.build(ListRemoteAtlasesCommand)
-        results = list_bgatlases()
-        self.bgatlas_names = results.atlas_names
+        result = list_bgatlases()
+        if isinstance(result, Ok):
+            data = result.value
+            self.bgatlas_names = data.atlas_names
 
     # Get Physical Coordinate from Image Coordinate
     def select_coord(self, i: int, j: int):
         get_atlas_coord = self._injector.build(MapImageCoordToAtlasCoordCommand)
-        results = get_atlas_coord(i=i, j=j)
-        self.selected_ij = results.ij
-        self.selected_xyz = results.xyz
+        result = get_atlas_coord(i=i, j=j)
+        if isinstance(result, Ok):
+            data = result.value
+            self.selected_ij = data.ij
+            self.selected_xyz = data.xyz
 
     def _section_image(self, axis):
         if (volume := self.registration_volume) is not None:

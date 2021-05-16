@@ -16,6 +16,6 @@ def test_load_section_command_gets_section_image_from_file():
     load_section = LoadSectionCommand(_repo=repo, _image_reader=reader)
     result = load_section(filename="myfile.tiff")
     assert reader.read.called_with(filename="myfile.tiff")
-    assert result.section_image.ndim == 2
+    assert result.ok().section_image.ndim == 2
 
 
