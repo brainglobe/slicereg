@@ -65,7 +65,7 @@ class AppModel(HasObservableAttributes):
         load_section = self._injector.build(LoadSectionCommand)
         result = load_section(filename=filename)
         if result is not None:
-            self.section_image = result.image
+            self.section_image = result.section_image
             self.section_transform = result.transform
             self.section_image_resolution = result.resolution_um
             self.atlas_image = result.atlas_image

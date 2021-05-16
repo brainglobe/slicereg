@@ -13,7 +13,7 @@ from slicereg.core.section import Section
 
 @dataclass(frozen=True)
 class LoadImageResult:
-    image: ndarray
+    section_image: ndarray
     transform: ndarray
     resolution_um: float
     atlas_image: ndarray
@@ -50,7 +50,7 @@ class LoadSectionCommand:
 
         self._repo.save_section(section=section)
         return LoadImageResult(
-            image=section.image.channels[0],
+            section_image=section.image.channels[0],
             transform=registration.image_to_volume_transform,
             resolution_um=image.resolution_um,
             atlas_image=registration.slice_atlas().channels[0],
