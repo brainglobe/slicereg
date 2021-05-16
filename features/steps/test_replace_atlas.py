@@ -1,7 +1,7 @@
 import numpy.testing as npt
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.app.app_model import VolumeType
+from slicereg.gui.app_model import VolumeType
 
 
 @scenario("../load_atlas.feature", "Replace Atlas")

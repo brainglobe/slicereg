@@ -2,7 +2,7 @@ import os
 
 from PySide2.QtWidgets import QApplication
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
 from slicereg.gui.main_window import MainWindowView, MainWindowViewModel
 from slicereg.gui.sidebar import SidebarViewModel, SidebarView

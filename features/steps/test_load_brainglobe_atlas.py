@@ -1,7 +1,7 @@
 import numpy.testing as npt
 from pytest_bdd import scenario, when, then
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 
 
 @scenario("../load_atlas.feature", "Load Atlas")

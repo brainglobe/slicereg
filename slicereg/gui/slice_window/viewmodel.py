@@ -1,9 +1,9 @@
 from dataclasses import dataclass, field
-from typing import Tuple, Callable
+from typing import Tuple
 
 import numpy as np
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.utils.observable import HasObservableAttributes
 
 

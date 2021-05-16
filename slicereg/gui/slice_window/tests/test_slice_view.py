@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 from vispy.scene.events import SceneMouseEvent
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.slice_window import SliceView, SliceViewModel
 from slicereg.utils.introspection import get_public_attrs
 

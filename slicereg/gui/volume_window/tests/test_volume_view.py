@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.volume_window import VolumeViewModel, VolumeView
 from slicereg.utils.introspection import get_public_attrs
 

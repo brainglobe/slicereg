@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import numpy as np
 import numpy.testing as npt
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.slice_window import SliceViewModel
 from slicereg.utils import DependencyInjector
 

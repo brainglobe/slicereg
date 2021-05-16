@@ -1,6 +1,6 @@
 from pytest_bdd import scenario, given, when, then
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 
 
 @scenario("../resample.feature", "Section Resample")

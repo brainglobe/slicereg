@@ -2,7 +2,7 @@ from unittest.mock import Mock, patch
 
 import pytest
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.sidebar import SidebarView, SidebarViewModel
 from slicereg.utils.introspection import get_public_attrs
 

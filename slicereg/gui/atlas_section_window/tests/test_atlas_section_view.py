@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectionView
 from slicereg.utils.introspection import get_public_attrs
 

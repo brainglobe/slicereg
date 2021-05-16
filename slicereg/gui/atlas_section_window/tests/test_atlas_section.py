@@ -4,9 +4,9 @@ import numpy as np
 import numpy.testing as npt
 import pytest
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.gui.atlas_section_window.viewmodel import AtlasSectionViewModel
-from slicereg.utils import DependencyInjector, Signal
+from slicereg.utils import DependencyInjector
 
 cases = [
     (0, 'coronal_section_image'),

@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
-from typing import Optional, Tuple, List, Any, Callable
+from typing import Optional, Tuple, List
 
-from slicereg.app.app_model import AppModel, VolumeType
+from slicereg.gui.app_model import AppModel, VolumeType
 from slicereg.utils.observable import HasObservableAttributes
 
 

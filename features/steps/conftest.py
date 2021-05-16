@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from numpy import random
 
-from slicereg.app.app_model import AppModel
+from slicereg.gui.app_model import AppModel
 from slicereg.commands.base import BaseRemoteAtlasReader, BaseLocalAtlasReader, BaseLocalImageReader, AtlasReaderData, \
     ImageReaderData
 from slicereg.core.atlas import Atlas
