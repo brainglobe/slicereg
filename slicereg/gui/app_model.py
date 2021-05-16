@@ -45,6 +45,12 @@ class AppModel(HasObservableAttributes):
     num_channels: Optional[int] = None
     current_channel: int = 1
     visible_volume: VolumeType = VolumeType.REGISTRATION
+    x: float = 0.
+    y: float = 0.
+    z: float = 0.
+    rx: float = 0.
+    ry: float = 0.
+    rz: float = 0.
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -107,7 +113,15 @@ class AppModel(HasObservableAttributes):
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
             result = move_section(axis=axes[ax_name], value=value, type=move_types[ax_name], absolute=False)
-            if isinstance(result, Err):
+            if isinstance(result, Ok):
+                data = result.value
+                self.x = data.x
+                self.y = data.y
+                self.z = data.z
+                self.rx = data.rx
+                self.ry = data.ry
+                self.rz = data.rz
+            elif isinstance(result, Err):
                 return
 
         register_section = self._injector.build(RegisterSectionCommand)
@@ -124,7 +138,15 @@ class AppModel(HasObservableAttributes):
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
             result = move_section(axis=axes[ax_name], value=value, type=move_types[ax_name], absolute=True)
-            if isinstance(result, Err):
+            if isinstance(result, Ok):
+                data = result.value
+                self.x = data.x
+                self.y = data.y
+                self.z = data.z
+                self.rx = data.rx
+                self.ry = data.ry
+                self.rz = data.rz
+            elif isinstance(result, Err):
                 return
 
         register_section = self._injector.build(RegisterSectionCommand)
