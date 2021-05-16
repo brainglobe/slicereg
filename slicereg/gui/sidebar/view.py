@@ -171,6 +171,12 @@ class SidebarView(BaseQtWidget):
             'selected_bgatlas': (lambda: None),
             'atlas_resolution_text': self._render_atlas_resolution_textbox,
             'section_resolution_text': self._render_section_resolution_textbox,
+            'x_slider_value': self._update_x_slider,
+            'y_slider_value': self._update_y_slider,
+            'z_slider_value': self._update_z_slider,
+            'rx_slider_value': self._update_rotx_slider,
+            'ry_slider_value': self._update_roty_slider,
+            'rz_slider_value': self._update_rotz_slider,
         }
         render_funs[changed]()
 
@@ -183,3 +189,21 @@ class SidebarView(BaseQtWidget):
 
     def _render_section_resolution_textbox(self):
         self.section_resolution_textbox.setText(self._model.section_resolution_text)
+
+    def _update_x_slider(self):
+        self.x_slider.set_value(value=int(self._model.x_slider_value))
+
+    def _update_y_slider(self):
+        self.y_slider.set_value(value=int(self._model.y_slider_value))
+
+    def _update_z_slider(self):
+        self.z_slider.set_value(value=int(self._model.z_slider_value))
+
+    def _update_rotx_slider(self):
+        self.rotx_slider.set_value(value=int(self._model.rx_slider_value))
+
+    def _update_roty_slider(self):
+        self.roty_slider.set_value(value=int(self._model.ry_slider_value))
+
+    def _update_rotz_slider(self):
+        self.rotz_slider.set_value(value=int(self._model.rz_slider_value))

@@ -2,7 +2,7 @@ from unittest.mock import Mock
 
 import pytest
 from hypothesis import given
-from hypothesis.strategies import floats, text
+from hypothesis.strategies import floats, text, sampled_from
 from pytest import approx
 
 from slicereg.gui.app_model import AppModel, VolumeType
@@ -133,3 +133,7 @@ def test_atlas_atlas_type_selector_buttons_selects_matching_volume(app_model, vi
     assert app_model.visible_volume == VolumeType.REGISTRATION
 
 
+@given(axis=sampled_from(['x', 'y', 'z', 'rx', 'ry', 'rz']), value=floats(-100, 100))
+def test_appmodel_coord_attrs_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, axis, value):
+    setattr(app_model, axis, value)
+    assert getattr(view_model, f"{axis}_slider_value") == value

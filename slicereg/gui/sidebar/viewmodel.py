@@ -14,6 +14,12 @@ class SidebarViewModel(HasObservableAttributes):
     _section_resolution_text: str = ''
     _clim_section_2d: Tuple[float, float] = (0., 1.)
     _clim_section_3d: Tuple[float, float] = (0., 1.)
+    x_slider_value: float = 0.
+    y_slider_value: float = 0.
+    z_slider_value: float = 0.
+    rx_slider_value: float = 0.
+    ry_slider_value: float = 0.
+    rz_slider_value: float = 0.
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -25,6 +31,12 @@ class SidebarViewModel(HasObservableAttributes):
             'section_image_resolution': self._update_section_resolution_text,
             'clim_2d': self._update_clim2d,
             'clim_3d': self._update_clim3d,
+            'x': self._update_x_slider,
+            'y': self._update_y_slider,
+            'z': self._update_z_slider,
+            'rx': self._update_rx_slider,
+            'ry': self._update_ry_slider,
+            'rz': self._update_rz_slider,
         }
         if (fun := update_funs.get(changed)) is not None:
             fun()
@@ -41,6 +53,24 @@ class SidebarViewModel(HasObservableAttributes):
         else:
             text = str(float(res))
         self._section_resolution_text = text
+
+    def _update_x_slider(self):
+        self.x_slider_value = self._model.x
+
+    def _update_y_slider(self):
+        self.y_slider_value = self._model.y
+
+    def _update_z_slider(self):
+        self.z_slider_value = self._model.z
+
+    def _update_rx_slider(self):
+        self.rx_slider_value = self._model.rx
+
+    def _update_ry_slider(self):
+        self.ry_slider_value = self._model.ry
+
+    def _update_rz_slider(self):
+        self.rz_slider_value = self._model.rz
 
     @property
     def section_resolution_text(self) -> str:
