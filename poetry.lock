@@ -339,7 +339,7 @@ hdfs = ["pyarrow (>=2.0.0)"]
 oss = ["oss2 (==2.6.1)", "pycryptodome (>=3.10)"]
 s3 = ["boto3 (>=1.9.201)"]
 ssh = ["paramiko[invoke] (>=2.7.0)"]
-ssh_gssapi = ["paramiko[invoke,gssapi] (>=2.7.0)"]
+ssh_gssapi = ["paramiko[gssapi,invoke] (>=2.7.0)"]
 tests = ["wheel (==0.36.2)", "pytest (==6.2.3)", "pytest-cov (==2.11.1)", "pytest-xdist (==2.2.1)", "pytest-mock (==3.6.0)", "pytest-lazy-fixture (==0.6.3)", "pytest-timeout (==1.4.2)", "pytest-docker (==0.10.1)", "flaky (==3.7.0)", "mock (==4.0.3)", "rangehttpserver (==1.2.0)", "mock-ssh-server (==0.9.0)", "moto (==2.0.5)", "beautifulsoup4 (==4.9.3)", "wget (==3.2)", "filelock (==3.0.12)", "wsgidav (==3.1.0)", "crc32c (==2.2)", "xmltodict (==0.12.0)", "google-compute-engine (==2.8.13)", "google-cloud-storage (==1.38.0)", "urllib3 (==1.26.4)", "Pygments (==2.8.1)", "collective.checkdocs (==0.2)", "pydocstyle (==6.0.0)", "jaraco.windows (==5.5.0)", "pylint (==2.8.2)", "pylint-pytest (==1.0.3)", "pylint-plugin-utils (==0.6)", "mypy (==0.812)"]
 webdav = ["webdavclient3 (>=3.14.5)"]
 webhdfs = ["hdfs (==2.5.8)"]
@@ -1386,6 +1386,14 @@ security = ["pyOpenSSL (>=0.14)", "cryptography (>=1.3.4)"]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 
 [[package]]
+name = "result"
+version = "0.6.0"
+description = "A rust-like result type for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "rich"
 version = "10.2.0"
 description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
@@ -1726,7 +1734,7 @@ test = ["zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8.1,<3.9"
-content-hash = "bbb37770500eabc6daaafa94427c71a57ee77b81ad0e7d97bffd26e8449324ae"
+content-hash = "cb2c6d0ea9016bc038064e0b012d2aff025b754cea1f80ab19c67ecfe61d21e2"
 
 [metadata.files]
 appdirs = [
@@ -2627,6 +2635,10 @@ pyyaml = [
 requests = [
     {file = "requests-2.25.1-py2.py3-none-any.whl", hash = "sha256:c210084e36a42ae6b9219e00e48287def368a26d03a048ddad7bfee44f75871e"},
     {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
+]
+result = [
+    {file = "result-0.6.0-py3-none-any.whl", hash = "sha256:31d632b1aaca74e3798e700ae5a9a9a752fee639a5f054080bed7c8086170567"},
+    {file = "result-0.6.0.tar.gz", hash = "sha256:3c69a9d76b305957eb8d7f036cb5ed5af561f48624f705b5e9cff042f560c3d2"},
 ]
 rich = [
     {file = "rich-10.2.0-py3-none-any.whl", hash = "sha256:2701b69b9646a12b05d80f9d96a48615d4b68678fbfa67a60aa2834a62ad01e7"},
