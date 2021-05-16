@@ -49,10 +49,10 @@ class LoadAtlasFromFileCommand:
     _repo: BaseRepo
     _local_atlas_reader: BaseLocalAtlasReader
 
-    def __call__(self, filename: str, resolution_um: int) -> LoadAtlasData:
+    def __call__(self, filename: str, resolution_um: int) -> Result[LoadAtlasData, str]:
         atlas_data = self._local_atlas_reader.read(filename=filename)
         if atlas_data is None:
-            raise RuntimeError("Atlas loading failed.")
+            return Err("Atlas loading failed.")
 
         atlas = Atlas(
             volume=atlas_data.registration_volume,
@@ -62,9 +62,9 @@ class LoadAtlasFromFileCommand:
 
         self._repo.set_atlas(atlas=atlas)
 
-        return LoadAtlasData(
+        return Ok(LoadAtlasData(
             volume=atlas.volume,
             transform=atlas.shared_space_transform,
             resolution=atlas.resolution_um,
             annotation_volume=None,
-        )
+        ))

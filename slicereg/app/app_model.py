@@ -6,6 +6,7 @@ from typing import Tuple, List, Optional
 
 import numpy as np
 from numpy import ndarray
+from result import Ok
 
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
@@ -105,7 +106,7 @@ class AppModel(HasObservableAttributes):
     def load_bgatlas(self, name: str):
         load_atlas = self._injector.build(LoadRemoteAtlasCommand)
         result = load_atlas(name=name)
-        if result.is_ok():
+        if isinstance(result, Ok):
             data = result.value
             self.registration_volume = data.volume
             self.atlas_resolution = int(data.resolution)
@@ -114,10 +115,12 @@ class AppModel(HasObservableAttributes):
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         load_atlas = self._injector.build(LoadAtlasFromFileCommand)
         result = load_atlas(filename=filename, resolution_um=resolution_um)
-        self.registration_volume = result.volume
-        self.atlas_resolution = int(result.resolution)
-        x, y, z = tuple((np.array(self.registration_volume.shape) * 0.5).astype(int).tolist())
-        self.atlas_section_coords = x, y, z
+        if isinstance(result, Ok):
+            atlas = result.value
+            self.registration_volume = atlas.volume
+            self.atlas_resolution = int(atlas.resolution)
+            x, y, z = tuple((np.array(self.registration_volume.shape) * 0.5).astype(int).tolist())
+            self.atlas_section_coords = x, y, z
 
     # List Brainglobe Atlases
     def list_bgatlases(self):
