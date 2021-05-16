@@ -10,6 +10,7 @@ from slicereg.core.registration import Registration
 
 class RegisterSectionData(NamedTuple):
     atlas_slice_image: np.ndarray
+    section_transform: np.ndarray
 
 
 @dataclass(frozen=True)
@@ -28,4 +29,7 @@ class RegisterSectionCommand:
 
         registration = Registration(section=section, atlas=atlas)
         atlas_slice_image = registration.slice_atlas().channels[0]
-        return Ok(RegisterSectionData(atlas_slice_image=atlas_slice_image))
+        return Ok(RegisterSectionData(
+            atlas_slice_image=atlas_slice_image,
+            section_transform=registration.image_to_volume_transform,
+        ))

@@ -13,6 +13,7 @@ from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
+from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -68,11 +69,18 @@ class AppModel(HasObservableAttributes):
         if isinstance(result, Ok):
             data = result.value
             self.section_image = data.section_image
-            self.section_transform = data.transform
             self.section_image_resolution = data.resolution_um
-            self.atlas_image = data.atlas_image
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
+
+        register_section = self._injector.build(RegisterSectionCommand)
+        result = register_section()
+        if isinstance(result, Ok):
+            data = result.value
+            self.atlas_image = data.atlas_slice_image
+            self.section_transform = data.section_transform
+
+
 
     # Select Channel
     def select_channel(self, num: int):
