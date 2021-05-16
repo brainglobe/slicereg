@@ -112,10 +112,15 @@ class AppModel(HasObservableAttributes):
         result = resample_section(resolution_um=resolution_um)
         if isinstance(result, Ok):
             data = result.value
-            self.atlas_image = data.atlas_image
             self.section_image = data.section_image
-            self.section_transform = data.section_transform
             self.section_image_resolution = data.resolution_um
+
+        register_section = self._injector.build(RegisterSectionCommand)
+        result2 = register_section()
+        if isinstance(result2, Ok):
+            data2 = result2.value
+            self.atlas_image = data2.atlas_slice_image
+            self.section_transform = data2.section_transform
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
