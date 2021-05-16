@@ -119,10 +119,21 @@ class AppModel(HasObservableAttributes):
             self.section_transform = data2.section_transform
 
     def update_section(self, **kwargs):
-        update_section = self._injector.build(UpdateSectionTransformCommand)
-        results = update_section(**kwargs)
-        self.atlas_image = results.atlas_slice_image
-        self.section_transform = results.transform
+        axes = {'x': Axis.X, 'y': Axis.Y, 'z': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
+        t, r = MoveType.TRANSLATION, MoveType.ROTATION
+        move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
+        move_section = self._injector.build(MoveSectionCommand2)
+        for ax_name, value in kwargs.items():
+            result = move_section(axis=axes[ax_name], value=value, type=move_types[ax_name], absolute=True)
+            if isinstance(result, Err):
+                return
+
+        register_section = self._injector.build(RegisterSectionCommand)
+        result2 = register_section()
+        if isinstance(result2, Ok):
+            data2 = result2.value
+            self.atlas_image = data2.atlas_slice_image
+            self.section_transform = data2.section_transform
 
     # Load Atlases
     def load_bgatlas(self, name: str):
