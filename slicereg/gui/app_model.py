@@ -74,11 +74,11 @@ class AppModel(HasObservableAttributes):
             self.visible_volume = VolumeType.REGISTRATION
 
         register_section = self._injector.build(RegisterSectionCommand)
-        result = register_section()
-        if isinstance(result, Ok):
-            data = result.value
-            self.atlas_image = data.atlas_slice_image
-            self.section_transform = data.section_transform
+        result2 = register_section()
+        if isinstance(result2, Ok):
+            data2 = result2.value
+            self.atlas_image = data2.atlas_slice_image
+            self.section_transform = data2.section_transform
 
 
 
