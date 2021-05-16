@@ -16,7 +16,7 @@ class RegisterSectionData(NamedTuple):
 class RegisterSectionCommand:
     _repo: BaseRepo
 
-    def __call__(self) -> Result[None, None]:
+    def __call__(self) -> Result[RegisterSectionData, str]:
         sections = self._repo.get_sections()
         if not sections:
             return Err("No section loaded")
