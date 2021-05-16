@@ -6,13 +6,14 @@ from typing import Tuple, List, Optional
 
 import numpy as np
 from numpy import ndarray
-from result import Ok
+from result import Ok, Err
 
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section import MoveSectionCommand, UpdateSectionTransformCommand
+from slicereg.commands.move_section import UpdateSectionTransformCommand
+from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType
 from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
@@ -23,7 +24,6 @@ from slicereg.utils.observable import HasObservableAttributes
 class VolumeType(Enum):
     REGISTRATION = auto()
     ANNOTATION = auto()
-
 
 
 @dataclass
@@ -80,8 +80,6 @@ class AppModel(HasObservableAttributes):
             self.atlas_image = data2.atlas_slice_image
             self.section_transform = data2.section_transform
 
-
-
     # Select Channel
     def select_channel(self, num: int):
         select_channel = self._injector.build(SelectChannelCommand)
@@ -104,12 +102,21 @@ class AppModel(HasObservableAttributes):
 
     # Move/Update Section Position/Rotation
     def move_section(self, **kwargs):
-        move_section = self._injector.build(MoveSectionCommand)
-        result = move_section(**kwargs)
-        if isinstance(result, Ok):
-            data = result.value
-            self.atlas_image = data.atlas_slice_image
-            self.section_transform = data.transform
+        axes = {'x': Axis.X, 'y': Axis.Y, 'z': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
+        t, r = MoveType.TRANSLATION, MoveType.ROTATION
+        move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
+        move_section = self._injector.build(MoveSectionCommand2)
+        for ax_name, value in kwargs.items():
+            result = move_section(axis=axes[ax_name], value=value, type=move_types[ax_name], absolute=False)
+            if isinstance(result, Err):
+                return
+
+        register_section = self._injector.build(RegisterSectionCommand)
+        result2 = register_section()
+        if isinstance(result2, Ok):
+            data2 = result2.value
+            self.atlas_image = data2.atlas_slice_image
+            self.section_transform = data2.section_transform
 
     def update_section(self, **kwargs):
         update_section = self._injector.build(UpdateSectionTransformCommand)

@@ -31,7 +31,7 @@ class MoveSectionData2(NamedTuple):
 class MoveSectionCommand2:
     _repo: BaseRepo
 
-    def __call__(self, axis: Axis, value: float, type: MoveType, absolute: bool) -> Result[None, None]:
+    def __call__(self, axis: Axis, value: float, type: MoveType, absolute: bool) -> Result[MoveSectionData2, str]:
         try:
             section = self._repo.get_sections()[0]
         except IndexError:
