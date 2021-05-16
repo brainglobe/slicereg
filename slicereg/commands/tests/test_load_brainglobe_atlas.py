@@ -23,9 +23,10 @@ def mock_reader():
 def test_load_bgatlas_command_gets_atlas(mock_reader):
     load_atlas = LoadRemoteAtlasCommand(_repo=Mock(BaseRepo), _remote_atlas_reader=mock_reader)
     result = load_atlas(name='allen_mouse_1um')
-    assert result.resolution == 1
-    assert result.volume.shape == (5, 5, 5)
-    assert result.annotation_volume.shape == (5, 5, 5)
+    data = result.unwrap()
+    assert data.resolution == 1
+    assert data.volume.shape == (5, 5, 5)
+    assert data.annotation_volume.shape == (5, 5, 5)
 
 
 def test_load_bgatlas_command_saves_atlas_in_repo(mock_reader):

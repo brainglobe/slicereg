@@ -105,9 +105,11 @@ class AppModel(HasObservableAttributes):
     def load_bgatlas(self, name: str):
         load_atlas = self._injector.build(LoadRemoteAtlasCommand)
         result = load_atlas(name=name)
-        self.registration_volume = result.volume
-        self.atlas_resolution = int(result.resolution)
-        self.annotation_volume = result.annotation_volume
+        if result.is_ok():
+            data = result.value
+            self.registration_volume = data.volume
+            self.atlas_resolution = int(data.resolution)
+            self.annotation_volume = data.annotation_volume
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         load_atlas = self._injector.build(LoadAtlasFromFileCommand)
