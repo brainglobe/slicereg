@@ -13,4 +13,4 @@ def step_impl(sidebar):
 
 @then("I see a list of bg-atlasapi's available atlases.")
 def step_impl(sidebar, bg_atlases):
-    sidebar.bgatlas_dropdown_entries == bg_atlases
+    assert sidebar.bgatlas_dropdown_entries == bg_atlases

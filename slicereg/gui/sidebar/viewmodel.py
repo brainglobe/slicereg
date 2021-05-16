@@ -55,7 +55,7 @@ class SidebarViewModel(HasObservableAttributes):
             else:
                 self._model.section_image_resolution = None
         except ValueError:
-            self._section_resolution_text = self._section_resolution_text
+            self.section_resolution_text = self._section_resolution_text
             return
 
     def click_coronal_button(self):
