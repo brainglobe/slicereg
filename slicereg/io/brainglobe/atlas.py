@@ -5,17 +5,12 @@ from typing import List
 from bg_atlasapi import BrainGlobeAtlas
 from bg_atlasapi import utils as bg_utils
 
-from slicereg.commands.base import BaseRemoteAtlasReader
-from slicereg.core.atlas import Atlas
+from slicereg.commands.base import BaseRemoteAtlasReader, AtlasReaderData
 
 
 class BrainglobeRemoteAtlasReader(BaseRemoteAtlasReader):
 
-    @property
-    def name(self) -> str:
-        return "Brainglobe"
-
-    def read(self, name: str) -> Atlas:
+    def read(self, name: str) -> AtlasReaderData:
         with redirect_stdout(StringIO()):  # blocks the BrainGlobeAtlas print to console
             bgatlas = BrainGlobeAtlas(atlas_name=name)
 
@@ -24,10 +19,12 @@ class BrainglobeRemoteAtlasReader(BaseRemoteAtlasReader):
         new_reference = bgatlas.space.map_stack_to("asl", bgatlas.reference)
         new_annotation = bgatlas.space.map_stack_to("asl", bgatlas.annotation)
 
-        return Atlas(
-            volume=new_reference,
-            resolution_um=bgatlas.resolution[0],
+        return AtlasReaderData(
+            source="Brainglobe",
+            name=name,
+            registration_volume=new_reference,
             annotation_volume=new_annotation,
+            resolution_um=bgatlas.resolution[0],
         )
 
     def list(self) -> List[str]:

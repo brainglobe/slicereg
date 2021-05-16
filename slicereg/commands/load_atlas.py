@@ -6,6 +6,7 @@ from typing import Optional
 from numpy import ndarray
 
 from slicereg.commands.base import BaseRepo, BaseRemoteAtlasReader, BaseLocalAtlasReader
+from slicereg.core.atlas import Atlas
 
 
 @dataclass(frozen=True)
@@ -22,10 +23,20 @@ class LoadRemoteAtlasCommand:
     _remote_atlas_reader: BaseRemoteAtlasReader
 
     def __call__(self, name: str) -> LoadAtlasResult:
-        atlas = self._remote_atlas_reader.read(name=name)
-        if atlas is None:
+        atlas_data = self._remote_atlas_reader.read(name=name)
+        if atlas_data is None:
             raise RuntimeError("Atlas not loaded.")
+
+
+
+        atlas = Atlas(
+            volume=atlas_data.registration_volume,
+            resolution_um=resolution if (resolution := atlas_data.resolution_um) is not None else 25.,
+            annotation_volume=atlas_data.annotation_volume,
+        )
+
         self._repo.set_atlas(atlas=atlas)
+
         return LoadAtlasResult(
             volume=atlas.volume,
             transform=atlas.shared_space_transform,
@@ -40,8 +51,18 @@ class LoadAtlasFromFileCommand:
     _local_atlas_reader: BaseLocalAtlasReader
 
     def __call__(self, filename: str, resolution_um: int) -> LoadAtlasResult:
-        atlas = self._local_atlas_reader.read(filename=filename, resolution_um=resolution_um)
+        atlas_data = self._local_atlas_reader.read(filename=filename)
+        if atlas_data is None:
+            raise RuntimeError("Atlas loading failed.")
+
+        atlas = Atlas(
+            volume=atlas_data.registration_volume,
+            resolution_um=resolution if (resolution := atlas_data.resolution_um) is not None else resolution_um,
+            annotation_volume=atlas_data.annotation_volume,
+        )
+
         self._repo.set_atlas(atlas=atlas)
+
         return LoadAtlasResult(
             volume=atlas.volume,
             transform=atlas.shared_space_transform,

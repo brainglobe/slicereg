@@ -1,23 +1,29 @@
 from abc import ABC, abstractmethod
-from typing import List
+from dataclasses import dataclass, field
+from typing import List, Optional
 
-from slicereg.core.atlas import Atlas
+from numpy import ndarray
+
+
+@dataclass(frozen=True)
+class AtlasReaderData:
+    source: str
+    name: str
+    registration_volume: ndarray
+    annotation_volume: Optional[ndarray] = field(repr=False)
+    resolution_um: Optional[float] = field(repr=False)
 
 
 class BaseLocalAtlasReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str, resolution_um: float) -> Atlas: ...
+    def read(self, filename: str) -> Optional[AtlasReaderData]: ...
 
 
 class BaseRemoteAtlasReader:
 
-    @property
     @abstractmethod
-    def name(self) -> str: ...
-
-    @abstractmethod
-    def read(self, name: str) -> Atlas: ...
+    def read(self, name: str) -> Optional[AtlasReaderData]: ...
 
     @abstractmethod
     def list(self) -> List[str]: ...

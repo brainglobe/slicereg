@@ -1,18 +1,21 @@
+from pathlib import Path
 from typing import Optional
 
 import imio
 
-from slicereg.commands.base import BaseLocalAtlasReader
-from slicereg.core.atlas import Atlas
+from slicereg.commands.base import BaseLocalAtlasReader, AtlasReaderData
 
 
 class ImioLocalAtlasReader(BaseLocalAtlasReader):
 
-    def read(self, filename: str, resolution_um: float) -> Atlas:
+    def read(self, filename: str) -> Optional[AtlasReaderData]:
+        path = Path(filename)
+        volume = imio.load_any(str(path))
 
-        volume = imio.load_any(filename)
-
-        return Atlas(
-            volume=volume,
-            resolution_um=resolution_um,
+        return AtlasReaderData(
+            source="File",
+            name=path.name,
+            registration_volume=volume,
+            annotation_volume=None,
+            resolution_um=None,
         )

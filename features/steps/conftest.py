@@ -5,11 +5,10 @@ import pytest
 from numpy import random
 
 from slicereg.app.app_model import AppModel
-from slicereg.commands.base import BaseRemoteAtlasReader, BaseLocalAtlasReader, BaseLocalImageReader
+from slicereg.commands.base import BaseRemoteAtlasReader, BaseLocalAtlasReader, BaseLocalImageReader, AtlasReaderData, \
+    ImageReaderData
 from slicereg.core.atlas import Atlas
-from slicereg.core.image import Image
 from slicereg.gui.main_window.viewmodel import MainWindowViewModel
-from slicereg.gui.sidebar import SidebarView
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.gui.slice_window.viewmodel import SliceViewModel
 from slicereg.gui.volume_window.viewmodel import VolumeViewModel
@@ -45,17 +44,21 @@ def channels():
 @pytest.fixture
 def model(atlas_volume, second_volume, annotation_volume, channels, bg_atlases):
     image_reader = Mock(BaseLocalImageReader)
-    image_reader.read.return_value = Image(channels=channels, resolution_um=10.)
+    image_reader.read.return_value = ImageReaderData(channels=channels, resolution_um=10.)
 
     atlas_reader = Mock(BaseRemoteAtlasReader)
     atlas_reader.list.return_value = bg_atlases
     atlas_reader.read.side_effect = [
-        Atlas(volume=atlas_volume, resolution_um=25, annotation_volume=annotation_volume),
-        Atlas(volume=second_volume, resolution_um=100),
+        AtlasReaderData(source="MockBrainglobe", name="fake_atlas", registration_volume=atlas_volume, resolution_um=25, annotation_volume=annotation_volume),
+        AtlasReaderData(source="MockBrainglobe", name="fake_atlas2", registration_volume=second_volume, resolution_um=100, annotation_volume=annotation_volume),
     ]
 
     atlas_file_reader = Mock(BaseLocalAtlasReader)
-    atlas_file_reader.read.return_value = Atlas(volume=random.normal(size=(4, 4, 4)), resolution_um=10)
+    atlas_file_reader.read.return_value = AtlasReaderData(source='Mock',
+                                                          name='filename.tiff',
+                                                          registration_volume=random.normal(size=(4, 4, 4)),
+                                                          annotation_volume=None,
+                                                          resolution_um=None)
 
     repo = InMemoryRepo()
     repo.set_atlas(Atlas(volume=np.empty((2, 3, 4)), resolution_um=10))

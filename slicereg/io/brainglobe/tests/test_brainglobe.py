@@ -4,9 +4,9 @@ import numpy as np
 
 from slicereg.core.atlas import Atlas
 from slicereg.io import BrainglobeRemoteAtlasReader
+import numpy.testing as npt
 
-
-def test_brainglobe_reader_creates_atlas():
+def test_brainglobe_reader_gets_reference_resolution_and_annotation():
     reader = BrainglobeRemoteAtlasReader()
     with patch("slicereg.io.brainglobe.atlas.BrainGlobeAtlas") as bgatlas:
         mock_atlas = Mock()
@@ -22,12 +22,8 @@ def test_brainglobe_reader_creates_atlas():
 
         atlas = reader.read("super_atlas")
 
-    assert isinstance(atlas, Atlas)
-
-
-def test_brainglobe_reader_says_source_is_brainglobe():
-    reader = BrainglobeRemoteAtlasReader()
-    assert reader.name == 'Brainglobe'
+    assert mock_atlas.reference.shape == atlas.registration_volume.shape
+    assert mock_atlas.annotation.shape == atlas.annotation_volume.shape
 
 
 def test_brainglobe_reader_gets_list_of_atlases():
