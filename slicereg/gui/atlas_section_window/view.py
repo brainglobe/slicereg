@@ -30,24 +30,8 @@ class AtlasSectionView(BaseQtWidget):
         self._x_line = InfiniteLine(pos=0, vertical=False, parent=self._viewbox.scene)
         self._y_line = InfiniteLine(pos=0, vertical=True, parent=self._viewbox.scene)
 
-        def _vispy_mouse_event(event: SceneMouseEvent) -> None:
-            if event.type == 'mouse_press':
-                event.handled = True
-
-            elif event.type == 'mouse_move':
-                if event.press_event is None:
-                    return
-
-                # transform coordinates from canvas to image
-                tr = self._canvas.scene.node_transform(self._viewbox.scene)
-                x1, y1, _, _ = tr.map(event.last_event.pos)
-                x2, y2, _, _ = tr.map(event.pos)
-
-                if event.button == 1:  # Left Mouse Button
-                    self._model.on_left_mouse_drag(x1=int(x1), x2=int(x2), y1=int(y1), y2=int(y2))
-
-        self._canvas.events.mouse_press.connect(_vispy_mouse_event)
-        self._canvas.events.mouse_move.connect(_vispy_mouse_event)
+        self._canvas.events.mouse_press.connect(self.mouse_press)
+        self._canvas.events.mouse_move.connect(self.mouse_move)
 
         axis_colors = self._model.axis_colors
         self._x_line.set_data(color=axis_colors[0])
@@ -56,6 +40,21 @@ class AtlasSectionView(BaseQtWidget):
     @property
     def qt_widget(self) -> QWidget:
         return self._canvas.native
+
+    def mouse_press(self, event: SceneMouseEvent) -> None:
+        event.handled = True
+
+    def mouse_move(self, event: SceneMouseEvent) -> None:
+        if event.press_event is None:
+            return
+
+        # transform coordinates from canvas to image
+        tr = self._canvas.scene.node_transform(self._viewbox.scene)
+        x1, y1, _, _ = tr.map(event.last_event.pos)
+        x2, y2, _, _ = tr.map(event.pos)
+
+        if event.button == 1:  # Left Mouse Button
+            self._model.on_left_mouse_drag(x1=int(x1), x2=int(x2), y1=int(y1), y2=int(y2))
 
     def update(self, changed: str):
         render_funs = {
