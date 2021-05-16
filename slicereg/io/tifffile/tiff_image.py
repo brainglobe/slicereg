@@ -1,12 +1,12 @@
 import tifffile
 from numpy import uint16
 
-from slicereg.core.image import Image
+from slicereg.commands.base import BaseLocalImageReader, ImageReaderData
 
 
-class TiffImageReader:
+class TiffImageReader(BaseLocalImageReader):
 
-    def read(self, filename: str, resolution_um: float) -> Image:
+    def read(self, filename: str) -> ImageReaderData:
         f = tifffile.TiffFile(filename)
         image = f.asarray()
         image = image.swapaxes(0,2)
@@ -14,6 +14,6 @@ class TiffImageReader:
         assert image.ndim == 3
         assert image.dtype == uint16
 
-        return Image(channels=image, resolution_um=resolution_um)
+        return ImageReaderData(channels=image, resolution_um=None)
 
 

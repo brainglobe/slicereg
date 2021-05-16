@@ -1,21 +1,18 @@
-from typing import Optional
-
 import numpy as np
 import tifffile
 import xmltodict
 from numpy import uint16
 
-from slicereg.commands.base import BaseLocalImageReader
-from slicereg.core.image import Image
+from slicereg.commands.base import BaseLocalImageReader, ImageReaderData
 
 
 class OmeTiffImageReader(BaseLocalImageReader):
 
-    def read(self, filename: str, resolution: Optional[float] = None) -> Image:
+    def read(self, filename: str) -> ImageReaderData:
         f = tifffile.TiffFile(filename)
         array = self._read_array(f=f)
-        resolution_um = self._read_resolution(f=f) if resolution is None else resolution
-        return Image(channels=array, resolution_um=resolution_um)
+        resolution_um = self._read_resolution(f=f)
+        return ImageReaderData(channels=array, resolution_um=resolution_um)
 
     @staticmethod
     def _read_array(f: tifffile.TiffFile) -> np.ndarray:

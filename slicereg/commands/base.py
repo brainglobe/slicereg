@@ -1,15 +1,21 @@
 from abc import ABC, abstractmethod
-from typing import List, Optional
+from typing import List, Optional, NamedTuple
+
+from numpy import ndarray
 
 from slicereg.core.atlas import Atlas
-from slicereg.core.image import Image
 from slicereg.core.section import Section
+
+
+class ImageReaderData(NamedTuple):
+    channels: ndarray
+    resolution_um: Optional[float]
 
 
 class BaseLocalImageReader(ABC):
 
     @abstractmethod
-    def read(self, filename: str, resolution: Optional[float]) -> Image: ...
+    def read(self, filename: str) -> ImageReaderData: ...
 
 
 class BaseLocalAtlasReader(ABC):
