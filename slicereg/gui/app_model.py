@@ -8,6 +8,7 @@ import numpy as np
 from numpy import ndarray
 from result import Ok, Err
 
+from slicereg.commands.center_section import CenterSectionCommand
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
@@ -77,6 +78,17 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
+
+        center_section = self._injector.build(CenterSectionCommand)
+        result3 = center_section()
+        if isinstance(result3, Ok):
+            data3 = result3.value
+            self.x = data3.x
+            self.y = data3.y
+            self.z = data3.z
+            self.rx = data3.rx
+            self.ry = data3.ry
+            self.rz = data3.rz
 
         register_section = self._injector.build(RegisterSectionCommand)
         result2 = register_section()
