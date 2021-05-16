@@ -26,3 +26,21 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
     assert data.x == value if axis is Axis.X else 5
     assert data.y == value if axis is Axis.Y else 10
     assert data.z == value if axis is Axis.Z else 2
+
+
+@given(value=floats(-100, 100), axis=sampled_from(Axis))
+def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axis):
+    physical_transform = PhysicalTransformer(rx=5, ry=10, rz=2)
+    repo = Mock(BaseRepo)
+    repo.get_sections.return_value = [
+        Section(
+            image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
+            physical_transform=physical_transform
+        )
+    ]
+    move_section = MoveSectionCommand2(_repo=repo)
+    result = move_section(axis=axis, value=value, type=MoveType.ROTATION, absolute=True)
+    data = result.unwrap()
+    assert data.rx == value if axis is Axis.X else 5
+    assert data.ry == value if axis is Axis.Y else 10
+    assert data.rz == value if axis is Axis.Z else 2
