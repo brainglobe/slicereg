@@ -57,6 +57,18 @@ class AppModel(HasObservableAttributes):
         HasObservableAttributes.__init__(self)
 
     @property
+    def coronal_image_coords(self) -> Tuple[int, int]:
+        return int(self.y), int(self.z)
+
+    @property
+    def axial_image_coords(self) -> Tuple[int, int]:
+        return int(self.x), int(self.z)
+
+    @property
+    def sagittal_image_coords(self) -> Tuple[int, int]:
+        return (0, 0)
+
+    @property
     def clim_2d_values(self):
         return tuple(np.percentile(self.section_image, [self.clim_2d[0] * 100, self.clim_2d[1] * 100]))
 

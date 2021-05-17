@@ -35,15 +35,15 @@ class AtlasSectionViewModel(HasObservableAttributes):
     def _update_depth_and_coords(self):
         if self.plane == 'coronal':
             # self.image_coords = self._model.coronal_image_coords  # todo
-            self.image_coords = int(self._model.y), int(self._model.z)
+            self.image_coords = self._model.coronal_image_coords
             self.depth = self._model.x
         elif self.plane == 'axial':
             # self.image_coords = self._model.axial_image_coords  # todo
-            self.image_coords = int(self._model.x), int(self._model.z)
+            self.image_coords = self._model.axial_image_coords
             self.depth = self._model.y
         elif self.plane == 'sagittal':
             # self.image_coords = self._model.sagittal_image_coords  # todo
-            self.image_coords = int(self._model.x), int(self._model.y)
+            self.image_coords = self._model.sagittal_image_coords
             self.depth = self._model.z
 
     def _update_section_image(self):
