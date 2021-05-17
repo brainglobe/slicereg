@@ -27,3 +27,8 @@ def test_can_get_atlas_center_in_shared_space(res, w, h, d):
 def test_atlas_contains_an_annotation_volume():
     atlas = Atlas(volume=np.empty((5, 4, 6)), annotation_volume=np.empty((5, 4, 6)), resolution_um=10)
     assert atlas.annotation_volume.shape == atlas.volume.shape
+
+
+def test_can_get_atlas_image_coords_from_xyz():
+    atlas = Atlas(volume=np.empty((5, 4, 6)), annotation_volume=np.empty((5, 5, 5)), resolution_um=10)
+    assert atlas.map_xyz_to_ijk(x=0, y=0, z=0) == (0, 0, 0)

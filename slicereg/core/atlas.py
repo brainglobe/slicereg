@@ -28,6 +28,9 @@ class Atlas(FrozenUpdater):
         cx, cy, cz = tuple(dim * self.resolution_um / 2 for dim in (x, y, z))
         return cx, cy, cz
 
+    def map_xyz_to_ijk(self, x: float, y: float, z: float) -> Tuple[int, int, int]:
+        return 0, 0, 0
+
 
 ijk_to_xyz_matrix = np.array([
     [0, 1, 0, 0],
