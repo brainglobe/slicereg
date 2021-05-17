@@ -34,9 +34,9 @@ def launch_gui(create_qapp: bool = True):
 
     model = AppModel(_injector=injector)
 
-    coronal_section_view = AtlasSectionView(_model=AtlasSectionViewModel(_axis=0, _model=model))
-    axial_section_view = AtlasSectionView(_model=AtlasSectionViewModel(_axis=1, _model=model))
-    sagittal_section_view = AtlasSectionView(_model=AtlasSectionViewModel(_axis=2, _model=model))
+    coronal_section_view = AtlasSectionView(_model=AtlasSectionViewModel(plane='coronal', _axis=0, _model=model))
+    axial_section_view = AtlasSectionView(_model=AtlasSectionViewModel(plane='axial', _axis=1, _model=model))
+    sagittal_section_view = AtlasSectionView(_model=AtlasSectionViewModel(plane='sagittal', _axis=2, _model=model))
     slice_view = SliceView(_model=SliceViewModel(_model=model))
     volume_view = VolumeView(_model=VolumeViewModel(_model=model))
     sidebar_view = SidebarView(_model=SidebarViewModel(_model=model))

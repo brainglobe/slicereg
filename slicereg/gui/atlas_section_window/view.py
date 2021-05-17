@@ -60,6 +60,9 @@ class AtlasSectionView(BaseQtWidget):
         render_funs = {
             'atlas_section_image': self._render_image,
             'coords': self._render_lines,
+            'plane': (lambda: None),
+            'image_coords': (lambda: None),
+            'depth': (lambda: None),
         }
         render_funs[changed]()
 

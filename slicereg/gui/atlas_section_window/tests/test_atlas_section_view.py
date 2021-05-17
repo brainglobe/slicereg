@@ -8,10 +8,9 @@ from slicereg.gui.atlas_section_window import AtlasSectionViewModel, AtlasSectio
 from slicereg.utils.introspection import get_public_attrs
 
 
-@pytest.mark.parametrize("axis", [0, 1, 2])
-def test_slice_view_updates_without_error_for_all_viewmodel_fields(qtbot, axis):
+def test_slice_view_updates_without_error_for_all_viewmodel_fields(qtbot):
     for attr in get_public_attrs(AtlasSectionViewModel):
-        model = AtlasSectionViewModel(_model=Mock(AppModel), _axis=axis)
+        model = AtlasSectionViewModel(_model=Mock(AppModel))
         view = AtlasSectionView(_model=model)
         qtbot.addWidget(view.qt_widget)
         setattr(model, attr, getattr(model, attr))  # set attribute with its own value
@@ -19,7 +18,7 @@ def test_slice_view_updates_without_error_for_all_viewmodel_fields(qtbot, axis):
 
 
 def test_atlas_slice_view_triggers_left_mouse_drag_on_viewmodel(qtbot):
-    model = AtlasSectionViewModel(_axis=0, _model=Mock(AppModel))
+    model = AtlasSectionViewModel(_model=Mock(AppModel))
     model.on_left_mouse_drag = Mock()
     view = AtlasSectionView(_model=model)
     qtbot.addWidget(view.qt_widget)

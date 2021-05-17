@@ -9,10 +9,13 @@ from slicereg.utils.observable import HasObservableAttributes
 
 @dataclass(unsafe_hash=True)
 class AtlasSectionViewModel(HasObservableAttributes):
-    _axis: int
     _model: AppModel = field(hash=False)
+    plane: str = 'coronal'
+    _axis: int = 0
     atlas_section_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
     coords: Tuple[int, int] = (0, 0)
+    image_coords: Tuple[int, int] = (0, 0)
+    depth: float = 0.
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -22,9 +25,35 @@ class AtlasSectionViewModel(HasObservableAttributes):
         update_funs = {
             'registration_volume': self._update_section_image,
             'atlas_section_coords': self._update_coords,
+            'x': self._update_depth_and_coords,
+            'y': self._update_depth_and_coords,
+            'z': self._update_depth_and_coords,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
+
+    def _update_depth_and_coords(self):
+        self._update_image_coords()
+        self._update_depth()
+
+    def _update_image_coords(self):
+        if self.plane == 'coronal':
+            # self.image_coords = self._model.coronal_image_coords  # todo
+            self.image_coords = int(self._model.y), int(self._model.z)
+        elif self.plane == 'axial':
+            # self.image_coords = self._model.axial_image_coords  # todo
+            self.image_coords = int(self._model.x), int(self._model.z)
+        elif self.plane == 'sagittal':
+            # self.image_coords = self._model.sagittal_image_coords  # todo
+            self.image_coords = int(self._model.x), int(self._model.y)
+
+    def _update_depth(self):
+        if self.plane == 'coronal':
+            self.depth = self._model.x
+        elif self.plane == 'axial':
+            self.depth = self._model.y
+        elif self.plane == 'sagittal':
+            self.depth = self._model.z
 
     def _update_section_image(self):
         self.atlas_section_image = self._model.coronal_section_image
