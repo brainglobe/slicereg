@@ -12,8 +12,10 @@ from slicereg.gui.main_window.viewmodel import MainWindowViewModel
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.gui.slice_window.viewmodel import SliceViewModel
 from slicereg.gui.volume_window.viewmodel import VolumeViewModel
+from slicereg.gui.atlas_section_window import AtlasSectionViewModel
 from slicereg.repos import InMemoryRepo
 from slicereg.utils.dependency_injector import DependencyInjector
+
 
 
 @pytest.fixture
@@ -86,6 +88,21 @@ def volume_view(model: AppModel):
 @pytest.fixture
 def slice_view(model: AppModel):
     return SliceViewModel(_model=model)
+
+
+@pytest.fixture
+def coronal_view(model: AppModel):
+    return AtlasSectionViewModel(_model=model, plane='coronal')
+
+
+@pytest.fixture
+def axial_view(model: AppModel):
+    return AtlasSectionViewModel(_model=model, plane='axial')
+
+
+@pytest.fixture
+def sagittal_view(model: AppModel):
+    return AtlasSectionViewModel(_model=model, plane='sagittal')
 
 
 @pytest.fixture
