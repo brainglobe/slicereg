@@ -21,5 +21,7 @@ The nice thing about this approach is that it keeps the attribute types simple, 
 managed during the life of the object, and simply adds complexity during the construction moment. 
 
 This approach follows the general rule, **"Don't do any work in your constructurs"**.  It has many benefits, and is a good policy in general for working with classes.
-More info on this rule here: http://misko.hevery.com/code-reviewers-guide/flaw-constructor-does-real-work/
 
+#### Resources
+
+  - http://misko.hevery.com/code-reviewers-guide/flaw-constructor-does-real-work/
