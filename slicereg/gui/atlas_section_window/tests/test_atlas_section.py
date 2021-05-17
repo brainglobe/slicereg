@@ -26,13 +26,6 @@ def test_app_model_coronal_section_is_the_first_axis_of_the_atlas_volume_and_at_
     npt.assert_equal(getattr(app_model, section_attr), np.rollaxis(atlas_volume, axis)[coronal_coord])
 
 
-def test_coronal_section_view_model_displays_the_coronal_section_image():
-    app_model = AppModel(_injector=DependencyInjector())
-    view_model = AtlasSectionViewModel(_axis=0, _model=app_model)
-    app_model.registration_volume = np.random.randint(0, 100, (10, 10, 10), np.uint16)
-    npt.assert_equal(app_model.coronal_section_image, view_model.atlas_section_image)
-
-
 @given(value=floats(-50, 50), attributes=sampled_from([('coronal', 'x'), ('axial', 'y'), ('sagittal', 'z')]))
 def test_atlas_section_viewmodel_updates_depth_on_app_model_coord_change(value, attributes):
     plane, coord_name = attributes
@@ -54,11 +47,19 @@ def test_atlas_section_viewmodel_updates_depth_on_app_model_coord_change(value, 
     ),
     coord=sampled_from(['x', 'y', 'z'])
 )
-def test_atlas_section_viewmodel_updates_image_coords_to_corresponding_appmodel_image_coords_on_app_model_coord_change(value, attrs, coord):
+def test_atlas_section_viewmodel_updates_image_coords_to_corresponding_appmodel_image_coords_on_app_model_coord_change(
+        value, attrs, coord):
     plane, coord_attr = attrs
-    app_model = AppModel(_injector=DependencyInjector(), x=2, y=5, z=10)
+    app_model = AppModel(_injector=Mock(DependencyInjector), x=2, y=5, z=10)
     atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
     setattr(app_model, coord, value)
     assert atlas_section_view.image_coords == getattr(app_model, coord_attr)
 
 
+@pytest.mark.parametrize("plane", ["coronal", "axial", "sagittal"])
+def test_atlas_section_viewmodel_updates_atlas_section_image_to_match_cooresponding_coord(plane):
+    app_model = AppModel(_injector=DependencyInjector(), x=2, y=5, z=10)
+    atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
+    app_model.x = 10
+    section_image = getattr(app_model, f"{plane}_section_image")
+    npt.assert_almost_equal(atlas_section_view.atlas_section_image, section_image)
