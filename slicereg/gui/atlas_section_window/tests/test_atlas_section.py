@@ -54,7 +54,7 @@ def test_atlas_section_viewmodel_updates_depth_on_app_model_coord_change(value, 
     ),
     coord=sampled_from(['x', 'y', 'z'])
 )
-def test_atlas_section_viewmodel_updates_image_coords_on_app_model_coord_change(value, attrs, coord):
+def test_atlas_section_viewmodel_updates_image_coords_to_corresponding_appmodel_image_coords_on_app_model_coord_change(value, attrs, coord):
     plane, coord_attr = attrs
     app_model = AppModel(_injector=DependencyInjector(), x=2, y=5, z=10)
     atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
