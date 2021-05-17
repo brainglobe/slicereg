@@ -7,7 +7,7 @@
 
 This project makes heavy use of static typing and static type analysis to check for potential bugs in the code; 
 this puts a specific requirement on every class:  
-*"Every class must declare all of its attributes before construction."*
+*"Every class must declare all of its attributes and their types before construction."*
 
 Python dataclasses make that part easy: instance attribute goes under the classname,
 along with its type, the same as with every other method and property in the class.  
