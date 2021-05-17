@@ -20,8 +20,8 @@ def test_repo_can_round_trip_atlas():
 
 def test_repo_stores_multiple_sections():
     repo = InMemoryRepo()
-    section1 = Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
-    section2 = Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
+    section1 = Section.create(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
+    section2 = Section.create(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
     assert len(repo.get_sections()) == 0
     repo.save_section(section=section1)
     assert len(repo.get_sections()) == 1
@@ -31,7 +31,7 @@ def test_repo_stores_multiple_sections():
 
 def test_repo_overwrites_existing_section_even_if_properties_change():
     repo = InMemoryRepo()
-    section = Section(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
+    section = Section.create(image=Image(channels=np.empty((2, 3, 4)), resolution_um=12))
     repo.save_section(section=section)
     assert len(repo.get_sections()) == 1
     repo.save_section(section=section)

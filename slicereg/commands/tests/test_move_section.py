@@ -15,7 +15,7 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
     physical_transform = PhysicalTransformer(x=5, y=10, z=2)
     repo = Mock(BaseRepo)
     repo.get_sections.return_value = [
-        Section(
+        Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
             physical_transform=physical_transform
         )
@@ -33,7 +33,7 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
     physical_transform = PhysicalTransformer(rx=5, ry=10, rz=2)
     repo = Mock(BaseRepo)
     repo.get_sections.return_value = [
-        Section(
+        Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
             physical_transform=physical_transform
         )
@@ -52,7 +52,7 @@ def test_relative_move_section_to_position_translates_it_and_returns_new_positio
     physical_transform = PhysicalTransformer(x=5, y=10, z=2)
     repo = Mock(BaseRepo)
     repo.get_sections.return_value = [
-        Section(
+        Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
             physical_transform=physical_transform
         )
@@ -70,7 +70,7 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     physical_transform = PhysicalTransformer(rx=5, ry=10, rz=2)
     repo = Mock(BaseRepo)
     repo.get_sections.return_value = [
-        Section(
+        Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
             physical_transform=physical_transform
         )

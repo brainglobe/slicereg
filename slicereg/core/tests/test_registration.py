@@ -18,7 +18,7 @@ from slicereg.core.physical_transform import PhysicalTransformer
 
 def test_section_registration_to_an_atlas_gets_an_image_with_same_image_parameters():
     registration = Registration(
-        section=Section(
+        section=Section.create(
             image=Image(channels=np.empty((3, 4, 5)), resolution_um=10),
             image_transform=ImageTransformer(i_shift=3, j_shift=5, theta=20),
             physical_transform=PhysicalTransformer(x=10, y=-5, z=10, rx=20, ry=0, rz=-5),
@@ -106,7 +106,7 @@ def test_section_registration_cuts_correctly_with_diff_resolutions(case):
     volume = np.zeros((3, 3, 3))
     volume[1, 1, 1] = 1
     registration = Registration(
-        section=Section(
+        section=Section.create(
             image=Image(channels=np.empty((1, 3, 3)), resolution_um=case["section_res"]),
             physical_transform=PhysicalTransformer(**case["pos"]),
         ),

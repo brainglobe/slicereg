@@ -14,7 +14,7 @@ def repo():
     repo = Mock(BaseRepo)
     repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
     repo.get_sections.return_value = [
-        Section(
+        Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
             physical_transform=PhysicalTransformer(x=0, y=0, z=0)
         )

@@ -32,7 +32,7 @@ class LoadSectionCommand:
         image = Image(channels=image_data.channels, resolution_um=resolution)
         image = image.resample(resolution_um=10)
 
-        section = Section(
+        section = Section.create(
             image=image,
             image_transform=ImageTransformer(i_shift=-0.5, j_shift=-0.5)
         )

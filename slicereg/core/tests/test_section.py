@@ -21,7 +21,7 @@ real_floats = partial(floats, allow_nan=False, allow_infinity=False)
        theta=sensible_floats(-10000, 10000),
        )
 def test_shift_matrix_is_ij_ordered_and_in_pixel_coordinate_space(width, height, j_shift, i_shift, theta):
-    section = Section(
+    section = Section.create(
         image=Image(channels=np.empty((2, height, width)), resolution_um=99,),
         image_transform=ImageTransformer(i_shift=i_shift, j_shift=j_shift, theta=theta)
     )
@@ -43,7 +43,7 @@ def test_shift_matrix_is_ij_ordered_and_in_pixel_coordinate_space(width, height,
     res=real_floats(1e-4, 1000)
 )
 def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, j_shift, theta, x, y, z, res):
-    section = Section(
+    section = Section.create(
         image=Image(channels=np.empty((2, 3, 4)), resolution_um=res),
         image_transform=ImageTransformer(i_shift=i_shift, j_shift=j_shift, theta=theta),
         physical_transform=PhysicalTransformer(x=x, y=y, z=z),
@@ -62,3 +62,8 @@ def test_can_get_3d_position_from_2d_pixel_coordinate_in_section(i, j, i_shift, 
         z,
     )
     assert approx(xyz == expected)
+
+
+def test_section_creates_an_identical_registration_image_from_the_original_upon_construction():
+    section = Section.create(image=Image(np.empty((2, 10, 10)), resolution_um=10))
+    assert section.image == section.registration_image
