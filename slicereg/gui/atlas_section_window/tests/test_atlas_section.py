@@ -3,6 +3,7 @@ from unittest.mock import Mock
 import numpy as np
 import numpy.testing as npt
 import pytest
+from pytest import approx
 from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
@@ -40,15 +41,21 @@ def test_atlas_section_viewmodel_updates_depth_on_app_model_coord_change(value, 
     atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
     setattr(app_model, coord_name, value)
 
-    assert atlas_section_view.image_coords[0] == 0
-    assert atlas_section_view.image_coords[1] == 0
+    assert atlas_section_view.image_coords == (0, 0)
     assert atlas_section_view.depth == value
 
 
-def test_atlas_section_viewmodel_updates_image_coords_on_app_model_coord_change():
+@given(value=floats(-50, 50), attributes=sampled_from([
+    ('coronal', 'y'), ('coronal', 'z'),
+    ('axial', 'x'), ('axial', 'z'),
+    ('sagittal', 'x'), ('sagittal', 'y'),
+]))
+def test_atlas_section_viewmodel_updates_image_coords_on_app_model_coord_change(value, attributes):
+    if -1 < value < 1:  # test not valid for 0
+        return
+    plane, coord_name = attributes
     app_model = AppModel(_injector=DependencyInjector(), x=0, y=0, z=0)
-    atlas_section_view = AtlasSectionViewModel(plane='coronal', _model=app_model)
-    app_model.y = 10
-    assert atlas_section_view.image_coords[0] != 0
-    assert atlas_section_view.image_coords[1] == 0
+    atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
+    setattr(app_model, coord_name, value)
+    assert atlas_section_view.image_coords != (0, 0)
     assert atlas_section_view.depth == 0
