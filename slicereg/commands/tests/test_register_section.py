@@ -40,3 +40,11 @@ def test_register_section_returns_error_message_if_no_atlas_loaded():
     repo.get_sections.return_value = [Section.create(image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4))]
     register_section = RegisterSectionCommand(_repo=repo)
     assert "no atlas" in register_section().value.lower()
+
+
+def test_register_section_returns_atlas_image_coordinate_at_section_position(repo):
+    register_section = RegisterSectionCommand(_repo=repo)
+    coords = register_section().ok().atlas_image_coords
+    assert type(coords.coronal) == int
+    assert type(coords.axial) == int
+    assert type(coords.sagittal) == int

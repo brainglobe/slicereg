@@ -8,9 +8,16 @@ from slicereg.commands.base import BaseRepo
 from slicereg.core.registration import Registration
 
 
+class AtlasImageCoords(NamedTuple):
+    coronal: int
+    axial: int
+    sagittal: int
+
+
 class RegisterSectionData(NamedTuple):
     atlas_slice_image: np.ndarray
     section_transform: np.ndarray
+    atlas_image_coords: AtlasImageCoords
 
 
 @dataclass(frozen=True)
@@ -32,4 +39,5 @@ class RegisterSectionCommand:
         return Ok(RegisterSectionData(
             atlas_slice_image=atlas_slice_image,
             section_transform=registration.image_to_volume_transform,
+            atlas_image_coords=AtlasImageCoords(coronal=40, axial=40, sagittal=40),
         ))
