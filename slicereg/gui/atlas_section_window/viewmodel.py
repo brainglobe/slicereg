@@ -16,9 +16,6 @@ class AtlasSectionViewModel(HasObservableAttributes):
     coords: Tuple[int, int] = (0, 0)
     image_coords: Tuple[int, int] = (0, 0)
     depth: float = 0.
-    clim: Tuple[float, float] = (0., 1.)
-    camera_center: Tuple[float, float, float] = (1.5, 1.5, 0.)
-    camera_scale: float = 3.
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -53,13 +50,24 @@ class AtlasSectionViewModel(HasObservableAttributes):
             self.atlas_section_image = self._model.sagittal_section_image
 
     def _update_section_image(self):
-        image = self._model.coronal_section_image
-        self.atlas_section_image = image
-        self.camera_center = image.shape[1] / 2, image.shape[0] / 2, 0.
-        self.camera_scale = max(image.shape)
+        self.atlas_section_image = self._model.coronal_section_image
 
     def _update_coords(self):
         self.coords = tuple(np.delete(self._model.atlas_section_coords, self._axis))
+
+    @property
+    def clim(self) -> Tuple[float, float]:
+        return 0., 1.
+
+    @property
+    def camera_center(self) -> Tuple[float, float, float]:
+        image = self.atlas_section_image
+        return image.shape[1] / 2, image.shape[0] / 2, 0.
+
+    @property
+    def camera_scale(self) -> float:
+        image = self.atlas_section_image
+        return max(image.shape)
 
     @property
     def axis_colors(self):
@@ -79,4 +87,3 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     def click_left_mouse_button(self, x: int, y: int):
         self._model.set_pos_to_plane_indices(plane=self.plane, i=x, j=y)
-
