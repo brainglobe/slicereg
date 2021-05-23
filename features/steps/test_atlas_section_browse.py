@@ -2,11 +2,10 @@ import numpy.testing as npt
 import pytest
 from pytest_bdd import scenario, given, when, then
 
-
-# @pytest.mark.skip(reason='Not done yet.')
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel
 
 
+@pytest.mark.skip(reason='Not done yet.')
 @scenario("../browse_atlas.feature", "View Brain Position from Three Planes")
 def test_impl():
     ...
