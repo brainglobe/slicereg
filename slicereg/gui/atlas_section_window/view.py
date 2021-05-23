@@ -27,6 +27,11 @@ class AtlasSectionView(BaseQtWidget):
         )
 
         self._slice = Image(cmap='grays', parent=self._viewbox.scene)
+        self._slice.set_data(self._model.atlas_section_image)
+        self._slice.clim = self._model.clim
+        self._viewbox.camera.center = self._model.camera_center
+        self._viewbox.camera.scale_factor = self._viewbox.camera.scale_factor
+
         self._x_line = InfiniteLine(pos=0, vertical=False, parent=self._viewbox.scene)
         self._y_line = InfiniteLine(pos=0, vertical=True, parent=self._viewbox.scene)
 
@@ -43,6 +48,13 @@ class AtlasSectionView(BaseQtWidget):
 
     def mouse_press(self, event: SceneMouseEvent) -> None:
         event.handled = True
+
+        # transform coordinates from canvas to image
+        tr = self._canvas.scene.node_transform(self._viewbox.scene)
+        assert len(event.pos) == 2
+        x, y, _, _ = tr.map(event.pos)
+
+        self._model.click_left_mouse_button(x=x, y=y)
 
     def mouse_move(self, event: SceneMouseEvent) -> None:
         if event.press_event is None:
@@ -72,9 +84,8 @@ class AtlasSectionView(BaseQtWidget):
         self._y_line.set_data(pos=coords[1])
 
     def _render_image(self):
-        image = self._model.atlas_section_image
-        self._slice.set_data(image)
-        self._slice.clim = 'auto'
-        self._viewbox.camera.center = image.shape[1] / 2, image.shape[0] / 2, 0.
-        self._viewbox.camera.scale_factor = max(image.shape)
+        self._slice.set_data(self._model.atlas_section_image)
+        self._slice.clim = self._model.clim
+        self._viewbox.camera.center = self._model.camera_center
+        self._viewbox.camera.scale_factor = self._model.camera_scale
         self._canvas.update()

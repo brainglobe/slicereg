@@ -3,7 +3,10 @@ import pytest
 from pytest_bdd import scenario, given, when, then
 
 
-@pytest.mark.skip(reason='Not done yet.')
+# @pytest.mark.skip(reason='Not done yet.')
+from slicereg.gui.atlas_section_window import AtlasSectionViewModel
+
+
 @scenario("../browse_atlas.feature", "View Brain Position from Three Planes")
 def test_impl():
     ...
@@ -31,8 +34,8 @@ def step_impl(model, coronal_view, sagittal_view, axial_view):
 
 
 @when("I click on a location in the coronal section")
-def step_impl(coronal_view):
-    coronal_view.click_mouse(x=50, y=60)
+def step_impl(coronal_view: AtlasSectionViewModel):
+    coronal_view.click_left_mouse_button(x=50, y=60)
 
 
 @then("I see a view of that location along the sagittal plane.")

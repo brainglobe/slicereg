@@ -28,3 +28,14 @@ def test_atlas_slice_view_triggers_left_mouse_drag_on_viewmodel(qtbot):
     view.mouse_move(event)
     assert model.on_left_mouse_drag.call_count == 1
     # model.on_left_mouse_drag.assert_called_with(x1=1, y1=2, x2=5, y2=10)
+
+
+def test_left_clicking_on_atlas_clice_view_triggers_left_mouse_click_on_viewmodel(qtbot):
+    model = AtlasSectionViewModel(_model=Mock(AppModel))
+    model.click_left_mouse_button = Mock()
+    view = AtlasSectionView(_model=model)
+    qtbot.addWidget(view.qt_widget)
+
+    view.mouse_press(Mock(SceneMouseEvent, button=1, pos=(0, 0)))
+    assert model.click_left_mouse_button.call_count == 1
+

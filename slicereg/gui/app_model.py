@@ -254,6 +254,9 @@ class AppModel(HasObservableAttributes):
     def sagittal_section_image(self):
         return self._section_image(axis=2)
 
+    def set_pos_to_plane_indices(self, plane: str, i: int, j: int):
+        ...
+
     def press_key(self, key: str):
         key_commands = {
             '1': lambda: self.select_channel(1),

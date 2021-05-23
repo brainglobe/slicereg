@@ -63,3 +63,13 @@ def test_atlas_section_viewmodel_updates_atlas_section_image_to_match_coorespond
     app_model.x = 10
     section_image = getattr(app_model, f"{plane}_section_image")
     npt.assert_almost_equal(atlas_section_view.atlas_section_image, section_image)
+
+
+@given(plane=sampled_from(['coronal', 'sagittal', 'axial']))
+def test_left_clicking_on_atlas_section_viewmodel_calls_position_setter_for_its_plane(plane):
+    app_model = Mock(AppModel)
+    atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
+    atlas_section_view.click_left_mouse_button(x=0, y=0)
+    kwargs = app_model.set_pos_to_plane_indices.call_args[1]
+    assert kwargs['plane'] == plane
+    assert isinstance(kwargs['i'], int) and isinstance(kwargs['j'], int)
