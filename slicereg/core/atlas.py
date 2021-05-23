@@ -30,12 +30,20 @@ class Atlas(FrozenUpdater):
         cx, cy, cz = tuple(dim * self.resolution_um / 2 for dim in (x, y, z))
         return cx, cy, cz
 
-    def map_xyz_to_ijk(self, x: float, y: float, z: float) -> Tuple[int, int, int]:
-        return 0, 0, 0
+    def map_xyz_to_ijk(self, x: float, y: float, z: float) -> Optional[Tuple[int, int, int]]:
+        if x >= 0 and y >= 0 and z >= 0:
+            res = self.resolution_um
+            return int(x // res), int(y // res), int(z // res)
+        else:
+            return None
 
-    def orthogonal_sections_at(self, x: float, y: float, z: float) -> AtlasSections:
-        i, j, k = self.map_xyz_to_ijk(x=x, y=y, z=z)
-        return AtlasSections(coronal=self.volume[i, :, :], axial=self.volume[:, j, :], sagittal=self.volume[:, :, k])
+    def orthogonal_sections_at(self, x: float, y: float, z: float) -> Optional[AtlasSections]:
+        ijk = self.map_xyz_to_ijk(x=x, y=y, z=z)
+        if ijk is not None:
+            i, j, k = ijk
+            return AtlasSections(coronal=self.volume[i, :, :], axial=self.volume[:, j, :], sagittal=self.volume[:, :, k])
+        else:
+            return None
 
 
 ijk_to_xyz_matrix = np.array([
