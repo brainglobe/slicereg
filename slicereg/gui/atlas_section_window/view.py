@@ -38,9 +38,8 @@ class AtlasSectionView(BaseQtWidget):
         self._canvas.events.mouse_press.connect(self.mouse_press)
         self._canvas.events.mouse_move.connect(self.mouse_move)
 
-        axis_colors = self._model.axis_colors
-        self._x_line.set_data(color=axis_colors[0])
-        self._y_line.set_data(color=axis_colors[1])
+        self._x_line.set_data(color=self._model.horizontal_line_color)
+        self._y_line.set_data(color=self._model.vertical_line_color)
 
     @property
     def qt_widget(self) -> QWidget:

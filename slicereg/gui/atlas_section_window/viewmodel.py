@@ -11,7 +11,6 @@ from slicereg.utils.observable import HasObservableAttributes
 class AtlasSectionViewModel(HasObservableAttributes):
     _model: AppModel = field(hash=False)
     plane: str = 'coronal'
-    _axis: int = 0
     atlas_section_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
     coords: Tuple[int, int] = (0, 0)
     image_coords: Tuple[int, int] = (0, 0)
@@ -24,7 +23,6 @@ class AtlasSectionViewModel(HasObservableAttributes):
     def update(self, changed: str):
         update_funs = {
             'registration_volume': self._update_section_image,
-            'atlas_section_coords': self._update_coords,
             'x': self._update_depth_and_coords,
             'y': self._update_depth_and_coords,
             'z': self._update_depth_and_coords,
@@ -52,9 +50,6 @@ class AtlasSectionViewModel(HasObservableAttributes):
     def _update_section_image(self):
         self.atlas_section_image = self._model.coronal_section_image
 
-    def _update_coords(self):
-        self.coords = tuple(np.delete(self._model.atlas_section_coords, self._axis))
-
     @property
     def clim(self) -> Tuple[float, float]:
         return 0., 1.
@@ -70,12 +65,22 @@ class AtlasSectionViewModel(HasObservableAttributes):
         return max(image.shape)
 
     @property
-    def axis_colors(self):
-        colors = [(1., 0., 0., 1.),
-                  (0., 1., 0., 1.),
-                  (0., 0., 1., 1.)]
-        visible_axes = np.delete(np.arange(3), self._axis)
-        return tuple(np.array(colors)[visible_axes])
+    def vertical_line_color(self) -> Tuple[float, float, float, float]:
+        colors = {
+            'coronal': (0., 1., 0., 1.),
+            'axial': (1., 0., 0., 1.),
+            'sagittal': (1., 0., 0., 1.),
+        }
+        return colors[self.plane]
+
+    @property
+    def horizontal_line_color(self) -> Tuple[float, float, float, float]:
+        colors = {
+            'coronal': (1., 0., 0., 1.),
+            'axial': (0., 0., 1., 1.),
+            'sagittal': (0., 1., 0., 1.),
+        }
+        return colors[self.plane]
 
     def drag_left_mouse(self, x1: int, y1: int, x2: int, y2: int):
         self._model.set_pos_to_plane_indices(plane=self.plane, i=x2, j=y2)
