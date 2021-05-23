@@ -77,13 +77,8 @@ class AtlasSectionViewModel(HasObservableAttributes):
         visible_axes = np.delete(np.arange(3), self._axis)
         return tuple(np.array(colors)[visible_axes])
 
-    def on_left_mouse_drag(self, x1: int, y1: int, x2: int, y2: int):
-        visible_axes = np.delete(np.arange(3), self._axis)
-        coords = np.array(self._model.atlas_section_coords)
-        coords[visible_axes[0]] = int(np.clip(y2, 0, self._model.registration_volume.shape[visible_axes[0]] - 1))
-        coords[visible_axes[1]] = int(np.clip(x2, 0, self._model.registration_volume.shape[visible_axes[1]] - 1))
-        x, y, z = coords
-        self._model.atlas_section_coords = x, y, z
+    def drag_left_mouse(self, x1: int, y1: int, x2: int, y2: int):
+        self._model.set_pos_to_plane_indices(plane=self.plane, i=x2, j=y2)
 
     def click_left_mouse_button(self, x: int, y: int):
         self._model.set_pos_to_plane_indices(plane=self.plane, i=x, j=y)

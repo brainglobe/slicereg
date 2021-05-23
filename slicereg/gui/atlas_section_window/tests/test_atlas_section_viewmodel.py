@@ -73,3 +73,13 @@ def test_left_clicking_on_atlas_section_viewmodel_calls_position_setter_for_its_
     kwargs = app_model.set_pos_to_plane_indices.call_args[1]
     assert kwargs['plane'] == plane
     assert isinstance(kwargs['i'], int) and isinstance(kwargs['j'], int)
+
+
+@given(plane=sampled_from(['coronal', 'sagittal', 'axial']))
+def test_left_dragging_on_atlas_section_viewmodel_calls_position_setter_for_its_plane(plane):
+    app_model = Mock(AppModel)
+    atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
+    atlas_section_view.drag_left_mouse(x1=0, y1=0, x2=10, y2=10)
+    kwargs = app_model.set_pos_to_plane_indices.call_args[1]
+    assert kwargs['plane'] == plane
+    assert isinstance(kwargs['i'], int) and isinstance(kwargs['j'], int)

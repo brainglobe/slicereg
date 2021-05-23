@@ -255,6 +255,12 @@ class AppModel(HasObservableAttributes):
         return self._section_image(axis=2)
 
     def set_pos_to_plane_indices(self, plane: str, i: int, j: int):
+        # visible_axes = np.delete(np.arange(3), self._axis)
+        # coords = np.array(self._model.atlas_section_coords)
+        # coords[visible_axes[0]] = int(np.clip(y2, 0, self._model.registration_volume.shape[visible_axes[0]] - 1))
+        # coords[visible_axes[1]] = int(np.clip(x2, 0, self._model.registration_volume.shape[visible_axes[1]] - 1))
+        # x, y, z = coords
+        # self._model.atlas_section_coords = x, y, z
         ...
 
     def press_key(self, key: str):

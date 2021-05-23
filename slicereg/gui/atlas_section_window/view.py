@@ -66,7 +66,7 @@ class AtlasSectionView(BaseQtWidget):
         x2, y2, _, _ = tr.map(event.pos)
 
         if event.button == 1:  # Left Mouse Button
-            self._model.on_left_mouse_drag(x1=int(x1), x2=int(x2), y1=int(y1), y2=int(y2))
+            self._model.drag_left_mouse(x1=int(x1), x2=int(x2), y1=int(y1), y2=int(y2))
 
     def update(self, changed: str):
         render_funs = {
