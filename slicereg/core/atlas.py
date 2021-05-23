@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass, field
-from typing import Tuple, Optional
+from typing import Tuple, Optional, NamedTuple
 
 import numpy as np
 
@@ -31,6 +33,10 @@ class Atlas(FrozenUpdater):
     def map_xyz_to_ijk(self, x: float, y: float, z: float) -> Tuple[int, int, int]:
         return 0, 0, 0
 
+    def orthogonal_sections_at(self, x: float, y: float, z: float) -> AtlasSections:
+        i, j, k = self.map_xyz_to_ijk(x=x, y=y, z=z)
+        return AtlasSections(coronal=self.volume[i, :, :], axial=self.volume[:, j, :], sagittal=self.volume[:, :, k])
+
 
 ijk_to_xyz_matrix = np.array([
     [0, 1, 0, 0],
@@ -38,3 +44,9 @@ ijk_to_xyz_matrix = np.array([
     [0, 0, 1, 0],
     [0, 0, 0, 1],
 ])
+
+
+class AtlasSections(NamedTuple):
+    coronal: np.ndarray
+    axial: np.ndarray
+    sagittal: np.ndarray
