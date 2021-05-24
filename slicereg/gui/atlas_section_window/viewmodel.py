@@ -20,40 +20,39 @@ class AtlasSectionViewModel(HasObservableAttributes):
         HasObservableAttributes.__init__(self)
         self._model.register(self.update)
 
+    @property
+    def section_image_name(self):
+        return f"{self.plane}_section_image"
+
+    @property
+    def image_coords_name(self):
+        return f"{self.plane}_image_coords"
+
     def update(self, changed: str):
-        section_image_name = f"{self.plane}_section_image"
         update_funs = {
-            'registration_volume': self._update_section_image,
-            'x': self._update_depth_and_coords,
-            'y': self._update_depth_and_coords,
-            'z': self._update_depth_and_coords,
-            section_image_name: self._update_depth_and_coords,
+            'x': self._update_depth,
+            'y': self._update_depth,
+            'z': self._update_depth,
+            self.image_coords_name: self._update_image_coords,
+            self.section_image_name: self._update_section_image,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
 
-    def _update_depth_and_coords(self):
-        if self.plane == 'coronal':
-            # self.image_coords = self._model.coronal_image_coords  # todo
-            self.image_coords = self._model.coronal_image_coords
-            self.depth = self._model.x
-            if (section_image := self._model.coronal_section_image) is not None:
-                self.atlas_section_image = section_image
-        elif self.plane == 'axial':
-            # self.image_coords = self._model.axial_image_coords  # todo
-            self.image_coords = self._model.axial_image_coords
-            self.depth = self._model.y
-            if (section_image := self._model.axial_section_image) is not None:
-                self.atlas_section_image = section_image
-        elif self.plane == 'sagittal':
-            # self.image_coords = self._model.sagittal_image_coords  # todo
-            self.image_coords = self._model.sagittal_image_coords
-            self.depth = self._model.z
-            if (section_image := self._model.sagittal_section_image) is not None:
-                self.atlas_section_image = section_image
+    def _update_image_coords(self):
+        self.image_coords = getattr(self._model, self.image_coords_name)
 
     def _update_section_image(self):
-        self.atlas_section_image = self._model.coronal_section_image
+        if (section_image := getattr(self._model, self.section_image_name)) is not None:
+            self.atlas_section_image = section_image
+
+    def _update_depth(self):
+        if self.plane == 'coronal':
+            self.depth = self._model.x
+        elif self.plane == 'axial':
+            self.depth = self._model.y
+        elif self.plane == 'sagittal':
+            self.depth = self._model.z
 
     @property
     def clim(self) -> Tuple[float, float]:

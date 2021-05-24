@@ -52,28 +52,15 @@ class AppModel(HasObservableAttributes):
     rx: float = 0.
     ry: float = 0.
     rz: float = 0.
-    atlas_image_coords: Tuple[int, int, int] = (0, 0, 0)
     coronal_section_image: Optional[np.ndarray] = None
     axial_section_image: Optional[np.ndarray] = None
     sagittal_section_image: Optional[np.ndarray] = None
+    coronal_image_coords: Tuple[int, int] = (0, 0)
+    axial_image_coords: Tuple[int, int] = (0, 0)
+    sagittal_image_coords: Tuple[int, int] = (0, 0)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
-
-    @property
-    def coronal_image_coords(self) -> Tuple[int, int]:
-        coronal, axial, sagittal = self.atlas_image_coords
-        return axial, sagittal
-
-    @property
-    def axial_image_coords(self) -> Tuple[int, int]:
-        coronal, axial, sagittal = self.atlas_image_coords
-        return coronal, sagittal
-
-    @property
-    def sagittal_image_coords(self) -> Tuple[int, int]:
-        coronal, axial, sagittal = self.atlas_image_coords
-        return coronal, axial
 
     @property
     def clim_2d_values(self):
