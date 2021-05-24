@@ -20,39 +20,36 @@ class AtlasSectionViewModel(HasObservableAttributes):
         HasObservableAttributes.__init__(self)
         self._model.register(self.update)
 
-    @property
-    def section_image_name(self):
-        return f"{self.plane}_section_image"
-
-    @property
-    def image_coords_name(self):
-        return f"{self.plane}_image_coords"
-
     def update(self, changed: str):
         update_funs = {
-            'x': self._update_depth,
-            'y': self._update_depth,
-            'z': self._update_depth,
-            self.image_coords_name: self._update_image_coords,
-            self.section_image_name: self._update_section_image,
+            self._depth_coord: self._update_depth,
+            self._image_coords_name: self._update_image_coords,
+            self._section_image_name: self._update_section_image,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
 
     def _update_image_coords(self):
-        self.image_coords = getattr(self._model, self.image_coords_name)
+        self.image_coords = getattr(self._model, self._image_coords_name)
 
     def _update_section_image(self):
-        if (section_image := getattr(self._model, self.section_image_name)) is not None:
+        if (section_image := getattr(self._model, self._section_image_name)) is not None:
             self.atlas_section_image = section_image
 
     def _update_depth(self):
-        if self.plane == 'coronal':
-            self.depth = self._model.x
-        elif self.plane == 'axial':
-            self.depth = self._model.y
-        elif self.plane == 'sagittal':
-            self.depth = self._model.z
+        self.depth = getattr(self._model, self._depth_coord)
+
+    @property
+    def _section_image_name(self):
+        return f"{self.plane}_section_image"
+
+    @property
+    def _depth_coord(self):
+        return {'coronal': 'x', 'axial': 'y', 'sagittal': 'z'}[self.plane]
+
+    @property
+    def _image_coords_name(self):
+        return f"{self.plane}_image_coords"
 
     @property
     def clim(self) -> Tuple[float, float]:
