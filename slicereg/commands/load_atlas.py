@@ -11,11 +11,19 @@ from slicereg.core.atlas import Atlas
 
 
 @dataclass(frozen=True)
+class AtlasCoord:
+    x: float
+    y: float
+    z: float
+
+
+@dataclass(frozen=True)
 class LoadAtlasData:
     volume: ndarray
     transform: ndarray
     resolution: float
     annotation_volume: Optional[ndarray]
+    atlas_center: AtlasCoord
 
 
 @dataclass
@@ -33,6 +41,7 @@ class LoadRemoteAtlasCommand:
             resolution_um=resolution if (resolution := atlas_data.resolution_um) is not None else 25.,
             annotation_volume=atlas_data.annotation_volume,
         )
+        x, y, z = atlas.center
 
         self._repo.set_atlas(atlas=atlas)
 
@@ -41,6 +50,7 @@ class LoadRemoteAtlasCommand:
             transform=atlas.shared_space_transform,
             resolution=atlas.resolution_um,
             annotation_volume=atlas.annotation_volume,
+            atlas_center=AtlasCoord(x=x, y=y, z=z)
         ))
 
 
@@ -59,6 +69,7 @@ class LoadAtlasFromFileCommand:
             resolution_um=resolution if (resolution := atlas_data.resolution_um) is not None else resolution_um,
             annotation_volume=atlas_data.annotation_volume,
         )
+        x, y, z = atlas.center
 
         self._repo.set_atlas(atlas=atlas)
 
@@ -67,4 +78,5 @@ class LoadAtlasFromFileCommand:
             transform=atlas.shared_space_transform,
             resolution=atlas.resolution_um,
             annotation_volume=None,
+            atlas_center=AtlasCoord(x=x, y=y, z=z)
         ))
