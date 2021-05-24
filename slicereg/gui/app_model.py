@@ -53,6 +53,9 @@ class AppModel(HasObservableAttributes):
     ry: float = 0.
     rz: float = 0.
     atlas_image_coords: Tuple[int, int, int] = (0, 0, 0)
+    coronal_section_image: Optional[np.ndarray] = None
+    axial_section_image: Optional[np.ndarray] = None
+    sagittal_section_image: Optional[np.ndarray] = None
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -229,13 +232,6 @@ class AppModel(HasObservableAttributes):
             self.selected_ij = data.ij
             self.selected_xyz = data.xyz
 
-    def _section_image(self, axis):
-        if (volume := self.registration_volume) is not None:
-            section_slice_idx = self.atlas_section_coords[axis]
-            return np.rollaxis(volume, axis)[section_slice_idx]
-        else:
-            return None
-
     def orient_section_to_coronal(self):
         self.update_section(rx=0, ry=0, rz=-90)
 
@@ -244,18 +240,6 @@ class AppModel(HasObservableAttributes):
 
     def orient_section_to_axial(self):
         self.update_section(rx=0, ry=90, rz=-90)
-
-    @property
-    def coronal_section_image(self):
-        return self._section_image(axis=0)
-
-    @property
-    def axial_section_image(self):
-        return self._section_image(axis=1)
-
-    @property
-    def sagittal_section_image(self):
-        return self._section_image(axis=2)
 
     def set_pos_to_plane_indices(self, plane: str, i: int, j: int):
             # visible_axes = np.delete(np.arange(3), self._axis)

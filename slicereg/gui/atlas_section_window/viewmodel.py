@@ -21,11 +21,13 @@ class AtlasSectionViewModel(HasObservableAttributes):
         self._model.register(self.update)
 
     def update(self, changed: str):
+        section_image_name = f"{self.plane}_section_image"
         update_funs = {
             'registration_volume': self._update_section_image,
             'x': self._update_depth_and_coords,
             'y': self._update_depth_and_coords,
             'z': self._update_depth_and_coords,
+            section_image_name: self._update_depth_and_coords,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
@@ -35,17 +37,20 @@ class AtlasSectionViewModel(HasObservableAttributes):
             # self.image_coords = self._model.coronal_image_coords  # todo
             self.image_coords = self._model.coronal_image_coords
             self.depth = self._model.x
-            self.atlas_section_image = self._model.coronal_section_image
+            if (section_image := self._model.coronal_section_image) is not None:
+                self.atlas_section_image = section_image
         elif self.plane == 'axial':
             # self.image_coords = self._model.axial_image_coords  # todo
             self.image_coords = self._model.axial_image_coords
             self.depth = self._model.y
-            self.atlas_section_image = self._model.axial_section_image
+            if (section_image := self._model.axial_section_image) is not None:
+                self.atlas_section_image = section_image
         elif self.plane == 'sagittal':
             # self.image_coords = self._model.sagittal_image_coords  # todo
             self.image_coords = self._model.sagittal_image_coords
             self.depth = self._model.z
-            self.atlas_section_image = self._model.sagittal_section_image
+            if (section_image := self._model.sagittal_section_image) is not None:
+                self.atlas_section_image = section_image
 
     def _update_section_image(self):
         self.atlas_section_image = self._model.coronal_section_image
