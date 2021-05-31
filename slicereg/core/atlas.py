@@ -51,7 +51,7 @@ class Atlas(FrozenUpdater):
         shape = self.volume.shape
         return 0 <= x / res < shape[0] and 0 <= y / res < shape[1] and 0 <= z / res < shape[2]
 
-    def get_coronal_image(self, x: float) -> Image:
+    def make_coronal_slice_at(self, x: float) -> Image:
         if 0 <= x < self.volume.shape[0] * self.resolution_um:
             i = int(x / self.resolution_um)
             channels = self.volume[[i], :, :]
@@ -60,7 +60,7 @@ class Atlas(FrozenUpdater):
             channels = np.zeros((1, shape[1], shape[2]))
         return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
-    def get_axial_image(self, y: float) -> Image:
+    def make_axial_slice_at(self, y: float) -> Image:
         if 0 <= y < self.volume.shape[1] * self.resolution_um:
             j = int(y / self.resolution_um)
             slice = self.volume[:, j, :]
@@ -70,7 +70,7 @@ class Atlas(FrozenUpdater):
             channels = np.zeros((1, shape[0], shape[2]))
         return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
-    def get_sagittal_image(self, z: float) -> Image:
+    def make_sagittal_slice_at(self, z: float) -> Image:
         if 0 <= z < self.volume.shape[2] * self.resolution_um:
             k = int(z / self.resolution_um)
             slice = self.volume[:, :, k]

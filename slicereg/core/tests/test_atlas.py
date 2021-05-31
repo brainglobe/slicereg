@@ -68,7 +68,7 @@ def test_atlas_detects_if_xyz_coordinate_is_inside_volume(x, y, z, res):
 @given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
 def test_atlas_returns_coronal_image_at_coordinate_or_zeros(coord):
     atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
-    image = atlas.get_coronal_image(coord)
+    image = atlas.make_coronal_slice_at(coord)
     if 0 < coord < 6:
         npt.assert_almost_equal(image.channels[0], atlas.volume[int(coord / 2), :, :])
     else:
@@ -78,7 +78,7 @@ def test_atlas_returns_coronal_image_at_coordinate_or_zeros(coord):
 @given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
 def test_atlas_returns_axial_image_at_coordinate_or_zeros(coord):
     atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
-    image = atlas.get_axial_image(coord)
+    image = atlas.make_axial_slice_at(coord)
     if 0 <= coord < 6:
         npt.assert_almost_equal(image.channels[0], atlas.volume[:, int(coord / 2), :])
     else:
@@ -88,7 +88,7 @@ def test_atlas_returns_axial_image_at_coordinate_or_zeros(coord):
 @given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
 def test_atlas_returns_sagittal_image_at_coordinate_or_zeros(coord):
     atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
-    image = atlas.get_sagittal_image(coord)
+    image = atlas.make_sagittal_slice_at(coord)
     if 0 <= coord < 6:
         npt.assert_almost_equal(image.channels[0], atlas.volume[:, :, int(coord / 2)])
     else:
