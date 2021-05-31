@@ -45,6 +45,10 @@ class Atlas(FrozenUpdater):
         else:
             return None
 
+    def coord_is_in_volume(self, x: float, y: float, z: float) -> bool:
+        res = self.resolution_um
+        shape = self.volume.shape
+        return 0 <= x / res < shape[0] and 0 <= y / res < shape[1] and 0 <= z / res < shape[2]
 
 ijk_to_xyz_matrix = np.array([
     [0, 1, 0, 0],

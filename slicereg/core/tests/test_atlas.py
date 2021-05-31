@@ -1,5 +1,6 @@
 import numpy as np
 import numpy.testing as npt
+import pytest
 from hypothesis import given
 from hypothesis.strategies import integers, floats
 from pytest import approx
@@ -55,3 +56,18 @@ def test_can_get_atlas_coronal_section_from_xyz():
     atlas = Atlas(volume=np.empty((10, 10, 10)), annotation_volume=np.empty((10, 10, 10)), resolution_um=2)
     sections = atlas.orthogonal_sections_at(x=0, y=0, z=0)
     npt.assert_almost_equal(sections.coronal, atlas.volume[0])
+
+
+@given(x=floats(-10, 50000), y=floats(-10, 50000), z=floats(-10, 50000), res=floats(0.1, 10))
+def test_atlas_detects_if_xyz_coordinate_is_inside_volume(x, y, z, res):
+    atlas = Atlas(volume=np.empty((5, 6, 7)), annotation_volume=np.empty((5, 6, 7)), resolution_um=res)
+    in_volume = atlas.coord_is_in_volume(x=x, y=y, z=z)
+    expected = True if 0 <= x < 5 * res and 0 <= y < 6 * res and 0 <= z < 7 * res else False
+    assert in_volume is expected
+
+
+@pytest.mark.skip("in progress")
+def test_atlas_returns_coronal_section_at_coordinate():
+    atlas = Atlas(volume=np.empty((10, 10, 10)), annotation_volume=np.empty((10, 10, 10)), resolution_um=2)
+    section = atlas.get_coronal_section(0)
+    assert np.isclose(section.image.channels[0], atlas.volume[0, :, :])
