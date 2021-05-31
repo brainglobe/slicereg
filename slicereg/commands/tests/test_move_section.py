@@ -5,7 +5,7 @@ from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.move_section2 import MoveType, Axis, MoveSectionCommand2
+from slicereg.commands.move_section2 import MoveType, Axis, MoveSectionCommand2, MoveRequest
 from slicereg.core import Section, Image
 from slicereg.core.physical_transform import PhysicalTransformer
 
@@ -21,7 +21,8 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
         )
     ]
     move_section = MoveSectionCommand2(_repo=repo)
-    result = move_section(axis=axis, value=value, type=MoveType.TRANSLATION, absolute=True)
+    request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=True)
+    result = move_section(request=request)
     data = result.unwrap()
     assert data.x == value if axis is Axis.X else 5
     assert data.y == value if axis is Axis.Y else 10
@@ -39,7 +40,8 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
         )
     ]
     move_section = MoveSectionCommand2(_repo=repo)
-    result = move_section(axis=axis, value=value, type=MoveType.ROTATION, absolute=True)
+    request = MoveRequest(axis=axis, value=value, move_type=MoveType.ROTATION, absolute=True)
+    result = move_section(request=request)
     data = result.unwrap()
     assert data.rx == value if axis is Axis.X else 5
     assert data.ry == value if axis is Axis.Y else 10
@@ -58,7 +60,8 @@ def test_relative_move_section_to_position_translates_it_and_returns_new_positio
         )
     ]
     move_section = MoveSectionCommand2(_repo=repo)
-    result = move_section(axis=axis, value=value, type=MoveType.TRANSLATION, absolute=False)
+    request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=False)
+    result = move_section(request)
     data = result.unwrap()
     assert data.x == value + 5 if axis is Axis.X else 5
     assert data.y == value + 10 if axis is Axis.Y else 10
@@ -76,7 +79,8 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
         )
     ]
     move_section = MoveSectionCommand2(_repo=repo)
-    result = move_section(axis=axis, value=value, type=MoveType.ROTATION, absolute=False)
+    request = MoveRequest(axis=axis, value=value, move_type=MoveType.ROTATION, absolute=False)
+    result = move_section(request=request)
     data = result.unwrap()
     assert data.rx == value + 5 if axis is Axis.X else 5
     assert data.ry == value + 10 if axis is Axis.Y else 10

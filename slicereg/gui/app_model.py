@@ -12,7 +12,7 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType
+from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType, MoveRequest
 from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
@@ -125,7 +125,8 @@ class AppModel(HasObservableAttributes):
         move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
-            result = move_section(axis=axes[ax_name], value=value, type=move_types[ax_name], absolute=False)
+            request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=False)
+            result = move_section(request=request)
             if isinstance(result, Ok):
                 data = result.value
                 self.x = data.x
@@ -150,7 +151,8 @@ class AppModel(HasObservableAttributes):
         move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
-            result = move_section(axis=axes[ax_name], value=value, type=move_types[ax_name], absolute=True)
+            request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=True)
+            result = move_section(request=request)
             if isinstance(result, Ok):
                 data = result.value
                 self.x = data.x
