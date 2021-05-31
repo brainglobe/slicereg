@@ -31,7 +31,7 @@ class Atlas(FrozenUpdater):
         return cx, cy, cz
 
     def map_xyz_to_ijk(self, x: float, y: float, z: float) -> Optional[Tuple[int, int, int]]:
-        if x >= 0 and y >= 0 and z >= 0:
+        if self.coord_is_in_volume(x=x, y=y, z=z):
             res = self.resolution_um
             return int(x // res), int(y // res), int(z // res)
         else:

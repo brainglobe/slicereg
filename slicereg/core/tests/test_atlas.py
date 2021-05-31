@@ -31,7 +31,7 @@ def test_atlas_contains_an_annotation_volume():
     assert atlas.annotation_volume.shape == atlas.volume.shape
 
 
-@given(x=floats(0, 30), y=floats(0, 30), z=floats(0, 30), res=floats(0.5, 10))
+@given(x=floats(0, 10), y=floats(0, 10), z=floats(0, 10), res=floats(0.5, 10))
 def test_atlas_converts_xyz_to_ijk(x, y, z, res):
     atlas = Atlas(volume=np.empty((20, 20, 20)), annotation_volume=np.empty((20, 20, 20)), resolution_um=res)
     i, j, k = atlas.map_xyz_to_ijk(x=x, y=y, z=z)
