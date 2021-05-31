@@ -119,51 +119,26 @@ class AppModel(HasObservableAttributes):
             self.atlas_image = data2.atlas_slice_image
             self.section_transform = data2.section_transform
 
-    # Move/Update Section Position/Rotation
-    def move_section(self, **kwargs):
-        axes = {'x': Axis.X, 'y': Axis.Y, 'z': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
-        t, r = MoveType.TRANSLATION, MoveType.ROTATION
-        move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
-        move_section = self._injector.build(MoveSectionCommand2)
-        for ax_name, value in kwargs.items():
-            request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=False)
-            result = move_section(request=request)
-            if isinstance(result, Ok):
-                data = result.value
-                self.x = data.x
-                self.y = data.y
-                self.z = data.z
-                self.rx = data.rx
-                self.ry = data.ry
-                self.rz = data.rz
-            elif isinstance(result, Err):
-                return
-
-        register_section = self._injector.build(RegisterSectionCommand)
-        result2 = register_section()
-        if isinstance(result2, Ok):
-            data2 = result2.value
-            self.atlas_image = data2.atlas_slice_image
-            self.section_transform = data2.section_transform
-
-    def update_section(self, **kwargs):
+    # Move/Update Section Position/Rotation/Orientation
+    def update_section(self, absolute: bool = True, **kwargs):
         axes = {'x': Axis.X, 'y': Axis.Y, 'z': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
         t, r = MoveType.TRANSLATION, MoveType.ROTATION
         move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
             if ax_name == 'orient':
-                axes = {
+                atlas_axes = {
                     AtlasOrientation.AXIAL: AtlasAxis.AXIAL,
                     AtlasOrientation.CORONAL: AtlasAxis.CORONAL,
                     AtlasOrientation.SAGITTAL: AtlasAxis.SAGITTAL,
                 }
-                axis = axes[value]
-                request = ReorientRequest(axis=axis)
+                axis = atlas_axes[value]
+                reorient_request = ReorientRequest(axis=axis)
+                result = move_section(request=reorient_request)
             else:
-                request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=True)
+                move_request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=absolute)
+                result = move_section(request=move_request)
 
-            result = move_section(request=request)
             if isinstance(result, Ok):
                 data = result.value
                 self.x = data.x
@@ -229,18 +204,18 @@ class AppModel(HasObservableAttributes):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self.move_section(z=30),
-            'S': lambda: self.move_section(z=-30),
-            'A': lambda: self.move_section(x=-30),
-            'D': lambda: self.move_section(x=30),
-            'Q': lambda: self.move_section(y=-30),
-            'E': lambda: self.move_section(y=30),
-            'I': lambda: self.move_section(rz=3),
-            'K': lambda: self.move_section(rz=-3),
-            'J': lambda: self.move_section(rx=-3),
-            'L': lambda: self.move_section(rx=3),
-            'U': lambda: self.move_section(ry=-3),
-            'O': lambda: self.move_section(ry=3),
+            'W': lambda: self.update_section(z=30, absolute=False),
+            'S': lambda: self.update_section(z=-30, absolute=False),
+            'A': lambda: self.update_section(x=-30, absolute=False),
+            'D': lambda: self.update_section(x=30, absolute=False),
+            'Q': lambda: self.update_section(y=-30, absolute=False),
+            'E': lambda: self.update_section(y=30, absolute=False),
+            'I': lambda: self.update_section(rz=3, absolute=False),
+            'K': lambda: self.update_section(rz=-3, absolute=False),
+            'J': lambda: self.update_section(rx=-3, absolute=False),
+            'L': lambda: self.update_section(rx=3, absolute=False),
+            'U': lambda: self.update_section(ry=-3, absolute=False),
+            'O': lambda: self.update_section(ry=3, absolute=False),
         }
         if command := key_commands.get(key):
             command()
