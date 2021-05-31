@@ -18,6 +18,5 @@ def step_impl(slice_view):
 
 @then("the coordinate's 2D position and 3D position should appear")
 def step_impl(main_window):
-    assert main_window.highlighted_image_coords == (1, 2)
     assert isinstance(main_window.highlighted_physical_coords, tuple)
     assert all(isinstance(el, float) for el in main_window.highlighted_physical_coords)

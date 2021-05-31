@@ -37,8 +37,6 @@ class AppModel(HasObservableAttributes):
     section_transform: Optional[ndarray] = None
     atlas_image: Optional[ndarray] = None
     registration_volume: ndarray = np.array([[[0]]], dtype=np.uint16)
-    atlas_section_coords: Tuple[int, int, int] = (0, 0, 0)
-    selected_ij: Tuple[int, int] = (0, 0)
     selected_xyz: Tuple[float, float, float] = (0, 0, 0)
     bgatlas_names: List[str] = field(default_factory=list)
     annotation_volume: Optional[np.ndarray] = None
@@ -202,8 +200,6 @@ class AppModel(HasObservableAttributes):
             atlas = result.value
             self.registration_volume = atlas.volume
             self.atlas_resolution = int(atlas.resolution)
-            x, y, z = tuple((np.array(self.registration_volume.shape) * 0.5).astype(int).tolist())
-            self.atlas_section_coords = x, y, z
 
     # List Brainglobe Atlases
     def list_bgatlases(self):
@@ -219,7 +215,6 @@ class AppModel(HasObservableAttributes):
         result = get_atlas_coord(i=i, j=j)
         if isinstance(result, Ok):
             data = result.value
-            self.selected_ij = data.ij
             self.selected_xyz = data.xyz
 
     def orient_section_to_coronal(self):

@@ -3,21 +3,12 @@ from unittest.mock import Mock
 import numpy as np
 import numpy.testing as npt
 import pytest
-from _pytest.python_api import approx
 from hypothesis import given
-from hypothesis.strategies import floats, sampled_from
+from hypothesis.strategies import sampled_from
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.atlas_section_window.viewmodel import AtlasSectionViewModel
 from slicereg.utils import DependencyInjector
-
-
-@given(plane=sampled_from(['coronal', 'axial', 'sagittal']))
-def test_atlas_section_viewmodel_does_update_image_coords_when_relevant_coords_are_updated(plane):
-    app_model = AppModel(_injector=DependencyInjector())
-    atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
-    setattr(app_model, f'{plane}_image_coords', (1., 2.))
-    assert atlas_section_view.image_coords == (1., 2.)
 
 
 @pytest.mark.parametrize("plane", ["coronal", "axial", "sagittal"])
@@ -36,7 +27,6 @@ def test_atlas_camera_center_and_scale_depend_on_the_atlas_shape_and_resolution(
     )
     atlas_section_view = AtlasSectionViewModel(plane='coronal', _model=app_model)
     atlas_section_view.section_scale
-
 
 
 @given(plane=sampled_from(['coronal', 'sagittal', 'axial']))

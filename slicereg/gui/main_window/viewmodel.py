@@ -23,14 +23,9 @@ class MainWindowViewModel(HasObservableAttributes):
         return self._model.window_title
 
     def _update_footer(self):
-        ij = self._model.selected_ij
         xyz = self._model.selected_xyz
-        text = f"(i={ij[0]}, j={ij[1]})   (x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})"
+        text = f"(x={xyz[0]:.1f}, y={xyz[1]:.1f}, z={xyz[2]:.1f})"
         self.footer = text
-
-    @property
-    def highlighted_image_coords(self) -> Optional[Tuple[int, int]]:
-        return self._model.selected_ij
 
     @property
     def highlighted_physical_coords(self) -> Optional[Tuple[float, float, float]]:
