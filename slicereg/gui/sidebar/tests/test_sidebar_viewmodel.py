@@ -5,7 +5,7 @@ from hypothesis import given
 from hypothesis.strategies import floats, text, sampled_from
 from pytest import approx
 
-from slicereg.gui.app_model import AppModel, VolumeType
+from slicereg.gui.app_model import AppModel, VolumeType, AtlasOrientation
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.utils import DependencyInjector
 
@@ -59,25 +59,17 @@ def test_viewmodel_bgatlas_dropdown_fills_with_atlas_names_when_app_gets_them(ap
     assert view_model.bgatlas_dropdown_entries == atlases
 
 
-def test_clicking_coronal_orientation_button_tells_app_to_rotate_slice_to_coronal_orientation():
+cases = [
+    ("click_coronal_button", AtlasOrientation.CORONAL),
+    ("click_axial_button", AtlasOrientation.AXIAL),
+    ("click_sagittal_button", AtlasOrientation.SAGITTAL),
+]
+@pytest.mark.parametrize("method_name,orientation", cases)
+def test_clicking_orientation_button_tells_app_to_rotate_slice_to_correct_orientation(method_name, orientation):
     app_model = Mock(AppModel)
     view_model = SidebarViewModel(_model=app_model)
-    view_model.click_coronal_button()
-    assert app_model.orient_section_to_coronal.call_count == 1
-
-
-def test_clicking_axial_orientation_button_tells_app_to_rotate_slice_to_axial_orientation():
-    app_model = Mock(AppModel)
-    view_model = SidebarViewModel(_model=app_model)
-    view_model.click_axial_button()
-    assert app_model.orient_section_to_axial.call_count == 1
-
-
-def test_clicking_sagittal_orientation_button_tells_app_to_rotate_slice_to_sagittal_orientation():
-    app_model = Mock(AppModel)
-    view_model = SidebarViewModel(_model=app_model)
-    view_model.click_sagittal_button()
-    assert app_model.orient_section_to_sagittal.call_count == 1
+    getattr(view_model, method_name)()
+    app_model.orient_section_to.assert_called_with(orientation)
 
 
 @pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])

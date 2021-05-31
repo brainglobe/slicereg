@@ -26,6 +26,12 @@ class VolumeType(Enum):
     ANNOTATION = auto()
 
 
+class AtlasOrientation(Enum):
+    CORONAL = auto()
+    AXIAL = auto()
+    SAGITTAL = auto()
+
+
 @dataclass
 class AppModel(HasObservableAttributes):
     _injector: DependencyInjector
@@ -53,9 +59,6 @@ class AppModel(HasObservableAttributes):
     coronal_atlas_image: Optional[np.ndarray] = None
     axial_atlas_image: Optional[np.ndarray] = None
     sagittal_atlas_image: Optional[np.ndarray] = None
-    coronal_image_coords: Tuple[int, int] = (0, 0)
-    axial_image_coords: Tuple[int, int] = (0, 0)
-    sagittal_image_coords: Tuple[int, int] = (0, 0)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -217,23 +220,13 @@ class AppModel(HasObservableAttributes):
             data = result.value
             self.selected_xyz = data.xyz
 
-    def orient_section_to_coronal(self):
-        self.update_section(rx=0, ry=0, rz=-90)
-
-    def orient_section_to_sagittal(self):
-        self.update_section(rx=90, ry=0, rz=-90)
-
-    def orient_section_to_axial(self):
-        self.update_section(rx=0, ry=90, rz=-90)
-
-    def set_pos_to_plane_indices(self, plane: str, i: int, j: int):
-            # visible_axes = np.delete(np.arange(3), self._axis)
-            # coords = np.array(self._model.atlas_section_coords)
-            # coords[visible_axes[0]] = int(np.clip(y2, 0, self._model.registration_volume.shape[visible_axes[0]] - 1))
-            # coords[visible_axes[1]] = int(np.clip(x2, 0, self._model.registration_volume.shape[visible_axes[1]] - 1))
-            # x, y, z = coords
-            # self._model.atlas_section_coords = x, y, z
-            ...
+    def orient_section_to(self, orientation: AtlasOrientation):
+        if orientation is AtlasOrientation.CORONAL:
+            self.update_section(rx=90, ry=0, rz=90)
+        elif orientation is AtlasOrientation.AXIAL:
+            self.update_section(rx=0, ry=90, rz=0)
+        elif orientation is AtlasOrientation.SAGITTAL:
+            self.update_section(rx=0, ry=180, rz=-90)
 
     def press_key(self, key: str):
         key_commands = {

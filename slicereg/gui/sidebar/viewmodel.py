@@ -1,7 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
-from slicereg.gui.app_model import AppModel, VolumeType
+from slicereg.gui.app_model import AppModel, VolumeType, AtlasOrientation
 from slicereg.utils.observable import HasObservableAttributes
 
 
@@ -89,13 +89,13 @@ class SidebarViewModel(HasObservableAttributes):
             return
 
     def click_coronal_button(self):
-        self._model.orient_section_to_coronal()
+        self._model.orient_section_to(AtlasOrientation.CORONAL)
 
     def click_sagittal_button(self):
-        self._model.orient_section_to_sagittal()
+        self._model.orient_section_to(AtlasOrientation.SAGITTAL)
 
     def click_axial_button(self):
-        self._model.orient_section_to_axial()
+        self._model.orient_section_to(AtlasOrientation.AXIAL)
 
     def move_clim_section_2d_slider(self, values: Tuple[float, float]):
         self._model.clim_2d = values

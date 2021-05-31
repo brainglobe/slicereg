@@ -107,13 +107,13 @@ class SidebarView(BaseQtWidget):
         buttons_layout.addWidget(self.coronal_button)
         self.coronal_button.clicked.connect(lambda: self._model.click_coronal_button())
 
-        self.annotation_atlas_button = QPushButton("Sagittal")
-        buttons_layout.addWidget(self.annotation_atlas_button)
-        self.annotation_atlas_button.clicked.connect(lambda: self._model.click_sagittal_button())
-
         self.axial_button = QPushButton("Axial")
         buttons_layout.addWidget(self.axial_button)
         self.axial_button.clicked.connect(lambda: self._model.click_axial_button())
+
+        self.annotation_atlas_button = QPushButton("Sagittal")
+        buttons_layout.addWidget(self.annotation_atlas_button)
+        self.annotation_atlas_button.clicked.connect(lambda: self._model.click_sagittal_button())
 
         layout.addLayout(buttons_layout)
 
