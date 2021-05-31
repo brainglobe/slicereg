@@ -51,12 +51,6 @@ def test_can_get_atlas_image_coords_from_xyz():
     assert atlas.map_xyz_to_ijk(x=0, y=0, z=0) == (0, 0, 0)
 
 
-def test_can_get_atlas_coronal_section_from_xyz():
-    atlas = Atlas(volume=np.empty((10, 10, 10)), annotation_volume=np.empty((10, 10, 10)), resolution_um=2)
-    sections = atlas.orthogonal_sections_at(x=0, y=0, z=0)
-    npt.assert_almost_equal(sections.coronal, atlas.volume[0])
-
-
 @given(x=floats(-10, 50000), y=floats(-10, 50000), z=floats(-10, 50000), res=floats(0.1, 10))
 def test_atlas_detects_if_xyz_coordinate_is_inside_volume(x, y, z, res):
     atlas = Atlas(volume=np.empty((5, 6, 7)), annotation_volume=np.empty((5, 6, 7)), resolution_um=res)

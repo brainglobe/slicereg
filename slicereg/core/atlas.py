@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from typing import Tuple, Optional, NamedTuple
+from typing import Tuple, Optional
 
 import numpy as np
 
@@ -35,14 +35,6 @@ class Atlas(FrozenUpdater):
         if self.coord_is_in_volume(x=x, y=y, z=z):
             res = self.resolution_um
             return int(x // res), int(y // res), int(z // res)
-        else:
-            return None
-
-    def orthogonal_sections_at(self, x: float, y: float, z: float) -> Optional[AtlasSections]:
-        ijk = self.map_xyz_to_ijk(x=x, y=y, z=z)
-        if ijk is not None:
-            i, j, k = ijk
-            return AtlasSections(coronal=self.volume[i, :, :], axial=self.volume[:, j, :], sagittal=self.volume[:, :, k])
         else:
             return None
 
@@ -80,15 +72,10 @@ class Atlas(FrozenUpdater):
             channels = np.zeros((1, shape[0], shape[1]))
         return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
+
 ijk_to_xyz_matrix = np.array([
     [0, 1, 0, 0],
     [-1, 0, 0, 0],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
 ])
-
-
-class AtlasSections(NamedTuple):
-    coronal: np.ndarray
-    axial: np.ndarray
-    sagittal: np.ndarray
