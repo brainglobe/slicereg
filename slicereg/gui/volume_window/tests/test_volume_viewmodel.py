@@ -5,7 +5,8 @@ import numpy.testing as npt
 import pytest
 from pytest import approx
 
-from slicereg.gui.app_model import AppModel, VolumeType
+from slicereg.gui.app_model import AppModel
+from slicereg.gui.constants import VolumeType
 from slicereg.gui.volume_window import VolumeViewModel
 from slicereg.utils import DependencyInjector
 

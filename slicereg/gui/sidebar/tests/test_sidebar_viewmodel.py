@@ -5,7 +5,8 @@ from hypothesis import given
 from hypothesis.strategies import floats, text, sampled_from
 from pytest import approx
 
-from slicereg.gui.app_model import AppModel, VolumeType, AtlasOrientation
+from slicereg.gui.app_model import AppModel
+from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.utils import DependencyInjector
 

@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from dataclasses import dataclass, field
-from enum import Enum, auto
 from typing import Tuple, List, Optional
 
 import numpy as np
@@ -17,19 +16,9 @@ from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType
 from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
+from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
 from slicereg.utils.observable import HasObservableAttributes
-
-
-class VolumeType(Enum):
-    REGISTRATION = auto()
-    ANNOTATION = auto()
-
-
-class AtlasOrientation(Enum):
-    CORONAL = auto()
-    AXIAL = auto()
-    SAGITTAL = auto()
 
 
 @dataclass

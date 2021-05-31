@@ -1,7 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
-from slicereg.gui.app_model import AppModel, VolumeType, AtlasOrientation
+from slicereg.gui.app_model import AppModel
+from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.observable import HasObservableAttributes
 
 
