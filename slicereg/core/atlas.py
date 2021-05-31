@@ -5,6 +5,7 @@ from typing import Tuple, Optional, NamedTuple
 
 import numpy as np
 
+from slicereg.core import Image
 from slicereg.core.base import FrozenUpdater
 
 
@@ -49,6 +50,15 @@ class Atlas(FrozenUpdater):
         res = self.resolution_um
         shape = self.volume.shape
         return 0 <= x / res < shape[0] and 0 <= y / res < shape[1] and 0 <= z / res < shape[2]
+
+    def get_coronal_image(self, x: float) -> Image:
+        if 0 <= x < self.volume.shape[0] * self.resolution_um:
+            i = int(x / self.resolution_um)
+            channels = self.volume[[i], :, :]
+        else:
+            channels = np.empty_like(self.volume[[0], :, :])
+        return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
+
 
 ijk_to_xyz_matrix = np.array([
     [0, 1, 0, 0],

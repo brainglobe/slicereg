@@ -2,7 +2,7 @@ import numpy as np
 import numpy.testing as npt
 import pytest
 from hypothesis import given
-from hypothesis.strategies import integers, floats
+from hypothesis.strategies import integers, floats, sampled_from
 from pytest import approx
 
 from slicereg.core.atlas import Atlas
@@ -66,8 +66,11 @@ def test_atlas_detects_if_xyz_coordinate_is_inside_volume(x, y, z, res):
     assert in_volume is expected
 
 
-@pytest.mark.skip("in progress")
-def test_atlas_returns_coronal_section_at_coordinate():
-    atlas = Atlas(volume=np.empty((10, 10, 10)), annotation_volume=np.empty((10, 10, 10)), resolution_um=2)
-    section = atlas.get_coronal_section(0)
-    assert np.isclose(section.image.channels[0], atlas.volume[0, :, :])
+@given(x=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
+def test_atlas_returns_coronal_image_at_coordinate_or_zeros(x):
+    atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
+    image = atlas.get_coronal_image(x)
+    if 0 < x < 6:
+        npt.assert_almost_equal(image.channels, atlas.volume[[int(x / 2)], :, :])
+    else:
+        npt.assert_almost_equal(image.channels, np.zeros_like(atlas.volume[[0]]))
