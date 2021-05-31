@@ -48,3 +48,13 @@ def test_register_section_returns_atlas_image_coordinate_at_section_position(rep
     assert type(coords.coronal) == int
     assert type(coords.axial) == int
     assert type(coords.sagittal) == int
+
+
+def test_register_section_returns_2d_orthogonal_atlas_section_images_at_section_position(repo):
+    register_section = RegisterSectionCommand(_repo=repo)
+    data = register_section().ok()
+    assert data.coronal_atlas_image.ndim == 2
+    assert data.axial_atlas_image.ndim == 2
+    assert data.sagittal_atlas_image.ndim == 2
+
+
