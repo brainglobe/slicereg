@@ -23,15 +23,23 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     def update(self, changed: str):
         update_funs = {
-            self._image_coords_name: self._update_image_coords,
             self._section_image_name: self._update_section_image,
             'atlas_resolution': self._update_section_image,
+            'x': self._update_image_coords,
+            'y': self._update_image_coords,
+            'z': self._update_image_coords,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
 
     def _update_image_coords(self):
-        self.image_coords = getattr(self._model, self._image_coords_name)
+        x, y, z = self._model.x, self._model.y, self._model.z
+        coords = {
+            'coronal': (y, z),
+            'axial': (x, z),
+            'sagittal': (x, y),
+        }
+        self.coords = coords[self.plane]
 
     def _update_section_image(self):
         if (image := getattr(self._model, self._section_image_name)) is not None:
@@ -45,14 +53,6 @@ class AtlasSectionViewModel(HasObservableAttributes):
     @property
     def _section_image_name(self):
         return f"{self.plane}_atlas_image"
-
-    @property
-    def _depth_coord(self):
-        return {'coronal': 'x', 'axial': 'y', 'sagittal': 'z'}[self.plane]
-
-    @property
-    def _image_coords_name(self):
-        return f"{self.plane}_image_coords"
 
     @property
     def clim(self) -> Tuple[float, float]:
@@ -70,7 +70,7 @@ class AtlasSectionViewModel(HasObservableAttributes):
     @property
     def horizontal_line_color(self) -> Tuple[float, float, float, float]:
         colors = {
-            'coronal': (1., 0., 0., 1.),
+            'coronal': (0., 0., 1., 1.),
             'axial': (0., 0., 1., 1.),
             'sagittal': (0., 1., 0., 1.),
         }
