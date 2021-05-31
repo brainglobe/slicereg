@@ -41,7 +41,7 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     @property
     def _section_image_name(self):
-        return f"{self.plane}_section_image"
+        return f"{self.plane}_atlas_image"
 
     @property
     def _depth_coord(self):
@@ -53,7 +53,7 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     @property
     def clim(self) -> Tuple[float, float]:
-        return 0., 1.
+        return np.min(self.atlas_section_image), np.max(self.atlas_section_image)
 
     @property
     def camera_center(self) -> Tuple[float, float, float]:

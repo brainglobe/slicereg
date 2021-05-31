@@ -52,9 +52,9 @@ class AppModel(HasObservableAttributes):
     rx: float = 0.
     ry: float = 0.
     rz: float = 0.
-    coronal_section_image: Optional[np.ndarray] = None
-    axial_section_image: Optional[np.ndarray] = None
-    sagittal_section_image: Optional[np.ndarray] = None
+    coronal_atlas_image: Optional[np.ndarray] = None
+    axial_atlas_image: Optional[np.ndarray] = None
+    sagittal_atlas_image: Optional[np.ndarray] = None
     coronal_image_coords: Tuple[int, int] = (0, 0)
     axial_image_coords: Tuple[int, int] = (0, 0)
     sagittal_image_coords: Tuple[int, int] = (0, 0)
@@ -178,6 +178,9 @@ class AppModel(HasObservableAttributes):
             data2 = result2.value
             self.atlas_image = data2.atlas_slice_image
             self.section_transform = data2.section_transform
+            self.coronal_atlas_image = data2.coronal_atlas_image
+            self.axial_atlas_image = data2.axial_atlas_image
+            self.sagittal_atlas_image = data2.sagittal_atlas_image
 
     # Load Atlases
     def load_bgatlas(self, name: str):

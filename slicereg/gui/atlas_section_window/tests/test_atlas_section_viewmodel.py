@@ -54,7 +54,7 @@ def test_atlas_section_viewmodel_updates_atlas_section_image_to_match_coorespond
     app_model = AppModel(_injector=DependencyInjector(), x=2, y=5, z=10)
     atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
     section_image = np.random.randint(0, 100, (10, 10), np.uint16)
-    setattr(app_model, f"{plane}_section_image", section_image)
+    setattr(app_model, f"{plane}_atlas_image", section_image)
     npt.assert_almost_equal(atlas_section_view.atlas_section_image, section_image)
 
 
