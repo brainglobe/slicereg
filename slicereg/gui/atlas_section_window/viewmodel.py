@@ -13,8 +13,9 @@ class AtlasSectionViewModel(HasObservableAttributes):
     plane: str = 'coronal'
     atlas_section_image: np.ndarray = np.zeros(shape=(3, 3), dtype=np.uint16)
     coords: Tuple[int, int] = (0, 0)
-    image_coords: Tuple[int, int] = (0, 0)
-    depth: float = 0.
+    camera_center: Tuple[float, float, float] = (1, 1, 0)
+    camera_scale: float = 1.
+    section_scale: Tuple[float, float, float] = (1., 1., 1.)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -22,9 +23,9 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     def update(self, changed: str):
         update_funs = {
-            self._depth_coord: self._update_depth,
             self._image_coords_name: self._update_image_coords,
             self._section_image_name: self._update_section_image,
+            'atlas_resolution': self._update_section_image,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
@@ -33,11 +34,13 @@ class AtlasSectionViewModel(HasObservableAttributes):
         self.image_coords = getattr(self._model, self._image_coords_name)
 
     def _update_section_image(self):
-        if (section_image := getattr(self._model, self._section_image_name)) is not None:
-            self.atlas_section_image = section_image
-
-    def _update_depth(self):
-        self.depth = getattr(self._model, self._depth_coord)
+        if (image := getattr(self._model, self._section_image_name)) is not None:
+            self.atlas_section_image = image
+            if self._model.atlas_resolution is not None:
+                res = self._model.atlas_resolution
+                self.camera_center = (image.shape[1] / 2 * res, image.shape[0] / 2 * res, 0.)
+                self.camera_scale = max(image.shape) * res
+                self.section_scale = (res, res, 1.)
 
     @property
     def _section_image_name(self):
@@ -54,16 +57,6 @@ class AtlasSectionViewModel(HasObservableAttributes):
     @property
     def clim(self) -> Tuple[float, float]:
         return np.min(self.atlas_section_image), np.max(self.atlas_section_image)
-
-    @property
-    def camera_center(self) -> Tuple[float, float, float]:
-        image = self.atlas_section_image
-        return image.shape[1] / 2, image.shape[0] / 2, 0.
-
-    @property
-    def camera_scale(self) -> float:
-        image = self.atlas_section_image
-        return max(image.shape)
 
     @property
     def vertical_line_color(self) -> Tuple[float, float, float, float]:
@@ -84,7 +77,17 @@ class AtlasSectionViewModel(HasObservableAttributes):
         return colors[self.plane]
 
     def drag_left_mouse(self, x1: int, y1: int, x2: int, y2: int):
-        self._model.set_pos_to_plane_indices(plane=self.plane, i=x2, j=y2)
+        if self.plane == 'coronal':
+            self._model.update_section(y=y2, z=x2)
+        elif self.plane == 'axial':
+            self._model.update_section(x=y2, z=x2)
+        elif self.plane == 'sagittal':
+            self._model.update_section(x=y2, y=x2)
 
     def click_left_mouse_button(self, x: int, y: int):
-        self._model.set_pos_to_plane_indices(plane=self.plane, i=x, j=y)
+        if self.plane == 'coronal':
+            self._model.update_section(y=y, z=x)
+        elif self.plane == 'axial':
+            self._model.update_section(x=y, z=x)
+        elif self.plane == 'sagittal':
+            self._model.update_section(x=y, y=x)

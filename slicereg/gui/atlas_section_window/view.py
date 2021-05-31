@@ -3,6 +3,7 @@ from __future__ import annotations
 from PySide2.QtWidgets import QWidget
 from vispy.scene import SceneCanvas, ViewBox, TurntableCamera, Image, InfiniteLine
 from vispy.scene.events import SceneMouseEvent
+from vispy.visuals.transforms import MatrixTransform
 
 from slicereg.gui.atlas_section_window import AtlasSectionViewModel
 from slicereg.gui.base import BaseQtWidget
@@ -27,6 +28,7 @@ class AtlasSectionView(BaseQtWidget):
         )
 
         self._slice = Image(cmap='grays', parent=self._viewbox.scene)
+        self._slice.transform = MatrixTransform()
         self._slice.set_data(self._model.atlas_section_image)
         self._slice.clim = self._model.clim
         self._viewbox.camera.center = self._model.camera_center
@@ -53,7 +55,8 @@ class AtlasSectionView(BaseQtWidget):
         assert len(event.pos) == 2
         x, y, _, _ = tr.map(event.pos)
 
-        self._model.click_left_mouse_button(x=x, y=y)
+        if event.button == 1:
+            self._model.click_left_mouse_button(x=x, y=y)
 
     def mouse_move(self, event: SceneMouseEvent) -> None:
         if event.press_event is None:
@@ -72,8 +75,9 @@ class AtlasSectionView(BaseQtWidget):
             'atlas_section_image': self._render_image,
             'coords': self._render_lines,
             'plane': (lambda: None),
-            'image_coords': (lambda: None),
-            'depth': (lambda: None),
+            'camera_scale': self._render_camera_scale,
+            'camera_center': self._render_camera_center,
+            'section_scale': self._render_section_scale,
         }
         render_funs[changed]()
 
@@ -85,6 +89,18 @@ class AtlasSectionView(BaseQtWidget):
     def _render_image(self):
         self._slice.set_data(self._model.atlas_section_image)
         self._slice.clim = self._model.clim
-        self._viewbox.camera.center = self._model.camera_center
+        self._canvas.update()
+
+    def _render_camera_scale(self):
         self._viewbox.camera.scale_factor = self._model.camera_scale
         self._canvas.update()
+
+    def _render_camera_center(self):
+        self._viewbox.camera.center = self._model.camera_center
+        self._canvas.update()
+
+    def _render_section_scale(self):
+        self._slice.transform.reset()
+        self._slice.transform.scale(self._model.section_scale)
+        self._canvas.update()
+
