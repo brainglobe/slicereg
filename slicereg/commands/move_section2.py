@@ -1,4 +1,3 @@
-from abc import ABC
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import NamedTuple, Union
@@ -6,17 +5,12 @@ from typing import NamedTuple, Union
 from result import Result, Err, Ok
 
 from slicereg.commands.base import BaseRepo
+from slicereg.commands.constants import Axis, AtlasAxis
 
 
 class MoveType(Enum):
     TRANSLATION = auto()
     ROTATION = auto()
-
-
-class Axis(Enum):
-    X = 'x'
-    Y = 'y'
-    Z = 'z'
 
 
 @dataclass(frozen=True)
@@ -25,12 +19,6 @@ class MoveRequest:
     axis: Axis
     value: float
     absolute: bool
-
-
-class AtlasAxis(Enum):
-    CORONAL = auto()
-    AXIAL = auto()
-    SAGITTAL = auto()
 
 
 @dataclass(frozen=True)

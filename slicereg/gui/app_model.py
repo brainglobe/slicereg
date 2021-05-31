@@ -12,7 +12,8 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType, MoveRequest, AtlasAxis, ReorientRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest
+from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand

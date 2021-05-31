@@ -5,7 +5,8 @@ from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.move_section2 import MoveType, Axis, MoveSectionCommand2, MoveRequest
+from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest
+from slicereg.commands.constants import Axis
 from slicereg.core import Section, Image
 from slicereg.core.physical_transform import PhysicalTransformer
 
