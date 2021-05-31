@@ -56,7 +56,7 @@ class Atlas(FrozenUpdater):
             i = int(x / self.resolution_um)
             channels = self.volume[[i], :, :]
         else:
-            channels = np.empty_like(self.volume[[0], :, :])
+            channels = np.zeros_like(self.volume[[0], :, :])
         return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
 
