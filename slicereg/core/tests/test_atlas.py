@@ -1,6 +1,5 @@
 import numpy as np
 import numpy.testing as npt
-import pytest
 from hypothesis import given
 from hypothesis.strategies import integers, floats, sampled_from
 from pytest import approx
@@ -66,11 +65,31 @@ def test_atlas_detects_if_xyz_coordinate_is_inside_volume(x, y, z, res):
     assert in_volume is expected
 
 
-@given(x=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
-def test_atlas_returns_coronal_image_at_coordinate_or_zeros(x):
+@given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
+def test_atlas_returns_coronal_image_at_coordinate_or_zeros(coord):
     atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
-    image = atlas.get_coronal_image(x)
-    if 0 < x < 6:
-        npt.assert_almost_equal(image.channels, atlas.volume[[int(x / 2)], :, :])
+    image = atlas.get_coronal_image(coord)
+    if 0 < coord < 6:
+        npt.assert_almost_equal(image.channels[0], atlas.volume[int(coord / 2), :, :])
     else:
-        npt.assert_almost_equal(image.channels, np.zeros_like(atlas.volume[[0]]))
+        npt.assert_almost_equal(image.channels, np.zeros((1, 3, 3)))
+
+
+@given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
+def test_atlas_returns_axial_image_at_coordinate_or_zeros(coord):
+    atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
+    image = atlas.get_axial_image(coord)
+    if 0 <= coord < 6:
+        npt.assert_almost_equal(image.channels[0], atlas.volume[:, int(coord / 2), :])
+    else:
+        npt.assert_almost_equal(image.channels, np.zeros((1, 3, 3)))
+
+
+@given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
+def test_atlas_returns_sagittal_image_at_coordinate_or_zeros(coord):
+    atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
+    image = atlas.get_sagittal_image(coord)
+    if 0 <= coord < 6:
+        npt.assert_almost_equal(image.channels[0], atlas.volume[:, :, int(coord / 2)])
+    else:
+        npt.assert_almost_equal(image.channels, np.zeros((1, 3, 3)))

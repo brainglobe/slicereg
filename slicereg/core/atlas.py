@@ -56,9 +56,29 @@ class Atlas(FrozenUpdater):
             i = int(x / self.resolution_um)
             channels = self.volume[[i], :, :]
         else:
-            channels = np.zeros_like(self.volume[[0], :, :])
+            shape = self.volume.shape
+            channels = np.zeros((1, shape[1], shape[2]))
         return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
+    def get_axial_image(self, y: float) -> Image:
+        if 0 <= y < self.volume.shape[1] * self.resolution_um:
+            j = int(y / self.resolution_um)
+            slice = self.volume[:, j, :]
+            channels = slice[None, :, :]
+        else:
+            shape = self.volume.shape
+            channels = np.zeros((1, shape[0], shape[2]))
+        return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
+
+    def get_sagittal_image(self, z: float) -> Image:
+        if 0 <= z < self.volume.shape[2] * self.resolution_um:
+            k = int(z / self.resolution_um)
+            slice = self.volume[:, :, k]
+            channels = slice[None, :, :]
+        else:
+            shape = self.volume.shape
+            channels = np.zeros((1, shape[0], shape[1]))
+        return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
 ijk_to_xyz_matrix = np.array([
     [0, 1, 0, 0],
