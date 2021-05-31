@@ -70,7 +70,7 @@ def test_clicking_orientation_button_tells_app_to_rotate_slice_to_correct_orient
     app_model = Mock(AppModel)
     view_model = SidebarViewModel(_model=app_model)
     getattr(view_model, method_name)()
-    app_model.orient_section_to.assert_called_with(orientation)
+    app_model.update_section.assert_called_with(orient=orientation)
 
 
 @pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])

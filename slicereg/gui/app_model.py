@@ -12,7 +12,7 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType, MoveRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, Axis, MoveType, MoveRequest, AtlasAxis, ReorientRequest
 from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
@@ -151,7 +151,17 @@ class AppModel(HasObservableAttributes):
         move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
-            request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=True)
+            if ax_name == 'orient':
+                axes = {
+                    AtlasOrientation.AXIAL: AtlasAxis.AXIAL,
+                    AtlasOrientation.CORONAL: AtlasAxis.CORONAL,
+                    AtlasOrientation.SAGITTAL: AtlasAxis.SAGITTAL,
+                }
+                axis = axes[value]
+                request = ReorientRequest(axis=axis)
+            else:
+                request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=True)
+
             result = move_section(request=request)
             if isinstance(result, Ok):
                 data = result.value
@@ -211,13 +221,6 @@ class AppModel(HasObservableAttributes):
             data = result.value
             self.selected_xyz = data.xyz
 
-    def orient_section_to(self, orientation: AtlasOrientation):
-        if orientation is AtlasOrientation.CORONAL:
-            self.update_section(rx=90, ry=0, rz=90)
-        elif orientation is AtlasOrientation.AXIAL:
-            self.update_section(rx=0, ry=90, rz=0)
-        elif orientation is AtlasOrientation.SAGITTAL:
-            self.update_section(rx=0, ry=180, rz=-90)
 
     def press_key(self, key: str):
         key_commands = {

@@ -74,16 +74,26 @@ class MoveSectionCommand2:
                 physical = section.physical_transform.rotate(**{coord: request.value})
             elif request.move_type is MoveType.TRANSLATION:
                 physical = section.physical_transform.translate(**{coord: request.value})
-            section = section.update(physical_transform=physical)
 
-            self._repo.save_section(section)
-            return Ok(MoveSectionData2(
-                x=physical.x,
-                y=physical.y,
-                z=physical.z,
-                rx=physical.rx,
-                ry=physical.ry,
-                rz=physical.rz
-            ))
+        elif isinstance(request, ReorientRequest):
+            orientation = request.axis
+            if orientation is AtlasAxis.CORONAL:
+                physical = section.physical_transform.update(rx=90, ry=0, rz=90)
+            elif orientation is AtlasAxis.AXIAL:
+                physical = section.physical_transform.update(rx=0, ry=90, rz=0)
+            elif orientation is AtlasAxis.SAGITTAL:
+                physical = section.physical_transform.update(rx=0, ry=180, rz=-90)
+
+        section = section.update(physical_transform=physical)
+
+        self._repo.save_section(section)
+        return Ok(MoveSectionData2(
+            x=physical.x,
+            y=physical.y,
+            z=physical.z,
+            rx=physical.rx,
+            ry=physical.ry,
+            rz=physical.rz
+        ))
 
 
