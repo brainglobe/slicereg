@@ -1,0 +1,5 @@
+outs:
+- md5: f8fed3197f4d25fc148fe9da5b5862dc.dir
+  size: 400
+  nfiles: 1
+  path: deepslice_output
