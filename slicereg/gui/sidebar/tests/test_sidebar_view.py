@@ -16,11 +16,11 @@ def view_model():
 def view(view_model):
     return SidebarView(_model=view_model)
 
-
+@pytest.mark.gui
 def test_sidebar_view_launches_without_errors(qtbot, view):
     qtbot.addWidget(view.qt_widget)
 
-
+@pytest.mark.gui
 def test_slice_view_updates_without_error_for_all_viewmodel_fields(qtbot):
     for attr in get_public_attrs(SidebarViewModel):
         model = SidebarViewModel(_model=Mock(AppModel))
@@ -28,7 +28,7 @@ def test_slice_view_updates_without_error_for_all_viewmodel_fields(qtbot):
         qtbot.addWidget(view.qt_widget)
         setattr(model, attr, getattr(model, attr))  # set attribute with its own value
 
-
+@pytest.mark.gui
 @pytest.mark.parametrize("filename", ["myfile.tiff", "", None])
 def test_sidebar_show_image_dialog_doesnt_crash(qtbot, view, filename):
     qtbot.addWidget(view.qt_widget)
@@ -36,7 +36,7 @@ def test_sidebar_show_image_dialog_doesnt_crash(qtbot, view, filename):
         get_filename.return_value = filename, ".tiff"
         view.show_load_image_dialog()
 
-
+@pytest.mark.gui
 @pytest.mark.parametrize("filename", ["myfile.tiff", "", None])
 def test_sidebar_show_atlas_dialog_doesnt_crash(qtbot, view, view_model, filename):
     qtbot.addWidget(view.qt_widget)
