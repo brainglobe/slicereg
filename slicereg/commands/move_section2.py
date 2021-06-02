@@ -66,11 +66,11 @@ class MoveSectionCommand2:
         elif isinstance(request, ReorientRequest):
             orientation = request.axis
             if orientation is AtlasAxis.CORONAL:
-                physical = section.physical_transform.update(rx=90, ry=0, rz=90)
-            elif orientation is AtlasAxis.AXIAL:
                 physical = section.physical_transform.update(rx=0, ry=90, rz=0)
+            elif orientation is AtlasAxis.AXIAL:
+                physical = section.physical_transform.update(rx=90, ry=0, rz=-90)
             elif orientation is AtlasAxis.SAGITTAL:
-                physical = section.physical_transform.update(rx=0, ry=180, rz=-90)
+                physical = section.physical_transform.update(rx=0, ry=0, rz=0)
 
         section = section.update(physical_transform=physical)
 
