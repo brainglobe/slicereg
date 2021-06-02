@@ -17,7 +17,7 @@ class Atlas(FrozenUpdater):
 
     @property
     def shared_space_transform(self) -> np.ndarray:
-        return self.scale_matrix @ ijk_to_xyz_matrix
+        return self.scale_matrix
 
     @property
     def scale_matrix(self) -> np.ndarray:
@@ -27,7 +27,7 @@ class Atlas(FrozenUpdater):
     def center(self) -> Tuple[float, float, float]:
         """Returns center coordinates, in shared physical (CCF) space."""
         d0, d1, d2 = self.volume.shape
-        x, y, z = (ijk_to_xyz_matrix @ np.array([[d0, d1, d2, 1]]).T)[:3, 0]
+        x, y, z = np.array([[d0, d1, d2, 1]]).transpose()[:3, 0]
         cx, cy, cz = tuple(dim * self.resolution_um / 2 for dim in (x, y, z))
         return cx, cy, cz
 
@@ -71,11 +71,3 @@ class Atlas(FrozenUpdater):
             shape = self.volume.shape
             channels = np.zeros((1, shape[0], shape[1]))
         return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
-
-
-ijk_to_xyz_matrix = np.array([
-    [1, 0, 0, 0],
-    [0, 1, 0, 0],
-    [0, 0, 1, 0],
-    [0, 0, 0, 1],
-])
