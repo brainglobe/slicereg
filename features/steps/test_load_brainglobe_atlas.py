@@ -28,5 +28,5 @@ def check_3d_atlas_data_shown(model: AppModel, annotation_volume):
 @then("the section registration position should be centered within the atlas.")
 def step_impl(model: AppModel):
     assert pytest.approx(model.x) == 50
-    assert pytest.approx(model.y) == -50
+    assert pytest.approx(model.y) == 50
     assert pytest.approx(model.z) == 50

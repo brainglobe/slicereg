@@ -16,8 +16,8 @@ class BrainglobeRemoteAtlasReader(BaseRemoteAtlasReader):
 
         # Brainglobe atlases have a "reference volume" and an "annotation volume"
         assert bgatlas.annotation.shape == bgatlas.reference.shape
-        new_reference = bgatlas.space.map_stack_to("asl", bgatlas.reference)
-        new_annotation = bgatlas.space.map_stack_to("asl", bgatlas.annotation)
+        new_reference = bgatlas.space.map_stack_to("pil", bgatlas.reference)
+        new_annotation = bgatlas.space.map_stack_to("pil", bgatlas.annotation)
 
         return AtlasReaderData(
             source="Brainglobe",

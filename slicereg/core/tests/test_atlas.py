@@ -22,7 +22,7 @@ def test_scale_matrix_is_scaled_to_um_according_to_resolution_and_not_shape(res,
 @given(res=integers(1, 1000), w=integers(1, 100), h=integers(1, 100), d=integers(1, 100))
 def test_can_get_atlas_center_in_shared_space(res, w, h, d):
     atlas = Atlas(volume=np.empty((w, h, d)), resolution_um=res)
-    assert atlas.center == approx((h * res / 2, -w * res / 2, d * res / 2))
+    assert atlas.center == approx((w * res / 2, h * res / 2, d * res / 2))
 
 
 def test_atlas_contains_an_annotation_volume():

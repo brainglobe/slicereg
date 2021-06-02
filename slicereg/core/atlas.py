@@ -65,7 +65,7 @@ class Atlas(FrozenUpdater):
     def make_sagittal_slice_at(self, z: float) -> Image:
         if 0 <= z < self.volume.shape[2] * self.resolution_um:
             k = int(z / self.resolution_um)
-            slice = self.volume[:, :, k]
+            slice = self.volume[:, :, k].T
             channels = slice[None, :, :]
         else:
             shape = self.volume.shape
@@ -74,8 +74,8 @@ class Atlas(FrozenUpdater):
 
 
 ijk_to_xyz_matrix = np.array([
+    [1, 0, 0, 0],
     [0, 1, 0, 0],
-    [-1, 0, 0, 0],
     [0, 0, 1, 0],
     [0, 0, 0, 1],
 ])

@@ -43,6 +43,6 @@ def test_load_bgatlas_command_returns_atlas_center(mock_reader):
     load_atlas = LoadRemoteAtlasCommand(_repo=repo, _remote_atlas_reader=mock_reader)
     result = load_atlas(name='allen_mouse_10um')
     data = result.unwrap()
-    assert data.atlas_center.x == 15
-    assert data.atlas_center.y == -10
+    assert data.atlas_center.x == 10
+    assert data.atlas_center.y == 15
     assert data.atlas_center.z == 20
