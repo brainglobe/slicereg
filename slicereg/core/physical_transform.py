@@ -23,6 +23,15 @@ class PhysicalTransformer(FrozenUpdater):
     def rotate(self, rx: float = 0., ry: float = 0., rz: float = 0.) -> PhysicalTransformer:
         return replace(self, rx=self.rx + rx, ry=self.ry + ry, rz=self.rz + rz)
 
+    def orient_to_coronal(self):
+        return replace(self, rx=0, ry=90, rz=0)
+
+    def orient_to_axial(self):
+        return replace(self, rx=90, ry=0, rz=-90)
+
+    def orient_to_sagittal(self):
+        return replace(self, rx=0, ry=0, rz=0)
+
     @property
     def affine_transform(self) -> ndarray:
         translate = np.array([
