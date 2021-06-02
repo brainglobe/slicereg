@@ -35,9 +35,9 @@ class AtlasSectionViewModel(HasObservableAttributes):
     def _update_image_coords(self):
         x, y, z = self._model.x, self._model.y, self._model.z
         coords = {
-            'coronal': (y, z),
-            'axial': (x, z),
-            'sagittal': (x, y),
+            'coronal': (x, z),
+            'axial': (y, z),
+            'sagittal': (y, x),
         }
         self.coords = coords[self.plane]
 
@@ -77,17 +77,15 @@ class AtlasSectionViewModel(HasObservableAttributes):
         return colors[self.plane]
 
     def drag_left_mouse(self, x1: int, y1: int, x2: int, y2: int):
-        if self.plane == 'coronal':
-            self._model.update_section(y=y2, z=x2)
-        elif self.plane == 'axial':
-            self._model.update_section(x=y2, z=x2)
-        elif self.plane == 'sagittal':
-            self._model.update_section(x=y2, y=x2)
+        self._update_section_position(x2, y2)
 
     def click_left_mouse_button(self, x: int, y: int):
+        self._update_section_position(x, y)
+
+    def _update_section_position(self, x, y):
         if self.plane == 'coronal':
-            self._model.update_section(y=y, z=x)
+            self._model.update_section(z=x, x=y)  # up-down, left-right
         elif self.plane == 'axial':
-            self._model.update_section(x=y, z=x)
+            self._model.update_section(z=x, y=y)  # forward-back, left-right
         elif self.plane == 'sagittal':
-            self._model.update_section(x=y, y=x)
+            self._model.update_section(x=x, y=y)  # forward-back, up-down
