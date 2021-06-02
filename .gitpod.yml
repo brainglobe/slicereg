@@ -1,3 +1,4 @@
+image: gitpod/workspace-full-vnc
 tasks:
   - init: sudo apt-get update && sudo apt-get install -y mesa-utils freeglut3-dev libgl1 libxkbcommon-x11-0 x11-xserver-utils && export PIP_USER=false && python -m pip install --upgrade pip && pip install poetry && poetry install && poetry shell
     command: pytest
