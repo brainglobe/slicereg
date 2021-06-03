@@ -41,3 +41,12 @@ bg-slicereg = "slicereg.main:launch_gui"
 
 [tool.coverage.run]
 relative_files = true
+
+[tool.pytest.ini_options]
+env = "NUMBA_DISABLE_JIT=1"
+markers = [
+    "gui: mark a test as using qt libraries"
+]
+filterwarnings = [
+    "ignore::DeprecationWarning"
+]

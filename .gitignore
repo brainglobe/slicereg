@@ -10,3 +10,4 @@ htmlcov/
 .vscode
 requirements.txt
 venv/
+poetry.toml
