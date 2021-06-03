@@ -11,3 +11,4 @@ htmlcov/
 requirements.txt
 venv/
 poetry.toml
+workspace.code-workspace
