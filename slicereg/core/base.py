@@ -9,13 +9,20 @@ class FrozenUpdater(ABC):
         Returns a new object with updated attributes.  If '__' is used, can update a nested attribute.
 
         Examples:
+            >>> from dataclasses import dataclass
+            >>> from typing import Any
+            >>> @dataclass(frozen=True)
+            ... class Object(FrozenUpdater):
+            ...    x: Any = 0
+            ...    y: Any = 0
+            ...    z: Any = 0
             >>> obj = Object(x=0, y=0, z=0)
             >>> obj.update(x=3, y=5)
             Object(x=3, y=5, z=0)
 
-            >>> obj = Object(x=0, y=Object(x=0, y=2))
+            >>> obj = Object(x=0, y=Object(x=0, y=2, z=0), z=0)
             >>> obj.update(x=2, y__x=5)
-            Object(x=2, y=Object(x=5, y=2))
+            Object(x=2, y=Object(x=5, y=2, z=0), z=0)
         """
         assert is_dataclass(self), "only works on dataclasses."
 

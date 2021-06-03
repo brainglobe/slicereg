@@ -6,6 +6,6 @@ def split_keyvalue_string(anchoring, sep1="&", sep2="="):
 
     Example:
         >>> split_keyvalue_string("a=3&b=6", "&", "=")
-        {'a': 3., 'b': 6.}
+        {'a': 3.0, 'b': 6.0}
     """
     return {(kv := pair.split(sep2))[0]: float(kv[1]) for pair in anchoring.split(sep1)}

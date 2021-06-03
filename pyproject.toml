@@ -47,6 +47,7 @@ env = "NUMBA_DISABLE_JIT=1"
 markers = [
     "gui: mark a test as using qt libraries"
 ]
+addopts = "--doctest-modules"
 filterwarnings = [
     "ignore::DeprecationWarning"
 ]

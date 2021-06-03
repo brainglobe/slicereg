@@ -23,9 +23,7 @@ def validate_n_seq(n: int, dtype=None):
 
     Examples
     --------
-    >>> validate = validate_N_seq(2)
-    >>> validate(8)  # raises TypeError
-    >>> validate([1, 2, 3])  # raises ValueError
+    >>> validate = validate_n_seq(2)
     >>> validate([4, 5])  # just fine, thank you very much
     """
 
