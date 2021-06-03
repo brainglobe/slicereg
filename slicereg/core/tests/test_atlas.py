@@ -84,6 +84,6 @@ def test_atlas_returns_sagittal_image_at_coordinate_or_zeros(coord):
     atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
     image = atlas.make_sagittal_slice_at(coord)
     if 0 <= coord < 6:
-        npt.assert_almost_equal(image.channels[0], atlas.volume[:, :, int(coord / 2)])
+        npt.assert_almost_equal(image.channels[0], atlas.volume[:, :, int(coord / 2)], decimal=4)
     else:
         npt.assert_almost_equal(image.channels, np.zeros((1, 3, 3)))
