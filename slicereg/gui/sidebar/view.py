@@ -144,7 +144,7 @@ class SidebarView(BaseQtWidget):
             parent=self.qt_widget,
             caption="Load Image",
             dir="../../../data/RA_10X_scans/MeA",
-            filter="OME-TIFF (*.ome.tiff) ;;TIFF (*.tif *.tiff)"
+            filter="OME-TIFF (*.ome.tiff, *.ome.tif) ;;TIFF (*.tif *.tiff) ;;QuickNII XML (*.xml)"
         )
         if not filename:
             return
