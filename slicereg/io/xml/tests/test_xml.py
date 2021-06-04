@@ -12,3 +12,13 @@ def test_xml_read_function_gets_transformation_properties_from_example_quicknii_
     assert output.vx == approx(-21.585269927978516)
     assert output.vy == approx(-4.721147060394287)
     assert output.vz == approx(-389.2110595703125)
+
+def test_xml_read_function_gets_image_metadata_from_example_quicknii_file():
+    output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
+    assert output.first == 1
+    assert output.last == 1
+    assert output.name == "richards_7.18-1-Nissl_2015.png"
+    assert output.filename == "richards_7.18-1-Nissl_2015.png"
+    assert output.height == 700
+    assert output.width == 700
+    assert output.nr == 0
