@@ -22,3 +22,11 @@ def test_xml_read_function_gets_image_metadata_from_example_quicknii_file():
     assert output.height == 700
     assert output.width == 700
     assert output.nr == 0
+
+def test_xml_read_function_gets_parent_path_from_example_xml_file():
+    output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
+    assert output.path == 'data/deepslice_output'
+
+def test_xml_read_function_gets_full_image_path_from_example_xml_file():
+    output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
+    assert output.image_path == 'data/deepslice_output/richards_7.18-1-Nissl_2015.png'

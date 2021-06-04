@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 import xmltodict
+from pathlib import Path
 
 from slicereg.io.utils import split_keyvalue_string
 
@@ -22,9 +23,20 @@ class QuickNiiData:
     height: int
     width: int
     nr: int
+    path: str
+
+    def __post_init__(self):
+        if self.name != self.filename:
+            raise ValueError('xml name and filename fields should match')
+
+    @property
+    def image_path(self) -> str:
+        return str(Path(self.path)/self.name)
     
 
-def read_quicknii_xml(filename: str):
+def read_quicknii_xml(filename: str) -> QuickNiiData:
+    file_path = Path(filename)
+
     with open(filename, mode='rb') as f:
         metadata = xmltodict.parse(f)
     
@@ -42,7 +54,8 @@ def read_quicknii_xml(filename: str):
         filename=slice['@filename'],
         height=int(slice['@height']), 
         width=int(slice['@width']), 
-        nr=int(slice['@nr'])
+        nr=int(slice['@nr']),
+        path=str(file_path.parent),
     )
     return data
 

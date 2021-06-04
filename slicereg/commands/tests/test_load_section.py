@@ -4,6 +4,7 @@ import numpy as np
 
 from slicereg.commands.base import BaseRepo, BaseLocalImageReader, ImageReaderData
 from slicereg.commands.load_section import LoadSectionCommand
+from slicereg.io.tifffile.ome_image import OmeTiffImageReader
 
 
 def test_load_section_command_gets_section_image_from_file():
@@ -17,3 +18,7 @@ def test_load_section_command_gets_section_image_from_file():
     assert result.ok().section_image.ndim == 2
 
 
+def test_load_section_command_is_okay_with_quicknii_xml_files():
+    load_section = LoadSectionCommand(_repo=Mock(BaseRepo), _image_reader=OmeTiffImageReader())
+    result = load_section(filename="data/deepslice_output/results_S2_07032020_downsampled.xml")
+    assert result.ok()
