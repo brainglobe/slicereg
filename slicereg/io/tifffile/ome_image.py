@@ -17,8 +17,10 @@ class OmeTiffImageReader(BaseLocalImageReader):
     @staticmethod
     def _read_array(f: tifffile.TiffFile) -> np.ndarray:
         image = f.asarray()
-        assert image.ndim == 3
         assert image.dtype == uint16
+        if image.ndim == 2:
+            image = image[None, :, :]
+        assert image.ndim == 3
         return image
 
     @staticmethod

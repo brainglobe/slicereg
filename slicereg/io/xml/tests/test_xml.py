@@ -1,5 +1,7 @@
 from slicereg.io.xml.reader import read_quicknii_xml
 from pytest import approx
+from pathlib import Path
+
 
 def test_xml_read_function_gets_transformation_properties_from_example_quicknii_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
@@ -25,8 +27,8 @@ def test_xml_read_function_gets_image_metadata_from_example_quicknii_file():
 
 def test_xml_read_function_gets_parent_path_from_example_xml_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
-    assert output.path == 'data/deepslice_output'
+    assert Path(output.path) == Path('data/deepslice_output')
 
 def test_xml_read_function_gets_full_image_path_from_example_xml_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
-    assert output.image_path == 'data/deepslice_output/richards_7.18-1-Nissl_2015.png'
+    assert Path(output.image_path) == Path('data/deepslice_output/richards_7.18-1-Nissl_2015.png')
