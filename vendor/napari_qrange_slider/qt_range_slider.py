@@ -364,7 +364,7 @@ class QHRangeSlider(QRangeSlider):
         position : int
             Relative horizontal position of the event.
         """
-        return event.superior()
+        return event.x()
 
     def paintEvent(self, event):
         """Paint the background, range bar and splitters.

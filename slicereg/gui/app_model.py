@@ -7,12 +7,11 @@ import numpy as np
 from numpy import ndarray
 from result import Ok, Err
 
-from slicereg.commands.center_section import CenterSectionCommand
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest
 from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.resample_section import ResampleSectionCommand
@@ -76,8 +75,8 @@ class AppModel(HasObservableAttributes):
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
 
-        center_section = self._injector.build(CenterSectionCommand)
-        result3 = center_section()
+        move_section = self._injector.build(MoveSectionCommand2)
+        result3 = move_section(CenterRequest())
         if isinstance(result3, Ok):
             data3 = result3.value
             self.superior = data3.superior

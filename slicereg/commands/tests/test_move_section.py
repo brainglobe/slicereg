@@ -5,9 +5,9 @@ from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest
+from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest, CenterRequest
 from slicereg.commands.constants import Axis
-from slicereg.core import Section, Image
+from slicereg.core import Section, Image, Atlas
 from slicereg.core.physical_transform import PhysicalTransformer
 
 
@@ -86,3 +86,21 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     assert data.rot_longitudinal == value + 5 if axis is Axis.Longitudinal else 5
     assert data.rot_anteroposterior == value + 10 if axis is Axis.Anteroposterior else 10
     assert data.rot_horizontal == value + 2 if axis is Axis.Horizontal else 2
+
+
+def test_center_atlas_command_translates_section_when_atlas_is_loaded():
+    repo = Mock(BaseRepo)
+    repo.get_sections.return_value = [
+        Section.create(
+            image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
+            physical_transform=PhysicalTransformer(x=0, y=0, z=0),
+        )
+    ]
+    repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=10)
+    move_section = MoveSectionCommand2(_repo=repo)
+    request = CenterRequest()
+    result = move_section(request)
+    data = result.unwrap()
+    assert data.superior == 15
+    assert data.anterior == 15
+    assert data.right == 15

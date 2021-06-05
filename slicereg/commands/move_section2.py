@@ -25,6 +25,9 @@ class MoveRequest:
 class ReorientRequest:
     axis: AtlasAxis
 
+@dataclass(frozen=True)
+class CenterRequest:
+    pass
 
 class MoveSectionData2(NamedTuple):
     superior: float
@@ -39,11 +42,15 @@ class MoveSectionData2(NamedTuple):
 class MoveSectionCommand2:
     _repo: BaseRepo
 
-    def __call__(self, request: Union[MoveRequest, ReorientRequest]) -> Result[MoveSectionData2, str]:
+    def __call__(self, request: Union[MoveRequest, ReorientRequest, CenterRequest]) -> Result[MoveSectionData2, str]:
         try:
             section = self._repo.get_sections()[0]
         except IndexError:
             return Err("No section loaded")
+
+        atlas = self._repo.get_atlas()
+        if atlas is None:
+            return Err("No atlas loaded")
 
         if isinstance(request, MoveRequest):
             coord_vals = {
@@ -71,6 +78,10 @@ class MoveSectionCommand2:
                 physical = section.physical_transform.orient_to_axial()
             elif orientation is AtlasAxis.SAGITTAL:
                 physical = section.physical_transform.orient_to_sagittal()
+
+        elif isinstance(request, CenterRequest):
+            cx, cy, cz = atlas.center
+            physical = section.physical_transform.update(x=cx, y=cy, z=cz)
 
         section = section.update(physical_transform=physical)
 
