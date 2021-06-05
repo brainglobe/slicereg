@@ -19,16 +19,16 @@ def test_xml_read_function_gets_image_metadata_from_example_quicknii_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
     assert output.first == 1
     assert output.last == 1
-    assert output.name == "richards_7.18-1-Nissl_2015.png"
-    assert output.filename == "richards_7.18-1-Nissl_2015.png"
+    assert output.name == Path("richards_7.18-1-Nissl_2015.png")
+    assert output.filename == Path("richards_7.18-1-Nissl_2015.png")
     assert output.height == 700
     assert output.width == 700
     assert output.nr == 0
 
 def test_xml_read_function_gets_parent_path_from_example_xml_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
-    assert Path(output.path) == Path('data/deepslice_output')
+    assert output.path == Path('data/deepslice_output')
 
 def test_xml_read_function_gets_full_image_path_from_example_xml_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
-    assert Path(output.image_path) == Path('data/deepslice_output/richards_7.18-1-Nissl_2015.png')
+    assert output.image_path == Path('data/deepslice_output/richards_7.18-1-Nissl_2015.png')

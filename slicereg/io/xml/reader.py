@@ -18,24 +18,23 @@ class QuickNiiData:
     vz: float
     first: int
     last: int
-    name: str
-    filename: str
+    name: Path
+    filename: Path
     height: int
     width: int
     nr: int
-    path: str
+    path: Path
 
     def __post_init__(self):
         if self.name != self.filename:
             raise ValueError('xml name and filename fields should match')
 
     @property
-    def image_path(self) -> str:
-        return str(Path(self.path)/self.name)
+    def image_path(self) -> Path:
+        return self.path / self.name
     
 
 def read_quicknii_xml(filename: str) -> QuickNiiData:
-    file_path = Path(filename)
 
     with open(filename, mode='rb') as f:
         metadata = xmltodict.parse(f)
@@ -50,12 +49,12 @@ def read_quicknii_xml(filename: str) -> QuickNiiData:
         vx=coords['vx'], vy=coords['vy'], vz=coords['vz'],
         first=int(series['@first']), 
         last=int(series['@last']),
-        name=series['@name'], 
-        filename=slice['@filename'],
+        name=Path(series['@name']),
+        filename=Path(slice['@filename']),
         height=int(slice['@height']), 
         width=int(slice['@width']), 
         nr=int(slice['@nr']),
-        path=str(file_path.parent),
+        path=Path(filename).parent,
     )
     return data
 
