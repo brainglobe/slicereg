@@ -1,5 +1,5 @@
 outs:
-- md5: bbca7f0ef8addf6dffecb2ed3bf08579.dir
-  size: 124285
-  nfiles: 3
+- md5: 409f901bb4c873cf8f3c9a4c9d66213c.dir
+  size: 124653
+  nfiles: 4
   path: deepslice_output
