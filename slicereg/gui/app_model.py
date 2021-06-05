@@ -5,15 +5,15 @@ from typing import Tuple, List, Optional
 
 import numpy as np
 from numpy import ndarray
-from result import Ok, Err
+from result import Ok
 
+from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
 from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
     ResampleRequest, UpdateSectionRequest
-from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -97,9 +97,12 @@ class AppModel(HasObservableAttributes):
 
     # Move/Update Section Position/Rotation/Orientation
     def update_section(self, absolute: bool = True, **kwargs):
-        axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal, 'rot_longitudinal': Axis.Longitudinal, 'rot_anteroposterior': Axis.Anteroposterior, 'rot_horizontal': Axis.Horizontal}
+        axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal,
+                'rot_longitudinal': Axis.Longitudinal, 'rot_anteroposterior': Axis.Anteroposterior,
+                'rot_horizontal': Axis.Horizontal}
         t, r = MoveType.TRANSLATION, MoveType.ROTATION
-        move_types = {'superior': t, 'anterior': t, 'right': t, 'rot_longitudinal': r, 'rot_anteroposterior': r, 'rot_horizontal': r}
+        move_types = {'superior': t, 'anterior': t, 'right': t, 'rot_longitudinal': r, 'rot_anteroposterior': r,
+                      'rot_horizontal': r}
         for ax_name, value in kwargs.items():
             if ax_name == 'orient':
                 atlas_axes = {
@@ -110,8 +113,8 @@ class AppModel(HasObservableAttributes):
                 axis = atlas_axes[value]
                 self._update_section(request=ReorientRequest(axis=axis))
             else:
-                self._update_section(request=MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=absolute))
-
+                self._update_section(request=MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name],
+                                                         absolute=absolute))
 
     def _update_section(self, request: UpdateSectionRequest):
         move_section = self._injector.build(MoveSectionCommand2)
@@ -166,25 +169,48 @@ class AppModel(HasObservableAttributes):
             data = result.value
             self.selected_xyz = data.xyz
 
-
     def press_key(self, key: str):
         key_commands = {
             '1': lambda: self.select_channel(1),
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self.update_section(anterior=30, absolute=False),
-            'S': lambda: self.update_section(anterior=-30, absolute=False),
-            'A': lambda: self.update_section(right=-30, absolute=False),
-            'D': lambda: self.update_section(right=30, absolute=False),
-            'Q': lambda: self.update_section(superior=-30, absolute=False),
-            'E': lambda: self.update_section(superior=30, absolute=False),
-            'I': lambda: self.update_section(rot_horizontal=3, absolute=False),
-            'K': lambda: self.update_section(rot_horizontal=-3, absolute=False),
-            'J': lambda: self.update_section(rot_longitudinal=-3, absolute=False),
-            'L': lambda: self.update_section(rot_longitudinal=3, absolute=False),
-            'U': lambda: self.update_section(rot_anteroposterior=-3, absolute=False),
-            'O': lambda: self.update_section(rot_anteroposterior=3, absolute=False),
+            'W': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Anteroposterior, value=30, absolute=False)
+            ),
+            'S': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Anteroposterior, value=-30, absolute=False)
+            ),
+            'A': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Horizontal, value=-30, absolute=False)
+            ),
+            'D': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Horizontal, value=30, absolute=False)
+            ),
+            'Q': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Longitudinal, value=-30, absolute=False)
+            ),
+            'E': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Longitudinal, value=30, absolute=False)
+            ),
+            'I': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Horizontal, value=5, absolute=False)
+            ),
+            'K': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Horizontal, value=-5, absolute=False)
+            ),
+            'J': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Longitudinal, value=5, absolute=False)
+            ),
+            'L': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Longitudinal, value=-5, absolute=False)
+            ),
+            'U': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Anteroposterior, value=-5, absolute=False)
+            ),
+            'O': lambda: self._update_section(
+                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Anteroposterior, value=5, absolute=False)
+            ),
         }
         if command := key_commands.get(key):
             command()
