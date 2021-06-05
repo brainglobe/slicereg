@@ -1,3 +1,4 @@
+from pytest import approx
 from pytest_bdd import scenario, given, when, then
 
 from slicereg.gui.app_model import AppModel
@@ -52,3 +53,10 @@ def check_the_transform_isnt_zero(model: AppModel):
 @then("The displayed resolution is set to the image's resolution")
 def check_resolution_is_sent(model: AppModel):
     assert model.section_image_resolution == 10
+
+
+@then("the section registration position should be centered within the atlas.")
+def step_impl(model: AppModel):
+    assert approx(model.superior) == 50
+    assert approx(model.anterior) == 50
+    assert approx(model.right) == 50

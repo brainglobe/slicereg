@@ -36,13 +36,3 @@ def test_load_bgatlas_command_saves_atlas_in_repo(mock_reader):
     assert repo.set_atlas.call_count == 0
     load_atlas(name='allen_mouse_10um')
     assert repo.set_atlas.call_count == 1
-
-
-def test_load_bgatlas_command_returns_atlas_center(mock_reader):
-    repo = Mock(BaseRepo)
-    load_atlas = LoadRemoteAtlasCommand(_repo=repo, _remote_atlas_reader=mock_reader)
-    result = load_atlas(name='allen_mouse_10um')
-    data = result.unwrap()
-    assert data.atlas_center.superior == 10
-    assert data.atlas_center.anterior == 15
-    assert data.atlas_center.right == 20

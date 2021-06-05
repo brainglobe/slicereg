@@ -23,10 +23,3 @@ def check_3d_atlas_data_shown(model: AppModel, atlas_volume):
 @then("a 3D annotation volume of the 25um allen reference atlas is loaded.")
 def check_3d_atlas_data_shown(model: AppModel, annotation_volume):
     npt.assert_almost_equal(model.annotation_volume, annotation_volume)
-
-
-@then("the section registration position should be centered within the atlas.")
-def step_impl(model: AppModel):
-    assert pytest.approx(model.superior) == 50
-    assert pytest.approx(model.anterior) == 50
-    assert pytest.approx(model.right) == 50

@@ -139,9 +139,6 @@ class AppModel(HasObservableAttributes):
             self.registration_volume = data.volume
             self.atlas_resolution = int(data.resolution)
             self.annotation_volume = data.annotation_volume
-            self.superior = data.atlas_center.superior
-            self.anterior = data.atlas_center.anterior
-            self.right = data.atlas_center.right
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         load_atlas = self._injector.build(LoadAtlasFromFileCommand)

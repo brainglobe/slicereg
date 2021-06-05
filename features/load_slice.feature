@@ -11,3 +11,4 @@ Feature: Slice Import
     And I should see the atlas image onscreen in slice view
     And The slice is centered on the image
     And The displayed resolution is set to the image's resolution
+    And the section registration position should be centered within the atlas.
