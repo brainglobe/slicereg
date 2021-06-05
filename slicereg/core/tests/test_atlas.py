@@ -61,7 +61,7 @@ def test_atlas_detects_if_xyz_coordinate_is_inside_volume(x, y, z, res):
 @pytest.mark.skip("It's flaky, need fixin!")
 @given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
 def test_atlas_returns_coronal_image_at_coordinate_or_zeros(coord):
-    atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
+    atlas = Atlas(volume=np.random.randint(0, 10, size=(3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
     image = atlas.make_coronal_slice_at(coord)
     if 0 < coord < 6:
         npt.assert_almost_equal(image.channels[0], atlas.volume[int(coord / 2), :, :])
@@ -71,19 +71,20 @@ def test_atlas_returns_coronal_image_at_coordinate_or_zeros(coord):
 
 @given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
 def test_atlas_returns_axial_image_at_coordinate_or_zeros(coord):
-    atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
+    res = 2
+    atlas = Atlas(volume=np.random.randint(0, 10, size=(3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=res)
     image = atlas.make_axial_slice_at(coord)
     if 0 <= coord < 6:
-        npt.assert_almost_equal(image.channels[0], atlas.volume[:, int(coord / 2), :])
+        npt.assert_almost_equal(image.channels[0], atlas.volume[:, int(coord / res), :])
     else:
         npt.assert_almost_equal(image.channels, np.zeros((1, 3, 3)))
 
 
 @given(coord=sampled_from([-4, -2, 0, 2, 4, 6, 8, 10]))
 def test_atlas_returns_sagittal_image_at_coordinate_or_zeros(coord):
-    atlas = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
+    atlas = Atlas(volume=np.random.randint(0, 10, size=(3, 3, 3)), annotation_volume=np.empty((3, 3, 3)), resolution_um=2)
     image = atlas.make_sagittal_slice_at(coord)
     if 0 <= coord < 6:
-        npt.assert_almost_equal(image.channels[0], atlas.volume[:, :, int(coord / 2)], decimal=4)
+        npt.assert_almost_equal(image.channels[0].T, atlas.volume[:, :, int(coord / 2)])
     else:
         npt.assert_almost_equal(image.channels, np.zeros((1, 3, 3)))
