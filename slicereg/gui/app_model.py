@@ -14,7 +14,6 @@ from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
     ResampleRequest
 from slicereg.commands.constants import Axis, AtlasAxis
-from slicereg.commands.register_section import RegisterSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -76,22 +75,17 @@ class AppModel(HasObservableAttributes):
             self.visible_volume = VolumeType.REGISTRATION
 
         move_section = self._injector.build(MoveSectionCommand2)
-        result3 = move_section(CenterRequest())
-        if isinstance(result3, Ok):
-            data3 = result3.value
-            self.superior = data3.superior
-            self.anterior = data3.anterior
-            self.right = data3.right
-            self.rot_longitudinal = data3.rot_longitudinal
-            self.rot_anteroposterior = data3.rot_anteroposterior
-            self.rot_horizontal = data3.rot_horizontal
-
-        register_section = self._injector.build(RegisterSectionCommand)
-        result2 = register_section()
-        if isinstance(result2, Ok):
-            data2 = result2.value
-            self.atlas_image = data2.atlas_slice_image
-            self.section_transform = data2.section_transform
+        result = move_section(CenterRequest())
+        if isinstance(result, Ok):
+            data = result.value
+            self.superior = data.superior
+            self.anterior = data.anterior
+            self.right = data.right
+            self.rot_longitudinal = data.rot_longitudinal
+            self.rot_anteroposterior = data.rot_anteroposterior
+            self.rot_horizontal = data.rot_horizontal
+            self.atlas_image = data.atlas_slice_image
+            self.section_transform = data.section_transform
 
     # Select Channel
     def select_channel(self, num: int):
@@ -110,13 +104,8 @@ class AppModel(HasObservableAttributes):
             data = result.value
             self.section_image = data.section_image
             self.section_image_resolution = data.resolution_um
-
-        register_section = self._injector.build(RegisterSectionCommand)
-        result2 = register_section()
-        if isinstance(result2, Ok):
-            data2 = result2.value
-            self.atlas_image = data2.atlas_slice_image
-            self.section_transform = data2.section_transform
+            self.atlas_image = data.atlas_slice_image
+            self.section_transform = data.section_transform
 
     # Move/Update Section Position/Rotation/Orientation
     def update_section(self, absolute: bool = True, **kwargs):
@@ -146,18 +135,11 @@ class AppModel(HasObservableAttributes):
                 self.rot_longitudinal = data.rot_longitudinal
                 self.rot_anteroposterior = data.rot_anteroposterior
                 self.rot_horizontal = data.rot_horizontal
-            elif isinstance(result, Err):
-                return
-
-        register_section = self._injector.build(RegisterSectionCommand)
-        result2 = register_section()
-        if isinstance(result2, Ok):
-            data2 = result2.value
-            self.atlas_image = data2.atlas_slice_image
-            self.section_transform = data2.section_transform
-            self.coronal_atlas_image = data2.coronal_atlas_image
-            self.axial_atlas_image = data2.axial_atlas_image
-            self.sagittal_atlas_image = data2.sagittal_atlas_image
+                self.atlas_image = data.atlas_slice_image
+                self.section_transform = data.section_transform
+                self.coronal_atlas_image = data.coronal_atlas_image
+                self.axial_atlas_image = data.axial_atlas_image
+                self.sagittal_atlas_image = data.sagittal_atlas_image
 
     # Load Atlases
     def load_bgatlas(self, name: str):

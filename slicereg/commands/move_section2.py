@@ -7,6 +7,7 @@ from result import Result, Err, Ok
 
 from slicereg.commands.base import BaseRepo
 from slicereg.commands.constants import Axis, AtlasAxis
+from slicereg.core import Registration
 
 
 class MoveType(Enum):
@@ -46,6 +47,11 @@ class MoveSectionData2(NamedTuple):
     rot_horizontal: float
     section_image: ndarray
     resolution_um: float
+    atlas_slice_image: ndarray
+    section_transform: ndarray
+    coronal_atlas_image: ndarray
+    axial_atlas_image: ndarray
+    sagittal_atlas_image: ndarray
 
 
 @dataclass(frozen=True)
@@ -99,7 +105,11 @@ class MoveSectionCommand2:
         elif isinstance(request, ResampleRequest):
             section = section.update(image=section.image.resample(resolution_um=request.resolution_um))
 
+        registration = Registration(section=section, atlas=atlas)
+        atlas_slice_image = registration.slice_atlas().channels[0]
+
         self._repo.save_section(section)
+
         return Ok(MoveSectionData2(
             superior=section.physical_transform.x,
             anterior=section.physical_transform.y,
@@ -108,7 +118,12 @@ class MoveSectionCommand2:
             rot_anteroposterior=section.physical_transform.ry,
             rot_horizontal=section.physical_transform.rz,
             resolution_um=section.image.resolution_um,
-            section_image=section.image.channels[0]
+            section_image=section.image.channels[0],
+            atlas_slice_image=atlas_slice_image,
+            section_transform=registration.image_to_volume_transform,
+            coronal_atlas_image=atlas.make_coronal_slice_at(y=section.physical_transform.y).channels[0],
+            axial_atlas_image=atlas.make_axial_slice_at(x=section.physical_transform.x).channels[0],
+            sagittal_atlas_image=atlas.make_sagittal_slice_at(z=section.physical_transform.z).channels[0],
         ))
 
 
