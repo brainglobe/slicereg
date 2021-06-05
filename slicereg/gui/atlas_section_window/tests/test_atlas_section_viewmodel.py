@@ -13,7 +13,7 @@ from slicereg.utils import DependencyInjector
 
 @pytest.mark.parametrize("plane", ["coronal", "axial", "sagittal"])
 def test_atlas_section_viewmodel_updates_atlas_section_image_to_match_cooresponding_coord(plane):
-    app_model = AppModel(_injector=DependencyInjector(), x=2, y=5, z=10)
+    app_model = AppModel(_injector=DependencyInjector(), superior=2, anterior=5, right=10)
     atlas_section_view = AtlasSectionViewModel(plane=plane, _model=app_model)
     section_image = np.random.randint(0, 100, (10, 10), np.uint16)
     setattr(app_model, f"{plane}_atlas_image", section_image)
