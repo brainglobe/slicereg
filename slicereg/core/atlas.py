@@ -31,13 +31,6 @@ class Atlas(FrozenUpdater):
         cx, cy, cz = tuple(dim * self.resolution_um / 2 for dim in (x, y, z))
         return cx, cy, cz
 
-    def map_xyz_to_ijk(self, x: float, y: float, z: float) -> Optional[Tuple[int, int, int]]:
-        if self.coord_is_in_volume(x=x, y=y, z=z):
-            res = self.resolution_um
-            return int(x // res), int(y // res), int(z // res)
-        else:
-            return None
-
     def coord_is_in_volume(self, x: float, y: float, z: float) -> bool:
         res = self.resolution_um
         shape = self.volume.shape
@@ -45,21 +38,21 @@ class Atlas(FrozenUpdater):
 
     def make_coronal_slice_at(self, x: float) -> Image:
         if self.coord_is_in_volume(x=x, y=0, z=0):
-            channels = self.volume[int(x / self.resolution_um), :, :][None, :, :]
+            channels = self.volume[int(x / self.resolution_um), :, :]
         else:
-            channels = np.zeros((1, self.volume.shape[1], self.volume.shape[2]))
-        return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
+            channels = np.zeros((self.volume.shape[1], self.volume.shape[2]))
+        return Image(channels=channels[None, :, :], resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
     def make_axial_slice_at(self, y: float) -> Image:
         if self.coord_is_in_volume(x=0, y=y, z=0):
-            channels = self.volume[:, int(y / self.resolution_um), :][None, :, :]
+            channels = self.volume[:, int(y / self.resolution_um), :]
         else:
-            channels = np.zeros((1, self.volume.shape[0], self.volume.shape[2]))
-        return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
+            channels = np.zeros((self.volume.shape[0], self.volume.shape[2]))
+        return Image(channels=channels[None, :, :], resolution_um=self.resolution_um, thickness_um=self.resolution_um)
 
     def make_sagittal_slice_at(self, z: float) -> Image:
         if self.coord_is_in_volume(x=0, y=0, z=z):
-            channels = self.volume[:, :, int(z / self.resolution_um)].T[None, :, :]
+            channels = self.volume[:, :, int(z / self.resolution_um)].T
         else:
-            channels = np.zeros((1,  self.volume.shape[0],  self.volume.shape[1]))
-        return Image(channels=channels, resolution_um=self.resolution_um, thickness_um=self.resolution_um)
+            channels = np.zeros((self.volume.shape[0],  self.volume.shape[1]))
+        return Image(channels=channels[None, :, :], resolution_um=self.resolution_um, thickness_um=self.resolution_um)
