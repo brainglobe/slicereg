@@ -88,15 +88,15 @@ class SidebarView(BaseQtWidget):
         layout.addLayout(self.right_slider.layout)
         self.right_slider.connect(lambda val: self._model.change_right_slider(val))
 
-        self.rotx_slider = LabelledSliderWidget(min=-180, max=180, label='rotx')
+        self.rotx_slider = LabelledSliderWidget(min=-180, max=180, label='Rot IS.')
         layout.addLayout(self.rotx_slider.layout)
         self.rotx_slider.connect(lambda val: self._model.change_rot_longitudinal_slider(val))
 
-        self.roty_slider = LabelledSliderWidget(min=-180, max=180, label='roty')
+        self.roty_slider = LabelledSliderWidget(min=-180, max=180, label='Rot AP')
         layout.addLayout(self.roty_slider.layout)
         self.roty_slider.connect(lambda val: self._model.change_rot_anteroposterior_slider(val))
 
-        self.rotz_slider = LabelledSliderWidget(min=-180, max=180, label='rotz')
+        self.rotz_slider = LabelledSliderWidget(min=-180, max=180, label='Rot LR')
         layout.addLayout(self.rotz_slider.layout)
         self.rotz_slider.connect(lambda val: self._model.change_rot_horizontal_slider(val))
 
