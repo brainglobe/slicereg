@@ -90,15 +90,15 @@ class SidebarView(BaseQtWidget):
 
         self.rotx_slider = LabelledSliderWidget(min=-180, max=180, label='rotx')
         layout.addLayout(self.rotx_slider.layout)
-        self.rotx_slider.connect(lambda val: self._model.change_rotx_slider(val))
+        self.rotx_slider.connect(lambda val: self._model.change_rot_longitudinal_slider(val))
 
         self.roty_slider = LabelledSliderWidget(min=-180, max=180, label='roty')
         layout.addLayout(self.roty_slider.layout)
-        self.roty_slider.connect(lambda val: self._model.change_roty_slider(val))
+        self.roty_slider.connect(lambda val: self._model.change_rot_anteroposterior_slider(val))
 
         self.rotz_slider = LabelledSliderWidget(min=-180, max=180, label='rotz')
         layout.addLayout(self.rotz_slider.layout)
-        self.rotz_slider.connect(lambda val: self._model.change_rotz_slider(val))
+        self.rotz_slider.connect(lambda val: self._model.change_rot_horizontal_slider(val))
 
         # Quick-rotation buttons
         buttons_layout = QHBoxLayout()
@@ -174,9 +174,9 @@ class SidebarView(BaseQtWidget):
             'superior_slider_value': self._update_superior_slider,
             'anterior_slider_value': self._update_anterior_slider,
             'right_slider_value': self._update_right_slider,
-            'rx_slider_value': self._update_rotx_slider,
-            'ry_slider_value': self._update_roty_slider,
-            'rz_slider_value': self._update_rotz_slider,
+            'rot_longitudinal_slider_value': self._update_rot_longitudinal_slider,
+            'rot_anteroposterior_slider_value': self._update_rot_anteroposterior_slider,
+            'rot_horizontal_slider_value': self._update_rot_horizontal_slider,
         }
         render_funs[changed]()
 
@@ -199,11 +199,11 @@ class SidebarView(BaseQtWidget):
     def _update_right_slider(self):
         self.right_slider.set_value(value=int(self._model.right_slider_value))
 
-    def _update_rotx_slider(self):
-        self.rotx_slider.set_value(value=int(self._model.rx_slider_value))
+    def _update_rot_longitudinal_slider(self):
+        self.rotx_slider.set_value(value=int(self._model.rot_longitudinal_slider_value))
 
-    def _update_roty_slider(self):
-        self.roty_slider.set_value(value=int(self._model.ry_slider_value))
+    def _update_rot_anteroposterior_slider(self):
+        self.roty_slider.set_value(value=int(self._model.rot_anteroposterior_slider_value))
 
-    def _update_rotz_slider(self):
-        self.rotz_slider.set_value(value=int(self._model.rz_slider_value))
+    def _update_rot_horizontal_slider(self):
+        self.rotz_slider.set_value(value=int(self._model.rot_horizontal_slider_value))

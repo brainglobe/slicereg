@@ -126,7 +126,37 @@ def test_atlas_atlas_type_selector_buttons_selects_matching_volume(app_model, vi
     assert app_model.visible_volume == VolumeType.REGISTRATION
 
 
-@given(axis=sampled_from(['superior', 'anterior', 'right', 'rx', 'ry', 'rz']), value=floats(-100, 100))
-def test_appmodel_coord_attrs_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, axis, value):
-    setattr(app_model, axis, value)
-    assert getattr(view_model, f"{axis}_slider_value") == value
+@given(value=floats(-100, 100))
+def test_appmodel_superior_attrs_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, value):
+    app_model.superior = value
+    assert view_model.superior_slider_value == approx(value)
+
+
+@given(value=floats(-100, 100))
+def test_appmodel_anterior_attrs_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, value):
+    app_model.anterior = value
+    assert view_model.anterior_slider_value == approx(value)
+
+
+@given(value=floats(-100, 100))
+def test_appmodel_right_attrs_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, value):
+    app_model.right = value
+    assert view_model.right_slider_value == approx(value)
+
+
+@given(value=floats(-100, 100))
+def test_appmodel_rot_longitudinal_attrs_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, value):
+    app_model.rot_longitudinal = value
+    assert view_model.rot_longitudinal_slider_value == approx(value)
+
+
+@given(value=floats(-100, 100))
+def test_appmodel_rot_anteroposterior_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, value):
+    app_model.rot_anteroposterior = value
+    assert view_model.rot_anteroposterior_slider_value == approx(value)
+
+
+@given(value=floats(-100, 100))
+def test_appmodel_rot_horizontal_update_sidebar_slider_values(app_model, view_model: SidebarViewModel, value):
+    app_model.rot_horizontal = value
+    assert view_model.rot_horizontal_slider_value == approx(value)

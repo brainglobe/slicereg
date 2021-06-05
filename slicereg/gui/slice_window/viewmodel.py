@@ -40,7 +40,7 @@ class SliceViewModel(HasObservableAttributes):
         scale = 1.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._model.update_section(rx=scaled_dx, rz=scaled_dy, absolute=False)
+        self._model.update_section(rot_longitudinal=scaled_dx, rot_horizontal=scaled_dy, absolute=False)
 
     def on_mousewheel_move(self, increment: int):
         scale = 10

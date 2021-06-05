@@ -43,9 +43,9 @@ class AppModel(HasObservableAttributes):
     superior: float = 0.
     anterior: float = 0.
     right: float = 0.
-    rx: float = 0.
-    ry: float = 0.
-    rz: float = 0.
+    rot_longitudinal: float = 0.
+    rot_anteroposterior: float = 0.
+    rot_horizontal: float = 0.
     coronal_atlas_image: Optional[np.ndarray] = None
     axial_atlas_image: Optional[np.ndarray] = None
     sagittal_atlas_image: Optional[np.ndarray] = None
@@ -83,9 +83,9 @@ class AppModel(HasObservableAttributes):
             self.superior = data3.superior
             self.anterior = data3.anterior
             self.right = data3.right
-            self.rx = data3.rx
-            self.ry = data3.ry
-            self.rz = data3.rz
+            self.rot_longitudinal = data3.rot_longitudinal
+            self.rot_anteroposterior = data3.rot_anteroposterior
+            self.rot_horizontal = data3.rot_horizontal
 
         register_section = self._injector.build(RegisterSectionCommand)
         result2 = register_section()
@@ -121,9 +121,9 @@ class AppModel(HasObservableAttributes):
 
     # Move/Update Section Position/Rotation/Orientation
     def update_section(self, absolute: bool = True, **kwargs):
-        axes = {'superior': Axis.X, 'anterior': Axis.Y, 'right': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
+        axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal, 'rot_longitudinal': Axis.Longitudinal, 'rot_anteroposterior': Axis.Anteroposterior, 'rot_horizontal': Axis.Horizontal}
         t, r = MoveType.TRANSLATION, MoveType.ROTATION
-        move_types = {'superior': t, 'anterior': t, 'right': t, 'rx': r, 'ry': r, 'rz': r}
+        move_types = {'superior': t, 'anterior': t, 'right': t, 'rot_longitudinal': r, 'rot_anteroposterior': r, 'rot_horizontal': r}
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
             if ax_name == 'orient':
@@ -144,9 +144,9 @@ class AppModel(HasObservableAttributes):
                 self.superior = data.superior
                 self.anterior = data.anterior
                 self.right = data.right
-                self.rx = data.rx
-                self.ry = data.ry
-                self.rz = data.rz
+                self.rot_longitudinal = data.rot_longitudinal
+                self.rot_anteroposterior = data.rot_anteroposterior
+                self.rot_horizontal = data.rot_horizontal
             elif isinstance(result, Err):
                 return
 
@@ -210,12 +210,12 @@ class AppModel(HasObservableAttributes):
             'D': lambda: self.update_section(right=30, absolute=False),
             'Q': lambda: self.update_section(superior=-30, absolute=False),
             'E': lambda: self.update_section(superior=30, absolute=False),
-            'I': lambda: self.update_section(rz=3, absolute=False),
-            'K': lambda: self.update_section(rz=-3, absolute=False),
-            'J': lambda: self.update_section(rx=-3, absolute=False),
-            'L': lambda: self.update_section(rx=3, absolute=False),
-            'U': lambda: self.update_section(ry=-3, absolute=False),
-            'O': lambda: self.update_section(ry=3, absolute=False),
+            'I': lambda: self.update_section(rot_horizontal=3, absolute=False),
+            'K': lambda: self.update_section(rot_horizontal=-3, absolute=False),
+            'J': lambda: self.update_section(rot_longitudinal=-3, absolute=False),
+            'L': lambda: self.update_section(rot_longitudinal=3, absolute=False),
+            'U': lambda: self.update_section(rot_anteroposterior=-3, absolute=False),
+            'O': lambda: self.update_section(rot_anteroposterior=3, absolute=False),
         }
         if command := key_commands.get(key):
             command()

@@ -18,9 +18,9 @@ class SidebarViewModel(HasObservableAttributes):
     superior_slider_value: float = 0.
     anterior_slider_value: float = 0.
     right_slider_value: float = 0.
-    rx_slider_value: float = 0.
-    ry_slider_value: float = 0.
-    rz_slider_value: float = 0.
+    rot_longitudinal_slider_value: float = 0.
+    rot_anteroposterior_slider_value: float = 0.
+    rot_horizontal_slider_value: float = 0.
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -35,9 +35,9 @@ class SidebarViewModel(HasObservableAttributes):
             'superior': self._update_superior_slider,
             'anterior': self._update_anterior_slider,
             'right': self._update_right_slider,
-            'rx': self._update_rx_slider,
-            'ry': self._update_ry_slider,
-            'rz': self._update_rz_slider,
+            'rot_longitudinal': self._update_rot_longitudinal_slider,
+            'rot_anteroposterior': self._update_rot_anteroposterior_slider,
+            'rot_horizontal': self._update_rot_horizontal_slider,
         }
         if (fun := update_funs.get(changed)) is not None:
             fun()
@@ -64,14 +64,14 @@ class SidebarViewModel(HasObservableAttributes):
     def _update_right_slider(self):
         self.right_slider_value = self._model.right
 
-    def _update_rx_slider(self):
-        self.rx_slider_value = self._model.rx
+    def _update_rot_longitudinal_slider(self):
+        self.rot_longitudinal_slider_value = self._model.rot_longitudinal
 
-    def _update_ry_slider(self):
-        self.ry_slider_value = self._model.ry
+    def _update_rot_anteroposterior_slider(self):
+        self.rot_anteroposterior_slider_value = self._model.rot_anteroposterior
 
-    def _update_rz_slider(self):
-        self.rz_slider_value = self._model.rz
+    def _update_rot_horizontal_slider(self):
+        self.rot_horizontal_slider_value = self._model.rot_horizontal
 
     @property
     def section_resolution_text(self) -> str:
@@ -151,14 +151,14 @@ class SidebarViewModel(HasObservableAttributes):
     def change_right_slider(self, value: int):
         self._model.update_section(right=value)
 
-    def change_rotx_slider(self, value: int):
-        self._model.update_section(rx=value)
+    def change_rot_longitudinal_slider(self, value: int):
+        self._model.update_section(rot_longitudinal=value)
 
-    def change_roty_slider(self, value: int):
-        self._model.update_section(ry=value)
+    def change_rot_anteroposterior_slider(self, value: int):
+        self._model.update_section(rot_anteroposterior=value)
 
-    def change_rotz_slider(self, value: int):
-        self._model.update_section(rz=value)
+    def change_rot_horizontal_slider(self, value: int):
+        self._model.update_section(rot_horizontal=value)
 
     @property
     def atlas_resolution_text(self) -> str:

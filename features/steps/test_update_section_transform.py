@@ -17,14 +17,14 @@ def step_impl(model, sidebar):
 def step_impl(slice_view, operation_type, axis, amount):
     controls = {
         'translate': {
-            'x': lambda: slice_view.on_left_mouse_drag(x1=0, y1=0, x2=10, y2=0),
-            'y': lambda: slice_view.on_left_mouse_drag(x1=0, y1=0, x2=0, y2=10),
-            'z': lambda: slice_view.on_mousewheel_move(increment=10),
+            'longitudinal': lambda: slice_view.on_left_mouse_drag(x1=0, y1=0, x2=10, y2=0),
+            'anteroposterior': lambda: slice_view.on_left_mouse_drag(x1=0, y1=0, x2=0, y2=10),
+            'horizontal': lambda: slice_view.on_mousewheel_move(increment=10),
         },
         'rotate': {
-            'x': lambda: slice_view.on_right_mouse_drag(x1=0, y1=0, x2=10, y2=0),
-            'y': lambda: slice_view.on_right_mouse_drag(x1=0, y1=0, x2=0, y2=10),
-            'z': lambda: (),
+            'longitudinal': lambda: slice_view.on_right_mouse_drag(x1=0, y1=0, x2=10, y2=0),
+            'anteroposterior': lambda: slice_view.on_right_mouse_drag(x1=0, y1=0, x2=0, y2=10),
+            'horizontal': lambda: (),
         }
     }
     controls[operation_type][axis]()

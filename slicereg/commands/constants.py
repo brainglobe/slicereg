@@ -2,9 +2,9 @@ from enum import Enum, auto
 
 
 class Axis(Enum):
-    X = 'x'
-    Y = 'y'
-    Z = 'z'
+    Longitudinal = auto()
+    Anteroposterior = auto()
+    Horizontal = auto()
 
 
 class AtlasAxis(Enum):

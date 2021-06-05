@@ -25,9 +25,9 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
     request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=True)
     result = move_section(request=request)
     data = result.unwrap()
-    assert data.superior == value if axis is Axis.X else 5
-    assert data.anterior == value if axis is Axis.Y else 10
-    assert data.right == value if axis is Axis.Z else 2
+    assert data.superior == value if axis is Axis.Longitudinal else 5
+    assert data.anterior == value if axis is Axis.Anteroposterior else 10
+    assert data.right == value if axis is Axis.Horizontal else 2
 
 
 @given(value=floats(-100, 100), axis=sampled_from(Axis))
@@ -44,9 +44,9 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
     request = MoveRequest(axis=axis, value=value, move_type=MoveType.ROTATION, absolute=True)
     result = move_section(request=request)
     data = result.unwrap()
-    assert data.rx == value if axis is Axis.X else 5
-    assert data.ry == value if axis is Axis.Y else 10
-    assert data.rz == value if axis is Axis.Z else 2
+    assert data.rot_longitudinal == value if axis is Axis.Longitudinal else 5
+    assert data.rot_anteroposterior == value if axis is Axis.Anteroposterior else 10
+    assert data.rot_horizontal == value if axis is Axis.Horizontal else 2
 
 
 
@@ -64,9 +64,9 @@ def test_relative_move_section_to_position_translates_it_and_returns_new_positio
     request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=False)
     result = move_section(request)
     data = result.unwrap()
-    assert data.superior == value + 5 if axis is Axis.X else 5
-    assert data.anterior == value + 10 if axis is Axis.Y else 10
-    assert data.right == value + 2 if axis is Axis.Z else 2
+    assert data.superior == value + 5 if axis is Axis.Longitudinal else 5
+    assert data.anterior == value + 10 if axis is Axis.Anteroposterior else 10
+    assert data.right == value + 2 if axis is Axis.Horizontal else 2
 
 
 @given(value=floats(-100, 100), axis=sampled_from(Axis))
@@ -83,6 +83,6 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     request = MoveRequest(axis=axis, value=value, move_type=MoveType.ROTATION, absolute=False)
     result = move_section(request=request)
     data = result.unwrap()
-    assert data.rx == value + 5 if axis is Axis.X else 5
-    assert data.ry == value + 10 if axis is Axis.Y else 10
-    assert data.rz == value + 2 if axis is Axis.Z else 2
+    assert data.rot_longitudinal == value + 5 if axis is Axis.Longitudinal else 5
+    assert data.rot_anteroposterior == value + 10 if axis is Axis.Anteroposterior else 10
+    assert data.rot_horizontal == value + 2 if axis is Axis.Horizontal else 2

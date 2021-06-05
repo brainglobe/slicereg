@@ -30,7 +30,7 @@ class CenterSectionCommand:
             superior=new_physical.x,
             anterior=new_physical.y,
             right=new_physical.z,
-            rx=new_physical.rx,
-            ry=new_physical.ry,
-            rz=new_physical.rz
+            rot_longitudinal=new_physical.rx,
+            rot_anteroposterior=new_physical.ry,
+            rot_horizontal=new_physical.rz,
         ))

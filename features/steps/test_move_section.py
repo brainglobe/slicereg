@@ -19,14 +19,14 @@ def step_impl(sidebar, model: AppModel):
 def step_impl(sidebar, operation_type, axis, amount):
     controls = {
         'translate': {
-            'x': sidebar.change_superior_slider,
-            'y': sidebar.change_anterior_slider,
-            'z': sidebar.change_right_slider,
+            'longitudinal': sidebar.change_superior_slider,
+            'anteroposterior': sidebar.change_anterior_slider,
+            'horizontal': sidebar.change_right_slider,
         },
         'rotate': {
-            'x': sidebar.change_rotx_slider,
-            'y': sidebar.change_roty_slider,
-            'z': sidebar.change_rotz_slider,
+            'longitudinal': sidebar.change_rot_longitudinal_slider,
+            'anteroposterior': sidebar.change_rot_anteroposterior_slider,
+            'horizontal': sidebar.change_rot_horizontal_slider,
         }
     }
     controls[operation_type][axis](value=float(amount))

@@ -4,12 +4,12 @@ Feature: Section 3D Affine Registration
 
   Examples:
   | operation_type | axis | amount |
-  | translate      | x    | 10     |
-  | translate      | y    | 8      |
-  | translate      | z    | 26.2   |
-  | rotate         | x    | -45.2  |
-  | rotate         | y    | 239.34 |
-  | rotate         | z    | 0.01   |
+  | translate      | longitudinal    | 10     |
+  | translate      | anteroposterior    | 8      |
+  | translate      | horizontal    | 26.2   |
+  | rotate         | longitudinal    | -45.2  |
+  | rotate         | anteroposterior    | 239.34 |
+  | rotate         | horizontal    | 0.01   |
 
   Scenario Outline: Move Section in 3D
     Given I have loaded a section

@@ -30,9 +30,9 @@ class MoveSectionData2(NamedTuple):
     superior: float
     anterior: float
     right: float
-    rx: float
-    ry: float
-    rz: float
+    rot_longitudinal: float
+    rot_anteroposterior: float
+    rot_horizontal: float
 
 
 @dataclass(frozen=True)
@@ -47,12 +47,12 @@ class MoveSectionCommand2:
 
         if isinstance(request, MoveRequest):
             coord_vals = {
-                (MoveType.TRANSLATION, Axis.X): 'x',
-                (MoveType.TRANSLATION, Axis.Y): 'y',
-                (MoveType.TRANSLATION, Axis.Z): 'z',
-                (MoveType.ROTATION, Axis.X): 'rx',
-                (MoveType.ROTATION, Axis.Y): 'ry',
-                (MoveType.ROTATION, Axis.Z): 'rz',
+                (MoveType.TRANSLATION, Axis.Longitudinal): 'x',
+                (MoveType.TRANSLATION, Axis.Anteroposterior): 'y',
+                (MoveType.TRANSLATION, Axis.Horizontal): 'z',
+                (MoveType.ROTATION, Axis.Longitudinal): 'rx',
+                (MoveType.ROTATION, Axis.Anteroposterior): 'ry',
+                (MoveType.ROTATION, Axis.Horizontal): 'rz',
             }
 
             coord = coord_vals[(request.move_type, request.axis)]
@@ -79,9 +79,9 @@ class MoveSectionCommand2:
             superior=physical.x,
             anterior=physical.y,
             right=physical.z,
-            rx=physical.rx,
-            ry=physical.ry,
-            rz=physical.rz
+            rot_longitudinal=physical.rx,
+            rot_anteroposterior=physical.ry,
+            rot_horizontal=physical.rz
         ))
 
 
