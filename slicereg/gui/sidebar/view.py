@@ -76,17 +76,17 @@ class SidebarView(BaseQtWidget):
         self.resolution_widget.connect(lambda val: self._model.slide_resolution_slider(val))
 
         # Movement Sliders
-        self.x_slider = LabelledSliderWidget(min=-10000, max=10000, label='x')
-        layout.addLayout(self.x_slider.layout)
-        self.x_slider.connect(lambda val: self._model.change_x_slider(val))
+        self.superior_slider = LabelledSliderWidget(min=0, max=10000, label='Superior')
+        layout.addLayout(self.superior_slider.layout)
+        self.superior_slider.connect(lambda val: self._model.change_superior_slider(val))
 
-        self.y_slider = LabelledSliderWidget(min=-10000, max=10000, label='y')
-        layout.addLayout(self.y_slider.layout)
-        self.y_slider.connect(lambda val: self._model.change_y_slider(val))
+        self.anterior_slider = LabelledSliderWidget(min=0, max=10000, label='Anterior')
+        layout.addLayout(self.anterior_slider.layout)
+        self.anterior_slider.connect(lambda val: self._model.change_anterior_slider(val))
 
-        self.z_slider = LabelledSliderWidget(min=-10000, max=10000, label='z')
-        layout.addLayout(self.z_slider.layout)
-        self.z_slider.connect(lambda val: self._model.change_z_slider(val))
+        self.right_slider = LabelledSliderWidget(min=0, max=10000, label='Right')
+        layout.addLayout(self.right_slider.layout)
+        self.right_slider.connect(lambda val: self._model.change_right_slider(val))
 
         self.rotx_slider = LabelledSliderWidget(min=-180, max=180, label='rotx')
         layout.addLayout(self.rotx_slider.layout)
@@ -171,9 +171,9 @@ class SidebarView(BaseQtWidget):
             'selected_bgatlas': (lambda: None),
             'atlas_resolution_text': self._render_atlas_resolution_textbox,
             'section_resolution_text': self._render_section_resolution_textbox,
-            'x_slider_value': self._update_x_slider,
-            'y_slider_value': self._update_y_slider,
-            'z_slider_value': self._update_z_slider,
+            'superior_slider_value': self._update_superior_slider,
+            'anterior_slider_value': self._update_anterior_slider,
+            'right_slider_value': self._update_right_slider,
             'rx_slider_value': self._update_rotx_slider,
             'ry_slider_value': self._update_roty_slider,
             'rz_slider_value': self._update_rotz_slider,
@@ -190,14 +190,14 @@ class SidebarView(BaseQtWidget):
     def _render_section_resolution_textbox(self):
         self.section_resolution_textbox.setText(self._model.section_resolution_text)
 
-    def _update_x_slider(self):
-        self.x_slider.set_value(value=int(self._model.x_slider_value))
+    def _update_superior_slider(self):
+        self.superior_slider.set_value(value=int(self._model.superior_slider_value))
 
-    def _update_y_slider(self):
-        self.y_slider.set_value(value=int(self._model.y_slider_value))
+    def _update_anterior_slider(self):
+        self.anterior_slider.set_value(value=int(self._model.anterior_slider_value))
 
-    def _update_z_slider(self):
-        self.z_slider.set_value(value=int(self._model.z_slider_value))
+    def _update_right_slider(self):
+        self.right_slider.set_value(value=int(self._model.right_slider_value))
 
     def _update_rotx_slider(self):
         self.rotx_slider.set_value(value=int(self._model.rx_slider_value))

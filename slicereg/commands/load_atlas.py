@@ -12,9 +12,9 @@ from slicereg.core.atlas import Atlas
 
 @dataclass(frozen=True)
 class AtlasCoord:
-    x: float
-    y: float
-    z: float
+    superior: float
+    anterior: float
+    right: float
 
 
 @dataclass(frozen=True)
@@ -50,7 +50,7 @@ class LoadRemoteAtlasCommand:
             transform=atlas.shared_space_transform,
             resolution=atlas.resolution_um,
             annotation_volume=atlas.annotation_volume,
-            atlas_center=AtlasCoord(x=x, y=y, z=z)
+            atlas_center=AtlasCoord(superior=x, anterior=y, right=z)
         ))
 
 
@@ -78,5 +78,5 @@ class LoadAtlasFromFileCommand:
             transform=atlas.shared_space_transform,
             resolution=atlas.resolution_um,
             annotation_volume=None,
-            atlas_center=AtlasCoord(x=x, y=y, z=z)
+            atlas_center=AtlasCoord(superior=x, anterior=y, right=z)
         ))

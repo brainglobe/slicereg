@@ -31,7 +31,7 @@ class SliceViewModel(HasObservableAttributes):
         scale = 4.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._model.update_section(x=scaled_dx, z=scaled_dy, absolute=False)
+        self._model.update_section(right=scaled_dx, superior=scaled_dy, absolute=False)
 
     def on_mouse_move(self, x: int, y: int):
         self._model.select_coord(i=x, j=y)
@@ -44,4 +44,4 @@ class SliceViewModel(HasObservableAttributes):
 
     def on_mousewheel_move(self, increment: int):
         scale = 10
-        self._model.update_section(y=scale * increment, absolute=False)
+        self._model.update_section(anterior=scale * increment, absolute=False)

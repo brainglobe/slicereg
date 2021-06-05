@@ -40,9 +40,9 @@ class AppModel(HasObservableAttributes):
     num_channels: Optional[int] = None
     current_channel: int = 1
     visible_volume: VolumeType = VolumeType.REGISTRATION
-    x: float = 0.
-    y: float = 0.
-    z: float = 0.
+    superior: float = 0.
+    anterior: float = 0.
+    right: float = 0.
     rx: float = 0.
     ry: float = 0.
     rz: float = 0.
@@ -80,9 +80,9 @@ class AppModel(HasObservableAttributes):
         result3 = center_section()
         if isinstance(result3, Ok):
             data3 = result3.value
-            self.x = data3.x
-            self.y = data3.y
-            self.z = data3.z
+            self.superior = data3.superior
+            self.anterior = data3.anterior
+            self.right = data3.right
             self.rx = data3.rx
             self.ry = data3.ry
             self.rz = data3.rz
@@ -121,9 +121,9 @@ class AppModel(HasObservableAttributes):
 
     # Move/Update Section Position/Rotation/Orientation
     def update_section(self, absolute: bool = True, **kwargs):
-        axes = {'x': Axis.X, 'y': Axis.Y, 'z': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
+        axes = {'superior': Axis.X, 'anterior': Axis.Y, 'right': Axis.Z, 'rx': Axis.X, 'ry': Axis.Y, 'rz': Axis.Z}
         t, r = MoveType.TRANSLATION, MoveType.ROTATION
-        move_types = {'x': t, 'y': t, 'z': t, 'rx': r, 'ry': r, 'rz': r}
+        move_types = {'superior': t, 'anterior': t, 'right': t, 'rx': r, 'ry': r, 'rz': r}
         move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
             if ax_name == 'orient':
@@ -141,9 +141,9 @@ class AppModel(HasObservableAttributes):
 
             if isinstance(result, Ok):
                 data = result.value
-                self.x = data.x
-                self.y = data.y
-                self.z = data.z
+                self.superior = data.superior
+                self.anterior = data.anterior
+                self.right = data.right
                 self.rx = data.rx
                 self.ry = data.ry
                 self.rz = data.rz
@@ -169,9 +169,9 @@ class AppModel(HasObservableAttributes):
             self.registration_volume = data.volume
             self.atlas_resolution = int(data.resolution)
             self.annotation_volume = data.annotation_volume
-            self.x = data.atlas_center.x
-            self.y = data.atlas_center.y
-            self.z = data.atlas_center.z
+            self.superior = data.atlas_center.superior
+            self.anterior = data.atlas_center.anterior
+            self.right = data.atlas_center.right
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
         load_atlas = self._injector.build(LoadAtlasFromFileCommand)
@@ -204,12 +204,12 @@ class AppModel(HasObservableAttributes):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self.update_section(z=30, absolute=False),
-            'S': lambda: self.update_section(z=-30, absolute=False),
-            'A': lambda: self.update_section(x=-30, absolute=False),
-            'D': lambda: self.update_section(x=30, absolute=False),
-            'Q': lambda: self.update_section(y=-30, absolute=False),
-            'E': lambda: self.update_section(y=30, absolute=False),
+            'W': lambda: self.update_section(anterior=30, absolute=False),
+            'S': lambda: self.update_section(anterior=-30, absolute=False),
+            'A': lambda: self.update_section(right=-30, absolute=False),
+            'D': lambda: self.update_section(right=30, absolute=False),
+            'Q': lambda: self.update_section(superior=-30, absolute=False),
+            'E': lambda: self.update_section(superior=30, absolute=False),
             'I': lambda: self.update_section(rz=3, absolute=False),
             'K': lambda: self.update_section(rz=-3, absolute=False),
             'J': lambda: self.update_section(rx=-3, absolute=False),

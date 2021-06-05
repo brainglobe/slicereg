@@ -21,9 +21,9 @@ def load_first_atlas(sidebar, model, atlas_volume):
 
 @given("that the current position is at the origin")
 def step_impl(model, coronal_view, sagittal_view, axial_view):
-    model.x = 0
-    model.y = 0
-    model.z = 0
+    model.superior = 0
+    model.anterior = 0
+    model.right = 0
     assert coronal_view.image_coords == (0, 0)
     assert coronal_view.depth == 0
     assert sagittal_view.image_coords == (0, 0)

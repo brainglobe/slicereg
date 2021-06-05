@@ -25,33 +25,33 @@ class AtlasSectionViewModel(HasObservableAttributes):
     def update(self, changed: str):
         update_funs = {
             self._section_image_name: self._update_section_image,
-            self._horizontal_coord: self._update_horizontal_line,
-            self._vertical_coord: self._update_vertical_line,
+            self._x_coord: self._update_horizontal_line,
+            self._y_coord: self._update_vertical_line,
         }
         if (render_fun := update_funs.get(changed)) is not None:
             render_fun()
 
     @property
-    def _horizontal_coord(self) -> str:
-        return {'coronal': 'z', 'axial': 'z', 'sagittal': 'x'}[self.plane]
-
-    def _update_horizontal_line(self):
-        self.horizontal_line_pos = getattr(self._model, self._horizontal_coord)
+    def _x_coord(self) -> str:
+        return {'coronal': 'superior', 'axial': 'anterior', 'sagittal': 'superior'}[self.plane]
 
     @property
-    def _vertical_coord(self) -> str:
-        return {'coronal': 'y', 'axial': 'x', 'sagittal': 'y'}[self.plane]
+    def _y_coord(self) -> str:
+        return {'coronal': 'right', 'axial': 'right', 'sagittal': 'anterior'}[self.plane]
+
+    def _update_horizontal_line(self):
+        self.horizontal_line_pos = getattr(self._model, self._y_coord)
 
     def _update_vertical_line(self):
-        self.vertical_line_pos = getattr(self._model, self._vertical_coord)
+        self.vertical_line_pos = getattr(self._model, self._x_coord)
 
     def _update_section_position(self, x, y):
         if self.plane == 'coronal':
-            self._model.update_section(y=x, z=y)  # left-right, up-down
+            self._model.update_section(right=x, superior=y)
         elif self.plane == 'axial':
-            self._model.update_section(x=x, z=y)  # left-right, forward-back
+            self._model.update_section(right=x, anterior=y)
         elif self.plane == 'sagittal':
-            self._model.update_section(x=y, y=x)  # up-down, forward-back
+            self._model.update_section(anterior=x, superior=y)
 
     def _update_section_image(self):
         if (image := getattr(self._model, self._section_image_name)) is not None:
@@ -73,21 +73,21 @@ class AtlasSectionViewModel(HasObservableAttributes):
     @staticmethod
     def _color_from_axis_name(axis: str) -> Tuple[float, float, float, float]:
         return {
-            'x': (1., 0., 0., 1.),
-            'y': (0., 1., 0., 1.),
-            'z': (0., 0., 1., 1.),
+            'superior': (1., 0., 0., 1.),
+            'anterior': (0., 1., 0., 1.),
+            'right': (0., 0., 1., 1.),
         }[axis]
 
     @property
     def vertical_line_color(self) -> Tuple[float, float, float, float]:
-        return self._color_from_axis_name(axis=self._vertical_coord)
+        return self._color_from_axis_name(axis=self._y_coord)
 
     @property
     def horizontal_line_color(self) -> Tuple[float, float, float, float]:
-        return self._color_from_axis_name(axis=self._horizontal_coord)
+        return self._color_from_axis_name(axis=self._x_coord)
 
     def drag_left_mouse(self, x1: int, y1: int, x2: int, y2: int):
-        self._update_section_position(x2, y2)
+        self._update_section_position(x=x2, y=y2)
 
     def click_left_mouse_button(self, x: int, y: int):
-        self._update_section_position(x, y)
+        self._update_section_position(x=x, y=y)

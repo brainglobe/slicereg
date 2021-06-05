@@ -25,9 +25,9 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
     request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=True)
     result = move_section(request=request)
     data = result.unwrap()
-    assert data.x == value if axis is Axis.X else 5
-    assert data.y == value if axis is Axis.Y else 10
-    assert data.z == value if axis is Axis.Z else 2
+    assert data.superior == value if axis is Axis.X else 5
+    assert data.anterior == value if axis is Axis.Y else 10
+    assert data.right == value if axis is Axis.Z else 2
 
 
 @given(value=floats(-100, 100), axis=sampled_from(Axis))
@@ -64,9 +64,9 @@ def test_relative_move_section_to_position_translates_it_and_returns_new_positio
     request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=False)
     result = move_section(request)
     data = result.unwrap()
-    assert data.x == value + 5 if axis is Axis.X else 5
-    assert data.y == value + 10 if axis is Axis.Y else 10
-    assert data.z == value + 2 if axis is Axis.Z else 2
+    assert data.superior == value + 5 if axis is Axis.X else 5
+    assert data.anterior == value + 10 if axis is Axis.Y else 10
+    assert data.right == value + 2 if axis is Axis.Z else 2
 
 
 @given(value=floats(-100, 100), axis=sampled_from(Axis))

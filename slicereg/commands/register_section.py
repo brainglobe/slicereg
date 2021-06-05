@@ -43,7 +43,7 @@ class RegisterSectionCommand:
             atlas_slice_image=atlas_slice_image,
             section_transform=registration.image_to_volume_transform,
             atlas_image_coords=AtlasImageCoords(coronal=40, axial=40, sagittal=40),
-            coronal_atlas_image=atlas.make_coronal_slice_at(x=section.physical_transform.x).channels[0],
-            axial_atlas_image=atlas.make_axial_slice_at(y=section.physical_transform.y).channels[0],
+            coronal_atlas_image=atlas.make_coronal_slice_at(y=section.physical_transform.y).channels[0],
+            axial_atlas_image=atlas.make_axial_slice_at(x=section.physical_transform.x).channels[0],
             sagittal_atlas_image=atlas.make_sagittal_slice_at(z=section.physical_transform.z).channels[0],
         ))

@@ -68,7 +68,7 @@ class AtlasSectionView(BaseQtWidget):
         x, y, _, _ = tr.map(event.pos)
 
         if event.button == 1:
-            self._model.click_left_mouse_button(y=x, x=y)
+            self._model.click_left_mouse_button(x=x, y=y)
 
     def mouse_move(self, event: SceneMouseEvent) -> None:
         if event.press_event is None:
@@ -80,7 +80,7 @@ class AtlasSectionView(BaseQtWidget):
         x2, y2, _, _ = tr.map(event.pos)
 
         if event.button == 1:  # Left Mouse Button
-            self._model.drag_left_mouse(y1=int(x1), y2=int(x2), x1=int(y1), x2=int(y2))
+            self._model.drag_left_mouse(x1=int(x1), x2=int(x2), y1=int(y1), y2=int(y2))
 
     def _render_horizontal_line(self):
         self._vertical_line.set_data(pos=self._model.horizontal_line_pos)

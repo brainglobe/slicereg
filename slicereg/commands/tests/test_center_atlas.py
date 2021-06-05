@@ -26,7 +26,7 @@ def test_center_atlas_command_translates_section_when_atlas_is_loaded(repo):
     center_section = CenterSectionCommand(_repo=repo)
     result = center_section()
     data = result.unwrap()
-    assert data.x != 0
-    assert data.y != 0
-    assert data.z != 0
+    assert data.superior != 0
+    assert data.anterior != 0
+    assert data.right != 0
 

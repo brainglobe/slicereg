@@ -15,9 +15,9 @@ class SidebarViewModel(HasObservableAttributes):
     _section_resolution_text: str = ''
     _clim_section_2d: Tuple[float, float] = (0., 1.)
     _clim_section_3d: Tuple[float, float] = (0., 1.)
-    x_slider_value: float = 0.
-    y_slider_value: float = 0.
-    z_slider_value: float = 0.
+    superior_slider_value: float = 0.
+    anterior_slider_value: float = 0.
+    right_slider_value: float = 0.
     rx_slider_value: float = 0.
     ry_slider_value: float = 0.
     rz_slider_value: float = 0.
@@ -32,9 +32,9 @@ class SidebarViewModel(HasObservableAttributes):
             'section_image_resolution': self._update_section_resolution_text,
             'clim_2d': self._update_clim2d,
             'clim_3d': self._update_clim3d,
-            'x': self._update_x_slider,
-            'y': self._update_y_slider,
-            'z': self._update_z_slider,
+            'superior': self._update_superior_slider,
+            'anterior': self._update_anterior_slider,
+            'right': self._update_right_slider,
             'rx': self._update_rx_slider,
             'ry': self._update_ry_slider,
             'rz': self._update_rz_slider,
@@ -55,14 +55,14 @@ class SidebarViewModel(HasObservableAttributes):
             text = str(float(res))
         self._section_resolution_text = text
 
-    def _update_x_slider(self):
-        self.x_slider_value = self._model.x
+    def _update_superior_slider(self):
+        self.superior_slider_value = self._model.superior
 
-    def _update_y_slider(self):
-        self.y_slider_value = self._model.y
+    def _update_anterior_slider(self):
+        self.anterior_slider_value = self._model.anterior
 
-    def _update_z_slider(self):
-        self.z_slider_value = self._model.z
+    def _update_right_slider(self):
+        self.right_slider_value = self._model.right
 
     def _update_rx_slider(self):
         self.rx_slider_value = self._model.rx
@@ -142,14 +142,14 @@ class SidebarViewModel(HasObservableAttributes):
     def submit_load_section_from_file(self, filename: str):
         self._model.load_section(filename=filename)
 
-    def change_x_slider(self, value: int):
-        self._model.update_section(x=value)
+    def change_superior_slider(self, value: int):
+        self._model.update_section(superior=value)
 
-    def change_y_slider(self, value: int):
-        self._model.update_section(y=value)
+    def change_anterior_slider(self, value: int):
+        self._model.update_section(anterior=value)
 
-    def change_z_slider(self, value: int):
-        self._model.update_section(z=value)
+    def change_right_slider(self, value: int):
+        self._model.update_section(right=value)
 
     def change_rotx_slider(self, value: int):
         self._model.update_section(rx=value)

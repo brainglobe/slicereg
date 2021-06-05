@@ -24,10 +24,10 @@ class PhysicalTransformer(FrozenUpdater):
         return replace(self, rx=self.rx + rx, ry=self.ry + ry, rz=self.rz + rz)
 
     def orient_to_coronal(self):
-        return replace(self, rx=0, ry=90, rz=0)
+        return replace(self, rx=90, ry=0, rz=-90)
 
     def orient_to_axial(self):
-        return replace(self, rx=90, ry=0, rz=-90)
+        return replace(self, rx=0, ry=90, rz=0)
 
     def orient_to_sagittal(self):
         return replace(self, rx=0, ry=0, rz=0)

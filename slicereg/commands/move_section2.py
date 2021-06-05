@@ -27,9 +27,9 @@ class ReorientRequest:
 
 
 class MoveSectionData2(NamedTuple):
-    x: float
-    y: float
-    z: float
+    superior: float
+    anterior: float
+    right: float
     rx: float
     ry: float
     rz: float
@@ -76,9 +76,9 @@ class MoveSectionCommand2:
 
         self._repo.save_section(section)
         return Ok(MoveSectionData2(
-            x=physical.x,
-            y=physical.y,
-            z=physical.z,
+            superior=physical.x,
+            anterior=physical.y,
+            right=physical.z,
             rx=physical.rx,
             ry=physical.ry,
             rz=physical.rz

@@ -27,9 +27,9 @@ class CenterSectionCommand:
 
         new_physical = new_section.physical_transform
         return Ok(MoveSectionData2(
-            x=new_physical.x,
-            y=new_physical.y,
-            z=new_physical.z,
+            superior=new_physical.x,
+            anterior=new_physical.y,
+            right=new_physical.z,
             rx=new_physical.rx,
             ry=new_physical.ry,
             rz=new_physical.rz
