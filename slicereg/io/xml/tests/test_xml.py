@@ -1,4 +1,6 @@
-from slicereg.io.xml.reader import read_quicknii_xml
+import pytest
+
+from slicereg.io.xml.reader import read_quicknii_xml, QuickNiiData
 from pytest import approx
 from pathlib import Path
 
@@ -32,3 +34,8 @@ def test_xml_read_function_gets_parent_path_from_example_xml_file():
 def test_xml_read_function_gets_full_image_path_from_example_xml_file():
     output = read_quicknii_xml(filename='data/deepslice_output/results.xml')
     assert output.image_path == Path('data/deepslice_output/richards_7.18-1-Nissl_2015.png')
+
+
+def test_error_if_image_name_and_filename_are_different_in_xml_file():
+    with pytest.raises(ValueError):
+        read_quicknii_xml(filename='data/deepslice_output/results_diffname.xml')
