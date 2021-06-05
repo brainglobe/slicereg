@@ -1,3 +1,4 @@
+from abc import ABC
 from dataclasses import dataclass
 from enum import Enum, auto
 from typing import NamedTuple, Union
@@ -10,13 +11,16 @@ from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.core import Registration
 
 
+class UpdateSectionRequest(ABC):
+    ...
+
 class MoveType(Enum):
     TRANSLATION = auto()
     ROTATION = auto()
 
 
 @dataclass(frozen=True)
-class MoveRequest:
+class MoveRequest(UpdateSectionRequest):
     move_type: MoveType
     axis: Axis
     value: float
@@ -24,17 +28,17 @@ class MoveRequest:
 
 
 @dataclass(frozen=True)
-class ReorientRequest:
+class ReorientRequest(UpdateSectionRequest):
     axis: AtlasAxis
 
 
 @dataclass(frozen=True)
-class CenterRequest:
+class CenterRequest(UpdateSectionRequest):
     pass
 
 
 @dataclass(frozen=True)
-class ResampleRequest:
+class ResampleRequest(UpdateSectionRequest):
     resolution_um: float
 
 
@@ -58,7 +62,7 @@ class MoveSectionData2(NamedTuple):
 class MoveSectionCommand2:
     _repo: BaseRepo
 
-    def __call__(self, request: Union[MoveRequest, ReorientRequest, CenterRequest, ResampleRequest]) -> Result[MoveSectionData2, str]:
+    def __call__(self, request: UpdateSectionRequest) -> Result[MoveSectionData2, str]:
         try:
             section = self._repo.get_sections()[0]
         except IndexError:

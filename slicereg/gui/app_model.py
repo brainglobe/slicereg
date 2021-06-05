@@ -12,7 +12,7 @@ from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
-    ResampleRequest
+    ResampleRequest, UpdateSectionRequest
 from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import AtlasOrientation, VolumeType
@@ -73,19 +73,7 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
-
-        move_section = self._injector.build(MoveSectionCommand2)
-        result = move_section(CenterRequest())
-        if isinstance(result, Ok):
-            data = result.value
-            self.superior = data.superior
-            self.anterior = data.anterior
-            self.right = data.right
-            self.rot_longitudinal = data.rot_longitudinal
-            self.rot_anteroposterior = data.rot_anteroposterior
-            self.rot_horizontal = data.rot_horizontal
-            self.atlas_image = data.atlas_slice_image
-            self.section_transform = data.section_transform
+        self._update_section(request=CenterRequest())
 
     # Select Channel
     def select_channel(self, num: int):
@@ -112,7 +100,6 @@ class AppModel(HasObservableAttributes):
         axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal, 'rot_longitudinal': Axis.Longitudinal, 'rot_anteroposterior': Axis.Anteroposterior, 'rot_horizontal': Axis.Horizontal}
         t, r = MoveType.TRANSLATION, MoveType.ROTATION
         move_types = {'superior': t, 'anterior': t, 'right': t, 'rot_longitudinal': r, 'rot_anteroposterior': r, 'rot_horizontal': r}
-        move_section = self._injector.build(MoveSectionCommand2)
         for ax_name, value in kwargs.items():
             if ax_name == 'orient':
                 atlas_axes = {
@@ -121,25 +108,27 @@ class AppModel(HasObservableAttributes):
                     AtlasOrientation.SAGITTAL: AtlasAxis.SAGITTAL,
                 }
                 axis = atlas_axes[value]
-                reorient_request = ReorientRequest(axis=axis)
-                result = move_section(request=reorient_request)
+                request = ReorientRequest(axis=axis)
             else:
-                move_request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=absolute)
-                result = move_section(request=move_request)
+                request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=absolute)
+            self._update_section(request=request)
 
-            if isinstance(result, Ok):
-                data = result.value
-                self.superior = data.superior
-                self.anterior = data.anterior
-                self.right = data.right
-                self.rot_longitudinal = data.rot_longitudinal
-                self.rot_anteroposterior = data.rot_anteroposterior
-                self.rot_horizontal = data.rot_horizontal
-                self.atlas_image = data.atlas_slice_image
-                self.section_transform = data.section_transform
-                self.coronal_atlas_image = data.coronal_atlas_image
-                self.axial_atlas_image = data.axial_atlas_image
-                self.sagittal_atlas_image = data.sagittal_atlas_image
+    def _update_section(self, request: UpdateSectionRequest):
+        move_section = self._injector.build(MoveSectionCommand2)
+        result = move_section(request=request)
+        if isinstance(result, Ok):
+            data = result.value
+            self.superior = data.superior
+            self.anterior = data.anterior
+            self.right = data.right
+            self.rot_longitudinal = data.rot_longitudinal
+            self.rot_anteroposterior = data.rot_anteroposterior
+            self.rot_horizontal = data.rot_horizontal
+            self.atlas_image = data.atlas_slice_image
+            self.section_transform = data.section_transform
+            self.coronal_atlas_image = data.coronal_atlas_image
+            self.axial_atlas_image = data.axial_atlas_image
+            self.sagittal_atlas_image = data.sagittal_atlas_image
 
     # Load Atlases
     def load_bgatlas(self, name: str):
