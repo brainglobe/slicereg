@@ -11,10 +11,10 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
+    ResampleRequest
 from slicereg.commands.constants import Axis, AtlasAxis
 from slicereg.commands.register_section import RegisterSectionCommand
-from slicereg.commands.resample_section import ResampleSectionCommand
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -104,8 +104,8 @@ class AppModel(HasObservableAttributes):
 
     # Resample Section
     def resample_section(self, resolution_um: float):
-        resample_section = self._injector.build(ResampleSectionCommand)
-        result = resample_section(resolution_um=resolution_um)
+        move_section = self._injector.build(MoveSectionCommand2)
+        result = move_section(ResampleRequest(resolution_um=resolution_um))
         if isinstance(result, Ok):
             data = result.value
             self.section_image = data.section_image

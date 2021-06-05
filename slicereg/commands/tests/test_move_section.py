@@ -5,7 +5,7 @@ from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest, CenterRequest
+from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest, CenterRequest, ResampleRequest
 from slicereg.commands.constants import Axis
 from slicereg.core import Section, Image, Atlas
 from slicereg.core.physical_transform import PhysicalTransformer
@@ -104,3 +104,15 @@ def test_center_atlas_command_translates_section_when_atlas_is_loaded():
     assert data.superior == 15
     assert data.anterior == 15
     assert data.right == 15
+
+
+def test_resample_section_gets_section_with_requested_resolution_and_different_image_size():
+    repo = Mock(BaseRepo)
+    repo.get_sections.return_value = repo.get_sections.return_value = [
+        Section.create(image=Image(channels=np.empty((2, 4, 4)), resolution_um=10))
+    ]
+    resample_section = MoveSectionCommand2(_repo=repo)
+    request = ResampleRequest(resolution_um=5)
+    result = resample_section(request)
+    assert result.unwrap().resolution_um == 5
+    assert result.unwrap().section_image.shape == (8, 8)
