@@ -3,14 +3,14 @@ from unittest.mock import Mock
 import numpy as np
 import pytest
 
-from slicereg.commands.base import AtlasReaderData, BaseRemoteAtlasReader, BaseRepo, BaseLocalAtlasReader
+from slicereg.commands.base import RemoteAtlasReaderData, BaseRemoteAtlasReader, BaseRepo, BaseLocalAtlasReader
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest
 
 
 @pytest.fixture
 def mock_reader():
     reader = Mock(BaseRemoteAtlasReader)
-    reader.read.return_value = AtlasReaderData(
+    reader.read.return_value = RemoteAtlasReaderData(
         source="Brainglobe",
         name="allen_mouse_10um",
         registration_volume=np.empty((2, 3, 4), dtype=np.uint16),

@@ -12,4 +12,3 @@ def test_imio_reader_creates_atlas():
         atlas = reader.read("super_atlas")
 
     assert atlas.registration_volume.ndim == 3
-    assert atlas.resolution_um is None

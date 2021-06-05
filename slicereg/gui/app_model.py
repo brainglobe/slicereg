@@ -108,10 +108,10 @@ class AppModel(HasObservableAttributes):
                     AtlasOrientation.SAGITTAL: AtlasAxis.SAGITTAL,
                 }
                 axis = atlas_axes[value]
-                request = ReorientRequest(axis=axis)
+                self._update_section(request=ReorientRequest(axis=axis))
             else:
-                request = MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=absolute)
-            self._update_section(request=request)
+                self._update_section(request=MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=absolute))
+
 
     def _update_section(self, request: UpdateSectionRequest):
         move_section = self._injector.build(MoveSectionCommand2)

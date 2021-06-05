@@ -37,19 +37,23 @@ class LoadAtlasCommand:
     def __call__(self, request: Union[LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest]) -> Result[LoadAtlasData, str]:
         if isinstance(request, LoadBrainglobeAtlasRequest):
             atlas_data = self._remote_atlas_reader.read(name=request.name)
-            resolution_um = atlas_data.resolution_um
+            if atlas_data is None:
+                return Err("Atlas not loaded.")
+            atlas = Atlas(
+                volume=atlas_data.registration_volume,
+                resolution_um=atlas_data.resolution_um,
+                annotation_volume=atlas_data.annotation_volume,
+            )
         elif isinstance(request, LoadAtlasFromFileRequest):
-            atlas_data = self._local_atlas_reader.read(filename=request.filename)
-            resolution_um = request.resolution_um
+            atlas_data2 = self._local_atlas_reader.read(filename=request.filename)
+            if atlas_data2 is None:
+                return Err("Atlas not loaded.")
+            atlas = Atlas(
+                volume=atlas_data2.registration_volume,
+                resolution_um=request.resolution_um,
+                annotation_volume=None,
+            )
 
-        if atlas_data is None:
-            return Err("Atlas not loaded.")
-
-        atlas = Atlas(
-            volume=atlas_data.registration_volume,
-            resolution_um=resolution_um,
-            annotation_volume=atlas_data.annotation_volume,
-        )
         self._repo.set_atlas(atlas=atlas)
 
         return Ok(LoadAtlasData(
