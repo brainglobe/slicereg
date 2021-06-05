@@ -1,13 +1,23 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Union
 
 from numpy import ndarray
 from result import Result, Err, Ok
 
 from slicereg.commands.base import BaseRepo, BaseRemoteAtlasReader, BaseLocalAtlasReader
 from slicereg.core.atlas import Atlas
+
+@dataclass(frozen=True)
+class LoadBrainglobeAtlasRequest:
+    name: str
+
+
+@dataclass(frozen=True)
+class LoadAtlasFromFileRequest:
+    filename: str
+    resolution_um: int
 
 
 @dataclass(frozen=True)
@@ -19,18 +29,25 @@ class LoadAtlasData:
 
 
 @dataclass
-class LoadRemoteAtlasCommand:
+class LoadAtlasCommand:
     _repo: BaseRepo
     _remote_atlas_reader: BaseRemoteAtlasReader
+    _local_atlas_reader: BaseLocalAtlasReader
 
-    def __call__(self, name: str) -> Result[LoadAtlasData, str]:
-        atlas_data = self._remote_atlas_reader.read(name=name)
+    def __call__(self, request: Union[LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest]) -> Result[LoadAtlasData, str]:
+        if isinstance(request, LoadBrainglobeAtlasRequest):
+            atlas_data = self._remote_atlas_reader.read(name=request.name)
+            resolution_um = atlas_data.resolution_um
+        elif isinstance(request, LoadAtlasFromFileRequest):
+            atlas_data = self._local_atlas_reader.read(filename=request.filename)
+            resolution_um = request.resolution_um
+
         if atlas_data is None:
             return Err("Atlas not loaded.")
 
         atlas = Atlas(
             volume=atlas_data.registration_volume,
-            resolution_um=resolution if (resolution := atlas_data.resolution_um) is not None else 25.,
+            resolution_um=resolution_um,
             annotation_volume=atlas_data.annotation_volume,
         )
         self._repo.set_atlas(atlas=atlas)
@@ -40,30 +57,4 @@ class LoadRemoteAtlasCommand:
             transform=atlas.shared_space_transform,
             resolution=atlas.resolution_um,
             annotation_volume=atlas.annotation_volume,
-        ))
-
-
-@dataclass
-class LoadAtlasFromFileCommand:
-    _repo: BaseRepo
-    _local_atlas_reader: BaseLocalAtlasReader
-
-    def __call__(self, filename: str, resolution_um: int) -> Result[LoadAtlasData, str]:
-        atlas_data = self._local_atlas_reader.read(filename=filename)
-        if atlas_data is None:
-            return Err("Atlas loading failed.")
-
-        atlas = Atlas(
-            volume=atlas_data.registration_volume,
-            resolution_um=resolution if (resolution := atlas_data.resolution_um) is not None else resolution_um,
-            annotation_volume=atlas_data.annotation_volume,
-        )
-
-        self._repo.set_atlas(atlas=atlas)
-
-        return Ok(LoadAtlasData(
-            volume=atlas.volume,
-            transform=atlas.shared_space_transform,
-            resolution=atlas.resolution_um,
-            annotation_volume=None,
         ))

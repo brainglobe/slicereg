@@ -9,7 +9,7 @@ from result import Ok, Err
 
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
-from slicereg.commands.load_atlas import LoadRemoteAtlasCommand, LoadAtlasFromFileCommand
+from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
 from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
     ResampleRequest, UpdateSectionRequest
@@ -132,8 +132,9 @@ class AppModel(HasObservableAttributes):
 
     # Load Atlases
     def load_bgatlas(self, name: str):
-        load_atlas = self._injector.build(LoadRemoteAtlasCommand)
-        result = load_atlas(name=name)
+        request = LoadBrainglobeAtlasRequest(name=name)
+        command = self._injector.build(LoadAtlasCommand)
+        result = command(request=request)
         if isinstance(result, Ok):
             data = result.value
             self.registration_volume = data.volume
@@ -141,8 +142,9 @@ class AppModel(HasObservableAttributes):
             self.annotation_volume = data.annotation_volume
 
     def load_atlas_from_file(self, filename: str, resolution_um: int):
-        load_atlas = self._injector.build(LoadAtlasFromFileCommand)
-        result = load_atlas(filename=filename, resolution_um=resolution_um)
+        load_atlas = self._injector.build(LoadAtlasCommand)
+        request = LoadAtlasFromFileRequest(filename=filename, resolution_um=resolution_um)
+        result = load_atlas(request)
         if isinstance(result, Ok):
             atlas = result.value
             self.registration_volume = atlas.volume
