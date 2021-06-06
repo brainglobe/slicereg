@@ -2,13 +2,13 @@ from unittest.mock import Mock
 
 import pytest
 from hypothesis import given
-from hypothesis.strategies import floats, text, sampled_from
+from hypothesis.strategies import floats, text
 from pytest import approx
 
 from slicereg.commands.constants import Plane
 from slicereg.commands.move_section2 import ReorientRequest
 from slicereg.gui.app_model import AppModel
-from slicereg.gui.constants import AtlasOrientation, VolumeType
+from slicereg.gui.constants import VolumeType
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
 from slicereg.utils import DependencyInjector
 

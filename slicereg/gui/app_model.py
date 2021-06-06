@@ -10,11 +10,9 @@ from result import Ok
 from slicereg.commands.constants import Axis, Direction
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
-from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest, \
-    LoadAtlasRequest
+from slicereg.commands.load_atlas import LoadAtlasCommand, LoadAtlasRequest
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, CenterRequest, \
-    UpdateSectionRequest, TranslateRequest, RotateRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, CenterRequest, UpdateSectionRequest, TranslateRequest, RotateRequest
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
