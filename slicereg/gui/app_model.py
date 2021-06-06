@@ -84,17 +84,6 @@ class AppModel(HasObservableAttributes):
             self.current_channel = data.current_channel
             self.section_image = data.section_image
 
-    # Resample Section
-    def resample_section(self, resolution_um: float):
-        move_section = self._injector.build(MoveSectionCommand2)
-        result = move_section(ResampleRequest(resolution_um=resolution_um))
-        if isinstance(result, Ok):
-            data = result.value
-            self.section_image = data.section_image
-            self.section_image_resolution = data.resolution_um
-            self.atlas_image = data.atlas_slice_image
-            self.section_transform = data.section_transform
-
     # Move/Update Section Position/Rotation/Orientation
     def update_section(self, **kwargs):
         axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal,
@@ -122,6 +111,8 @@ class AppModel(HasObservableAttributes):
             self.coronal_atlas_image = data.coronal_atlas_image
             self.axial_atlas_image = data.axial_atlas_image
             self.sagittal_atlas_image = data.sagittal_atlas_image
+            self.section_image = data.section_image
+            self.section_image_resolution = data.resolution_um
 
     # Load Atlases
     def load_bgatlas(self, name: str):

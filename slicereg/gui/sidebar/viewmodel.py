@@ -2,7 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
 from slicereg.commands.constants import Plane
-from slicereg.commands.move_section2 import ReorientRequest
+from slicereg.commands.move_section2 import ReorientRequest, ResampleRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.observable import HasObservableAttributes
@@ -124,7 +124,7 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")
 
     def slide_resample_slider(self, val: int):
-        self._model.resample_section(val)
+        self._model._update_section(request=ResampleRequest(resolution_um=val))
 
     def slide_resolution_slider(self, val: int):
         self._model.update_section(res=val)
