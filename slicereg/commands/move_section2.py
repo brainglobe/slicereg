@@ -14,18 +14,6 @@ from slicereg.core import Registration
 class UpdateSectionRequest(ABC):
     ...
 
-class MoveType(Enum):
-    TRANSLATION = auto()
-    ROTATION = auto()
-
-
-@dataclass(frozen=True)
-class MoveRequest(UpdateSectionRequest):
-    move_type: MoveType
-    axis: Axis
-    value: float
-    absolute: bool
-
 
 @dataclass(frozen=True)
 class SetPositionRequest(UpdateSectionRequest):
@@ -96,26 +84,7 @@ class MoveSectionCommand2:
         if atlas is None:
             return Err("No atlas loaded")
 
-        if isinstance(request, MoveRequest):
-            coord_vals = {
-                (MoveType.TRANSLATION, Axis.Longitudinal): 'x',
-                (MoveType.TRANSLATION, Axis.Anteroposterior): 'y',
-                (MoveType.TRANSLATION, Axis.Horizontal): 'z',
-                (MoveType.ROTATION, Axis.Longitudinal): 'rx',
-                (MoveType.ROTATION, Axis.Anteroposterior): 'ry',
-                (MoveType.ROTATION, Axis.Horizontal): 'rz',
-            }
-
-            coord = coord_vals[(request.move_type, request.axis)]
-            if request.absolute:
-                physical = section.physical_transform.update(**{coord: request.value})
-            elif request.move_type is MoveType.ROTATION:
-                physical = section.physical_transform.rotate(**{coord: request.value})
-            elif request.move_type is MoveType.TRANSLATION:
-                physical = section.physical_transform.translate(**{coord: request.value})
-            section = section.update(physical_transform=physical)
-
-        elif isinstance(request, SetPositionRequest):
+        if isinstance(request, SetPositionRequest):
             coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[request.axis]
             physical = section.physical_transform.update(**{coord: request.value})
             section = section.update(physical_transform=physical)
@@ -139,12 +108,7 @@ class MoveSectionCommand2:
             section = section.update(physical_transform=physical)
 
         elif isinstance(request, RotateRequest):
-            dir_vals2 = {
-                Axis.Longitudinal: 'rx',
-                Axis.Anteroposterior: 'ry',
-                Axis.Horizontal: 'rz',
-            }
-            coord = dir_vals2[request.axis]
+            coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
             physical = section.physical_transform.rotate(**{coord: request.value})
             section = section.update(physical_transform=physical)
 

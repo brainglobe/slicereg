@@ -7,8 +7,8 @@ from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
 from slicereg.commands.constants import Axis, Direction
-from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest, CenterRequest, ResampleRequest, \
-    TranslateRequest, RotateRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, CenterRequest, ResampleRequest, \
+    TranslateRequest, RotateRequest, SetPositionRequest, SetRotationRequest
 from slicereg.core import Atlas, Image, Section
 from slicereg.core.physical_transform import PhysicalTransformer
 
@@ -37,7 +37,7 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
         )
     ]
     move_section = MoveSectionCommand2(_repo=repo)
-    request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=True)
+    request = SetPositionRequest(axis=axis, value=value)
     result = move_section(request=request)
     data = result.unwrap()
     assert data.superior == value if axis is Axis.Longitudinal else 5
@@ -57,7 +57,7 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
     ]
     repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
     move_section = MoveSectionCommand2(_repo=repo)
-    request = MoveRequest(axis=axis, value=value, move_type=MoveType.ROTATION, absolute=True)
+    request = SetRotationRequest(axis=axis, value=value)
     result = move_section(request=request)
     data = result.unwrap()
     assert data.rot_longitudinal == value if axis is Axis.Longitudinal else 5
