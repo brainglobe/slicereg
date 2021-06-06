@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from typing import Optional
 from pathlib import Path
+from uuid import UUID
 
 from numpy import ndarray
 from result import Result, Err, Ok
@@ -14,6 +15,7 @@ from slicereg.io.xml.reader import read_quicknii_xml
 
 @dataclass(frozen=True)
 class LoadImageData:
+    section_id: UUID
     section_image: ndarray
     resolution_um: float
     num_channels: int
@@ -43,6 +45,7 @@ class LoadSectionCommand:
 
         self._repo.save_section(section=section)
         return Ok(LoadImageData(
+            section_id=section.id,
             section_image=section.image.channels[0],
             resolution_um=image.resolution_um,
             num_channels=image.num_channels,
