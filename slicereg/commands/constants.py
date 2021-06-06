@@ -7,10 +7,10 @@ class Axis(Enum):
     Horizontal = auto()
 
 
-class AtlasAxis(Enum):
-    CORONAL = auto()
-    AXIAL = auto()
-    SAGITTAL = auto()
+class Plane(Enum):
+    Coronal = auto()
+    Axial = auto()
+    Sagittal = auto()
 
 
 class Direction(Enum):

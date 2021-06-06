@@ -7,7 +7,7 @@ import numpy as np
 from numpy import ndarray
 from result import Ok
 
-from slicereg.commands.constants import Axis, AtlasAxis, Direction
+from slicereg.commands.constants import Axis, Plane, Direction
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
@@ -96,7 +96,7 @@ class AppModel(HasObservableAttributes):
             self.section_transform = data.section_transform
 
     # Move/Update Section Position/Rotation/Orientation
-    def update_section(self, absolute: bool = True, **kwargs):
+    def update_section(self, **kwargs):
         axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal,
                 'rot_longitudinal': Axis.Longitudinal, 'rot_anteroposterior': Axis.Anteroposterior,
                 'rot_horizontal': Axis.Horizontal}
@@ -104,17 +104,7 @@ class AppModel(HasObservableAttributes):
         move_types = {'superior': t, 'anterior': t, 'right': t, 'rot_longitudinal': r, 'rot_anteroposterior': r,
                       'rot_horizontal': r}
         for ax_name, value in kwargs.items():
-            if ax_name == 'orient':
-                atlas_axes = {
-                    AtlasOrientation.AXIAL: AtlasAxis.AXIAL,
-                    AtlasOrientation.CORONAL: AtlasAxis.CORONAL,
-                    AtlasOrientation.SAGITTAL: AtlasAxis.SAGITTAL,
-                }
-                axis = atlas_axes[value]
-                self._update_section(request=ReorientRequest(axis=axis))
-            else:
-                self._update_section(request=MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name],
-                                                         absolute=absolute))
+            self._update_section(request=MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=True))
 
     def _update_section(self, request: UpdateSectionRequest):
         move_section = self._injector.build(MoveSectionCommand2)

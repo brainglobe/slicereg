@@ -6,8 +6,9 @@ from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.constants import Axis
-from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest, CenterRequest, ResampleRequest
+from slicereg.commands.constants import Axis, Direction
+from slicereg.commands.move_section2 import MoveType, MoveSectionCommand2, MoveRequest, CenterRequest, ResampleRequest, \
+    TranslateRequest, RotateRequest
 from slicereg.core import Atlas, Image, Section
 from slicereg.core.physical_transform import PhysicalTransformer
 
@@ -64,8 +65,8 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
     assert data.rot_horizontal == value if axis is Axis.Horizontal else 2
 
 
-@given(value=floats(-100, 100), axis=sampled_from(Axis))
-def test_relative_move_section_to_position_translates_it_and_returns_new_position(value, axis):
+@given(value=floats(-100, 100), direction=sampled_from(Direction))
+def test_relative_move_section_to_position_translates_it_and_returns_new_position(value, direction):
     physical_transform = PhysicalTransformer(x=5, y=10, z=2)
     repo = Mock(BaseRepo)
     repo.get_sections.return_value = [
@@ -77,12 +78,29 @@ def test_relative_move_section_to_position_translates_it_and_returns_new_positio
     repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)),
                                         resolution_um=10)
     move_section = MoveSectionCommand2(_repo=repo)
-    request = MoveRequest(axis=axis, value=value, move_type=MoveType.TRANSLATION, absolute=False)
+    request = TranslateRequest(direction=direction, value=value)
     result = move_section(request)
     data = result.unwrap()
-    assert data.superior == value + 5 if axis is Axis.Longitudinal else 5
-    assert data.anterior == value + 10 if axis is Axis.Anteroposterior else 10
-    assert data.right == value + 2 if axis is Axis.Horizontal else 2
+    if direction is Direction.Superior:
+        assert data.superior == 5 + value
+    elif direction is Direction.Inferior:
+        assert data.superior == 5 - value
+    else:
+        assert data.superior == 5
+
+    if direction is Direction.Anterior:
+        assert data.anterior == 10 + value
+    elif direction is Direction.Posterior:
+        assert data.anterior == 10 - value
+    else:
+        assert data.anterior == 10
+
+    if direction is Direction.Right:
+        assert data.right == 2 + value
+    elif direction is Direction.Left:
+        assert data.right == 2 - value
+    else:
+        assert data.right == 2
 
 
 @given(value=floats(-100, 100), axis=sampled_from(Axis))
@@ -98,9 +116,10 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)),
                                         resolution_um=10)
     move_section = MoveSectionCommand2(_repo=repo)
-    request = MoveRequest(axis=axis, value=value, move_type=MoveType.ROTATION, absolute=False)
+    request = RotateRequest(axis=axis, value=value)
     result = move_section(request=request)
     data = result.unwrap()
+
     assert data.rot_longitudinal == value + 5 if axis is Axis.Longitudinal else 5
     assert data.rot_anteroposterior == value + 10 if axis is Axis.Anteroposterior else 10
     assert data.rot_horizontal == value + 2 if axis is Axis.Horizontal else 2

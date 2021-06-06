@@ -7,7 +7,7 @@ from numpy import ndarray
 from result import Result, Err, Ok
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.constants import Axis, AtlasAxis, Direction
+from slicereg.commands.constants import Axis, Plane, Direction
 from slicereg.core import Registration
 
 
@@ -41,7 +41,7 @@ class RotateRequest(UpdateSectionRequest):
 
 @dataclass(frozen=True)
 class ReorientRequest(UpdateSectionRequest):
-    axis: AtlasAxis
+    plane: Plane
 
 
 @dataclass(frozen=True)
@@ -127,12 +127,12 @@ class MoveSectionCommand2:
             section = section.update(physical_transform=physical)
 
         elif isinstance(request, ReorientRequest):
-            orientation = request.axis
-            if orientation is AtlasAxis.CORONAL:
+            orientation = request.plane
+            if orientation is Plane.Coronal:
                 physical = section.physical_transform.orient_to_coronal()
-            elif orientation is AtlasAxis.AXIAL:
+            elif orientation is Plane.Axial:
                 physical = section.physical_transform.orient_to_axial()
-            elif orientation is AtlasAxis.SAGITTAL:
+            elif orientation is Plane.Sagittal:
                 physical = section.physical_transform.orient_to_sagittal()
             section = section.update(physical_transform=physical)
 

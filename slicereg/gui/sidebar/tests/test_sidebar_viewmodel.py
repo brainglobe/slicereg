@@ -5,6 +5,8 @@ from hypothesis import given
 from hypothesis.strategies import floats, text, sampled_from
 from pytest import approx
 
+from slicereg.commands.constants import Plane
+from slicereg.commands.move_section2 import ReorientRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel
@@ -61,16 +63,16 @@ def test_viewmodel_bgatlas_dropdown_fills_with_atlas_names_when_app_gets_them(ap
 
 
 cases = [
-    ("click_coronal_button", AtlasOrientation.CORONAL),
-    ("click_axial_button", AtlasOrientation.AXIAL),
-    ("click_sagittal_button", AtlasOrientation.SAGITTAL),
+    ("click_coronal_button", Plane.Coronal),
+    ("click_axial_button", Plane.Axial),
+    ("click_sagittal_button", Plane.Sagittal),
 ]
-@pytest.mark.parametrize("method_name,orientation", cases)
-def test_clicking_orientation_button_tells_app_to_rotate_slice_to_correct_orientation(method_name, orientation):
+@pytest.mark.parametrize("method_name,plane", cases)
+def test_clicking_orientation_button_tells_app_to_rotate_slice_to_correct_orientation(method_name, plane):
     app_model = Mock(AppModel)
     view_model = SidebarViewModel(_model=app_model)
     getattr(view_model, method_name)()
-    app_model.update_section.assert_called_with(orient=orientation)
+    app_model._update_section.assert_called_with(ReorientRequest(plane=plane))
 
 
 @pytest.mark.parametrize("clim", [(0.3, 0.8), (0.1, 0.3), (0.8, 0.82)])
