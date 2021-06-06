@@ -12,7 +12,7 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadAtlasRequest
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, CenterRequest, UpdateSectionRequest, TranslateRequest, RotateRequest
+from slicereg.commands.update_section import UpdateSectionCommand, CenterRequest, UpdateSectionRequest, TranslateRequest, RotateRequest
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -85,7 +85,7 @@ class AppModel(HasObservableAttributes):
 
     # Move/Update Section Position/Rotation/Orientation
     def update_section(self, request: UpdateSectionRequest):
-        move_section = self._injector.build(MoveSectionCommand2)
+        move_section = self._injector.build(UpdateSectionCommand)
         result = move_section(request=request)
         if isinstance(result, Ok):
             data = result.value

@@ -7,7 +7,7 @@ from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
 from slicereg.commands.constants import Axis, Direction
-from slicereg.commands.move_section2 import MoveSectionCommand2, CenterRequest, ResampleRequest, \
+from slicereg.commands.update_section import UpdateSectionCommand, CenterRequest, ResampleRequest, \
     TranslateRequest, RotateRequest, SetPositionRequest, SetRotationRequest
 from slicereg.core import Atlas, Image, Section
 from slicereg.core.physical_transform import PhysicalTransformer
@@ -36,7 +36,7 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
             physical_transform=PhysicalTransformer(x=5, y=10, z=2)
         )
     ]
-    move_section = MoveSectionCommand2(_repo=repo)
+    move_section = UpdateSectionCommand(_repo=repo)
     request = SetPositionRequest(axis=axis, value=value)
     result = move_section(request=request)
     data = result.unwrap()
@@ -56,7 +56,7 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
         )
     ]
     repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
-    move_section = MoveSectionCommand2(_repo=repo)
+    move_section = UpdateSectionCommand(_repo=repo)
     request = SetRotationRequest(axis=axis, value=value)
     result = move_section(request=request)
     data = result.unwrap()
@@ -77,7 +77,7 @@ def test_relative_move_section_to_position_translates_it_and_returns_new_positio
     ]
     repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)),
                                         resolution_um=10)
-    move_section = MoveSectionCommand2(_repo=repo)
+    move_section = UpdateSectionCommand(_repo=repo)
     request = TranslateRequest(direction=direction, value=value)
     result = move_section(request)
     data = result.unwrap()
@@ -115,7 +115,7 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     ]
     repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)),
                                         resolution_um=10)
-    move_section = MoveSectionCommand2(_repo=repo)
+    move_section = UpdateSectionCommand(_repo=repo)
     request = RotateRequest(axis=axis, value=value)
     result = move_section(request=request)
     data = result.unwrap()
@@ -135,7 +135,7 @@ def test_center_atlas_command_translates_section_when_atlas_is_loaded():
     ]
     repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)),
                                         resolution_um=10)
-    move_section = MoveSectionCommand2(_repo=repo)
+    move_section = UpdateSectionCommand(_repo=repo)
     request = CenterRequest()
     result = move_section(request)
     data = result.unwrap()
@@ -151,7 +151,7 @@ def test_resample_section_gets_section_with_requested_resolution_and_different_i
     ]
     repo.get_atlas.return_value = Atlas(volume=np.empty((3, 3, 3)), annotation_volume=np.empty((3, 3, 3)),
                                         resolution_um=10)
-    resample_section = MoveSectionCommand2(_repo=repo)
+    resample_section = UpdateSectionCommand(_repo=repo)
     request = ResampleRequest(resolution_um=5)
     result = resample_section(request)
     assert result.unwrap().resolution_um == 5
@@ -159,13 +159,13 @@ def test_resample_section_gets_section_with_requested_resolution_and_different_i
 
 
 def test_register_section_command_gets_atlas_slice_image_when_both_section_and_atlas_are_loaded(repo):
-    command = MoveSectionCommand2(_repo=repo)
+    command = UpdateSectionCommand(_repo=repo)
     result = command(CenterRequest())
     assert result.ok().atlas_slice_image.ndim == 2
 
 
 def test_register_section_gets_section_transform_matrix_when_both_section_and_atlas_are_loaded(repo):
-    command = MoveSectionCommand2(_repo=repo)
+    command = UpdateSectionCommand(_repo=repo)
     result = command(CenterRequest())
     assert result.ok().section_transform.shape == (4, 4)
 
@@ -174,7 +174,7 @@ def test_register_section_returns_error_message_if_no_section_loaded():
     repo = Mock(BaseRepo)
     repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
     repo.get_sections.return_value = []
-    command = MoveSectionCommand2(_repo=repo)
+    command = UpdateSectionCommand(_repo=repo)
     result = command(CenterRequest())
     assert "no section" in result.value.lower()
 
@@ -183,13 +183,13 @@ def test_register_section_returns_error_message_if_no_atlas_loaded():
     repo = Mock(BaseRepo)
     repo.get_atlas.return_value = None
     repo.get_sections.return_value = [Section.create(image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4))]
-    command = MoveSectionCommand2(_repo=repo)
+    command = UpdateSectionCommand(_repo=repo)
     result = command(CenterRequest())
     assert "no atlas" in result.value.lower()
 
 
 def test_register_section_returns_2d_orthogonal_atlas_section_images_at_section_position(repo):
-    command = MoveSectionCommand2(_repo=repo)
+    command = UpdateSectionCommand(_repo=repo)
     result = command(CenterRequest())
     data = result.ok()
     assert data.coronal_atlas_image.ndim == 2

@@ -6,7 +6,7 @@ from hypothesis.strategies import floats, text
 from pytest import approx
 
 from slicereg.commands.constants import Plane
-from slicereg.commands.move_section2 import ReorientRequest
+from slicereg.commands.update_section import ReorientRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import VolumeType
 from slicereg.gui.sidebar.viewmodel import SidebarViewModel

@@ -71,7 +71,7 @@ class MoveSectionData2(NamedTuple):
 
 
 @dataclass(frozen=True)
-class MoveSectionCommand2:
+class UpdateSectionCommand:
     _repo: BaseRepo
 
     def __call__(self, request: UpdateSectionRequest) -> Result[MoveSectionData2, str]:

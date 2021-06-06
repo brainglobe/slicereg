@@ -4,7 +4,7 @@ from typing import Tuple
 import numpy as np
 
 from slicereg.commands.constants import Direction, Axis
-from slicereg.commands.move_section2 import TranslateRequest, RotateRequest
+from slicereg.commands.update_section import TranslateRequest, RotateRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.utils.observable import HasObservableAttributes
 

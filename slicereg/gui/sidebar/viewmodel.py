@@ -3,7 +3,7 @@ from typing import Optional, Tuple, List
 
 from slicereg.commands.constants import Plane, Axis
 from slicereg.commands.load_atlas import LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
-from slicereg.commands.move_section2 import ReorientRequest, ResampleRequest, SetPositionRequest, SetRotationRequest
+from slicereg.commands.update_section import ReorientRequest, ResampleRequest, SetPositionRequest, SetRotationRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.observable import HasObservableAttributes
