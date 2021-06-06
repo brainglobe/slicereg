@@ -3,6 +3,8 @@ from typing import Tuple
 
 import numpy as np
 
+from slicereg.commands.constants import Axis
+from slicereg.commands.move_section2 import SetPositionRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.utils.observable import HasObservableAttributes
 
@@ -47,11 +49,14 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     def _update_section_position(self, x, y):
         if self.plane == 'coronal':
-            self._model.update_section(right=x, superior=y)
+            self._model._update_section(request=SetPositionRequest(axis=Axis.Horizontal, value=x))
+            self._model._update_section(request=SetPositionRequest(axis=Axis.Longitudinal, value=y))
         elif self.plane == 'axial':
-            self._model.update_section(right=x, anterior=y)
+            self._model._update_section(request=SetPositionRequest(axis=Axis.Horizontal, value=x))
+            self._model._update_section(request=SetPositionRequest(axis=Axis.Anteroposterior, value=y))
         elif self.plane == 'sagittal':
-            self._model.update_section(anterior=x, superior=y)
+            self._model._update_section(request=SetPositionRequest(axis=Axis.Anteroposterior, value=x))
+            self._model._update_section(request=SetPositionRequest(axis=Axis.Longitudinal, value=y))
 
     def _update_section_image(self):
         if (image := getattr(self._model, self._section_image_name)) is not None:

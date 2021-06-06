@@ -28,6 +28,18 @@ class MoveRequest(UpdateSectionRequest):
 
 
 @dataclass(frozen=True)
+class SetPositionRequest(UpdateSectionRequest):
+    axis: Axis
+    value: float
+
+
+@dataclass(frozen=True)
+class SetRotationRequest(UpdateSectionRequest):
+    axis: Axis
+    value: float
+
+
+@dataclass(frozen=True)
 class TranslateRequest(UpdateSectionRequest):
     direction: Direction
     value: float
@@ -101,6 +113,16 @@ class MoveSectionCommand2:
                 physical = section.physical_transform.rotate(**{coord: request.value})
             elif request.move_type is MoveType.TRANSLATION:
                 physical = section.physical_transform.translate(**{coord: request.value})
+            section = section.update(physical_transform=physical)
+
+        elif isinstance(request, SetPositionRequest):
+            coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[request.axis]
+            physical = section.physical_transform.update(**{coord: request.value})
+            section = section.update(physical_transform=physical)
+
+        elif isinstance(request, SetRotationRequest):
+            coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
+            physical = section.physical_transform.update(**{coord: request.value})
             section = section.update(physical_transform=physical)
 
         elif isinstance(request, TranslateRequest):
