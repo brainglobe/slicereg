@@ -11,3 +11,12 @@ class AtlasAxis(Enum):
     CORONAL = auto()
     AXIAL = auto()
     SAGITTAL = auto()
+
+
+class Direction(Enum):
+    Superior = auto()
+    Inferior = auto()
+    Anterior = auto()
+    Posterior = auto()
+    Right = auto()
+    Left = auto()

@@ -7,13 +7,13 @@ import numpy as np
 from numpy import ndarray
 from result import Ok
 
-from slicereg.commands.constants import Axis, AtlasAxis
+from slicereg.commands.constants import Axis, AtlasAxis, Direction
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
 from slicereg.commands.load_section import LoadSectionCommand
 from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
-    ResampleRequest, UpdateSectionRequest
+    ResampleRequest, UpdateSectionRequest, TranslateRequest, RotateRequest
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -175,42 +175,18 @@ class AppModel(HasObservableAttributes):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Anteroposterior, value=30, absolute=False)
-            ),
-            'S': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Anteroposterior, value=-30, absolute=False)
-            ),
-            'A': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Horizontal, value=-30, absolute=False)
-            ),
-            'D': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Horizontal, value=30, absolute=False)
-            ),
-            'Q': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Longitudinal, value=-30, absolute=False)
-            ),
-            'E': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.TRANSLATION, axis=Axis.Longitudinal, value=30, absolute=False)
-            ),
-            'I': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Horizontal, value=5, absolute=False)
-            ),
-            'K': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Horizontal, value=-5, absolute=False)
-            ),
-            'J': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Longitudinal, value=5, absolute=False)
-            ),
-            'L': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Longitudinal, value=-5, absolute=False)
-            ),
-            'U': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Anteroposterior, value=-5, absolute=False)
-            ),
-            'O': lambda: self._update_section(
-                MoveRequest(move_type=MoveType.ROTATION, axis=Axis.Anteroposterior, value=5, absolute=False)
-            ),
+            'W': lambda: self._update_section(TranslateRequest(direction=Direction.Anterior, value=30)),
+            'S': lambda: self._update_section(TranslateRequest(direction=Direction.Posterior, value=30)),
+            'A': lambda: self._update_section(TranslateRequest(direction=Direction.Left, value=30)),
+            'D': lambda: self._update_section(TranslateRequest(direction=Direction.Right, value=30)),
+            'Q': lambda: self._update_section(TranslateRequest(direction=Direction.Inferior, value=30)),
+            'E': lambda: self._update_section(TranslateRequest(direction=Direction.Superior, value=30)),
+            'I': lambda: self._update_section(RotateRequest(axis=Axis.Horizontal, value=5)),
+            'K': lambda: self._update_section(RotateRequest(axis=Axis.Horizontal, value=-5)),
+            'J': lambda: self._update_section(RotateRequest(axis=Axis.Longitudinal, value=5)),
+            'L': lambda: self._update_section(RotateRequest(axis=Axis.Longitudinal, value=-5)),
+            'U': lambda: self._update_section(RotateRequest(axis=Axis.Anteroposterior, value=-5)),
+            'O': lambda: self._update_section(RotateRequest(axis=Axis.Anteroposterior, value=5)),
         }
         if command := key_commands.get(key):
             command()

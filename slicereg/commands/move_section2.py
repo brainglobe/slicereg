@@ -7,7 +7,7 @@ from numpy import ndarray
 from result import Result, Err, Ok
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.constants import Axis, AtlasAxis
+from slicereg.commands.constants import Axis, AtlasAxis, Direction
 from slicereg.core import Registration
 
 
@@ -25,6 +25,18 @@ class MoveRequest(UpdateSectionRequest):
     axis: Axis
     value: float
     absolute: bool
+
+
+@dataclass(frozen=True)
+class TranslateRequest(UpdateSectionRequest):
+    direction: Direction
+    value: float
+
+
+@dataclass(frozen=True)
+class RotateRequest(UpdateSectionRequest):
+    axis: Axis
+    value: float
 
 
 @dataclass(frozen=True)
@@ -89,6 +101,29 @@ class MoveSectionCommand2:
                 physical = section.physical_transform.rotate(**{coord: request.value})
             elif request.move_type is MoveType.TRANSLATION:
                 physical = section.physical_transform.translate(**{coord: request.value})
+            section = section.update(physical_transform=physical)
+
+        elif isinstance(request, TranslateRequest):
+            dir_vals = {
+                Direction.Superior: ('x', 1),
+                Direction.Inferior: ('x', -1),
+                Direction.Anterior: ('y', 1),
+                Direction.Posterior: ('y', -1),
+                Direction.Right: ('z', 1),
+                Direction.Left: ('z', -1),
+            }
+            coord, transform = dir_vals[request.direction]
+            physical = section.physical_transform.translate(**{coord: request.value * transform})
+            section = section.update(physical_transform=physical)
+
+        elif isinstance(request, RotateRequest):
+            dir_vals = {
+                Axis.Longitudinal: 'rx',
+                Axis.Anteroposterior: 'ry',
+                Axis.Horizontal: 'rz',
+            }
+            coord = dir_vals[request.axis]
+            physical = section.physical_transform.rotate(**{coord: request.value})
             section = section.update(physical_transform=physical)
 
         elif isinstance(request, ReorientRequest):
