@@ -6,9 +6,9 @@ from hypothesis import given
 from hypothesis.strategies import floats, sampled_from
 
 from slicereg.commands.base import BaseRepo
-from slicereg.commands.constants import Axis, Direction
+from slicereg.commands.constants import Axis, Direction, Plane
 from slicereg.commands.update_section import UpdateSectionCommand, CenterRequest, ResampleRequest, \
-    TranslateRequest, RotateRequest, SetPositionRequest, SetRotationRequest
+    TranslateRequest, RotateRequest, SetPositionRequest, SetRotationRequest, ReorientRequest
 from slicereg.core import Atlas, Image, Section
 from slicereg.core.physical_transform import PhysicalTransformer
 
@@ -20,11 +20,26 @@ def repo():
     repo.get_sections.return_value = [
         Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
-            physical_transform=PhysicalTransformer(x=5, y=10, z=2)
+            physical_transform=PhysicalTransformer(x=5, y=10, z=2, rx=2, ry=15, rz=-3)
         )
     ]
     return repo
 
+
+cases = [
+    (Plane.Axial, 0, 90, 0),
+    (Plane.Coronal, 90, 0, -90),
+    (Plane.Sagittal, 0, 0, 0),
+]
+@pytest.mark.parametrize("plane,si,ap,lr", cases)
+def test_reorient_section_sets_new_rotations(repo, plane, si, ap, lr):
+    command = UpdateSectionCommand(_repo=repo)
+    request = ReorientRequest(plane=plane)
+    result = command(request=request)
+    data = result.ok()
+    assert data.rot_longitudinal == si
+    assert data.rot_anteroposterior == ap
+    assert data.rot_horizontal == lr
 
 @given(value=floats(-100, 100), axis=sampled_from(Axis))
 def test_move_section_to_position_translates_it_and_returns_new_position(value, axis):
@@ -123,6 +138,8 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     assert data.rot_longitudinal == value + 5 if axis is Axis.Longitudinal else 5
     assert data.rot_anteroposterior == value + 10 if axis is Axis.Anteroposterior else 10
     assert data.rot_horizontal == value + 2 if axis is Axis.Horizontal else 2
+
+
 
 
 def test_center_atlas_command_translates_section_when_atlas_is_loaded():
