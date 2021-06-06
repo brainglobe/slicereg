@@ -117,12 +117,12 @@ class MoveSectionCommand2:
             section = section.update(physical_transform=physical)
 
         elif isinstance(request, RotateRequest):
-            dir_vals = {
+            dir_vals2 = {
                 Axis.Longitudinal: 'rx',
                 Axis.Anteroposterior: 'ry',
                 Axis.Horizontal: 'rz',
             }
-            coord = dir_vals[request.axis]
+            coord = dir_vals2[request.axis]
             physical = section.physical_transform.rotate(**{coord: request.value})
             section = section.update(physical_transform=physical)
 

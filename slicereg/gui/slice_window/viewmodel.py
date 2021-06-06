@@ -3,6 +3,8 @@ from typing import Tuple
 
 import numpy as np
 
+from slicereg.commands.constants import Direction, Axis
+from slicereg.commands.move_section2 import TranslateRequest, RotateRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.utils.observable import HasObservableAttributes
 
@@ -31,7 +33,8 @@ class SliceViewModel(HasObservableAttributes):
         scale = 4.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._model.update_section(right=scaled_dx, superior=scaled_dy, absolute=False)
+        self._model._update_section(TranslateRequest(direction=Direction.Right, value=scaled_dx))
+        self._model._update_section(TranslateRequest(direction=Direction.Superior, value=scaled_dy))
 
     def on_mouse_move(self, x: int, y: int):
         self._model.select_coord(i=x, j=y)
@@ -40,8 +43,9 @@ class SliceViewModel(HasObservableAttributes):
         scale = 1.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._model.update_section(rot_longitudinal=scaled_dx, rot_horizontal=scaled_dy, absolute=False)
+        self._model._update_section(RotateRequest(axis=Axis.Longitudinal, value=scaled_dx))
+        self._model._update_section(RotateRequest(axis=Axis.Horizontal, value=scaled_dy))
 
     def on_mousewheel_move(self, increment: int):
         scale = 10
-        self._model.update_section(anterior=scale * increment, absolute=False)
+        self._model._update_section(TranslateRequest(direction=Direction.Anterior, value=scale * increment))
