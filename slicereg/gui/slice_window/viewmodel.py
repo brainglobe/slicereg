@@ -33,8 +33,8 @@ class SliceViewModel(HasObservableAttributes):
         scale = 4.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._model._update_section(TranslateRequest(direction=Direction.Right, value=scaled_dx))
-        self._model._update_section(TranslateRequest(direction=Direction.Superior, value=scaled_dy))
+        self._model.update_section(TranslateRequest(direction=Direction.Right, value=scaled_dx))
+        self._model.update_section(TranslateRequest(direction=Direction.Superior, value=scaled_dy))
 
     def on_mouse_move(self, x: int, y: int):
         self._model.select_coord(i=x, j=y)
@@ -43,9 +43,9 @@ class SliceViewModel(HasObservableAttributes):
         scale = 1.
         scaled_dx = (x2 - x1) * scale
         scaled_dy = (y2 - y1) * scale
-        self._model._update_section(RotateRequest(axis=Axis.Longitudinal, value=scaled_dx))
-        self._model._update_section(RotateRequest(axis=Axis.Horizontal, value=scaled_dy))
+        self._model.update_section(RotateRequest(axis=Axis.Longitudinal, value=scaled_dx))
+        self._model.update_section(RotateRequest(axis=Axis.Horizontal, value=scaled_dy))
 
     def on_mousewheel_move(self, increment: int):
         scale = 10
-        self._model._update_section(TranslateRequest(direction=Direction.Anterior, value=scale * increment))
+        self._model.update_section(TranslateRequest(direction=Direction.Anterior, value=scale * increment))

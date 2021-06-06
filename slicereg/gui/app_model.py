@@ -73,7 +73,7 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
-        self._update_section(request=CenterRequest())
+        self.update_section(request=CenterRequest())
 
     # Select Channel
     def select_channel(self, num: int):
@@ -85,17 +85,7 @@ class AppModel(HasObservableAttributes):
             self.section_image = data.section_image
 
     # Move/Update Section Position/Rotation/Orientation
-    def update_section(self, **kwargs):
-        axes = {'superior': Axis.Longitudinal, 'anterior': Axis.Anteroposterior, 'right': Axis.Horizontal,
-                'rot_longitudinal': Axis.Longitudinal, 'rot_anteroposterior': Axis.Anteroposterior,
-                'rot_horizontal': Axis.Horizontal}
-        t, r = MoveType.TRANSLATION, MoveType.ROTATION
-        move_types = {'superior': t, 'anterior': t, 'right': t, 'rot_longitudinal': r, 'rot_anteroposterior': r,
-                      'rot_horizontal': r}
-        for ax_name, value in kwargs.items():
-            self._update_section(request=MoveRequest(axis=axes[ax_name], value=value, move_type=move_types[ax_name], absolute=True))
-
-    def _update_section(self, request: UpdateSectionRequest):
+    def update_section(self, request: UpdateSectionRequest):
         move_section = self._injector.build(MoveSectionCommand2)
         result = move_section(request=request)
         if isinstance(result, Ok):
@@ -156,18 +146,18 @@ class AppModel(HasObservableAttributes):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self._update_section(TranslateRequest(direction=Direction.Anterior, value=30)),
-            'S': lambda: self._update_section(TranslateRequest(direction=Direction.Posterior, value=30)),
-            'A': lambda: self._update_section(TranslateRequest(direction=Direction.Left, value=30)),
-            'D': lambda: self._update_section(TranslateRequest(direction=Direction.Right, value=30)),
-            'Q': lambda: self._update_section(TranslateRequest(direction=Direction.Inferior, value=30)),
-            'E': lambda: self._update_section(TranslateRequest(direction=Direction.Superior, value=30)),
-            'I': lambda: self._update_section(RotateRequest(axis=Axis.Horizontal, value=5)),
-            'K': lambda: self._update_section(RotateRequest(axis=Axis.Horizontal, value=-5)),
-            'J': lambda: self._update_section(RotateRequest(axis=Axis.Longitudinal, value=5)),
-            'L': lambda: self._update_section(RotateRequest(axis=Axis.Longitudinal, value=-5)),
-            'U': lambda: self._update_section(RotateRequest(axis=Axis.Anteroposterior, value=-5)),
-            'O': lambda: self._update_section(RotateRequest(axis=Axis.Anteroposterior, value=5)),
+            'W': lambda: self.update_section(TranslateRequest(direction=Direction.Anterior, value=30)),
+            'S': lambda: self.update_section(TranslateRequest(direction=Direction.Posterior, value=30)),
+            'A': lambda: self.update_section(TranslateRequest(direction=Direction.Left, value=30)),
+            'D': lambda: self.update_section(TranslateRequest(direction=Direction.Right, value=30)),
+            'Q': lambda: self.update_section(TranslateRequest(direction=Direction.Inferior, value=30)),
+            'E': lambda: self.update_section(TranslateRequest(direction=Direction.Superior, value=30)),
+            'I': lambda: self.update_section(RotateRequest(axis=Axis.Horizontal, value=5)),
+            'K': lambda: self.update_section(RotateRequest(axis=Axis.Horizontal, value=-5)),
+            'J': lambda: self.update_section(RotateRequest(axis=Axis.Longitudinal, value=5)),
+            'L': lambda: self.update_section(RotateRequest(axis=Axis.Longitudinal, value=-5)),
+            'U': lambda: self.update_section(RotateRequest(axis=Axis.Anteroposterior, value=-5)),
+            'O': lambda: self.update_section(RotateRequest(axis=Axis.Anteroposterior, value=5)),
         }
         if command := key_commands.get(key):
             command()

@@ -1,8 +1,8 @@
 from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
-from slicereg.commands.constants import Plane
-from slicereg.commands.move_section2 import ReorientRequest, ResampleRequest
+from slicereg.commands.constants import Plane, Axis
+from slicereg.commands.move_section2 import ReorientRequest, ResampleRequest, SetPositionRequest, SetRotationRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import AtlasOrientation, VolumeType
 from slicereg.utils.observable import HasObservableAttributes
@@ -92,13 +92,13 @@ class SidebarViewModel(HasObservableAttributes):
             return
 
     def click_coronal_button(self):
-        self._model._update_section(ReorientRequest(plane=Plane.Coronal))
+        self._model.update_section(ReorientRequest(plane=Plane.Coronal))
 
     def click_sagittal_button(self):
-        self._model._update_section(ReorientRequest(plane=Plane.Sagittal))
+        self._model.update_section(ReorientRequest(plane=Plane.Sagittal))
 
     def click_axial_button(self):
-        self._model._update_section(ReorientRequest(plane=Plane.Axial))
+        self._model.update_section(ReorientRequest(plane=Plane.Axial))
 
     def move_clim_section_2d_slider(self, values: Tuple[float, float]):
         self._model.clim_2d = values
@@ -124,10 +124,7 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")
 
     def slide_resample_slider(self, val: int):
-        self._model._update_section(request=ResampleRequest(resolution_um=val))
-
-    def slide_resolution_slider(self, val: int):
-        self._model.update_section(res=val)
+        self._model.update_section(request=ResampleRequest(resolution_um=val))
 
     def click_update_bgatlas_list_button(self):
         self._model.list_bgatlases()
@@ -145,22 +142,22 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section(filename=filename)
 
     def change_superior_slider(self, value: int):
-        self._model.update_section(superior=value)
+        self._model.update_section(request=SetPositionRequest(axis=Axis.Longitudinal, value=value))
 
     def change_anterior_slider(self, value: int):
-        self._model.update_section(anterior=value)
+        self._model.update_section(request=SetPositionRequest(axis=Axis.Anteroposterior, value=value))
 
     def change_right_slider(self, value: int):
-        self._model.update_section(right=value)
+        self._model.update_section(request=SetPositionRequest(axis=Axis.Horizontal, value=value))
 
     def change_rot_longitudinal_slider(self, value: int):
-        self._model.update_section(rot_longitudinal=value)
+        self._model.update_section(request=SetRotationRequest(axis=Axis.Longitudinal, value=value))
 
     def change_rot_anteroposterior_slider(self, value: int):
-        self._model.update_section(rot_anteroposterior=value)
+        self._model.update_section(request=SetRotationRequest(axis=Axis.Anteroposterior, value=value))
 
     def change_rot_horizontal_slider(self, value: int):
-        self._model.update_section(rot_horizontal=value)
+        self._model.update_section(request=SetRotationRequest(axis=Axis.Horizontal, value=value))
 
     @property
     def atlas_resolution_text(self) -> str:

@@ -71,10 +71,6 @@ class SidebarView(BaseQtWidget):
         layout.addLayout(self.resample_widget.layout)
         self.resample_widget.connect(lambda val: self._model.slide_resample_slider(val))
 
-        self.resolution_widget = LabelledSliderWidget(min=1, max=100, label="Resolution")
-        layout.addLayout(self.resolution_widget.layout)
-        self.resolution_widget.connect(lambda val: self._model.slide_resolution_slider(val))
-
         # Movement Sliders
         self.superior_slider = LabelledSliderWidget(min=0, max=10000, label='Superior')
         layout.addLayout(self.superior_slider.layout)
