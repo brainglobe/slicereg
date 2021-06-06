@@ -1,6 +1,4 @@
-from abc import ABC
 from dataclasses import dataclass
-from enum import Enum, auto
 from typing import NamedTuple, Union
 
 from numpy import ndarray
@@ -12,47 +10,15 @@ from slicereg.core import Registration
 from slicereg.core.physical_transform import PhysicalTransformer
 
 
-class UpdateSectionRequest(ABC):
-    ...
+SetPosition = NamedTuple("SetPosition", [('axis', Axis), ('value', float)])
+SetRotation = NamedTuple("SetRotation", [('axis', Axis), ('value', float)])
+Translate = NamedTuple("Translate", [('direction', Direction), ('value', float)])
+Rotate = NamedTuple("Rotate", [('axis', Axis), ('value', float)])
+Reorient = NamedTuple("Reorient", [('plane', Plane)])
+Center = NamedTuple("Center", [])
+Resample = NamedTuple("Resample", [('resolution_um', float)])
 
-
-@dataclass(frozen=True)
-class SetPositionRequest(UpdateSectionRequest):
-    axis: Axis
-    value: float
-
-
-@dataclass(frozen=True)
-class SetRotationRequest(UpdateSectionRequest):
-    axis: Axis
-    value: float
-
-
-@dataclass(frozen=True)
-class TranslateRequest(UpdateSectionRequest):
-    direction: Direction
-    value: float
-
-
-@dataclass(frozen=True)
-class RotateRequest(UpdateSectionRequest):
-    axis: Axis
-    value: float
-
-
-@dataclass(frozen=True)
-class ReorientRequest(UpdateSectionRequest):
-    plane: Plane
-
-
-@dataclass(frozen=True)
-class CenterRequest(UpdateSectionRequest):
-    pass
-
-
-@dataclass(frozen=True)
-class ResampleRequest(UpdateSectionRequest):
-    resolution_um: float
+UpdateSectionRequest = Union[SetPosition, SetRotation, Translate, Rotate, Reorient, Center, Resample]
 
 
 class MoveSectionData2(NamedTuple):
@@ -85,17 +51,17 @@ class UpdateSectionCommand:
         if atlas is None:
             return Err("No atlas loaded")
 
-        if isinstance(request, SetPositionRequest):
+        if isinstance(request, SetPosition):
             coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[request.axis]
             physical = section.physical_transform.update(**{coord: request.value})
             section = section.update(physical_transform=physical)
 
-        elif isinstance(request, SetRotationRequest):
+        elif isinstance(request, SetRotation):
             coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
             physical = section.physical_transform.update(**{coord: request.value})
             section = section.update(physical_transform=physical)
 
-        elif isinstance(request, TranslateRequest):
+        elif isinstance(request, Translate):
             dir_vals = {
                 Direction.Superior: ('x', 1),
                 Direction.Inferior: ('x', -1),
@@ -108,12 +74,12 @@ class UpdateSectionCommand:
             physical = section.physical_transform.translate(**{coord: request.value * transform})
             section = section.update(physical_transform=physical)
 
-        elif isinstance(request, RotateRequest):
+        elif isinstance(request, Rotate):
             coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
             physical = section.physical_transform.rotate(**{coord: request.value})
             section = section.update(physical_transform=physical)
 
-        elif isinstance(request, ReorientRequest):
+        elif isinstance(request, Reorient):
             funs = {
                 Plane.Coronal: PhysicalTransformer.orient_to_coronal,
                 Plane.Axial: PhysicalTransformer.orient_to_axial,
@@ -122,12 +88,12 @@ class UpdateSectionCommand:
             physical = funs[request.plane](section.physical_transform)
             section = section.update(physical_transform=physical)
 
-        elif isinstance(request, CenterRequest):
+        elif isinstance(request, Center):
             cx, cy, cz = atlas.center
             physical = section.physical_transform.update(x=cx, y=cy, z=cz)
             section = section.update(physical_transform=physical)
 
-        elif isinstance(request, ResampleRequest):
+        elif isinstance(request, Resample):
             section = section.update(image=section.image.resample(resolution_um=request.resolution_um))
 
         registration = Registration(section=section, atlas=atlas)
@@ -150,5 +116,3 @@ class UpdateSectionCommand:
             axial_atlas_image=atlas.make_axial_slice_at(x=section.physical_transform.x).channels[0],
             sagittal_atlas_image=atlas.make_sagittal_slice_at(z=section.physical_transform.z).channels[0],
         ))
-
-

@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from abc import ABC
 from dataclasses import dataclass
-from typing import Optional, Union
+from typing import Optional, Union, NamedTuple
 
 from numpy import ndarray
 from result import Result, Err, Ok
@@ -11,23 +11,13 @@ from slicereg.commands.base import BaseRepo, BaseRemoteAtlasReader, BaseLocalAtl
 from slicereg.core.atlas import Atlas
 
 
-class LoadAtlasRequest(ABC):
-    pass
+LoadBrainglobeAtlas = NamedTuple("LoadBrainglobeAtlas", [("name", str)])
+LoadAtlasFromFile = NamedTuple("LoadAtlasFromFile", [("filename", str), ("resolution_um", int)])
+
+LoadAtlasRequest = Union[LoadBrainglobeAtlas, LoadAtlasFromFile]
 
 
-@dataclass(frozen=True)
-class LoadBrainglobeAtlasRequest(LoadAtlasRequest):
-    name: str
-
-
-@dataclass(frozen=True)
-class LoadAtlasFromFileRequest(LoadAtlasRequest):
-    filename: str
-    resolution_um: int
-
-
-@dataclass(frozen=True)
-class LoadAtlasData:
+class LoadAtlasData(NamedTuple):
     volume: ndarray
     transform: ndarray
     resolution: float
@@ -42,7 +32,7 @@ class LoadAtlasCommand:
 
     def __call__(self, request: LoadAtlasRequest) -> Result[
         LoadAtlasData, str]:
-        if isinstance(request, LoadBrainglobeAtlasRequest):
+        if isinstance(request, LoadBrainglobeAtlas):
             atlas_data = self._remote_atlas_reader.read(name=request.name)
             if atlas_data is None:
                 return Err("Atlas not loaded.")
@@ -51,7 +41,7 @@ class LoadAtlasCommand:
                 resolution_um=atlas_data.resolution_um,
                 annotation_volume=atlas_data.annotation_volume,
             )
-        elif isinstance(request, LoadAtlasFromFileRequest):
+        elif isinstance(request, LoadAtlasFromFile):
             atlas_data2 = self._local_atlas_reader.read(filename=request.filename)
             if atlas_data2 is None:
                 return Err("Atlas not loaded.")

@@ -12,7 +12,7 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadAtlasRequest
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.update_section import UpdateSectionCommand, CenterRequest, UpdateSectionRequest, TranslateRequest, RotateRequest
+from slicereg.commands.update_section import UpdateSectionCommand, Center, UpdateSectionRequest, Translate, Rotate
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -72,7 +72,7 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
-        self.update_section(request=CenterRequest())
+        self.update_section(request=Center())
 
     # Select Channel
     def select_channel(self, num: int):
@@ -135,18 +135,18 @@ class AppModel(HasObservableAttributes):
             '2': lambda: self.select_channel(2),
             '3': lambda: self.select_channel(3),
             '4': lambda: self.select_channel(4),
-            'W': lambda: self.update_section(TranslateRequest(direction=Direction.Anterior, value=30)),
-            'S': lambda: self.update_section(TranslateRequest(direction=Direction.Posterior, value=30)),
-            'A': lambda: self.update_section(TranslateRequest(direction=Direction.Left, value=30)),
-            'D': lambda: self.update_section(TranslateRequest(direction=Direction.Right, value=30)),
-            'Q': lambda: self.update_section(TranslateRequest(direction=Direction.Inferior, value=30)),
-            'E': lambda: self.update_section(TranslateRequest(direction=Direction.Superior, value=30)),
-            'I': lambda: self.update_section(RotateRequest(axis=Axis.Horizontal, value=5)),
-            'K': lambda: self.update_section(RotateRequest(axis=Axis.Horizontal, value=-5)),
-            'J': lambda: self.update_section(RotateRequest(axis=Axis.Longitudinal, value=5)),
-            'L': lambda: self.update_section(RotateRequest(axis=Axis.Longitudinal, value=-5)),
-            'U': lambda: self.update_section(RotateRequest(axis=Axis.Anteroposterior, value=-5)),
-            'O': lambda: self.update_section(RotateRequest(axis=Axis.Anteroposterior, value=5)),
+            'W': lambda: self.update_section(Translate(direction=Direction.Anterior, value=30)),
+            'S': lambda: self.update_section(Translate(direction=Direction.Posterior, value=30)),
+            'A': lambda: self.update_section(Translate(direction=Direction.Left, value=30)),
+            'D': lambda: self.update_section(Translate(direction=Direction.Right, value=30)),
+            'Q': lambda: self.update_section(Translate(direction=Direction.Inferior, value=30)),
+            'E': lambda: self.update_section(Translate(direction=Direction.Superior, value=30)),
+            'I': lambda: self.update_section(Rotate(axis=Axis.Horizontal, value=5)),
+            'K': lambda: self.update_section(Rotate(axis=Axis.Horizontal, value=-5)),
+            'J': lambda: self.update_section(Rotate(axis=Axis.Longitudinal, value=5)),
+            'L': lambda: self.update_section(Rotate(axis=Axis.Longitudinal, value=-5)),
+            'U': lambda: self.update_section(Rotate(axis=Axis.Anteroposterior, value=-5)),
+            'O': lambda: self.update_section(Rotate(axis=Axis.Anteroposterior, value=5)),
         }
         if command := key_commands.get(key):
             command()

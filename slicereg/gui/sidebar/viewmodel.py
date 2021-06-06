@@ -2,8 +2,8 @@ from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
 from slicereg.commands.constants import Plane, Axis
-from slicereg.commands.load_atlas import LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
-from slicereg.commands.update_section import ReorientRequest, ResampleRequest, SetPositionRequest, SetRotationRequest
+from slicereg.commands.load_atlas import LoadBrainglobeAtlas, LoadAtlasFromFile
+from slicereg.commands.update_section import Reorient, Resample, SetPosition, SetRotation
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.observable import HasObservableAttributes
@@ -93,13 +93,13 @@ class SidebarViewModel(HasObservableAttributes):
             return
 
     def click_coronal_button(self):
-        self._model.update_section(ReorientRequest(plane=Plane.Coronal))
+        self._model.update_section(Reorient(plane=Plane.Coronal))
 
     def click_sagittal_button(self):
-        self._model.update_section(ReorientRequest(plane=Plane.Sagittal))
+        self._model.update_section(Reorient(plane=Plane.Sagittal))
 
     def click_axial_button(self):
-        self._model.update_section(ReorientRequest(plane=Plane.Axial))
+        self._model.update_section(Reorient(plane=Plane.Axial))
 
     def move_clim_section_2d_slider(self, values: Tuple[float, float]):
         self._model.clim_2d = values
@@ -125,16 +125,16 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")
 
     def slide_resample_slider(self, val: int):
-        self._model.update_section(request=ResampleRequest(resolution_um=val))
+        self._model.update_section(request=Resample(resolution_um=val))
 
     def click_update_bgatlas_list_button(self):
         self._model.list_bgatlases()
 
     def submit_load_atlas_from_file(self, filename: str):
-        self._model.load_atlas(request=LoadAtlasFromFileRequest(filename=filename, resolution_um=int(self.atlas_resolution_text)))
+        self._model.load_atlas(request=LoadAtlasFromFile(filename=filename, resolution_um=int(self.atlas_resolution_text)))
 
     def click_load_bgatlas_button(self):
-        self._model.load_atlas(request=LoadBrainglobeAtlasRequest(name=self.selected_bgatlas))
+        self._model.load_atlas(request=LoadBrainglobeAtlas(name=self.selected_bgatlas))
 
     def change_bgatlas_selection_dropdown(self, text: str):
         self.selected_bgatlas = text
@@ -143,22 +143,22 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section(filename=filename)
 
     def change_superior_slider(self, value: int):
-        self._model.update_section(request=SetPositionRequest(axis=Axis.Longitudinal, value=value))
+        self._model.update_section(request=SetPosition(axis=Axis.Longitudinal, value=value))
 
     def change_anterior_slider(self, value: int):
-        self._model.update_section(request=SetPositionRequest(axis=Axis.Anteroposterior, value=value))
+        self._model.update_section(request=SetPosition(axis=Axis.Anteroposterior, value=value))
 
     def change_right_slider(self, value: int):
-        self._model.update_section(request=SetPositionRequest(axis=Axis.Horizontal, value=value))
+        self._model.update_section(request=SetPosition(axis=Axis.Horizontal, value=value))
 
     def change_rot_longitudinal_slider(self, value: int):
-        self._model.update_section(request=SetRotationRequest(axis=Axis.Longitudinal, value=value))
+        self._model.update_section(request=SetRotation(axis=Axis.Longitudinal, value=value))
 
     def change_rot_anteroposterior_slider(self, value: int):
-        self._model.update_section(request=SetRotationRequest(axis=Axis.Anteroposterior, value=value))
+        self._model.update_section(request=SetRotation(axis=Axis.Anteroposterior, value=value))
 
     def change_rot_horizontal_slider(self, value: int):
-        self._model.update_section(request=SetRotationRequest(axis=Axis.Horizontal, value=value))
+        self._model.update_section(request=SetRotation(axis=Axis.Horizontal, value=value))
 
     @property
     def atlas_resolution_text(self) -> str:
