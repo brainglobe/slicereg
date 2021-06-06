@@ -7,15 +7,16 @@ import numpy as np
 from numpy import ndarray
 from result import Ok
 
-from slicereg.commands.constants import Axis, Plane, Direction
+from slicereg.commands.constants import Axis, Direction
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
-from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
+from slicereg.commands.load_atlas import LoadAtlasCommand, LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest, \
+    LoadAtlasRequest
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.move_section2 import MoveSectionCommand2, MoveType, MoveRequest, ReorientRequest, CenterRequest, \
-    ResampleRequest, UpdateSectionRequest, TranslateRequest, RotateRequest
+from slicereg.commands.move_section2 import MoveSectionCommand2, CenterRequest, \
+    UpdateSectionRequest, TranslateRequest, RotateRequest
 from slicereg.commands.select_channel import SelectChannelCommand
-from slicereg.gui.constants import AtlasOrientation, VolumeType
+from slicereg.gui.constants import VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
 from slicereg.utils.observable import HasObservableAttributes
 
@@ -105,8 +106,7 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
 
     # Load Atlases
-    def load_bgatlas(self, name: str):
-        request = LoadBrainglobeAtlasRequest(name=name)
+    def load_atlas(self, request: LoadAtlasRequest):
         command = self._injector.build(LoadAtlasCommand)
         result = command(request=request)
         if isinstance(result, Ok):
@@ -114,15 +114,6 @@ class AppModel(HasObservableAttributes):
             self.registration_volume = data.volume
             self.atlas_resolution = int(data.resolution)
             self.annotation_volume = data.annotation_volume
-
-    def load_atlas_from_file(self, filename: str, resolution_um: int):
-        load_atlas = self._injector.build(LoadAtlasCommand)
-        request = LoadAtlasFromFileRequest(filename=filename, resolution_um=resolution_um)
-        result = load_atlas(request)
-        if isinstance(result, Ok):
-            atlas = result.value
-            self.registration_volume = atlas.volume
-            self.atlas_resolution = int(atlas.resolution)
 
     # List Brainglobe Atlases
     def list_bgatlases(self):

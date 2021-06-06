@@ -2,6 +2,7 @@ from dataclasses import dataclass, field
 from typing import Optional, Tuple, List
 
 from slicereg.commands.constants import Plane, Axis
+from slicereg.commands.load_atlas import LoadBrainglobeAtlasRequest, LoadAtlasFromFileRequest
 from slicereg.commands.move_section2 import ReorientRequest, ResampleRequest, SetPositionRequest, SetRotationRequest
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import AtlasOrientation, VolumeType
@@ -130,10 +131,10 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.list_bgatlases()
 
     def submit_load_atlas_from_file(self, filename: str):
-        self._model.load_atlas_from_file(filename=filename, resolution_um=int(self.atlas_resolution_text))
+        self._model.load_atlas(request=LoadAtlasFromFileRequest(filename=filename, resolution_um=int(self.atlas_resolution_text)))
 
     def click_load_bgatlas_button(self):
-        self._model.load_bgatlas(name=self.selected_bgatlas)
+        self._model.load_atlas(request=LoadBrainglobeAtlasRequest(name=self.selected_bgatlas))
 
     def change_bgatlas_selection_dropdown(self, text: str):
         self.selected_bgatlas = text
