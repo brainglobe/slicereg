@@ -41,7 +41,7 @@ class MoveSectionData2(NamedTuple):
 class UpdateSectionCommand:
     _repo: BaseRepo
 
-    def __call__(self, request: UpdateSectionRequest) -> Result[MoveSectionData2, str]:
+    def __call__(self, *requests: UpdateSectionRequest) -> Result[MoveSectionData2, str]:
         try:
             section = self._repo.get_sections()[0]
         except IndexError:
@@ -51,53 +51,54 @@ class UpdateSectionCommand:
         if atlas is None:
             return Err("No atlas loaded")
 
-        if isinstance(request, SetPosition):
-            coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[request.axis]
-            physical = section.physical_transform.update(**{coord: request.value})
-            section = section.update(physical_transform=physical)
+        for request in requests:
+            if isinstance(request, SetPosition):
+                coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[request.axis]
+                physical = section.physical_transform.update(**{coord: request.value})
+                section = section.update(physical_transform=physical)
 
-        elif isinstance(request, SetRotation):
-            coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
-            physical = section.physical_transform.update(**{coord: request.value})
-            section = section.update(physical_transform=physical)
+            elif isinstance(request, SetRotation):
+                coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
+                physical = section.physical_transform.update(**{coord: request.value})
+                section = section.update(physical_transform=physical)
 
-        elif isinstance(request, Translate):
-            dir_vals = {
-                Direction.Superior: ('x', 1),
-                Direction.Inferior: ('x', -1),
-                Direction.Anterior: ('y', 1),
-                Direction.Posterior: ('y', -1),
-                Direction.Right: ('z', 1),
-                Direction.Left: ('z', -1),
-            }
-            coord, transform = dir_vals[request.direction]
-            physical = section.physical_transform.translate(**{coord: request.value * transform})
-            section = section.update(physical_transform=physical)
+            elif isinstance(request, Translate):
+                dir_vals = {
+                    Direction.Superior: ('x', 1),
+                    Direction.Inferior: ('x', -1),
+                    Direction.Anterior: ('y', 1),
+                    Direction.Posterior: ('y', -1),
+                    Direction.Right: ('z', 1),
+                    Direction.Left: ('z', -1),
+                }
+                coord, transform = dir_vals[request.direction]
+                physical = section.physical_transform.translate(**{coord: request.value * transform})
+                section = section.update(physical_transform=physical)
 
-        elif isinstance(request, Rotate):
-            coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
-            physical = section.physical_transform.rotate(**{coord: request.value})
-            section = section.update(physical_transform=physical)
+            elif isinstance(request, Rotate):
+                coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
+                physical = section.physical_transform.rotate(**{coord: request.value})
+                section = section.update(physical_transform=physical)
 
-        elif isinstance(request, Reorient):
-            funs = {
-                Plane.Coronal: PhysicalTransformer.orient_to_coronal,
-                Plane.Axial: PhysicalTransformer.orient_to_axial,
-                Plane.Sagittal: PhysicalTransformer.orient_to_sagittal,
-            }
-            physical = funs[request.plane](section.physical_transform)
-            section = section.update(physical_transform=physical)
+            elif isinstance(request, Reorient):
+                funs = {
+                    Plane.Coronal: PhysicalTransformer.orient_to_coronal,
+                    Plane.Axial: PhysicalTransformer.orient_to_axial,
+                    Plane.Sagittal: PhysicalTransformer.orient_to_sagittal,
+                }
+                physical = funs[request.plane](section.physical_transform)
+                section = section.update(physical_transform=physical)
 
-        elif isinstance(request, Center):
-            cx, cy, cz = atlas.center
-            physical = section.physical_transform.update(x=cx, y=cy, z=cz)
-            section = section.update(physical_transform=physical)
+            elif isinstance(request, Center):
+                cx, cy, cz = atlas.center
+                physical = section.physical_transform.update(x=cx, y=cy, z=cz)
+                section = section.update(physical_transform=physical)
 
-        elif isinstance(request, Resample):
-            section = section.update(image=section.image.resample(resolution_um=request.resolution_um))
+            elif isinstance(request, Resample):
+                section = section.update(image=section.image.resample(resolution_um=request.resolution_um))
 
-        registration = Registration(section=section, atlas=atlas)
-        atlas_slice_image = registration.slice_atlas().channels[0]
+            registration = Registration(section=section, atlas=atlas)
+            atlas_slice_image = registration.slice_atlas().channels[0]
 
         self._repo.save_section(section)
 

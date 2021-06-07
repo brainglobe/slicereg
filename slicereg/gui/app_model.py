@@ -7,12 +7,13 @@ import numpy as np
 from numpy import ndarray
 from result import Ok
 
-from slicereg.commands.constants import Axis, Direction
+from slicereg.commands.constants import Axis, Direction, Plane
 from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadAtlasRequest
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.update_section import UpdateSectionCommand, Center, UpdateSectionRequest, Translate, Rotate
+from slicereg.commands.update_section import UpdateSectionCommand, Center, UpdateSectionRequest, Translate, Rotate, \
+    Reorient
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -72,7 +73,7 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
-        self.update_section(request=Center())
+        self.update_section(Center(), Reorient(plane=Plane.Coronal))
 
     # Select Channel
     def select_channel(self, num: int):
@@ -84,9 +85,9 @@ class AppModel(HasObservableAttributes):
             self.section_image = data.section_image
 
     # Move/Update Section Position/Rotation/Orientation
-    def update_section(self, request: UpdateSectionRequest):
+    def update_section(self, *requests: UpdateSectionRequest):
         move_section = self._injector.build(UpdateSectionCommand)
-        result = move_section(request=request)
+        result = move_section(*requests)
         if isinstance(result, Ok):
             data = result.value
             self.superior = data.superior

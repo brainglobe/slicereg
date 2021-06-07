@@ -125,7 +125,7 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section("data/RA_10X_scans/MeA/S1_07032020.ome.tiff")
 
     def slide_resample_slider(self, val: int):
-        self._model.update_section(request=Resample(resolution_um=val))
+        self._model.update_section(Resample(resolution_um=val))
 
     def click_update_bgatlas_list_button(self):
         self._model.list_bgatlases()
@@ -143,22 +143,22 @@ class SidebarViewModel(HasObservableAttributes):
         self._model.load_section(filename=filename)
 
     def change_superior_slider(self, value: int):
-        self._model.update_section(request=SetPosition(axis=Axis.Longitudinal, value=value))
+        self._model.update_section(SetPosition(axis=Axis.Longitudinal, value=value))
 
     def change_anterior_slider(self, value: int):
-        self._model.update_section(request=SetPosition(axis=Axis.Anteroposterior, value=value))
+        self._model.update_section(SetPosition(axis=Axis.Anteroposterior, value=value))
 
     def change_right_slider(self, value: int):
-        self._model.update_section(request=SetPosition(axis=Axis.Horizontal, value=value))
+        self._model.update_section(SetPosition(axis=Axis.Horizontal, value=value))
 
     def change_rot_longitudinal_slider(self, value: int):
-        self._model.update_section(request=SetRotation(axis=Axis.Longitudinal, value=value))
+        self._model.update_section(SetRotation(axis=Axis.Longitudinal, value=value))
 
     def change_rot_anteroposterior_slider(self, value: int):
-        self._model.update_section(request=SetRotation(axis=Axis.Anteroposterior, value=value))
+        self._model.update_section(SetRotation(axis=Axis.Anteroposterior, value=value))
 
     def change_rot_horizontal_slider(self, value: int):
-        self._model.update_section(request=SetRotation(axis=Axis.Horizontal, value=value))
+        self._model.update_section(SetRotation(axis=Axis.Horizontal, value=value))
 
     @property
     def atlas_resolution_text(self) -> str:

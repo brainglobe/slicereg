@@ -49,14 +49,20 @@ class AtlasSectionViewModel(HasObservableAttributes):
 
     def _update_section_position(self, x, y):
         if self.plane == 'coronal':
-            self._model.update_section(request=SetPosition(axis=Axis.Horizontal, value=x))
-            self._model.update_section(request=SetPosition(axis=Axis.Longitudinal, value=y))
+            self._model.update_section(
+                SetPosition(axis=Axis.Horizontal, value=x),
+                SetPosition(axis=Axis.Longitudinal, value=y)
+            )
         elif self.plane == 'axial':
-            self._model.update_section(request=SetPosition(axis=Axis.Horizontal, value=x))
-            self._model.update_section(request=SetPosition(axis=Axis.Anteroposterior, value=y))
+            self._model.update_section(
+                SetPosition(axis=Axis.Horizontal, value=x),
+                SetPosition(axis=Axis.Anteroposterior, value=y)
+            )
         elif self.plane == 'sagittal':
-            self._model.update_section(request=SetPosition(axis=Axis.Anteroposterior, value=x))
-            self._model.update_section(request=SetPosition(axis=Axis.Longitudinal, value=y))
+            self._model.update_section(
+                SetPosition(axis=Axis.Anteroposterior, value=x),
+                SetPosition(axis=Axis.Longitudinal, value=y)
+            )
 
     def _update_section_image(self):
         if (image := getattr(self._model, self._section_image_name)) is not None:

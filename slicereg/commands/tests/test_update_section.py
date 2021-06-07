@@ -14,15 +14,18 @@ from slicereg.core.physical_transform import PhysicalTransformer
 
 
 @pytest.fixture
-def repo():
-    repo = Mock(BaseRepo)
-    repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
-    repo.get_sections.return_value = [
-        Section.create(
+def section1():
+    return Section.create(
             image=Image(channels=np.empty((2, 4, 4)), resolution_um=3.4),
             physical_transform=PhysicalTransformer(x=5, y=10, z=2, rx=2, ry=15, rz=-3)
         )
-    ]
+
+
+@pytest.fixture
+def repo(section1):
+    repo = Mock(BaseRepo)
+    repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
+    repo.get_sections.return_value = [section1]
     return repo
 
 
@@ -35,7 +38,7 @@ cases = [
 def test_reorient_section_sets_new_rotations(repo, plane, si, ap, lr):
     command = UpdateSectionCommand(_repo=repo)
     request = Reorient(plane=plane)
-    result = command(request=request)
+    result = command(request)
     data = result.ok()
     assert data.rot_longitudinal == si
     assert data.rot_anteroposterior == ap
@@ -53,7 +56,7 @@ def test_move_section_to_position_translates_it_and_returns_new_position(value, 
     ]
     move_section = UpdateSectionCommand(_repo=repo)
     request = SetPosition(axis=axis, value=value)
-    result = move_section(request=request)
+    result = move_section(request)
     data = result.unwrap()
     assert data.superior == value if axis is Axis.Longitudinal else 5
     assert data.anterior == value if axis is Axis.Anteroposterior else 10
@@ -73,7 +76,7 @@ def test_move_section_to_rotation_rotates_it_and_returns_new_position(value, axi
     repo.get_atlas.return_value = Atlas(volume=np.empty((5, 5, 5)), resolution_um=10)
     move_section = UpdateSectionCommand(_repo=repo)
     request = SetRotation(axis=axis, value=value)
-    result = move_section(request=request)
+    result = move_section(request)
     data = result.unwrap()
     assert data.rot_longitudinal == value if axis is Axis.Longitudinal else 5
     assert data.rot_anteroposterior == value if axis is Axis.Anteroposterior else 10
@@ -132,7 +135,7 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
                                         resolution_um=10)
     move_section = UpdateSectionCommand(_repo=repo)
     request = Rotate(axis=axis, value=value)
-    result = move_section(request=request)
+    result = move_section(request)
     data = result.unwrap()
 
     assert data.rot_longitudinal == value + 5 if axis is Axis.Longitudinal else 5
@@ -140,9 +143,14 @@ def test_relative_move_section_to_rotation_rotates_it_and_returns_new_position(v
     assert data.rot_horizontal == value + 2 if axis is Axis.Horizontal else 2
 
 
+def test_update_section_updates_multiple_times_if_given_multiple_commands(repo):
+    command = UpdateSectionCommand(_repo=repo)
+    result = command(Translate(Direction.Right, 30), Translate(Direction.Right, 400))
+    data = result.ok()
+    assert data.right == 2 + 30 + 400
 
 
-def test_center_atlas_command_translates_section_when_atlas_is_loaded():
+def test_center_atlas_command_centers_section_when_atlas_is_loaded():
     repo = Mock(BaseRepo)
     repo.get_sections.return_value = [
         Section.create(
@@ -212,3 +220,4 @@ def test_register_section_returns_2d_orthogonal_atlas_section_images_at_section_
     assert data.coronal_atlas_image.ndim == 2
     assert data.axial_atlas_image.ndim == 2
     assert data.sagittal_atlas_image.ndim == 2
+
