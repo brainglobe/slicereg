@@ -7,7 +7,7 @@ from result import Result, Err, Ok
 
 from slicereg.commands.base import BaseRepo
 from slicereg.commands.constants import Axis, Plane, Direction
-from slicereg.core import Registration
+from slicereg.core import Registration, Section
 from slicereg.core.physical_transform import PhysicalTransformer
 
 SetPosition = NamedTuple("SetPosition", [('axis', Axis), ('value', float)])
@@ -49,9 +49,10 @@ class UpdateSectionCommand:
 
     def __call__(self, request: UpdateSectionRequest) -> Result[MoveSectionData2, str]:
 
-        section = self._repo.get_section(id=request.section_id)
-        if section is None:
+        maybe_section = self._repo.get_section(id=request.section_id)
+        if maybe_section is None:
             return Err(f"Section not found: {request.section_id}")
+        section = maybe_section
 
         atlas = self._repo.get_atlas()
         if atlas is None:

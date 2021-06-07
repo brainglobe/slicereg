@@ -216,5 +216,6 @@ def test_update_section_command_works_on_section_with_matching_id(repo, section1
     result = command(UpdateSectionRequest(section_id=section1.id, steps=[Center()]))
     assert result.is_ok()
     data = result.ok()
-    assert data.section_id == section1.id
+    if data is not None:  # mypy workaround, not sure why only happening here.
+        assert result.ok().section_id == section1.id
     repo.get_section.assert_called_with(id=section1.id)
