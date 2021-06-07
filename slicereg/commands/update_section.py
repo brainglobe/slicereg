@@ -97,8 +97,8 @@ class UpdateSectionCommand:
             elif isinstance(request, Resample):
                 section = section.update(image=section.image.resample(resolution_um=request.resolution_um))
 
-            registration = Registration(section=section, atlas=atlas)
-            atlas_slice_image = registration.slice_atlas().channels[0]
+        registration = Registration(section=section, atlas=atlas)
+        atlas_slice_image = registration.slice_atlas().channels[0]
 
         self._repo.save_section(section)
 
