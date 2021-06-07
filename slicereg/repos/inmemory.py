@@ -10,8 +10,11 @@ from slicereg.core.section import Section
 @dataclass
 class InMemoryRepo(BaseRepo):
     _atlas: Optional[Atlas] = None
-
     _sections: Dict[UUID, Section] = field(default_factory=dict, repr=False)
+
+    def get_section(self, id: UUID) -> Optional[Section]:
+        return self._sections.get(id, None)
+
     def get_sections(self) -> List[Section]:
         return list(self._sections.values())
 

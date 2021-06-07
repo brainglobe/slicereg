@@ -1,3 +1,6 @@
+from unittest.mock import Mock
+from uuid import uuid4
+
 import numpy as np
 
 from slicereg.core.atlas import Atlas
@@ -40,3 +43,25 @@ def test_repo_overwrites_existing_section_even_if_properties_change():
     section_moved = section.update(image=section.image.update(resolution_um=14))
     repo.save_section(section=section_moved)
     assert len(repo.get_sections()) == 1
+
+
+def test_repo_gets_section_with_matching_id():
+    repo = InMemoryRepo()
+    section1 = Mock(Section, id=uuid4())
+    section2 = Mock(Section, id=uuid4())
+    repo.save_section(section1)
+    repo.save_section(section2)
+
+    assert repo.get_section(id=section2.id) is section2
+    assert repo.get_section(id=section1.id) is section1
+    assert repo.get_section(id=section2.id) is section2
+
+
+def test_repo_gets_none_when_no_matching_section_found():
+    repo = InMemoryRepo()
+    section1 = Mock(Section, id=uuid4())
+    section2 = Mock(Section, id=uuid4())
+    repo.save_section(section1)
+    repo.save_section(section2)
+
+    assert repo.get_section(id=uuid4()) is None

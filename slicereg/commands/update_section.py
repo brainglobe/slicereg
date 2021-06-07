@@ -1,5 +1,6 @@
 from dataclasses import dataclass
-from typing import NamedTuple, Union
+from typing import NamedTuple, Union, List
+from uuid import UUID
 
 from numpy import ndarray
 from result import Result, Err, Ok
@@ -9,7 +10,6 @@ from slicereg.commands.constants import Axis, Plane, Direction
 from slicereg.core import Registration
 from slicereg.core.physical_transform import PhysicalTransformer
 
-
 SetPosition = NamedTuple("SetPosition", [('axis', Axis), ('value', float)])
 SetRotation = NamedTuple("SetRotation", [('axis', Axis), ('value', float)])
 Translate = NamedTuple("Translate", [('direction', Direction), ('value', float)])
@@ -18,10 +18,16 @@ Reorient = NamedTuple("Reorient", [('plane', Plane)])
 Center = NamedTuple("Center", [])
 Resample = NamedTuple("Resample", [('resolution_um', float)])
 
-UpdateSectionRequest = Union[SetPosition, SetRotation, Translate, Rotate, Reorient, Center, Resample]
+UpdateSectionStep = Union[SetPosition, SetRotation, Translate, Rotate, Reorient, Center, Resample]
+
+
+class UpdateSectionRequest(NamedTuple):
+    section_id: UUID
+    steps: List[UpdateSectionStep]
 
 
 class MoveSectionData2(NamedTuple):
+    section_id: UUID
     superior: float
     anterior: float
     right: float
@@ -41,28 +47,28 @@ class MoveSectionData2(NamedTuple):
 class UpdateSectionCommand:
     _repo: BaseRepo
 
-    def __call__(self, *requests: UpdateSectionRequest) -> Result[MoveSectionData2, str]:
-        try:
-            section = self._repo.get_sections()[0]
-        except IndexError:
-            return Err("No section loaded")
+    def __call__(self, request: UpdateSectionRequest) -> Result[MoveSectionData2, str]:
+
+        section = self._repo.get_section(id=request.section_id)
+        if section is None:
+            return Err(f"Section not found: {request.section_id}")
 
         atlas = self._repo.get_atlas()
         if atlas is None:
             return Err("No atlas loaded")
 
-        for request in requests:
-            if isinstance(request, SetPosition):
-                coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[request.axis]
-                physical = section.physical_transform.update(**{coord: request.value})
+        for step in request.steps:
+            if isinstance(step, SetPosition):
+                coord = {Axis.Longitudinal: 'x', Axis.Anteroposterior: 'y', Axis.Horizontal: 'z'}[step.axis]
+                physical = section.physical_transform.update(**{coord: step.value})
                 section = section.update(physical_transform=physical)
 
-            elif isinstance(request, SetRotation):
-                coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
-                physical = section.physical_transform.update(**{coord: request.value})
+            elif isinstance(step, SetRotation):
+                coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[step.axis]
+                physical = section.physical_transform.update(**{coord: step.value})
                 section = section.update(physical_transform=physical)
 
-            elif isinstance(request, Translate):
+            elif isinstance(step, Translate):
                 dir_vals = {
                     Direction.Superior: ('x', 1),
                     Direction.Inferior: ('x', -1),
@@ -71,31 +77,31 @@ class UpdateSectionCommand:
                     Direction.Right: ('z', 1),
                     Direction.Left: ('z', -1),
                 }
-                coord, transform = dir_vals[request.direction]
-                physical = section.physical_transform.translate(**{coord: request.value * transform})
+                coord, transform = dir_vals[step.direction]
+                physical = section.physical_transform.translate(**{coord: step.value * transform})
                 section = section.update(physical_transform=physical)
 
-            elif isinstance(request, Rotate):
-                coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[request.axis]
-                physical = section.physical_transform.rotate(**{coord: request.value})
+            elif isinstance(step, Rotate):
+                coord = {Axis.Longitudinal: 'rx', Axis.Anteroposterior: 'ry', Axis.Horizontal: 'rz'}[step.axis]
+                physical = section.physical_transform.rotate(**{coord: step.value})
                 section = section.update(physical_transform=physical)
 
-            elif isinstance(request, Reorient):
+            elif isinstance(step, Reorient):
                 funs = {
                     Plane.Coronal: PhysicalTransformer.orient_to_coronal,
                     Plane.Axial: PhysicalTransformer.orient_to_axial,
                     Plane.Sagittal: PhysicalTransformer.orient_to_sagittal,
                 }
-                physical = funs[request.plane](section.physical_transform)
+                physical = funs[step.plane](section.physical_transform)
                 section = section.update(physical_transform=physical)
 
-            elif isinstance(request, Center):
+            elif isinstance(step, Center):
                 cx, cy, cz = atlas.center
                 physical = section.physical_transform.update(x=cx, y=cy, z=cz)
                 section = section.update(physical_transform=physical)
 
-            elif isinstance(request, Resample):
-                section = section.update(image=section.image.resample(resolution_um=request.resolution_um))
+            elif isinstance(step, Resample):
+                section = section.update(image=section.image.resample(resolution_um=step.resolution_um))
 
         registration = Registration(section=section, atlas=atlas)
         atlas_slice_image = registration.slice_atlas().channels[0]
@@ -103,6 +109,7 @@ class UpdateSectionCommand:
         self._repo.save_section(section)
 
         return Ok(MoveSectionData2(
+            section_id=section.id,
             superior=section.physical_transform.x,
             anterior=section.physical_transform.y,
             right=section.physical_transform.z,

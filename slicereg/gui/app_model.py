@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from typing import Tuple, List, Optional
+from uuid import UUID
 
 import numpy as np
 from numpy import ndarray
@@ -12,8 +13,8 @@ from slicereg.commands.get_coords import MapImageCoordToAtlasCoordCommand
 from slicereg.commands.list_atlases import ListRemoteAtlasesCommand
 from slicereg.commands.load_atlas import LoadAtlasCommand, LoadAtlasRequest
 from slicereg.commands.load_section import LoadSectionCommand
-from slicereg.commands.update_section import UpdateSectionCommand, Center, UpdateSectionRequest, Translate, Rotate, \
-    Reorient
+from slicereg.commands.update_section import UpdateSectionCommand, Center, UpdateSectionStep, Translate, Rotate, \
+    Reorient, UpdateSectionRequest
 from slicereg.commands.select_channel import SelectChannelCommand
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.dependency_injector import DependencyInjector
@@ -26,6 +27,7 @@ class AppModel(HasObservableAttributes):
     window_title: str = "bg-slicereg"
     clim_2d: Tuple[float, float] = (0., 1.)
     clim_3d: Tuple[float, float] = (0., 1.)
+    current_section_id: Optional[UUID] = None
     section_image: Optional[ndarray] = None
     section_image_resolution: Optional[float] = None
     section_transform: Optional[ndarray] = None
@@ -69,6 +71,7 @@ class AppModel(HasObservableAttributes):
         result = load_section(filename=filename)
         if isinstance(result, Ok):
             data = result.value
+            self.current_section_id = data.section_id
             self.section_image = data.section_image
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
@@ -85,9 +88,12 @@ class AppModel(HasObservableAttributes):
             self.section_image = data.section_image
 
     # Move/Update Section Position/Rotation/Orientation
-    def update_section(self, *requests: UpdateSectionRequest):
-        move_section = self._injector.build(UpdateSectionCommand)
-        result = move_section(*requests)
+    def update_section(self, *requests: UpdateSectionStep):
+        if self.current_section_id is None:
+            return
+        command = self._injector.build(UpdateSectionCommand)
+        request = UpdateSectionRequest(section_id=self.current_section_id, steps=list(requests))
+        result = command(request)
         if isinstance(result, Ok):
             data = result.value
             self.superior = data.superior
