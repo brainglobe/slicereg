@@ -42,6 +42,7 @@ class VolumeView(BaseQtWidget):
             'section_image': self._render_section,
             'section_transform': self._render_section_transform,
             'clim': self._render_section_clim,
+            'sections': (lambda: ...),
         }
         render_funs[changed]()
 

@@ -49,6 +49,7 @@ class AppModel(HasObservableAttributes):
     coronal_atlas_image: Optional[np.ndarray] = None
     axial_atlas_image: Optional[np.ndarray] = None
     sagittal_atlas_image: Optional[np.ndarray] = None
+    loaded_sections: List = field(default_factory=list)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -76,7 +77,8 @@ class AppModel(HasObservableAttributes):
             self.section_image_resolution = data.resolution_um
             self.num_channels = data.num_channels
             self.visible_volume = VolumeType.REGISTRATION
-        self.update_section(Center(), Reorient(plane=Plane.Coronal))
+            self.loaded_sections.append(data.section_id)
+        self.update_section(Center(), Reorient(plane=Plane.Coronal)) # todo: don't have this function call two commands
 
     # Select Channel
     def select_channel(self, num: int):

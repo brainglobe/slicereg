@@ -12,3 +12,11 @@ Feature: Slice Import
     And The slice is centered on the image
     And The displayed resolution is set to the image's resolution
     And the section registration position should be centered within the atlas.
+
+  Scenario: Multiple Slice Import
+    Given No sections have been loaded yet
+    And an atlas has been loaded
+    When I load a section file
+    And I load another section file
+    Then both slices are visible in 3D
+    And the second slice is highlighted.

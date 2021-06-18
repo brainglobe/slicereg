@@ -15,6 +15,7 @@ class VolumeViewModel(HasObservableAttributes):
     section_transform: np.ndarray = np.eye(4)
     clim: Tuple[int, int] = (0, 2)
     atlas_volume: np.ndarray = np.zeros(shape=(3, 3, 3), dtype=np.uint16)
+    sections: list = field(default_factory=list)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
