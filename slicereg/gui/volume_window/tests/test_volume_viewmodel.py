@@ -7,7 +7,7 @@ from pytest import approx
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import VolumeType
-from slicereg.gui.volume_window import VolumeViewModel
+from slicereg.gui.volume_window import VolumeViewModel, SectionViewData
 from slicereg.utils import DependencyInjector
 
 
@@ -91,3 +91,15 @@ def test_volume_viewmodel_describes_camera_parameters_for_3d_viewing(app_model, 
 def test_volume_viewmodel_describes_volume_clim(view_model: VolumeViewModel):
     c_min, c_max = view_model.volume_clim
     assert isinstance(c_min, int) and isinstance(c_max, int)
+
+
+def test_volume_viewmodel_multiple_slices_visible(app_model: AppModel, view_model: VolumeViewModel):
+    image1 = SectionViewData(image = np.random.randint(0,100, size=(3, 3)), 
+                  transform = np.eye(4),
+                  clim = (0, 2))
+    image2 = SectionViewData(image = np.random.randint(0,100, size=(3, 3)), 
+                  transform = np.eye(4),
+                  clim = (0, 2))
+    app_model.loaded_sections = [image1, image2]
+    assert view_model.sections == app_model.loaded_sections
+    

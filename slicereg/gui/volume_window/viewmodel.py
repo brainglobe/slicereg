@@ -1,11 +1,20 @@
 from dataclasses import dataclass, field
-from typing import Tuple
+from typing import Tuple, List
 
 import numpy as np
+from numpy import ndarray
 
 from slicereg.gui.app_model import AppModel
 from slicereg.gui.constants import VolumeType
 from slicereg.utils.observable import HasObservableAttributes
+
+@dataclass
+class SectionViewData:
+    image: ndarray
+    transform: ndarray
+    clim: Tuple[int, int]
+
+
 
 
 @dataclass(unsafe_hash=True)
@@ -15,7 +24,7 @@ class VolumeViewModel(HasObservableAttributes):
     section_transform: np.ndarray = np.eye(4)
     clim: Tuple[int, int] = (0, 2)
     atlas_volume: np.ndarray = np.zeros(shape=(3, 3, 3), dtype=np.uint16)
-    sections: list = field(default_factory=list)
+    sections: List[SectionViewData] = field(default_factory=list)
 
     def __post_init__(self):
         HasObservableAttributes.__init__(self)
@@ -29,10 +38,14 @@ class VolumeViewModel(HasObservableAttributes):
             'visible_volume': self._switch_visible_volume,
             'registration_volume': self._update_visible_volume_to_registration,
             'annotation_volume': self._update_visible_volume_to_annotation,
+            'loaded_sections': self._update_visible_sections,
         }
         if (fun := update_funs.get(changed)) is not None:
             fun()
 
+    def _update_visible_sections(self):
+        self.sections = self._model.loaded_sections
+    
     def _update_section_image(self):
         if (image := self._model.section_image) is not None:
             self.section_image = image

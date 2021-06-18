@@ -1,2 +1,2 @@
-from .viewmodel import VolumeViewModel
+from .viewmodel import VolumeViewModel, SectionViewData
 from .view import VolumeView
