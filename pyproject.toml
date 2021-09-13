@@ -22,7 +22,7 @@ result = "^0.6.0"
 
 [tool.poetry.dev-dependencies]
 dvc = { extras = ["gdrive"], version = "^2.0" }
-pywin32 = {version = "225", platform = "win32"}
+pywin32 = {version = "301", platform = "win32"}
 pytest = "^6.2.1"
 pytest-qt = "^3.3.0"
 pytest-bdd = "^4.0.2"
