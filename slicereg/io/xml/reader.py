@@ -4,7 +4,7 @@ from pathlib import Path
 
 from slicereg.io.utils import split_keyvalue_string
 
-
+# https://www.nitrc.org/plugins/mwiki/index.php?title=quicknii:Coordinate_systems
 @dataclass
 class QuickNiiData:
     ox: float
